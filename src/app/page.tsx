@@ -2,6 +2,7 @@ import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import { BaseHeader } from "./components/Header/BaseHeader";
 import BaseFooter from "./components/Footer/BaseFooter";
+import { BaseCarousel } from "./components/Carousels/BaseCarousel";
 
 export default function Home() {
   return (
@@ -21,7 +22,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-
+      
       <BaseFooter />
     </div>
   );

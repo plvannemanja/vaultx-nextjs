@@ -77,5 +77,17 @@
 }
 
 body {
+  background-color: black;
+}
+
+.bg-dark {
   background-color: #232323;
+}
+
+.text-dark {
+  color: #656565;
+}
+
+.text-neon {
+  color: #ddf247;
 }
