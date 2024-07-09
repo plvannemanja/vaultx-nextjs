@@ -20,8 +20,9 @@ export default function Home() {
             />
           </div>
         </div>
-        <BaseFooter />
       </main>
+
+      <BaseFooter />
     </div>
   );
 }
