@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        manrope: ['Manrope', 'Helvetica', 'Arial', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -75,6 +78,14 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  purge: {
+    mode: 'all',
+    preserveHtmlElements: false,
+    content: [
+      './src/**/*.tsx',
+      './node_modules/flatpickr/**/*.js',
+    ],
+  },
 } satisfies Config
 
 export default config

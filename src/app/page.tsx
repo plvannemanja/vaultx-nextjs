@@ -1,23 +1,13 @@
-import { ConnectButton } from "thirdweb/react";
-import { client } from "./client";
 import { BaseHeader } from "./components/Header/BaseHeader";
 
 export default function Home() {
   return (
-    <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
+    <main className="font-manrope flex flex-col pt-4 bg-neutral-900">
+      <BaseHeader />
       <div className="py-20">
-        <BaseHeader />
 
         <div className="flex justify-center mb-20">
-          <ConnectButton
-            client={client}
-            appMetadata={{
-              name: "Example App",
-              url: "https://www.vault-x.io",
-            }}
-          />
         </div>
-
       </div>
     </main>
   );
