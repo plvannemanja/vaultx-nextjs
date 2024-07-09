@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThirdwebProvider } from "thirdweb/react";
+import BaseFooter from "./components/Footer/BaseFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vault",
-  description:
-    "Monstorx frontend real world NFT marketplace",
+  description: "Monstorx frontend real world NFT marketplace",
 };
 
 export default function RootLayout({
