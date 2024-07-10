@@ -88,6 +88,10 @@ body {
   color: #656565;
 }
 
+.text-light-gray {
+  color: #ffffff63;
+}
+
 .text-neon {
   color: #ddf247;
 }

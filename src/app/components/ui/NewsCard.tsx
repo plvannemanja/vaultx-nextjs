@@ -34,7 +34,7 @@ export default function NewsCard({
         </div>
         <div className="lg:w-[45%] grid grid-cols-2 grid-rows-3 gap-3 lg:gap-6">
           {data.slice(1).map((item, index) => (
-            <div key={index} className='w-full h-full'>
+            <div key={index} className='w-full h-full relative'>
               <Image
                 src={item.image}
                 alt="news"
@@ -42,6 +42,7 @@ export default function NewsCard({
                 height={100}
                 className="rounded aspect-square w-full h-full"
               />
+              <p className='text-lg text-light-gray p-5 absolute bottom-0 font-bold'>{item.title}</p>
             </div>
           ))}
         </div>
