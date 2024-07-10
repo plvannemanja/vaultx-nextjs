@@ -1,5 +1,5 @@
-import * as React from "react"
-import { SVGProps } from "react"
+import * as React from 'react';
+import { SVGProps } from 'react';
 const WalletIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -18,5 +18,5 @@ const WalletIcon = (props: SVGProps<SVGSVGElement>) => (
     />
     <script />
   </svg>
-)
-export default WalletIcon
+);
+export default WalletIcon;
