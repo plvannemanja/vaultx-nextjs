@@ -7,8 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Vault",
-  description:
-    "Monstorx frontend real world NFT marketplace",
+  description: "Monstorx frontend real world NFT marketplace",
 };
 
 export default function RootLayout({
