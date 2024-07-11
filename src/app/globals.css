@@ -109,16 +109,16 @@ body {
 
 /* Background of the scrollbar track */
 ::-webkit-scrollbar-track {
-  background: #232323; 
+  background: #232323;
 }
 
 /* Scrollbar thumb */
 ::-webkit-scrollbar-thumb {
-  background: #ddf247; 
+  background: #ddf247;
   border-radius: 6px;
 }
 
 /* Scrollbar thumb on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }

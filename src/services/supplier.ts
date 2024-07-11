@@ -508,12 +508,7 @@ export const userServices = {
       content,
     });
   },
-  contactUs: ({
-    email,
-    content,
-    name,
-    contactNumber,
-  }: ContactUsParams) => {
+  contactUs: ({ email, content, name, contactNumber }: ContactUsParams) => {
     const token = getCookie('token');
     api.defaults.headers.common['authorization'] = token;
     return api.post(`${server_uri}/users/contact`, {

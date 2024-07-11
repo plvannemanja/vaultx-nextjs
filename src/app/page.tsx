@@ -1,9 +1,9 @@
 import { BaseHeader } from './components/Header/BaseHeader';
 import BaseFooter from './components/Footer/BaseFooter';
 import NFTList from './components/Dashboard/NFTList';
-import { getSections } from '@/services/supplier';
 import TrendingList from './components/Dashboard/TrendingList';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import NewsCard from './components/ui/NewsCard';
 
 export default async function Home() {
   const { section1, section2, section3, section4 } = await getData();
@@ -16,6 +16,13 @@ export default async function Home() {
         </div>
         <div className="flex justify-center">
           <NFTList />
+        </div>
+        <div className="flex justify-center w-full">
+          <NewsCard
+            heading={'News and Event'}
+            description={section4?.description}
+            data={section4?.box}
+          />
         </div>
       </div>
       <BaseFooter />

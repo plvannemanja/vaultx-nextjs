@@ -2,7 +2,12 @@
 import { client, wallets } from '@/app/client';
 import Logo from '@/components/Icon/Logo';
 import Link from 'next/link';
-import { useWalletDetailsModal, useConnectModal, useActiveAccount, AutoConnect } from 'thirdweb/react';
+import {
+  useWalletDetailsModal,
+  useConnectModal,
+  useActiveAccount,
+  AutoConnect,
+} from 'thirdweb/react';
 import { Search } from './Search';
 import WalletIcon from '@/components/Icon/WalletIcon';
 import { Address } from 'thirdweb';
@@ -13,9 +18,9 @@ import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import Image from 'next/image';
 
 export function BaseHeader() {
-  const [user, setUser] =useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const detailsModal = useWalletDetailsModal();
-  const {connect} = useConnectModal();
+  const { connect } = useConnectModal();
   const activeAccount = useActiveAccount();
 
   function handleDetail() {
@@ -28,24 +33,22 @@ export function BaseHeader() {
 
   const login = async (address: Address) => {
     try {
-      const {data} =
-        await authenticationServices.connectWallet({
-          wallet: address,
-        })
-      createCookie("user", JSON.stringify(data.user))
-      createCookie("token", data.token)
+      const { data } = await authenticationServices.connectWallet({
+        wallet: address,
+      });
+      createCookie('user', JSON.stringify(data.user));
+      createCookie('token', data.token);
       const {
-        data: {user}
-      } = await userServices.getSingleUser()
+        data: { user },
+      } = await userServices.getSingleUser();
       setUser(user);
     } catch (error) {
-      console.log({error})
+      console.log({ error });
     }
-  }
+  };
 
   useEffect(() => {
-    if(activeAccount?.address)
-      login(activeAccount?.address as Address)
+    if (activeAccount?.address) login(activeAccount?.address as Address);
   }, [activeAccount]);
 
   return (
@@ -83,16 +86,21 @@ export function BaseHeader() {
       </div>
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
         <Search />
-        {
-         (activeAccount) ? (
+        {activeAccount ? (
           <div className="flex gap-3 text-sm font-extrabold text-white capitalize whitespace-nowrap">
-            <Image className="shrink-0 aspect-square" width={40} height={40} src="/icons/default_profile.svg" alt="default_profile"/>
+            <Image
+              className="shrink-0 aspect-square"
+              width={40}
+              height={40}
+              src="/icons/default_profile.svg"
+              alt="default_profile"
+            />
             <div className="flex gap-1.5 px-5 my-auto">
               <div>{user?.username}</div>
               <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
             </div>
           </div>
-         ) : (
+        ) : (
           <div
             className="flex gap-2.5 justify-center items-center px-5 py-0.5 font-extrabold capitalize bg-yellow-300 rounded-lg text-neutral-900 max-md:px-5 cursor-pointer hover:bg-white hover:text-gray-900"
             onClick={handleConnect}
@@ -100,12 +108,8 @@ export function BaseHeader() {
             <div className="my-auto">Connect Wallet</div>
             <WalletIcon />
           </div>
-         ) 
-        }
-        <AutoConnect
-          wallets={wallets}
-          client={client}
-        />
+        )}
+        <AutoConnect wallets={wallets} client={client} />
       </div>
     </header>
   );
