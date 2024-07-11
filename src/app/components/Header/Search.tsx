@@ -8,7 +8,7 @@ export function Search() {
         type="text"
         placeholder="Search artwork, collection..."
       ></input>
-      <SearchIcon size={16} />
+      <SearchIcon size={16} className="cursor-pointer" />
     </div>
   );
 }

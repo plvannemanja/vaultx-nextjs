@@ -21,7 +21,6 @@ export default function NFTList() {
             !nft.curationInfo?.[0].active,
         );
       setNfts(filterNFTs);
-      debugger;
     } catch (error) {
       setNfts([]);
       console.log(error);

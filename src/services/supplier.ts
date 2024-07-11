@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { getCookie } from '../lib/cookie';
+import { Address } from 'thirdweb';
 
 const server_uri =
   process.env.Next_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
@@ -31,6 +32,39 @@ interface UserData {
 
 interface SaleData {
   // Define the structure of sale data object
+}
+
+interface ConnectWalletParams {
+  wallet: Address;
+}
+
+interface LogoutParams {
+  accessToken: string;
+}
+
+interface GetUserByIdParams {
+  id: string;
+}
+
+interface SubscribeEmailParams {
+  email: string;
+  subject: string;
+  content: string;
+}
+
+interface ContactUsParams {
+  email: string;
+  content: string;
+  name: string;
+  contactNumber: string;
+}
+
+interface UpdateProfileParams {
+  details: Record<string, unknown>;
+}
+
+interface GetArtistsParams {
+  data: Record<string, unknown>;
 }
 
 // API calls for NFTs
@@ -320,21 +354,6 @@ export const launchpadServices = {
     api.get(`${server_uri}/launchpad/getLaunchpadById/${launchpadId}`),
 };
 
-// API calls for user profile
-export const userServices = {
-  createUser: (userDetails: UserData): Promise<AxiosResponse<any>> => {
-    const token = getCookie('token');
-    api.defaults.headers.common['authorization'] = token;
-    return api.post(`${server_uri}/user/create`, userDetails);
-  },
-  getUserProfile: (userId: string): Promise<AxiosResponse<any>> =>
-    api.get(`${server_uri}/user/getUserProfile/${userId}`),
-  getUserNfts: (userId: string): Promise<AxiosResponse<any>> =>
-    api.get(`${server_uri}/user/getUserNfts/${userId}`),
-  getAllUsers: (limit: number, skip: number): Promise<AxiosResponse<any>> =>
-    api.post(`${server_uri}/user/getAllUsers`, { limit, skip }),
-};
-
 // API calls for sales
 export const saleServices = {
   createSale: (saleDetails: SaleData): Promise<AxiosResponse<any>> => {
@@ -446,4 +465,73 @@ export const upsertProperty = async (payload: any) => {
   );
 
   return property;
+};
+
+// authentication api calls
+export const authenticationServices = {
+  connectWallet: ({ wallet }: ConnectWalletParams) =>
+    api.post(`${server_uri}/user/login`, {
+      wallet: wallet,
+    }),
+  logout: ({ accessToken }: LogoutParams) => {
+    api.defaults.headers.common['authorization'] = accessToken;
+    return api.delete(`${server_uri}/auth/logout`);
+  },
+};
+
+// user api calls
+export const userServices = {
+  getSingleUser: () => {
+    return api.get(`${server_uri}/user/get-single-user`, {
+      headers: {
+        authorization: 'Bearer ' + getCookie('token'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  },
+  getUserById: (data: GetUserByIdParams) => {
+    return api.post(`${server_uri}/user/get-user-by-id`, data);
+  },
+  getGlobalSearch: (search: string) =>
+    api.get(`${server_uri}/users/getGlobalSearch/${search}`),
+  search: (searchQuery: string) =>
+    api.get(`${server_uri}/users/search?search=${searchQuery}`),
+  getSingleUserByAddress: (address: string) =>
+    api.get(`${server_uri}/users/getSingleUserByAddress/${address}`),
+
+  subscribeEmail: ({ email, subject, content }: SubscribeEmailParams) => {
+    const token = getCookie('token');
+    api.defaults.headers.common['authorization'] = token;
+    return api.post(`${server_uri}/users/subscribeEmail`, {
+      email,
+      subject,
+      content,
+    });
+  },
+  contactUs: ({
+    email,
+    content,
+    name,
+    contactNumber,
+  }: ContactUsParams) => {
+    const token = getCookie('token');
+    api.defaults.headers.common['authorization'] = token;
+    return api.post(`${server_uri}/users/contact`, {
+      email,
+      content,
+      name,
+      contactNumber,
+    });
+  },
+  updateProfile: (details: UpdateProfileParams) => {
+    return axios.post(`${server_uri}/user/updateUserDetails`, details, {
+      headers: {
+        authorization: 'Bearer ' + getCookie('token'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  },
+  getArtists: (data: GetArtistsParams) => {
+    return axios.post(`${server_uri}/user/getArtists`, data);
+  },
 };

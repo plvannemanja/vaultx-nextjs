@@ -57,7 +57,12 @@ export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
           <CarouselPrevious className="absolute left-8" />
           <div className="flex items-center gap-x-1 font-medium text-dark">
             {Array.from({ length: 5 }).map((_, index) => (
-              <span className={index === 2 ? 'text-neon' : 'text-dark'}>+</span>
+              <span
+                key={index}
+                className={index === 2 ? 'text-neon' : 'text-dark'}
+              >
+                +
+              </span>
             ))}
           </div>
           <CarouselNext className="absolute right-8" />
