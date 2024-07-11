@@ -78,6 +78,7 @@
 
 body {
   background-color: black;
+  font-family: Manrope;
 }
 
 .bg-dark {
@@ -88,6 +89,36 @@ body {
   color: #656565;
 }
 
+.text-light-gray {
+  color: #ffffff63;
+}
+
 .text-neon {
   color: #ddf247;
+}
+
+.bg-neon {
+  background-color: #ddf247;
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 100px;
+}
+
+/* Background of the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #232323; 
+}
+
+/* Scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #ddf247; 
+  border-radius: 6px;
+}
+
+/* Scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

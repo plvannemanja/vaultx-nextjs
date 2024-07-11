@@ -8,7 +8,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 export default async function Home() {
   const { section1, section2, section3, section4 } = await getData();
   return (
-    <main className="font-manrope flex flex-col pt-4 bg-neutral-900">
+    <main className="flex flex-col pt-4 bg-neutral-900">
       <BaseHeader />
       <div>
         <div className="flex justify-center">
