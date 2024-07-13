@@ -15,7 +15,7 @@ export default function BaseFooter() {
 
   return (
     <div className="flex flex-col gap-y-6 text-white justify-around my-10">
-      <div className="flex flex-wrap justify-between px-20 gap-10">
+      <div className="flex flex-wrap justify-between px-20 gap-10 container">
         <Link href="/dashboard?appreciate">Appreciate</Link>
         <Link href="/dashboard?curation">Curation</Link>
         <Link href="https://artistvaultx.wpcomstaging.com/" target="_blank">
@@ -93,7 +93,7 @@ export default function BaseFooter() {
 
       <hr />
 
-      <div className="flex flex-col gap-y-4 justify-center items-center relative px-20">
+      <div className="flex flex-col gap-y-4 justify-center items-center relative px-20 container">
         <Link href="/">
           <Logo />
         </Link>
