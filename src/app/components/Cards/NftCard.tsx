@@ -12,16 +12,20 @@ interface INftCardProps {
 
 export default function NftCard({ data }: { data: INftCardProps }) {
   return (
-    <Card className="bg-dark text-white border-none">
+    <Card className="bg-dark text-white border-none max-w-[20rem]">
       <CardContent className="aspect-square p-3">
-        <Image
-          src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-          height={100}
-          width={100}
-          className="rounded w-full aspect-[4/3] object-cover"
-          alt="nft-image"
-          loading="lazy"
-        />
+        <div className='w-full overflow-hidden'>
+          <Image
+            src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
+            placeholder='blur'
+            blurDataURL='/images/image_placeholder.png'
+            height={100}
+            width={100}
+            className="rounded w-full aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
+            alt="nft-image"
+            loading="lazy"
+          />
+        </div>
         <div className="flex flex-col gap-y-4 my-2">
           <p className="text-lg">{data.name}</p>
           <div className="flex justify-between">
@@ -29,7 +33,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             <span className="text-sm">{data.curation.name}</span>
           </div>
           <hr />
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <span className="text-xs text-dark">Price </span>
             <div className="flex gap-x-2 items-center">
               <Image
