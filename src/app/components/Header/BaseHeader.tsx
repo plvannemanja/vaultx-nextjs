@@ -16,6 +16,19 @@ import { createCookie } from '@/lib/cookie';
 import { useEffect, useState } from 'react';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import Image from 'next/image';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { List } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 
 export function BaseHeader() {
   const [user, setUser] = useState<any>(null);
@@ -52,42 +65,82 @@ export function BaseHeader() {
   }, [activeAccount]);
 
   return (
-    <header className="flex container gap-1 justify-between items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
-      <Link href="/">
-        <Logo />
-      </Link>
-      <div className="flex gap-5 justify-between self-stretch my-auto text-base font-medium text-white max-md:flex-wrap">
-        <Link
-          className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-          href="/dashboard?appreciate"
-        >
-          Appreciation
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-          href="/dashboard?curation"
-        >
-          Curation
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-          href="https://artistvaultx.wpcomstaging.com/"
-          target="_blank"
-        >
-          Magazine
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-          href="https://www.monsterx.io"
-          target="_blank"
-        >
-          How it Works
+    <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex">
+      <div className='h-8 relative inline-flex gap-1.5'>
+        <div className='hidden max-xl:block'>
+          <Sheet>
+            <SheetTrigger asChild>
+              <List size={24}></List>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetHeader>
+                <SheetTitle>Edit profile</SheetTitle>
+                <SheetDescription>
+                  Make changes to your profile here. Click save when you're done.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <input id="name" value="Pedro Duarte" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Username
+                  </Label>
+                  <input id="username" value="@peduarte" className="col-span-3" />
+                </div>
+              </div>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type="submit">Save changes</Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
+        <Link href="/">
+          <Logo />
         </Link>
       </div>
+
+      <div className='hidden xl:block'>
+        <div className="justify-start items-center gap-10 flex text-base text-white font-manrope">
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
+            href="/dashboard?appreciate"
+          >
+            Appreciation
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="/dashboard?curation"
+          >
+            Curation
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="https://artistvaultx.wpcomstaging.com/"
+            target="_blank"
+          >
+            Magazine
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="https://www.monsterx.io"
+            target="_blank"
+          >
+            How it Works
+          </Link>
+        </div>
+      </div>
+
+      <Search />
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
-        <Search />
         {activeAccount ? (
-          <div className="flex gap-3 text-sm font-extrabold text-white capitalize whitespace-nowrap">
+          <div className="w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
               className="shrink-0 aspect-square"
               width={40}
@@ -95,17 +148,17 @@ export function BaseHeader() {
               src="/icons/default_profile.svg"
               alt="default_profile"
             />
-            <div className="flex gap-1.5 px-5 my-auto">
-              <div>{user?.username}</div>
+            <div className="justify-start items-center gap-1.5 flex">
+              <div>{user?.username ?? 'Themesflat'}</div>
               <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
             </div>
           </div>
         ) : (
           <div
-            className="flex gap-2.5 justify-center items-center px-5 py-0.5 font-extrabold capitalize bg-yellow-300 rounded-lg text-neutral-900 max-md:px-5 cursor-pointer hover:bg-white hover:text-gray-900"
+            className="w-[187px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
             onClick={handleConnect}
           >
-            <div className="my-auto">Connect Wallet</div>
+            <div className="text-neutral-900 text-base font-semibold font-['Manrope'] leading-normal">Connect Wallet</div>
             <WalletIcon />
           </div>
         )}

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 import './globals.css';
 import { ThirdwebProvider } from 'thirdweb/react';
+import { ThemeProvider } from './components/theme-provider';
 
 const manrope = Manrope({ subsets: ['latin'] });
 
@@ -18,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={manrope.className}>
-        <ThirdwebProvider>{children}</ThirdwebProvider>
+        <ThemeProvider attribute='class' defaultTheme='dark'>
+          <ThirdwebProvider>{children}</ThirdwebProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
