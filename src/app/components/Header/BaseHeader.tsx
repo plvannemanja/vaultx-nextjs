@@ -25,10 +25,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from '@/components/ui/sheet';
 import { List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Menu } from './Menu';
 
 export function BaseHeader() {
   const [user, setUser] = useState<any>(null);
@@ -66,8 +67,8 @@ export function BaseHeader() {
 
   return (
     <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex">
-      <div className='h-8 relative inline-flex gap-1.5'>
-        <div className='hidden max-xl:block'>
+      <div className="h-8 relative inline-flex gap-1.5">
+        <div className="hidden max-xl:block">
           <Sheet>
             <SheetTrigger asChild>
               <List size={24}></List>
@@ -76,7 +77,8 @@ export function BaseHeader() {
               <SheetHeader>
                 <SheetTitle>Edit profile</SheetTitle>
                 <SheetDescription>
-                  Make changes to your profile here. Click save when you're done.
+                  Make changes to your profile here. Click save when you're
+                  done.
                 </SheetDescription>
               </SheetHeader>
               <div className="grid gap-4 py-4">
@@ -84,13 +86,21 @@ export function BaseHeader() {
                   <Label htmlFor="name" className="text-right">
                     Name
                   </Label>
-                  <input id="name" value="Pedro Duarte" className="col-span-3" />
+                  <input
+                    id="name"
+                    value="Pedro Duarte"
+                    className="col-span-3"
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="username" className="text-right">
                     Username
                   </Label>
-                  <input id="username" value="@peduarte" className="col-span-3" />
+                  <input
+                    id="username"
+                    value="@peduarte"
+                    className="col-span-3"
+                  />
                 </div>
               </div>
               <SheetFooter>
@@ -106,7 +116,7 @@ export function BaseHeader() {
         </Link>
       </div>
 
-      <div className='hidden xl:block'>
+      <div className="hidden xl:block">
         <div className="justify-start items-center gap-10 flex text-base text-white font-manrope">
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
@@ -140,29 +150,19 @@ export function BaseHeader() {
       <Search />
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
         {activeAccount ? (
-          <div className="w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
-            <Image
-              className="shrink-0 aspect-square"
-              width={40}
-              height={40}
-              src="/icons/default_profile.svg"
-              alt="default_profile"
-            />
-            <div className="justify-start items-center gap-1.5 flex">
-              <div>{user?.username ?? 'Themesflat'}</div>
-              <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
-            </div>
-          </div>
+          <Menu user={user} />
         ) : (
           <div
             className="w-[187px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
             onClick={handleConnect}
           >
-            <div className="text-neutral-900 text-base font-semibold font-['Manrope'] leading-normal">Connect Wallet</div>
+            <div className="text-neutral-900 text-base font-semibold font-['Manrope'] leading-normal">
+              Connect Wallet
+            </div>
             <WalletIcon />
           </div>
         )}
-        <AutoConnect wallets={wallets} client={client} />
+        <AutoConnect wallets={wallets} client={client} timeout={10000} />
       </div>
     </header>
   );

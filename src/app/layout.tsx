@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={manrope.className}>
-        <ThemeProvider attribute='class' defaultTheme='dark'>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <ThirdwebProvider>{children}</ThirdwebProvider>
         </ThemeProvider>
       </body>

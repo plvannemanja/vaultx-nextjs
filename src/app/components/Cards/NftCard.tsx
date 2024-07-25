@@ -14,11 +14,11 @@ export default function NftCard({ data }: { data: INftCardProps }) {
   return (
     <Card className="bg-dark text-white border-none max-w-[20rem]">
       <CardContent className="aspect-square p-3">
-        <div className='w-full overflow-hidden'>
+        <div className="w-full overflow-hidden">
           <Image
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-            placeholder='blur'
-            blurDataURL='/images/image_placeholder.png'
+            placeholder="blur"
+            blurDataURL="/images/image_placeholder.png"
             height={100}
             width={100}
             className="rounded w-full aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
