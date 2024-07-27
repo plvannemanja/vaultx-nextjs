@@ -8,6 +8,7 @@ interface INftCardProps {
     name: string;
   };
   price: string;
+  artist?: string;
 }
 
 export default function NftCard({ data }: { data: INftCardProps }) {
@@ -30,7 +31,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
           <p className="text-lg">{data.name}</p>
           <div className="flex justify-between">
             <span className="text-xs text-dark">Created by: </span>
-            <span className="text-sm">{data.curation.name}</span>
+            <span className="text-sm">{data.curation.name ? data.curation.name : data.artist}</span>
           </div>
           <hr />
           <div className="flex justify-between items-center">

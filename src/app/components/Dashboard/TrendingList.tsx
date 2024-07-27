@@ -14,7 +14,6 @@ export default function TrendingList({ data }: TrendingProps) {
     if (!data) return;
     const tempNfts = [];
     for (let i = 0; i < data?.box?.length; i++) {
-      console.log(data?.box[i]?.split('/')[5]);
       try {
         const nftService = new NftServices();
         const {
