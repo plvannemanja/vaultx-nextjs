@@ -19,11 +19,13 @@ export default function NewsCard({
     <div className="flex flex-col gap-y-10 text-white">
       <div className="flex flex-col gap-y-5 text-center">
         {heading}
-        <p className="text-center px-10 text-gray-300 md:text-xl">{description}</p>
+        <p className="text-center px-10 text-gray-300 md:text-xl">
+          {description}
+        </p>
       </div>
 
       <div className="flex gap-3 lg:gap-6 w-full flex-wrap mx-auto justify-center">
-        <div className='w-[90%] lg:w-[45%]'>
+        <div className="w-[90%] lg:w-[45%]">
           <Image
             src="/pic.webp"
             alt="news"
@@ -34,7 +36,7 @@ export default function NewsCard({
         </div>
         <div className="w-[90%] lg:w-[45%] grid grid-cols-2 grid-rows-3 gap-3 lg:gap-6">
           {data.slice(1).map((item, index) => (
-            <div key={index} className='w-full h-full relative'>
+            <div key={index} className="w-full h-full relative">
               <Image
                 src={item.image}
                 alt="news"
@@ -42,7 +44,9 @@ export default function NewsCard({
                 height={100}
                 className="rounded aspect-square w-full h-full object-cover"
               />
-              <p className='text-light-gray p-5 absolute bottom-0 font-semibold'>{item.title}</p>
+              <p className="text-light-gray p-5 absolute bottom-0 font-semibold">
+                {item.title}
+              </p>
             </div>
           ))}
         </div>
