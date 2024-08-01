@@ -1,70 +1,168 @@
 'use client';
-import { client } from '@/app/client';
+import { client, wallets } from '@/app/client';
 import Logo from '@/components/Icon/Logo';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { createThirdwebClient } from 'thirdweb';
-import { useWalletDetailsModal, useConnectModal } from 'thirdweb/react';
-import { useConnect } from 'thirdweb/react';
-import { createWallet, injectedProvider } from 'thirdweb/wallets';
+import {
+  useWalletDetailsModal,
+  useConnectModal,
+  useActiveAccount,
+  AutoConnect,
+} from 'thirdweb/react';
 import { Search } from './Search';
 import WalletIcon from '@/components/Icon/WalletIcon';
+import { Address } from 'thirdweb';
+import { authenticationServices, userServices } from '@/services/supplier';
+import { createCookie } from '@/lib/cookie';
+import { useEffect, useState } from 'react';
+import { DropdownIcon } from '@/components/Icon/ProfileIcon';
+import Image from 'next/image';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
+import { List } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Menu } from './Menu';
 
 export function BaseHeader() {
-  const { connect, isConnecting, error } = useConnect();
+  const [user, setUser] = useState<any>(null);
   const detailsModal = useWalletDetailsModal();
-  const connectModal = useConnectModal();
+  const { connect } = useConnectModal();
+  const activeAccount = useActiveAccount();
 
   function handleDetail() {
     detailsModal.open({ client });
   }
 
   function handleConnect() {
-    connectModal.connect({ client });
+    connect({ client, wallets });
   }
 
+  const login = async (address: Address) => {
+    try {
+      const { data } = await authenticationServices.connectWallet({
+        wallet: address,
+      });
+      createCookie('user', JSON.stringify(data.user));
+      createCookie('token', data.token);
+      const {
+        data: { user },
+      } = await userServices.getSingleUser();
+      setUser(user);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  useEffect(() => {
+    if (activeAccount?.address) login(activeAccount?.address as Address);
+  }, [activeAccount]);
+
   return (
-    <header className="flex container gap-1 justify-between items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
-      <Link href="/">
-        <Logo />
-      </Link>
-      <div className="flex gap-5 justify-between self-stretch my-auto text-base font-medium text-white max-md:flex-wrap">
-        <Link
-          className="hover:font-bold hover:cursor-pointer"
-          href="/dashboard?appreciate"
-        >
-          Appreciation
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer"
-          href="/dashboard?curation"
-        >
-          Curation
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer"
-          href="https://artistvaultx.wpcomstaging.com/"
-          target="_blank"
-        >
-          Magazine
-        </Link>
-        <Link
-          className="hover:font-bold hover:cursor-pointer"
-          href="https://www.monsterx.io"
-          target="_blank"
-        >
-          How it Works
+    <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex">
+      <div className="h-8 relative inline-flex gap-1.5">
+        <div className="hidden max-xl:block">
+          <Sheet>
+            <SheetTrigger asChild>
+              <List size={24}></List>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetHeader>
+                <SheetTitle>Edit profile</SheetTitle>
+                <SheetDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <input
+                    id="name"
+                    value="Pedro Duarte"
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Username
+                  </Label>
+                  <input
+                    id="username"
+                    value="@peduarte"
+                    className="col-span-3"
+                  />
+                </div>
+              </div>
+              <SheetFooter>
+                <SheetClose asChild>
+                  <Button type="submit">Save changes</Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        </div>
+        <Link href="/">
+          <Logo />
         </Link>
       </div>
-      <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
-        <Search />
-        <div
-          className="flex gap-2.5 justify-center items-center px-5 py-0.5 font-extrabold capitalize bg-yellow-300 rounded-lg text-neutral-900 max-md:px-5"
-          onClick={handleConnect}
-        >
-          <div className="my-auto">Connect Wallet</div>
-          <WalletIcon />
+
+      <div className="hidden xl:block">
+        <div className="justify-start items-center gap-10 flex text-base text-white font-manrope">
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
+            href="/dashboard?appreciate"
+          >
+            Appreciation
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="/dashboard?curation"
+          >
+            Curation
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="https://artistvaultx.wpcomstaging.com/"
+            target="_blank"
+          >
+            Magazine
+          </Link>
+          <Link
+            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            href="https://www.monsterx.io"
+            target="_blank"
+          >
+            How it Works
+          </Link>
         </div>
+      </div>
+
+      <Search />
+      <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
+        {activeAccount ? (
+          <Menu user={user} />
+        ) : (
+          <div
+            className="w-[187px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+            onClick={handleConnect}
+          >
+            <div className="text-neutral-900 text-base font-semibold font-['Manrope'] leading-normal">
+              Connect Wallet
+            </div>
+            <WalletIcon />
+          </div>
+        )}
+        <AutoConnect wallets={wallets} client={client} timeout={10000} />
       </div>
     </header>
   );

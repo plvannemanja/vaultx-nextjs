@@ -129,7 +129,7 @@ export default function Home() {
     getData();
   }, []);
   return (
-    <main className="flex flex-col pt-4 bg-neutral-900">
+    <main className="flex flex-col bg-neutral-900">
       <BaseHeader />
       <div className="py-20 w-full px-10 lg:px-20">
         {section1 ? (
@@ -200,6 +200,13 @@ export default function Home() {
         <div className="flex justify-center">
           <NFTList />
         </div>
+        <div className="flex justify-center w-full">
+          <NewsCard
+            heading={'News and Event'}
+            description={section4?.description}
+            data={section4?.box}
+          />
+        </div>
       </div>
       {section4 ? (
         <div className="py-20">
@@ -231,44 +238,3 @@ export default function Home() {
     </main>
   );
 }
-
-// async function getData() {
-//   try {
-//     const server_uri =
-//       process.env.Next_PUBLIC_APP_BACKEND_URL ||
-//       'https://tapi.vault-x.io/api/v1';
-
-//     // Fetch data from an API
-//     const { data } = await axios.get(`${server_uri}/homepage/get-sections`);
-//     const images = await getMedia();
-//     let curations: any[] = [];
-
-//     if (data.section3 && data.section3.box.length > 0) {
-//       await data.section3.box.forEach(async (item: string) => {
-//         const {
-//           data: { collection },
-//         } = await collectionServices.getCollectionById(item.split('/')[5]);
-
-//         if (collection) {
-//           curations.push(collection);
-//         }
-//       });
-//     }
-
-//     return {
-//       ...data,
-//       images: images,
-//       curations: curations,
-//     };
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//     return {
-//       section1: null,
-//       section2: null,
-//       section3: null,
-//       section4: null,
-//       images: null,
-//       curations: null,
-//     };
-//   }
-// }
