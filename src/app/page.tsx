@@ -99,6 +99,7 @@ export default function Home() {
 
   useEffect(() => {
     const getData = async () => {
+      debugger;
       const server_uri =
         process.env.Next_PUBLIC_APP_BACKEND_URL ||
         'https://tapi.vault-x.io/api/v1';
@@ -201,11 +202,13 @@ export default function Home() {
           <NFTList />
         </div>
         <div className="flex justify-center w-full">
-          <NewsCard
-            heading={'News and Event'}
-            description={section4?.description}
-            data={section4?.box}
-          />
+          {section4 ? (
+            <NewsCard
+              heading={'News and Event'}
+              description={section4?.description}
+              data={section4?.box}
+            />
+          ) : null }
         </div>
       </div>
       {section4 ? (
