@@ -14,22 +14,41 @@ import { Address } from 'thirdweb';
 import { authenticationServices, userServices } from '@/services/supplier';
 import { createCookie } from '@/lib/cookie';
 import { useEffect, useState } from 'react';
-import { DropdownIcon } from '@/components/Icon/ProfileIcon';
-import Image from 'next/image';
 import {
   Sheet,
   SheetClose,
   SheetContent,
   SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { List } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Menu } from './Menu';
+
+const socials = [
+  {
+    link: "",
+    image: "/icons/facebook-tag.svg"
+  },
+  {
+    link: "",
+    image: "/icons/linkedin.svg"
+  },
+  {
+    link: "",
+    image: "/icons/tiktok.svg"
+  },
+  {
+    link: "",
+    image: "/icons/instagram.svg"
+  },
+  {
+    link: "",
+    image: "/icons/youtube.svg"
+  }
+]
 
 export function BaseHeader() {
   const [user, setUser] = useState<any>(null);
@@ -66,58 +85,68 @@ export function BaseHeader() {
   }, [activeAccount]);
 
   return (
-    <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex">
-      <div className="h-8 relative inline-flex gap-1.5">
-        <div className="hidden max-xl:block">
-          <Sheet>
-            <SheetTrigger asChild>
-              <List size={24}></List>
-            </SheetTrigger>
-            <SheetContent side="left">
-              <SheetHeader>
-                <SheetTitle>Edit profile</SheetTitle>
-                <SheetDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <input
-                    id="name"
-                    value="Pedro Duarte"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <input
-                    id="username"
-                    value="@peduarte"
-                    className="col-span-3"
-                  />
-                </div>
-              </div>
-              <SheetFooter>
-                <SheetClose asChild>
-                  <Button type="submit">Save changes</Button>
-                </SheetClose>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+    <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex px-4">
+      <div className="flex gap-x-4 items-center">
+
+        <div className="h-8 relative inline-flex gap-1.5 top-1">
+          <div className="hidden max-xl:block">
+            <Sheet>
+              <SheetTrigger asChild>
+                <List size={24} className="my-auto"></List>
+              </SheetTrigger>
+              <SheetContent side="left" className="bg-dark">
+                <SheetHeader className="text-left space-y-10">
+                  <SheetTitle>VaultX</SheetTitle>
+                  <SheetDescription>
+                    <div className="flex flex-col gap-y-4 text-white">
+                      <Label className="text-sm">Appreciation</Label>
+                      <Label className="text-sm">Artist</Label>
+                      <Label className="text-sm">Curation</Label>
+                      <Label className="text-sm">Magazine</Label>
+                    </div>
+                    <hr className="my-4 bg-white" />
+                    <Label className="text-sm text-white">How to work</Label>
+                    <div className="flex mt-4 gap-3.5 self-stretch text-sm max-md:flex-wrap">
+                      {activeAccount ? (
+                        <Menu user={user} />
+                      ) : (
+                        <div
+                          className="max-w-[200px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+                          onClick={handleConnect}
+                        >
+                          <div className="text-neutral-900 text-sm md:text-base font-semibold leading-normal">
+                            Connect Wallet
+                          </div>
+                          <WalletIcon />
+                        </div>
+                      )}
+                      <AutoConnect wallets={wallets} client={client} timeout={10000} />
+                    </div>
+                    <div className="flex gap-x-2 my-4">
+                      {
+                        socials.map((social, _) => {
+                          return (
+                            <Link href={social.link} target='_blank'>
+                              <img src={social.image} className="w-6 fill-white stroke-white" />
+                            </Link>
+                          )
+                        })
+                      }
+                    </div>
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
+
         <Link href="/">
           <Logo />
         </Link>
       </div>
 
       <div className="hidden xl:block">
-        <div className="justify-start items-center gap-10 flex text-base text-white font-manrope">
+        <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
             href="/dashboard?appreciate"
@@ -153,10 +182,10 @@ export function BaseHeader() {
           <Menu user={user} />
         ) : (
           <div
-            className="w-[187px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+            className="max-w-[200px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
             onClick={handleConnect}
           >
-            <div className="text-neutral-900 text-base font-semibold font-['Manrope'] leading-normal">
+            <div className="text-neutral-900 text-sm md:text-base font-semibold leading-normal">
               Connect Wallet
             </div>
             <WalletIcon />

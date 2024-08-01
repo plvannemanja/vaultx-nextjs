@@ -10,8 +10,8 @@ import NewsCard from './components/ui/NewsCard';
 import ArtistsCard from './components/Cards/ArtistsCard';
 import { Label } from '@/components/ui/label';
 import ExceptionalCard from './components/Cards/ExceptionalCard';
-import OwlCarouselWrapper from './components/Carousels/OwlCarouselWrapper';
 import { useEffect, useState } from 'react';
+import { AutoCarousel } from './components/Carousels/AutoCarousel';
 
 interface Isection1 {
   title: string;
@@ -131,6 +131,11 @@ export default function Home() {
   return (
     <main className="flex flex-col bg-neutral-900">
       <BaseHeader />
+      {
+        images?.homeAutority ? (
+          <AutoCarousel data={images.homeAutority} />
+        ) : null
+      }
       <div className="py-20 w-full px-10 lg:px-20">
         {section1 ? (
           <>
@@ -199,15 +204,6 @@ export default function Home() {
 
         <div className="flex justify-center">
           <NFTList />
-        </div>
-        <div className="flex justify-center w-full">
-          {section4 ? (
-            <NewsCard
-              heading={'News and Event'}
-              description={section4?.description}
-              data={section4?.box}
-            />
-          ) : null }
         </div>
       </div>
       {section4 ? (
