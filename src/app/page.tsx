@@ -99,7 +99,6 @@ export default function Home() {
 
   useEffect(() => {
     const getData = async () => {
-      debugger;
       const server_uri =
         process.env.Next_PUBLIC_APP_BACKEND_URL ||
         'https://tapi.vault-x.io/api/v1';
