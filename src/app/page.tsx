@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import ExceptionalCard from './components/Cards/ExceptionalCard';
 import { useEffect, useState } from 'react';
 import { AutoCarousel } from './components/Carousels/AutoCarousel';
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface Isection1 {
   title: string;
@@ -134,7 +135,7 @@ export default function Home() {
       {
         images?.homeAutority ? (
           <AutoCarousel data={images.homeAutority} />
-        ) : null
+        ) : <Skeleton className='w-full h-[400px]' />
       }
       <div className="py-20 w-full px-10 lg:px-20">
         {section1 ? (

@@ -25,6 +25,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             className="rounded w-full aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
             loading="lazy"
+            quality={100}
           />
         </div>
         <div className="flex flex-col gap-y-4 my-2">
@@ -44,6 +45,9 @@ export default function NftCard({ data }: { data: INftCardProps }) {
                 height={20}
                 width={20}
                 alt="matic"
+                loading="lazy"
+                blurDataURL={"/images/image_placeholder.png"}
+                quality={100}
               />
               ${data.price}
             </div>
