@@ -8,6 +8,10 @@ import NftServices from '@/services/nftService';
 
 import Curation from './tabs/Curation';
 import Appreciate from './tabs/Appreciate';
+import Profile from './tabs/Profile';
+import Favourite from './tabs/Favourite';
+import Orders from './tabs/Orders';
+import Settings from './tabs/Settings';
 
 
 interface IImage {
@@ -27,9 +31,7 @@ export default function page() {
   const [nfts, setNfts] = useState<any>([]);
   const [collection, setCollection] = useState<any>([]);
   const nftService = new NftServices();
-  const [tab, setTab] = useState(searchParams.get('tab') || null);
-
-  console.log(tab)
+  const [tab, setTab] = useState(searchParams.get('tab') || 'appreciate');
 
   const [filters, setFilters] = useState({
     filter: {
@@ -99,6 +101,22 @@ export default function page() {
       {
         tab === 'curation' ?
         <Curation hero={images ? images.curationTop : null} collections={collection} /> : null 
+      }
+      {
+        tab === 'work' ?
+        <Profile /> : null
+      }
+      {
+        tab === 'fav' ?
+        <Favourite /> : null
+      }
+      {
+        tab === 'order' ? 
+        <Orders /> : null
+      }
+      {
+        tab === 'settings' ? 
+        <Settings /> : null
       }
     </div>
   )

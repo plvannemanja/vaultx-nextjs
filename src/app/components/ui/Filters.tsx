@@ -39,7 +39,7 @@ const categories = [
     }
 ]
 
-const prices = [
+export const prices = [
     {
         value: "e",
         label: "Price: Low to High"
@@ -63,6 +63,10 @@ const prices = [
     {
         value: "j",
         label: "Highest Last Sale"
+    },
+    {
+        value: "k",
+        label: "NFC Minted"
     }
 ]
 

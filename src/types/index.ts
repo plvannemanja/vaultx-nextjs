@@ -43,7 +43,11 @@ export type NFTItemType = {
     certificates: Array<string>;
     freeMinting: boolean;
     onSale: boolean;
-    saleId: string;
+    saleId: {
+        sellerShippingId: {
+            country: string
+        }
+    };
     views: number;
     followers: number;
     minted: boolean;

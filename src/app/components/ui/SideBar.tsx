@@ -18,6 +18,7 @@ const marketPlaceLinks = [
     name: 'Magazine',
     value: 'news',
     icon: '/icons/sidebar_ico_4.svg',
+    link: 'https://magazinex.io/',
   },
   {
     name: 'How to work',
@@ -75,6 +76,11 @@ export default function SideBar({ className }: {className?: string}) {
               className="flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative"
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
+              onClick={() => {
+                if (link.link) {
+                  window.open(link.link, '_blank');
+                }
+              }}
             >
               <Image
                 src={link.icon}
