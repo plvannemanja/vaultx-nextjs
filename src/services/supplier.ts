@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { getCookie } from '../lib/cookie';
 import { Address } from 'thirdweb';
+import { CurationType, NFTItem, NFTItemType, UserType } from '@/types';
 
 const server_uri =
   process.env.Next_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
@@ -65,6 +66,18 @@ interface UpdateProfileParams {
 
 interface GetArtistsParams {
   data: Record<string, unknown>;
+}
+
+interface IGetSearchRequest {
+  filterString: string;
+}
+
+export interface IGetSearchResponse {
+  success: boolean;
+  nfts: Array<Partial<NFTItem>>;
+  curations: Array<Partial<CurationType>>,
+  artistsNfts: Array<Partial<NFTItemType>>,
+  users: Array<Partial<UserType>>,
 }
 
 // API calls for NFTs
@@ -251,8 +264,14 @@ export const collectionServices = {
     data: CollectionData,
   ): Promise<AxiosResponse<any>> =>
     api.post(`${server_uri}/collection/getCollectionActivities/`, data),
-  getSearch: (data: string): Promise<AxiosResponse<any>> =>
-    api.post(`${server_uri}/collection/search`, data),
+  getSearch: (data: IGetSearchRequest): Promise<IGetSearchResponse> => {
+    return api.post(`${server_uri}/collection/search`, data)
+      .then((res: AxiosResponse) => {
+        return res.data;
+      })
+      .catch(err => err)
+
+  }
 };
 
 // API calls for auctions
