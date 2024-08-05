@@ -54,16 +54,16 @@ const accountLinks = [
   },
 ];
 
-export default function SideBar() {
+export default function SideBar({ className }: {className?: string}) {
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
-    <div className="bg-black fixed left-0 top-0 h-[100vh] z-20 w-[16rem]">
-      <div className="px-10 py-5 mt-10 border-b-2 border-b-gray-700">
+    <div className={`bg-black fixed left-0 top-0 h-[100vh] z-20 w-[16rem] ${className}`}>
+      <div className="px-10 py-5 mt-4 border-b-2 border-b-gray-700">
         <Image src="/logo.svg" width={120} height={120} alt="logo" />
       </div>
       <button className="flex items-center justify-center gap-x-2 my-5 py-3 px-3 bg-neon rounded-xl w-[80%] mx-auto">
-        <span className="font-bold">Create</span>
+        <span className="font-bold text-black">Create</span>
         <Image src="/icons/file_plus.svg" width={20} height={20} alt="create" />
       </button>
       <div className="flex flex-col gap-y-3 text-white py-5 pl-8 sidebar_list max-h-[60vh] overflow-auto border-t-2 border-t-gray-700">

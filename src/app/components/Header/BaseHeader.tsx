@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/sheet';
 import { List } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Menu } from './Menu';
+import Menu from './Menu';
 
 const socials = [
   {

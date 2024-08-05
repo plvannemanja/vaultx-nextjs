@@ -1,3 +1,5 @@
+"use client";
+
 import { client } from '@/app/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import { Button } from '@/components/ui/button';
@@ -11,16 +13,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Copy, Power } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect } from 'react';
 import {
-  ConnectButton,
   useActiveAccount,
   useActiveWallet,
   useActiveWalletChain,
   useDisconnect,
   useWalletBalance,
   useWalletImage,
-  useWalletInfo,
 } from 'thirdweb/react';
 import { Data, Polygon } from '@3rdweb/chain-icons';
 import { WalletId } from 'thirdweb/wallets';
@@ -48,7 +47,7 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
         height={size}
         src={walletImageData}
         alt="wallet_img"
-        className="round-lg"
+        className="rounded-full"
       />
     );
   }
@@ -59,7 +58,7 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
         width={size}
         height={size}
         src={defaultImageData}
-        alt="wallet_img"
+        alt="wallet_img rounded-full"
       />
     );
   }
@@ -67,7 +66,7 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
   return null;
 };
 
-export function Menu({ user }: MenuProps) {
+export default function Menu({ user }: MenuProps) {
   const activeAccount = useActiveAccount();
   const activeWallet = useActiveWallet();
   const activeChain = useActiveWalletChain();
@@ -92,7 +91,7 @@ export function Menu({ user }: MenuProps) {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[400px] relative bg-neutral-900 rounded-[20px] shadow !text-base">
+      <DropdownMenuContent className="w-[325px] p-4 relative bg-neutral-900 rounded-[20px] shadow !text-base">
         <DropdownMenuLabel>
           <div className="w-[109px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
@@ -108,16 +107,16 @@ export function Menu({ user }: MenuProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>My Profile</DropdownMenuItem>
-        <DropdownMenuItem>My Favorite</DropdownMenuItem>
-        <DropdownMenuItem>My Order</DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem className="my-1">My Profile</DropdownMenuItem>
+        <DropdownMenuItem className="my-1">My Favorite</DropdownMenuItem>
+        <DropdownMenuItem className="my-1">My Order</DropdownMenuItem>
+        <DropdownMenuItem className="my-1">
           Language
           <div className="w-[109px] h-8 absolute right-0 justify-start items-center gap-14 inline-flex">
-            <div className="text-center text-white font-extrabold font-['Manrope'] capitalize">
+            <div className="text-center text-white font-extrabold capitalize">
               En
             </div>
-            <div className="w-[18px] h-[18px] relative">
+            <div className="relative w-4">
               <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
             </div>
           </div>
@@ -125,8 +124,8 @@ export function Menu({ user }: MenuProps) {
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Help Center</DropdownMenuItem>
         <DropdownMenuItem>
-					<div>
-						<div className="w-[368px] mx-auto flex">
+					<div className='w-full mt-4'>
+						<div className="mx-auto flex">
 							<div className="justify-center w-full items-center">
 								<div className="float-left">
 									<div className="justify-start items-center gap-5 inline-flex">
@@ -135,13 +134,8 @@ export function Menu({ user }: MenuProps) {
 											size={50}
 										></WalletImage>
 										<div className="justify-start items-start">
-											<div className="opacity-40 text-left text-white text-base font-medium font-manrope capitalize">
+											<div className="opacity-40 text-left text-white text-base font-medium capitalize">
 												{activeChain?.name}
-											</div>
-											<div className="text-left text-white text-base font-medium font-manrope capitalize">
-												{activeAccount
-													? shortenAddress(activeAccount?.address)
-													: ''}
 											</div>
 										</div>
 									</div>
@@ -157,17 +151,17 @@ export function Menu({ user }: MenuProps) {
 							</div>
 						</div>
 						<h3>{JSON.stringify(data)}</h3>
-						<div className="w-[368px] h-[86px] pl-[15px] pr-[23px] pt-[23px] rounded-[15px] border border-white border-opacity-5 flex-col justify-end items-start gap-9 inline-flex">
+						<div className="px-4 py-2 mt-3 w-full rounded-lg border border-white border-opacity-5 flex-col justify-end items-start gap-9 inline-flex">
 								<div className="self-stretch justify-between items-center inline-flex">
 									<div className="justify-start items-center gap-[17px] flex">
-										<div className="w-10 h-10 relative">
+										<div className="w-5 h-5 relative">
 											<Polygon className="text-white"></Polygon>
 										</div>
-										<div className="text-center text-white text-base font-extrabold font-manrope capitalize">
+										<div className="text-center text-white text-base font-extrabold capitalize">
 											{}Matic
 										</div>
 									</div>
-									<div className="text-center text-neutral-400 text-base font-semibold font-manrope capitalize">
+									<div className="text-center text-neutral-400 text-base font-semibold capitalize">
 										$448.9
 									</div>
 								</div>
