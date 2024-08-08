@@ -5,13 +5,14 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import NftServices from '@/services/nftService';
-
 import Curation from './tabs/Curation';
 import Appreciate from './tabs/Appreciate';
 import Profile from './tabs/Profile';
 import Favourite from './tabs/Favourite';
 import Orders from './tabs/Orders';
 import Settings from './tabs/Settings';
+import Create from './tabs/Create';
+import BaseModal from '../components/Modals/BaseModal';
 
 
 interface IImage {
@@ -26,12 +27,17 @@ interface IImage {
 }
 
 export default function page() {
+  const nftService = new NftServices();
+
   const searchParams = useSearchParams();
   const [images, setImages] = useState<IImage | null>(null);
   const [nfts, setNfts] = useState<any>([]);
   const [collection, setCollection] = useState<any>([]);
-  const nftService = new NftServices();
   const [tab, setTab] = useState(searchParams.get('tab') || 'appreciate');
+  const [modal, setModal] = useState({
+    active: false,
+    content: ''
+  });
 
   const [filters, setFilters] = useState({
     filter: {
@@ -42,6 +48,19 @@ export default function page() {
     skip: 0,
   })
 
+  const handleModalProcess = (type: string) => {
+    const show = type != '';
+    if (show) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('show', show ? 'true' : 'false');
+    }
+
+    setModal({
+      active: true,
+      content: type
+    })
+  }
+ 
   useEffect(() => {
     if (tab == 'curation') {
       const fetchCollection = async () => {
@@ -81,6 +100,11 @@ export default function page() {
       fetchNfts();
     }
 
+    const modal = searchParams.get('show') == "true" ? true : false;
+    setModal({
+      active: modal,
+      content: ''
+    })
 
     if (!images) {
       const fetchMedia = async() => {
@@ -117,6 +141,14 @@ export default function page() {
       {
         tab === 'settings' ? 
         <Settings /> : null
+      }
+      {
+        tab === 'create' ? 
+        <Create modalProcess={handleModalProcess} /> : null
+      }
+      {
+        modal &&
+        <BaseModal show={modal.active} type="curation" />
       }
     </div>
   )

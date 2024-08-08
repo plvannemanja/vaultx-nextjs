@@ -42,27 +42,39 @@ const categories = [
 export const prices = [
     {
         value: "e",
-        label: "Price: Low to High"
+        label: "Price: Low to High",
+        param: "price",
+        paramValue: 1
     },
     {
         value: "f",
-        label: "Price: High to Low"
+        label: "Price: High to Low",
+        param: "price",
+        paramValue: -1
     },
     {
         value: "g",
-        label: "Recently Minted"
+        label: "Recently Minted",
+        param: "createdAt",
+        paramValue: -1
     },
     {
         value: "h",
-        label: "Recently Listed"
+        label: "Recently Listed",
+        param: "updatedAt",
+        paramValue: -1
     },
     {
         value: "i",
-        label: "Most Favorited"
+        label: "Most Favorited",
+        param: "likes",
+        paramValue: -1
     },
     {
         value: "j",
-        label: "Highest Last Sale"
+        label: "Highest Last Sale",
+        param: "price",
+        paramValue: -1
     },
     {
         value: "k",

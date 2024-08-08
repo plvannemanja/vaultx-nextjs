@@ -16,20 +16,15 @@ export default function NftCard({ data }: { data: INftCardProps }) {
     <Card className="bg-dark text-white border-none max-w-[20rem]">
       <CardContent className="aspect-square p-3">
         <div className="w-full overflow-hidden">
-          <Image
+          <img
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-            placeholder="blur"
-            blurDataURL="/images/image_placeholder.png"
-            height={100}
-            width={100}
             className="rounded w-full aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
             loading="lazy"
-            quality={100}
           />
         </div>
         <div className="flex flex-col gap-y-4 my-2">
-          <p className="text-lg">{data.name}</p>
+          <p className="text-lg">{data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}</p>
           <div className="flex justify-between">
             <span className="text-xs text-dark">Created by: </span>
             <span className="text-sm">
