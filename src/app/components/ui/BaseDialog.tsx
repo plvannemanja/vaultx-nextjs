@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -20,39 +18,41 @@ interface IBaseDialogProps {
   footer?: React.ReactNode
 }
 
-export function BaseDialog({trigger, children, title, description, className, footer}: IBaseDialogProps) {
+export function BaseDialog({ trigger, children, title, description, className, footer }: IBaseDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          {trigger}
-        </Button>
+        {trigger}
       </DialogTrigger>
-      <DialogContent className={`sm:max-w-md ${className}`}>
-        <DialogHeader>
-          {
-            title && (  
-              <DialogTitle>
-                {title}
-              </DialogTitle>
-            )
-          }
-          {
-            description && (
-              <DialogDescription>
-                {description}
-              </DialogDescription>
-            )
-          }
-        </DialogHeader>
-        {children}
-        <DialogFooter className="sm:justify-start">
-          {
-            footer && (
-              footer
-            )
-          }
-        </DialogFooter>
+      <DialogContent className={`max-w-2xl ${className}`}>
+        <div className="w-full overflow-x-hidden">
+          <DialogHeader>
+            {
+              title && (
+                <DialogTitle>
+                  {title}
+                </DialogTitle>
+              )
+            }
+            {
+              description && (
+                <DialogDescription>
+                  {description}
+                </DialogDescription>
+              )
+            }
+          </DialogHeader>
+          <div className="w-full">
+            {children}
+          </div>
+          <DialogFooter className="sm:justify-start">
+            {
+              footer && (
+                footer
+              )
+            }
+          </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   )

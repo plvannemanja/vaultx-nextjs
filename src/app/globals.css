@@ -126,3 +126,74 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.file-upload {
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s all;
+}
+
+.file-upload input.file-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  height: 100%;
+  width: 100%;
+}
+
+.file-input {
+  width: 231px;
+}
+
+.file-upload input.file-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  height: 100%;
+  width: 100%;
+}
+
+.file-upload span {
+  cursor: pointer;
+  color: var(--Text-in-Bg, #161616);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+  display: inline-flex;
+  gap: 6px;
+  border-radius: 12px;
+  background: var(--Main-color, #ddf247);
+  padding: 10px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.file-upload {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px;
+  background: transparent;
+  color: #919191;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 160%;
+  display: flex;
+  align-items: center;
+  font-family: 'Manrope', sans-serif;
+  gap: 10px;
+  width: 460px;
+}
