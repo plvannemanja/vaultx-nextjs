@@ -12,7 +12,8 @@ import Favourite from './tabs/Favourite';
 import Orders from './tabs/Orders';
 import Settings from './tabs/Settings';
 import Create from './tabs/Create';
-import BaseModal from '../components/Modals/BaseModal';
+import CreateCuration from '../components/Modules/CreateCuration';
+import CreateNft from '../components/Modules/CreateNft';
 
 
 interface IImage {
@@ -118,6 +119,8 @@ export default function page() {
   }, [tab])
   return (
     <div>
+      <CreateNft />
+      <CreateCuration />
       {
         tab === 'appreciate' ?
         <Appreciate hero={images ? images.appreciateTop : null} nfts={nfts} /> : null
@@ -146,10 +149,10 @@ export default function page() {
         tab === 'create' ? 
         <Create modalProcess={handleModalProcess} /> : null
       }
-      {
+      {/* {
         modal &&
         <BaseModal show={modal.active} type="curation" />
-      }
+      } */}
     </div>
   )
 }
