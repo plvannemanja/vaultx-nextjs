@@ -8,13 +8,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import BaseButton from "../ui/BaseButton";
 
-export default function ContactInfo() {
+export default function ContactInfo({ handler } : { handler?: (data: any) => void }) {
     const [data, setData] = useState<null | any[]>(null);
     const [newContact, setNewContact] = useState({
         id: null,
         contactInfo: "",
         name: ""
     })
+    const [selectedContact, setSelectedContact] = useState(null);
 
     const update = async (id?: string) => {
         
@@ -46,6 +47,12 @@ export default function ContactInfo() {
     }
 
     useEffect(() => {
+        if (handler) {
+            handler(selectedContact);
+        }
+    }, [selectedContact]);
+
+    useEffect(() => {
         const fetchContacts = async () => {
             const response = await getContactsInfo();
 
@@ -63,7 +70,9 @@ export default function ContactInfo() {
             <div className="flex flex-wrap gap-5">
                 {data && data.length > 0 ? (
                     data.map((item: any, index: number) => (
-                        <div key={index} className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md">
+                        <div key={index} className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md"
+                        onClick={() => setSelectedContact(item)}
+                        >
                             <span>{item.name ? item.name : `#${index + 1}`}</span>
                             <div>
                                 <p className="text-[#A6A6A6] py-1">{item.contactInfo.length > 150 ? `${item.contactInfo.slice(0, 150)}...` : item.contactInfo}...</p>

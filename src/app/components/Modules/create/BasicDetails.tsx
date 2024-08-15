@@ -21,7 +21,7 @@ const basicDetailsSchema = z.object({
     file: z.string(),
 });
 
-export default function BasicDetails() {
+export default function BasicDetails({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
     const fileInputRef = useRef(null);
     const attachmentRef = useRef(null);
 
@@ -57,15 +57,13 @@ export default function BasicDetails() {
     const create = async () => {
         const result = basicDetailsSchema.safeParse(formData);
         if (!result.success) {
+            handler(null, result.error.message)
             console.log(result.error.message)
             return;
         }
 
-        const response = await collectionServices.create(formData as any);
-
-        if (response) {
-            window.location.reload();
-        }
+        handler(formData, null);
+        nextStep(true);
     }
 
     const handleLogoChange = (event: any) => {
@@ -260,7 +258,7 @@ export default function BasicDetails() {
 
                     <div className="flex gap-x-4 justify-center my-5">
                         <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                        <BaseButton title="Save" variant="primary" onClick={create} />
+                        <BaseButton title="Next" variant="primary" onClick={create} />
                     </div>
                 </div>
 

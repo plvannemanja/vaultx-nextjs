@@ -119,8 +119,6 @@ export default function page() {
   }, [tab])
   return (
     <div>
-      <CreateNft />
-      <CreateCuration />
       {
         tab === 'appreciate' ?
         <Appreciate hero={images ? images.appreciateTop : null} nfts={nfts} /> : null

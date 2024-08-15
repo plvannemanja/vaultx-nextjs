@@ -5,7 +5,9 @@ import { Switch } from "@/components/ui/switch"
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@headlessui/react'
 import { Label } from '@/components/ui/label'
+import BaseButton from '../../ui/BaseButton'
 import FileInput from '../../ui/FileInput'
+import PropertiesTemplate from './PropertiesTemplate'
 
 const category = [
     'Fine Art',
@@ -14,7 +16,7 @@ const category = [
     'Test Category'
 ]
 
-export default function AdvanceDetails() {
+export default function AdvanceDetails({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
 
     const [options, setOptions] = useState({
         freeMint: false,
@@ -103,6 +105,14 @@ export default function AdvanceDetails() {
             default:
                 break;
         }
+    }
+
+    const cancelChanges = () => {
+        nextStep(false)
+    }
+
+    const create = async () => {
+        nextStep(true)
     }
 
     return (
@@ -242,6 +252,13 @@ export default function AdvanceDetails() {
                     )
                 }
 
+                <PropertiesTemplate />
+
+
+                <div className="flex gap-x-4 justify-center my-5">
+                    <BaseButton title="Previous" variant="secondary" onClick={cancelChanges} />
+                    <BaseButton title="Next" variant="primary" onClick={create} />
+                </div>
             </div>
         </div>
     )

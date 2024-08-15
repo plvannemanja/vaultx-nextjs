@@ -9,7 +9,7 @@ import BaseButton from "../ui/BaseButton";
 import PhoneInput from "react-phone-input-2";
 import { City, Country, State } from "country-state-city";
 
-export default function ShippingInfo() {
+export default function ShippingInfo({ handler } : { handler?: (data: any) => void }) {
     const [data, setData] = useState<null | any[]>(null);
     const [sellerInfo, setSellerInfo] = useState({
         id: null,
@@ -29,6 +29,7 @@ export default function ShippingInfo() {
     const [cities, setCities] = useState([]);
     const [countryCode, setCountryCode] = useState("");
     const countries = Country.getAllCountries();
+    const [selectedShipping, setSelectedShipping] = useState<any>(null);
 
     const update = async (id?: string) => {
         let response = null;
@@ -196,6 +197,13 @@ export default function ShippingInfo() {
         return null
     }
 
+
+    useEffect(() => {
+        if (handler) {
+            handler(selectedShipping);
+        }
+    }, [selectedShipping]);
+
     useEffect(() => {
         const fetchSellers = async () => {
             const response = await getSellerInfo();
@@ -215,7 +223,9 @@ export default function ShippingInfo() {
                 {data && data.length > 0 ? (
                     data.map((item: any, index: number) => {
                         return (
-                            <div key={index} className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md">
+                            <div key={index} 
+                            onClick={() => setSelectedShipping(item)}
+                            className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md">
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-y-2">
                                         <span>{item.name}</span>
