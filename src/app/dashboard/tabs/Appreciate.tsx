@@ -1,8 +1,13 @@
 import Filters from "@/app/components/ui/Filters";
 import Image from "next/image"
 import NftCard from "@/app/components/Cards/NftCard";
+import { useEffect } from "react";
 
 export default function Appreciate({ hero, nfts }: { hero: { link: string, image: string } | null, nfts: any[] }) {
+    useEffect(() => {
+        console.log(hero, nfts);
+    }, [])
+    
     return (
         <div className="flex flex-col gap-y-4 px-4">
             {

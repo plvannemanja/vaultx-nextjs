@@ -63,7 +63,10 @@ export default function SideBar({ className }: {className?: string}) {
       <div className="px-10 py-5 mt-4 border-b-2 border-b-gray-700">
         <Image src="/logo.svg" width={120} height={120} alt="logo" />
       </div>
-      <button className="flex items-center justify-center gap-x-2 my-5 py-3 px-3 bg-neon rounded-xl w-[80%] mx-auto">
+      <button 
+        className="flex items-center justify-center gap-x-2 my-5 py-3 px-3 bg-neon rounded-xl w-[80%] mx-auto"
+        onClick={()=>{window.location.href = "/dashboard?tab=create"}}  
+      >
         <span className="font-bold text-black">Create</span>
         <Image src="/icons/file_plus.svg" width={20} height={20} alt="create" />
       </button>
@@ -79,6 +82,8 @@ export default function SideBar({ className }: {className?: string}) {
               onClick={() => {
                 if (link.link) {
                   window.open(link.link, '_blank');
+                } else {
+                  window.location.href = `/dashboard?tab=${link.value}`
                 }
               }}
             >

@@ -9,9 +9,17 @@ import {
 import { List } from 'lucide-react';
 import Menu from './Menu';
 import SideBar from '../ui/SideBar';
+import { useEffect, useState } from 'react';
+import { getCookie } from '@/lib/cookie';
 
 export default function AppHeader() {
+  const [user, setUser] = useState<any>(null);
 
+  useEffect(() => {
+    const connectedUser = JSON.parse(getCookie("user"));
+    console.log("connectedUser", connectedUser);
+    setUser(connectedUser);
+  }, [])
   return (
     <div className="flex justify-between lg:justify-end mt-6 px-3 items-center">
       <div className='lg:hidden'>
@@ -29,7 +37,7 @@ export default function AppHeader() {
         </Sheet>
       </div>
 
-      <Menu user={null} />
+      <Menu user={user} />
     </div>
   )
 }

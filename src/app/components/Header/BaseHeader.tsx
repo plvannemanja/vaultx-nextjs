@@ -69,12 +69,12 @@ export function BaseHeader() {
       const { data } = await authenticationServices.connectWallet({
         wallet: address,
       });
-      createCookie('user', JSON.stringify(data.user));
-      createCookie('token', data.token);
-      const {
-        data: { user },
-      } = await userServices.getSingleUser();
-      setUser(user);
+      const connectedUser = data.user;
+      const connectedToken = data.token;
+      console.log("data", data, connectedUser, connectedToken);
+      createCookie('user', JSON.stringify(connectedUser));
+      createCookie('token', connectedToken);
+      setUser(connectedUser);
     } catch (error) {
       console.log({ error });
     }
@@ -149,13 +149,13 @@ export function BaseHeader() {
         <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
-            href="/dashboard?appreciate"
+            href="/dashboard?tab=appreciate"
           >
             Appreciation
           </Link>
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-            href="/dashboard?curation"
+            href="/dashboard?tab=curation"
           >
             Curation
           </Link>

@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import SideBar from '../components/ui/SideBar';
 import AppHeader from '../components/Header/AppHeader';

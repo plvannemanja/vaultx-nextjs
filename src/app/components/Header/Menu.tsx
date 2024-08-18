@@ -24,6 +24,7 @@ import {
 import { Data, Polygon } from '@3rdweb/chain-icons';
 import { WalletId } from 'thirdweb/wallets';
 import { shortenAddress } from 'thirdweb/utils';
+import { useEffect } from 'react';
 
 interface MenuProps {
   user: any;
@@ -74,6 +75,9 @@ export default function Menu({ user }: MenuProps) {
 	const {data, isLoading, isError} = useWalletBalance({
 		client,
 	});
+  useEffect(() => {
+    console.log(user);
+  }, [user])
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -82,8 +86,8 @@ export default function Menu({ user }: MenuProps) {
             className="shrink-0 aspect-square"
             width={40}
             height={40}
-            src="/icons/default_profile.svg"
-            alt="default_profile"
+            src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
+            alt="user_profile"
           />
           <div className="justify-start items-center gap-1.5 flex">
             <div>{user?.username ?? 'Themesflat'}</div>
@@ -98,7 +102,7 @@ export default function Menu({ user }: MenuProps) {
               className="shrink-0 aspect-square"
               width={40}
               height={40}
-              src="/icons/default_profile.svg"
+              src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
               alt="default_profile"
             />
             <div className="justify-start items-center gap-1.5 flex">

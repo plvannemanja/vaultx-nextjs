@@ -1,8 +1,13 @@
 import Filters from "@/app/components/ui/Filters";
 import Image from "next/image"
 import CurationCard from "@/app/components/Cards/CurationCard";
+import { useEffect } from "react";
 
 export default function Curation({ hero, collections }: { hero: { link: string, image: string } | null, collections: any[] }) {
+    useEffect(() => {
+        console.log(hero, collections);
+    }, [])
+    
     return (
         <div className="flex flex-col gap-y-4 px-4">
             {
