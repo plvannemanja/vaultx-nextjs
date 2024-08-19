@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import FileInput from "../ui/FileInput"
@@ -9,6 +9,8 @@ import BaseButton from "../ui/BaseButton"
 import Image from "next/image"
 import { collectionServices } from "@/services/supplier"
 import { z } from "zod"
+import TriggerModal from "../ui/TriggerModal"
+import ErrorModal from "./create/ErrorModal"
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
@@ -18,14 +20,18 @@ const createCurationSchema = z.object({
     name: z.string(),
     symbol: z.string(),
     description: z.string(),
-    logo: z.string(),
-    bannerImage: z.string(),
+    logo: z.object({}).passthrough(),
+    bannerImage: z.object({}).passthrough(),
 });
 
 export default function CreateCuration() {
     const fileInputRef = useRef(null);
     const [file, setFile] = useState<any>(null);
     const [imageSrc, setImageSrc] = useState(null);
+    const [errors, setErrors] = useState({
+        active: false,
+        data: []
+    });
 
     const [formData, setFormData] = useState({
         name: null,
@@ -71,7 +77,10 @@ export default function CreateCuration() {
     const create = async () => {
         const result = createCurationSchema.safeParse(formData);
         if (!result.success) {
-            console.log(result.error.message)
+            setErrors({
+                active: true,
+                data: JSON.parse(result.error.message)
+            })
             return;
         }
 
@@ -108,17 +117,23 @@ export default function CreateCuration() {
     }
 
     const handleButtonClick = () => {
-        console.log(fileInputRef.current)
         if (fileInputRef.current) {
             (fileInputRef.current as any).click();
         }
     }
 
-
-
     return (
         <div className="flex flex-col gap-y-4 px-4">
             <p className="text-xl font-medium">Edit Your Collection</p>
+
+            {
+                errors.active && 
+                <TriggerModal 
+                    isOpen={errors.active}
+                    children={<ErrorModal data={errors.data} />}
+                    close={() => setErrors({ active: false, data: [] })}
+                />
+            }
 
             <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
 
