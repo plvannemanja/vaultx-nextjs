@@ -11,6 +11,7 @@ import { collectionServices } from "@/services/supplier"
 import { z } from "zod"
 import TriggerModal from "../ui/TriggerModal"
 import ErrorModal from "./create/ErrorModal"
+import CurationLoader from "./create/CurationLoader"
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
@@ -20,8 +21,6 @@ const createCurationSchema = z.object({
     name: z.string(),
     symbol: z.string(),
     description: z.string(),
-    logo: z.object({}).passthrough(),
-    bannerImage: z.object({}).passthrough(),
 });
 
 export default function CreateCuration() {
@@ -32,8 +31,12 @@ export default function CreateCuration() {
         active: false,
         data: []
     });
+    const [status, setStatus] = useState({
+        error: false,
+        loading: false
+    });
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         name: null,
         symbol: null,
         logo: null,
@@ -75,19 +78,39 @@ export default function CreateCuration() {
     ])
 
     const create = async () => {
+        setStatus({ error: false, loading: true });
         const result = createCurationSchema.safeParse(formData);
-        if (!result.success) {
+        if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
             setErrors({
                 active: true,
                 data: JSON.parse(result.error.message)
             })
-            return;
+            return null;
         }
 
-        const response = await collectionServices.create(formData as any);
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('symbol', formData.symbol);
+        data.append('discription', formData.description);
+        data.append('logo', formData.logo);
+        data.append('bannerImage', formData.bannerImage);
+        data.append('descriptionImage', formData.descriptionImage);
+        data.append('website', formData.website);
+        data.append('twitter', formData.twitter);
+        data.append('facebook', formData.facebook);
+        data.append('instagram', formData.instagram);
+        data.append('youtube', JSON.stringify(youtube));
 
-        if (response) {
-            window.location.reload();
+        try {
+            const response = await collectionServices.create(data);
+
+            if (response) {
+                setStatus({ error: false, loading: false });
+                cancelChanges();
+            }
+
+        } catch (error) {
+            setStatus({ error: true, loading: true });
         }
     }
 
@@ -105,7 +128,6 @@ export default function CreateCuration() {
     const handleLogoChange = (event: any) => {
         const file = event.target.files[0];
         const fileExtension = file.name.split('.').pop().toLowerCase();
-        console.log(file.size < maxFileSize && acceptedFormats.includes(`.${fileExtension}`), fileExtension)
         if (file.size < maxFileSize && acceptedFormats.includes(`.${fileExtension}`)) {
             const reader = new FileReader();
             reader.onload = (e: any) => {
@@ -113,6 +135,7 @@ export default function CreateCuration() {
             };
             reader.readAsDataURL(file);
             setFile(file);
+            handleFileChange(file, "logo");
         }
     }
 
@@ -127,8 +150,17 @@ export default function CreateCuration() {
             <p className="text-xl font-medium">Edit Your Collection</p>
 
             {
-                errors.active && 
-                <TriggerModal 
+                status.loading &&
+                <TriggerModal
+                    isOpen={status.loading || status.error}
+                    children={<CurationLoader status={status} />}
+                    close={() => setStatus({ error: false, loading: false })}
+                />
+            }
+
+            {
+                errors.active &&
+                <TriggerModal
                     isOpen={errors.active}
                     children={<ErrorModal data={errors.data} />}
                     close={() => setErrors({ active: false, data: [] })}
