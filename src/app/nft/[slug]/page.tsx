@@ -14,14 +14,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { invoices } from "@/app/dashboard/tabs/Orders";
+import { getAllNftActivitys } from "@/services/supplier";
+import moment from "moment";
+import { FavoriteService } from "@/services/FavoriteService";
+import BaseButton from "@/app/components/ui/BaseButton";
 
 export default function Page({ params }: { params: { slug: string } }) {
     const nftService = new NftServices();
+    const favoriteService = new FavoriteService();
 
     const [data, setData] = useState<null | NFTItemType>(null)
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
+    const [views, setViews] = useState(0);
+    const [list, setList] = useState([]);
 
     const handleLike = async () => {
         try {
@@ -33,11 +39,55 @@ export default function Page({ params }: { params: { slug: string } }) {
         }
     }
 
+    const getAllNftActivity = async (id: string) => {
+        try {
+            const {
+                data: { data },
+            } = await getAllNftActivitys({ nftId: id })
+            setList(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getArtitsLikes = async () => {
+        try {
+            const {
+                data: { totalLikedNfts },
+            } = await favoriteService.getNftTotalLikes({ nftId: data?._id })
+            const {
+                data: { favorite },
+            } = await favoriteService.getUserReactionToNft({ nftId: data?._id })
+            setLikes(totalLikedNfts)
+            setLiked(favorite)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleView = async () => {
+        try {
+          const previosIpAddress = localStorage.getItem("ipAddress")
+          const {
+            data: { views, ipAddress },
+          } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress })
+          localStorage.setItem("ipAddress", ipAddress)
+          setViews(views)
+        } catch (error) {
+          console.log({ error })
+        }
+      }
+
     useEffect(() => {
         const fetchNftData = async () => {
             try {
                 const response = await nftService.getNftById(params.slug)
-                console.log(response.data.nft)
+
+                if (list.length === 0) {
+                    getAllNftActivity(params.slug)
+                    getArtitsLikes()
+                    handleView()
+                }
 
                 setData(response.data.nft)
             } catch (error) {
@@ -55,7 +105,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <>
 
                         <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
-                            <div className="w-full relative max-w-lg lg:w-[49%]">
+                            <div className="w-full relative lg:w-[55%]">
                                 <Image src={data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="rounded-xl object-cover aspect-square w-full" />
 
                                 <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
@@ -83,7 +133,47 @@ export default function Page({ params }: { params: { slug: string } }) {
                                 <Image alt="rwa" src="/images/rwa-logo.svg" height={100} width={100} quality={100} className="w-20 h-16 absolute bottom-3 right-4" />
                             </div>
 
-                            <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[49%]">
+                            <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
+                                <div className="w-full flex flex-col gap-y-6">
+                                    <p className="text-lg font-medium">{data.name}</p>
+                                    <div className="flex justify-between">
+                                        <div className="flex gap-2 items-center">
+                                            <img src={data?.owner?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                            <div className="flex flex-col gap-y-1 text-sm">
+                                                <p className="text-gray-400">Owned by:</p>
+                                                <p className="font-medium">{data?.owner?.username}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-2 items-center">
+                                            <img src={data?.mintedBy?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                            <div className="flex flex-col gap-y-1 text-sm">
+                                                <p className="text-gray-400">Created by:</p>
+                                                <p className="font-medium">{data?.mintedBy?.username}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-x-3">
+                                        <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
+                                            {views} view 
+                                        </div>
+                                        <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
+                                            Pop Art 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-lg">
+                                    <p className="text-sm text-gray-400">Current Price</p>
+                                    <div className="flex justify-between">
+                                        <div className="flex flex-col gap-y-2">
+                                            <p className="text-lg font-medium">$7500</p>
+                                            <BaseButton title="Bid" variant="primary" onClick={() => {}} />
+                                        </div>
+                                        <div>
+                                            <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">Check Matic Quotes</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-lg">
                                     <p className="text-lg font-medium">Overview</p>
                                     <hr />
@@ -99,8 +189,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                                         <span className="font-medium">Royalties</span>
                                         <span className="text-gray-400">{data.royalty}%</span>
                                     </div>
-                                    <div className="flex px-4 py-2 rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                                        <span className="font-medium">Size</span>
+                                    <div className="flex px-4 py-2 flex-col rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                                        <p className="font-medium">Size</p>
                                         <div className="mt-3 flex flex-col gap-y-2">
                                             {
                                                 data.attributes.map((attr, index) => {
@@ -142,14 +232,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {invoices.map((invoice) => (
-                                            <TableRow key={invoice.invoice}>
-                                                <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                                                <TableCell>{invoice.paymentStatus}</TableCell>
-                                                <TableCell>{invoice.paymentStatus}</TableCell>
-                                                <TableCell>{invoice.paymentMethod}</TableCell>
-                                                <TableCell>{invoice.paymentStatus}</TableCell>
-                                                <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+                                        {FileList.length > 0 && list.map((item: any, index: number) => (
+                                            <TableRow key={index}>
+                                                <TableCell className="font-medium">{item.state}</TableCell>
+                                                <TableCell>{item.price}</TableCell>
+                                                <TableCell>{item.paymentStatus}</TableCell>
+                                                <TableCell>{item.paymentMethod}</TableCell>
+                                                <TableCell>{moment(item.createdAt).format('DD MMM, YY')}</TableCell>
+                                                <TableCell className="text-right">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

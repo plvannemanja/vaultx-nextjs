@@ -113,14 +113,21 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
         setAttachments(newAttachments);
     }
 
+    const fetchUserCollections = async () => {
+        try {
+            const res = await collectionServices.getUserCollections();
+            setCurations(
+                res.data.collection.length > 0 ? res.data.collection : []
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     useEffect(() => {
         if (curations.length === 0) {
-            const fetchCurations = async () => {
-                const response = await collectionServices.getAllCollections(null as any);
-                setCurations(response.data.curations);
-            }
-
+            fetchUserCollections();
         }
     }, [])
 
@@ -225,34 +232,34 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
                     <div className="flex flex-col gap-y-2 bg-dark px-4 py-3 rounded-lg">
                         <Label className="font-medium text-lg">Attachment</Label>
                         <hr />
-                        <div className="flex gap-4 flex-wrap my-2">                            
-                        {
-                            attachments.map((attachment, index) => {
-                                return (
-                                    <div key={index} className="flex flex-col gap-y-2">
-                                        <input type="file" className="hidden" ref={attachmentRef} onChange={(e) => handleAttachment(e, index)} />
-                                        {
-                                            !attachment ?
-                                                <img src="https://i.ibb.co/c8FMdw1/attachment-link.png" alt="attachment" className="w-28 mx-auto h-36 rounded-md object-cover" />
-                                                :
-                                                <img src={URL.createObjectURL(attachment)} alt="attachment" className="w-28 mx-auto h-36 rounded-md object-cover" />
-                                        }
-                                        {
-                                            attachment ? 
-                                            <div className="flex gap-x-2 justify-center items-center cursor-pointer" onClick={() => removeAttachment(index)}>
-                                                <span className="text-neon">Delete</span>
-                                                <img src="icons/trash.svg" alt="attachment" className="w-5 h-5" />
-                                            </div>
-                                            :
-                                            <div className="flex gap-x-2 justify-center items-center cursor-pointer" onClick={() => addAttachment()}>
-                                                <span className="text-neon">Upload</span>
-                                                <img src="icons/upload.svg" alt="attachment" className="w-5 h-5" />
-                                            </div>
-                                        }
-                                    </div>
-                                )
-                            })
-                        }
+                        <div className="flex gap-4 flex-wrap my-2">
+                            {
+                                attachments.map((attachment, index) => {
+                                    return (
+                                        <div key={index} className="flex flex-col gap-y-2">
+                                            <input type="file" className="hidden" ref={attachmentRef} onChange={(e) => handleAttachment(e, index)} />
+                                            {
+                                                !attachment ?
+                                                    <img src="https://i.ibb.co/c8FMdw1/attachment-link.png" alt="attachment" className="w-28 mx-auto h-36 rounded-md object-cover" />
+                                                    :
+                                                    <img src={URL.createObjectURL(attachment)} alt="attachment" className="w-28 mx-auto h-36 rounded-md object-cover" />
+                                            }
+                                            {
+                                                attachment ?
+                                                    <div className="flex gap-x-2 justify-center items-center cursor-pointer" onClick={() => removeAttachment(index)}>
+                                                        <span className="text-neon">Delete</span>
+                                                        <img src="icons/trash.svg" alt="attachment" className="w-5 h-5" />
+                                                    </div>
+                                                    :
+                                                    <div className="flex gap-x-2 justify-center items-center cursor-pointer" onClick={() => addAttachment()}>
+                                                        <span className="text-neon">Upload</span>
+                                                        <img src="icons/upload.svg" alt="attachment" className="w-5 h-5" />
+                                                    </div>
+                                            }
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
 

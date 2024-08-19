@@ -224,12 +224,16 @@ export default function CreateCuration() {
                             {
                                 youtube.length == 2 ?
                                     <p className="text-sm cursor-pointer" onClick={() => {
-                                        setYoutube(youtube.slice(0, youtube.length - 1))
+                                        if (youtube.length > 1) {
+                                            setYoutube(youtube.slice(0, youtube.length - 1))
+                                        }
                                     }}>Delete</p>
                                     :
                                     <div className="flex gap-x-2 items-center">
                                         <Image src="icons/add-new.svg" className="h-6 w-6 cursor-pointer" alt="add" height={100} width={100} onClick={() => {
-                                            setYoutube([...youtube, { title: '', url: '' }])
+                                            if (youtube.length < 2) {
+                                                setYoutube([...youtube, { title: '', url: '' }])
+                                            }
                                         }} />
                                         <p className="text-sm">Add New</p>
                                     </div>

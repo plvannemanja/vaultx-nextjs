@@ -83,7 +83,7 @@ export default function Menu({ user }: MenuProps) {
       <DropdownMenuTrigger asChild>
         <div className="w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
           <Image
-            className="shrink-0 aspect-square"
+            className="shrink-0 rounded-full object-cover w-10 h-10"
             width={40}
             height={40}
             src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
@@ -99,7 +99,7 @@ export default function Menu({ user }: MenuProps) {
         <DropdownMenuLabel>
           <div className="w-[109px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
-              className="shrink-0 aspect-square"
+              className="shrink-0 rounded-full object-cover h-10 w-10"
               width={40}
               height={40}
               src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
