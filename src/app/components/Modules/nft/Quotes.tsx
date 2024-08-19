@@ -5,7 +5,6 @@ import { trimString } from '@/utils/helpers';
 
 interface IQuotes {
     price: number;
-    contract: string;
 }
 
 export default function Quotes({ nft, fee, contractInfo }: { nft: IQuotes, fee: number, contractInfo: {address: string} }) {
@@ -35,7 +34,7 @@ export default function Quotes({ nft, fee, contractInfo }: { nft: IQuotes, fee: 
             </div>
             <div className='p-4 rounded-md border-2 border-dashed border-[#3A3A3A]'>
                 <div className='flex mb-3 gap-x-4'>
-                    <img src='../../assets/icons/polygon.svg' />
+                    <img src='/icons/matic.png' className='w-10' />
                     <div className=''>
                         <p>Matic <span className='text-sm' style={{
                             color: 'rgba(255, 255, 255, 0.53)'

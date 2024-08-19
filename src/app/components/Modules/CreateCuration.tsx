@@ -82,6 +82,17 @@ export default function CreateCuration() {
         }
     }
 
+    const handleVideo = (index: number, e: any, type: string) => {
+        let temp = [...youtube];
+        if (type === 'title') {
+            temp[index].title = e.target.value;
+        }
+        if (type === 'link') {
+            temp[index].url = e.target.value;
+        }
+        setYoutube(temp);
+    }
+
     const handleLogoChange = (event: any) => {
         const file = event.target.files[0];
         const fileExtension = file.name.split('.').pop().toLowerCase();
@@ -246,11 +257,11 @@ export default function CreateCuration() {
                                     <div key={index} className="mt-5 flex gap-x-3">
                                         <div className="flex flex-col gap-y-2 basis-1/2">
                                             <Label className="font-medium">Title</Label>
-                                            <Input value={item.title ? item.title : ''} onChange={(e) => setYoutube([...youtube, { title: (e.target as any).value, url: item.url }])} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter video title" />
+                                            <Input value={item.title ? item.title : ''} onChange={(e) => handleVideo(index, e, 'title')} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter video title" />
                                         </div>
                                         <div className="flex flex-col gap-y-2 basis-1/2">
                                             <Label className="font-medium">Video Link</Label>
-                                            <Input value={item.url ? item.url : ''} onChange={(e) => setYoutube([...youtube, { title: item.title, url: (e.target as any).value }])} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter video link" />
+                                            <Input value={item.url ? item.url : ''} onChange={(e) => handleVideo(index, e, 'link')} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter video link" />
                                         </div>
                                     </div>
                                 )

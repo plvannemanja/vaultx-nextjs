@@ -20,6 +20,8 @@ import { FavoriteService } from "@/services/FavoriteService";
 import BaseButton from "@/app/components/ui/BaseButton";
 import { BaseDialog } from "@/app/components/ui/BaseDialog";
 import BuyModal from "@/app/components/Modules/nft/BuyModal";
+import BidModal from "@/app/components/Modules/nft/BidModal";
+import Quotes from "@/app/components/Modules/nft/Quotes";
 
 export default function Page({ params }: { params: { slug: string } }) {
     const nftService = new NftServices();
@@ -108,7 +110,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <>
                         <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
                             <div className="w-full relative lg:w-[55%]">
-                                <Image src={mainImage ? mainImage : data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="rounded-xl object-cover aspect-square w-full" />
+                                <Image src={mainImage ? mainImage : data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="cursor-zoom-in rounded-xl object-cover aspect-square w-full" />
 
                                 <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
                                     <span className="font-medium">{likes}</span>
@@ -175,11 +177,27 @@ export default function Page({ params }: { params: { slug: string } }) {
                                                     <BaseButton title="Buy Now" variant="primary" onClick={() => { }} />
                                                 }
                                                 children={<BuyModal price={data.price} />}
-                                                className="bg-black max-h-[80%] w-[70vw] overflow-y-auto overflow-x-hidden"
+                                                className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                            />
+
+                                            <BaseDialog
+                                                trigger={
+                                                    <BaseButton title="Bid" variant="primary" onClick={() => { }} />
+                                                }
+                                                children={<BidModal title={data.name} />}
+                                                className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                                             />
                                         </div>
                                         <div>
-                                            <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">Check Matic Quotes</span>
+                                            <BaseDialog
+                                                trigger={
+                                                    <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">Check Matic Quotes</span>
+                                                }
+                                                children={<Quotes nft={data} fee={10} contractInfo={{
+                                                    address: '44932KJKLJ12'
+                                                }} />}
+                                                className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                            />
                                         </div>
                                     </div>
                                 </div>

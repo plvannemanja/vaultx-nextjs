@@ -101,16 +101,16 @@ export default function BuyModal({ price }: { price: number }) {
                     <hr className="bg-white" />
                     <div className='flex justify-between'>
                         <div className="flex flex-col gap-y-2 w-[32%]">
-                            <Label className="font-medium">Name*</Label>
+                            <Label className="text-lg font-medium">Name*</Label>
                             <Input value={formData.username ? formData.username : ''} onChange={(e) => setFormData({ ...formData, username: (e.target as any).value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your username" />
                         </div>
                         <div className="flex flex-col gap-y-2 w-[32%]">
-                            <Label className="font-medium">Email*</Label>
+                            <Label className="text-lg font-medium">Email*</Label>
                             <Input value={formData.email ? formData.email : ''} onChange={(e) => setFormData({ ...formData, email: (e.target as any).value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your email" />
                         </div>
 
                         <div className="flex flex-col gap-y-2 w-[32%]">
-                            <Label className="font-medium">Country*</Label>
+                            <Label className="text-lg font-medium">Country*</Label>
                             <select
                                 aria-label="select curation"
                                 className="h-10 rounded-md px-2"
