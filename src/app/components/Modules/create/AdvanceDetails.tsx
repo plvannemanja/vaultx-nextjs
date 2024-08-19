@@ -31,6 +31,15 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
         data: []
     })
     const [unlockableFiles, setUnlockableFiles] = useState<any>([])
+    const [formData, setFormData] = useState<any>({
+        royaltyAddress: null,
+        royalty: null,
+        unlockable: null,
+        category: null,
+        address: null,
+        percentage: null,
+    })
+    const [selectedProperty, setSelectedProperty] = useState<any>(null)
 
     const handleFileChange = (file: any, index: number) => {
         const newFiles = unlockableFiles.map((item: any, i: number) => {
@@ -112,6 +121,44 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
     }
 
     const create = async () => {
+        const err = []
+        if (!selectedProperty) {
+            err.push({ path: ['Properties'] })
+        }
+
+        if (options.royalties && !formData.royalty) {
+            err.push({ path: ['Royalties'] })
+        }
+
+        if (options.catgory && !formData.category) {
+            err.push({ path: ['Category'] })
+        }
+
+        if (options.unlockable && !formData.unlockable) {
+            err.push({ path: ['Unlockable Content'] })
+        }
+
+        if (options.split && !splits.data.length) {
+            err.push({ path: ['Split Payments'] })
+        }
+        
+        if (err.length > 0) {
+            handler(null, JSON.stringify(err))
+            return
+        }
+
+        const data = new FormData()
+        data.append('freeMinting', options.freeMint as any)
+        data.append('royalty', formData.royalty)
+        data.append('category', formData.category)
+        data.append('unlockableContent', formData.unlockable)
+        data.append("attributes", JSON.stringify(selectedProperty.attributes ? selectedProperty.attributes : []));
+
+        for (let i = 0; i < unlockableFiles.length; i++) {
+            data.append('certificates', unlockableFiles[i])
+        }
+
+        handler(data, null);
         nextStep(true)
     }
 
@@ -165,8 +212,8 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
                         <div className='flex flex-col gap-y-3'>
                             <p className='text-lg font-medium'>Royalties(%)</p>
                             <div className='flex gap-x-2'>
-                                <Input className='bg-dark max-w-[22rem]' placeholder='Address' type='text' />
-                                <Input className='bg-dark max-w-20' placeholder='0' type='number' />
+                                <Input className='bg-dark max-w-[22rem]' onChange={(e) => setFormData({...formData, royaltyAddress: (e.target as any).value})}  placeholder='Address' type='text' />
+                                <Input className='bg-dark max-w-20' onChange={(e) => setFormData({...formData, royalty: (e.target as any).value})} placeholder='0' type='number' />
                             </div>
                         </div>
                     )
@@ -176,7 +223,7 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
                     options.unlockable && (
                         <div className='flex flex-col gap-y-3'>
                             <p className='text-lg font-medium'>Unlockable Content</p>
-                            <Textarea className='bg-dark p-4 rounded-md' rows={4} placeholder='Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer.' />
+                            <Textarea className='bg-dark p-4 rounded-md' onChange={(e) => setFormData({...formData, unlockable: (e.target as any).value})} rows={4} placeholder='Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer.' />
                             <div className='flex gap-x-4 items-center'>
                                 <p>File Selected</p>
                                 <div className='flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer' onClick={() => {
@@ -210,6 +257,7 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
                                 aria-label="Select category"
                                 className="h-10 rounded-md px-2 w-full"
                                 name="country"
+                                onChange={(e) => setFormData({...formData, category: (e.target as any).value})} 
                             >
                                 <option value="">Select</option>
                                 {category.map((item: any) => (
@@ -230,8 +278,8 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
                         <div className='flex flex-col gap-y-3'>
                             <p className='text-lg font-medium'>Split Payments (%)</p>
                             <div className='flex gap-x-2'>
-                                <Input className='bg-dark max-w-[22rem]' placeholder='Address' type='text' />
-                                <Input className='bg-dark max-w-20' placeholder='%' type='number' />
+                                <Input className='bg-dark max-w-[22rem]' onChange={(e) => setFormData({...formData, address: (e.target as any).value})} placeholder='Address' type='text' />
+                                <Input className='bg-dark max-w-20' onChange={(e) => setFormData({...formData, percentage: (e.target as any).value})} placeholder='%' type='number' />
                                 <div className='flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer' onClick={addSplit}>
                                     <img src="icons/plus.svg" alt="plus" className='w-4 h-4' />
                                     <p className='text-neon'>Add</p>
@@ -252,8 +300,9 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
                     )
                 }
 
-                <PropertiesTemplate />
-
+                <PropertiesTemplate select={(e: any) => {
+                    setSelectedProperty(e)
+                }} />
 
                 <div className="flex gap-x-4 justify-center my-5">
                     <BaseButton title="Previous" variant="secondary" onClick={cancelChanges} />

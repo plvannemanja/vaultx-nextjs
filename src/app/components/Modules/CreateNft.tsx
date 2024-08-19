@@ -6,29 +6,34 @@ import { z } from "zod"
 import BasicDetails from "./create/BasicDetails"
 import AdvanceDetails from "./create/AdvanceDetails"
 import SellerInformation from "./create/SellerInformation"
+import ErrorModal from "./create/ErrorModal"
+import { error } from "console"
+import TriggerModal from "../ui/TriggerModal"
+import { CreateNftServices } from "@/services/createNftService"
 
 export default function CreateNft() {
-    const [step, setStep] = useState(1)
+    const nftService = new CreateNftServices();
+
+    const [step, setStep] = useState(3)
     const [progress, setProgress] = useState({
         basic: 0,
         advance: 0,
         seller: 0
     })
-
     const [basicDetails, setBasicDetails] = useState<any>({
         data: null,
         error: null
     })
-
     const [advanceDetails, setAdvanceDetails] = useState<any>({
         data: null,
         error: null
     })
-
     const [sellerInfo, setSellerInfo] = useState<any>({
         data: null,
         error: null
     })
+
+    const [nftId, setNftId] = useState(null)
 
     const handleBasicDetails = (data: any, error: any) => {
         setBasicDetails({
@@ -51,28 +56,111 @@ export default function CreateNft() {
         })
     }
 
-    const createCollection = async () => {
-        if (basicDetails) {
-            const response = await collectionServices.create(basicDetails)
+    const createBasicDetails = async () => {
+        try {
+            if (basicDetails.data) {
+                const response = await nftService.createBasicDetails(basicDetails.data)
 
-            if (response) {
-                setProgress({
-                    ...progress,
-                    basic: 1
-                })
+                if (response.data?.data?._id) {
+                    setNftId(response.data.data._id)
+                    return response.data.data._id
+                }
+
+                return null
             }
+
+            return null
+        } catch (error) {
+            return null
         }
     }
 
-    const nextStep = (next?: boolean) => {
+    const createAdvanceDetails = async (id: string) => {
+        try {
+            if (advanceDetails.data) {
+                await nftService.createAdvancedDetails({
+                    ...advanceDetails.data,
+                    nftId: id
+                })
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+    const createNFT = async () => {
+        try {
+            const nftId = await createBasicDetails()
+
+            if (!nftId) {
+                throw new Error('Failed to create NFT')
+            }
+
+            if (!sellerInfo.data) {
+                throw new Error('Seller Information')
+            }
+
+            await createAdvanceDetails(nftId)
+
+            const selectedSeller = sellerInfo.data.shipping
+
+            if (!selectedSeller.address) {
+                throw new Error('Address is required')
+            }
+
+            const data = {
+                name: selectedSeller.name,
+                email: selectedSeller.email,
+                country: selectedSeller.country,
+                address: {
+                    line1: selectedSeller.address.line1,
+                    line2: selectedSeller.address.line2,
+                    city: selectedSeller.address.city,
+                    state: selectedSeller.address.state,
+                    postalCode: selectedSeller.address.postalCode,
+                },
+                phoneNumber: selectedSeller.phoneNumber,
+                shippingInformation: {
+                    lengths: sellerInfo.lengths,
+                    width: sellerInfo.width,
+                    height: sellerInfo.height,
+                    weight: sellerInfo.weight,
+                },
+            };
+
+            const { data: { uri } } = await nftService.createSellerDetails(data)
+
+            if (!uri) {
+                throw new Error('Failed to create NFT')
+            }
+
+            await handleMint(uri, nftId)
+        } catch (error) {
+
+        }
+    }
+
+    // Add your logic here
+    const handleMint = async (uri: string, nftId: string) => {
+        try {
+
+        } catch (error) {
+
+        }
+    }
+
+    const nextStep = async (next?: boolean) => {
+        if (next && step == 3) {
+            await createNFT()   
+        }
+
         if (next) {
             setStep(step + 1)
         } else {
             setStep(step - 1)
         }
     }
-
-
 
     return (
         <div className="flex flex-col gap-y-4 px-4">
@@ -103,6 +191,33 @@ export default function CreateNft() {
                     <p>Seller Information</p>
                 </div>
             </div>
+
+            {
+                basicDetails.error &&
+                <TriggerModal
+                    isOpen={basicDetails.error ? true : false}
+                    children={<ErrorModal data={JSON.parse(basicDetails.error)} />}
+                    close={() => setBasicDetails({ ...basicDetails, error: null })}
+                />
+            }
+
+            {
+                advanceDetails.error &&
+                <TriggerModal
+                    isOpen={advanceDetails.error ? true : false}
+                    children={<ErrorModal data={JSON.parse(advanceDetails.error)} />}
+                    close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+                />
+            }
+
+            {
+                sellerInfo.error &&
+                <TriggerModal
+                    isOpen={sellerInfo.error ? true : false}
+                    children={<ErrorModal data={JSON.parse(sellerInfo.error)} />}
+                    close={() => setSellerInfo({ ...sellerInfo, error: null })}
+                />
+            }
 
             {
                 step === 1 && <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />

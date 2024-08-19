@@ -18,7 +18,6 @@ const basicDetailsSchema = z.object({
     productDescription: z.string(),
     price: z.number().gt(0),
     curation: z.string(),
-    file: z.string(),
 });
 
 export default function BasicDetails({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
@@ -30,7 +29,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
     const [curations, setCurations] = useState([]);
     const [attachments, setAttachments] = useState([null]);
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         productName: null,
         productDescription: null,
         artistName: null,
@@ -56,20 +55,34 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
 
     const create = async () => {
         const result = basicDetailsSchema.safeParse(formData);
-        if (!result.success) {
+        if (!result.success && !formData.file) {
             handler(null, result.error.message)
             console.log(result.error.message)
             return;
         }
 
-        handler(formData, null);
+        const data = new FormData();
+        data.append('file', file);
+        data.append('productName', formData.productName);
+        data.append('productDescription', formData.productDescription);
+        data.append('artistName', formData.artistName);
+        data.append('price', formData.price);
+        data.append('curation', formData.curation);
+
+        const files = [ file, ...attachments ];
+        files.forEach((file, index) => {
+            if (file) {
+                data.append(`files`, file);
+            }
+        })
+
+        handler(data, null);
         nextStep(true);
     }
 
     const handleLogoChange = (event: any) => {
         const file = event.target.files[0];
         const fileExtension = file.name.split('.').pop().toLowerCase();
-        console.log(file.size < maxFileSize && acceptedFormats.includes(`.${fileExtension}`), fileExtension)
         if (file.size < maxFileSize && acceptedFormats.includes(`.${fileExtension}`)) {
             const reader = new FileReader();
             reader.onload = (e: any) => {
@@ -81,7 +94,6 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
     }
 
     const handleButtonClick = () => {
-        console.log(fileInputRef.current)
         if (fileInputRef.current) {
             (fileInputRef.current as any).click();
         }
@@ -188,7 +200,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
 
                     <div className="flex flex-col gap-y-2">
                         <Label className="font-medium">Price(USD)*</Label>
-                        <Input value={formData.price ? formData.price : ''} onChange={(e) => setFormData({ ...formData, price: (e.target as any).value })} className="w-full border-none bg-[#161616]" type="number" placeholder="0" />
+                        <Input value={formData.price ? formData.price : ''} onChange={(e) => setFormData({ ...formData, price: parseInt((e.target as any).value) })} className="w-full border-none bg-[#161616]" type="number" placeholder="0" />
                     </div>
 
                     <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
@@ -216,6 +228,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
                             aria-label="Select curation"
                             className="h-10 rounded-md px-2 w-full"
                             name="country"
+                            onChange={(e) => setFormData({ ...formData, curation: (e.target as any).value })}
                         >
                             <option value="">Select</option>
                             {curations.map((item: any) => (

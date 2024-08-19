@@ -70,7 +70,7 @@ export default function ContactInfo({ handler } : { handler?: (data: any) => voi
             <div className="flex flex-wrap gap-5">
                 {data && data.length > 0 ? (
                     data.map((item: any, index: number) => (
-                        <div key={index} className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md"
+                        <div key={index} className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${selectedContact == item ? 'border-neon' : 'border-gray-400'}`}
                         onClick={() => setSelectedContact(item)}
                         >
                             <span>{item.name ? item.name : `#${index + 1}`}</span>

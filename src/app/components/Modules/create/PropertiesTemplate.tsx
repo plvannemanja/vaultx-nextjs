@@ -30,7 +30,7 @@ const defaultAttributes = [
     }
 ]
 
-export default function PropertiesTemplate() {
+export default function PropertiesTemplate({ select } : {select?: any}) {
     const [selectedProperty, setSelectedProperty] = useState<any | null>(null)
     const [data, setData] = useState([])
     const [propMod, setPropMod] = useState<any>({
@@ -124,7 +124,14 @@ export default function PropertiesTemplate() {
 
     useEffect(() => {
         if (selectedProperty !== null) {
+            if (select) {
+                select(selectedProperty)  
+            }
           makeUpdates()
+        } else {
+            if (select) {
+                select(null)
+            }
         }
       }, [selectedProperty])
 

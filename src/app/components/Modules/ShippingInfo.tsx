@@ -225,7 +225,7 @@ export default function ShippingInfo({ handler } : { handler?: (data: any) => vo
                         return (
                             <div key={index} 
                             onClick={() => setSelectedShipping(item)}
-                            className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md">
+                            className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${selectedShipping == item ? 'border-neon' : 'border-gray-400'}`}>
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-y-2">
                                         <span>{item.name}</span>
