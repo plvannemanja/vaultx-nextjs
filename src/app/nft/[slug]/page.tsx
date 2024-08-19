@@ -18,6 +18,8 @@ import { getAllNftActivitys } from "@/services/supplier";
 import moment from "moment";
 import { FavoriteService } from "@/services/FavoriteService";
 import BaseButton from "@/app/components/ui/BaseButton";
+import { BaseDialog } from "@/app/components/ui/BaseDialog";
+import BuyModal from "@/app/components/Modules/nft/BuyModal";
 
 export default function Page({ params }: { params: { slug: string } }) {
     const nftService = new NftServices();
@@ -28,6 +30,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [liked, setLiked] = useState(false);
     const [views, setViews] = useState(0);
     const [list, setList] = useState([]);
+    const [mainImage, setMainImage] = useState<string | null>(null)
 
     const handleLike = async () => {
         try {
@@ -67,16 +70,16 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     const handleView = async () => {
         try {
-          const previosIpAddress = localStorage.getItem("ipAddress")
-          const {
-            data: { views, ipAddress },
-          } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress })
-          localStorage.setItem("ipAddress", ipAddress)
-          setViews(views)
+            const previosIpAddress = localStorage.getItem("ipAddress")
+            const {
+                data: { views, ipAddress },
+            } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress })
+            localStorage.setItem("ipAddress", ipAddress)
+            setViews(views)
         } catch (error) {
-          console.log({ error })
+            console.log({ error })
         }
-      }
+    }
 
     useEffect(() => {
         const fetchNftData = async () => {
@@ -103,10 +106,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             {
                 data && (
                     <>
-
                         <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
                             <div className="w-full relative lg:w-[55%]">
-                                <Image src={data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="rounded-xl object-cover aspect-square w-full" />
+                                <Image src={mainImage ? mainImage : data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="rounded-xl object-cover aspect-square w-full" />
 
                                 <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
                                     <span className="font-medium">{likes}</span>
@@ -155,10 +157,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </div>
                                     <div className="flex gap-x-3">
                                         <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                                            {views} view 
+                                            {views} view
                                         </div>
                                         <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                                            Pop Art 
+                                            Pop Art
                                         </div>
                                     </div>
                                 </div>
@@ -167,7 +169,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <div className="flex justify-between">
                                         <div className="flex flex-col gap-y-2">
                                             <p className="text-lg font-medium">$7500</p>
-                                            <BaseButton title="Bid" variant="primary" onClick={() => {}} />
+
+                                            <BaseDialog
+                                                trigger={
+                                                    <BaseButton title="Buy Now" variant="primary" onClick={() => { }} />
+                                                }
+                                                children={<BuyModal price={data.price} />}
+                                                className="bg-black max-h-[80%] w-[70vw] overflow-y-auto overflow-x-hidden"
+                                            />
                                         </div>
                                         <div>
                                             <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">Check Matic Quotes</span>
@@ -191,18 +200,44 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </div>
                                     <div className="flex px-4 py-2 flex-col rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                                         <p className="font-medium">Size</p>
-                                        <div className="mt-3 flex flex-col gap-y-2">
-                                            {
-                                                data.attributes.map((attr, index) => {
-                                                    return (
-                                                        <p>
-                                                            {attr.type}: {attr.value}
-                                                        </p>
-                                                    )
-                                                })
-                                            }
+                                        <div className="mt-2 flex flex-col gap-y-2">
+                                            <p>Length: {data?.shippingInformation?.lengths}cm</p>
+                                            <p>Height: {data?.shippingInformation?.height}cm</p>
+                                            <p>Width: {data?.shippingInformation?.width}cm</p>
+                                            <p>Weight: {data?.shippingInformation?.weight}cm</p>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="w-full flex gap-5 flex-wrap">
+                            {
+                                [data.cloudinaryUrl, ...data.attachments].map((item, index) => {
+                                    return (
+                                        <img onClick={() => {
+                                            setMainImage(item)
+                                        }} src={item} className="w-[16rem] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover" />
+                                    )
+                                })
+                            }
+                        </div>
+
+                        <div className="w-full flex flex-col gap-y-5 mt-5">
+                            <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+                                <Label className="text-lg font-medium">Properties</Label>
+                                <hr className="bg-white" />
+                                <div className="flex gap-4 flex-wrap">
+                                    {
+                                        data.attributes.map((attr, index) => {
+                                            return (
+                                                <div className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400">
+                                                    <p className="text-lg font-medium text-center">{attr.type}</p>
+                                                    <p className="font-medium text-center">{attr.value}</p>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                         </div>

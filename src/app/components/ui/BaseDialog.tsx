@@ -24,7 +24,7 @@ export function BaseDialog({ trigger, children, title, description, className, f
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
-      <DialogContent className={`max-w-2xl ${className}`}>
+      <DialogContent className={`max-w-5xl ${className}`}>
         <div className="w-full overflow-x-hidden">
           <DialogHeader>
             {

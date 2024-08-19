@@ -1,9 +1,14 @@
+"use client";
+
 import Filters from "@/app/components/ui/Filters";
 import Image from "next/image"
 import NftCard from "@/app/components/Cards/NftCard";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Appreciate({ hero, nfts }: { hero: { link: string, image: string } | null, nfts: any[] }) {
+    const router = useRouter();
+
     useEffect(() => {
         console.log(hero, nfts);
     }, [])
@@ -22,7 +27,9 @@ export default function Appreciate({ hero, nfts }: { hero: { link: string, image
                 {
                     nfts.map((nft: any, index: number) => {
                         return (
-                            <div className="w-[17rem]">
+                            <div className="w-[17rem]" onClick={() => {
+                                router.push(`/nft/${nft._id}`)
+                            }}>
                                 <NftCard key={index} data={nft} />
                             </div>
                         )
