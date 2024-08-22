@@ -252,7 +252,7 @@ export default function PropertiesInfo() {
 
                                             <div className="flex gap-x-4 justify-center my-3">
                                                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                                <BaseButton title="Save" variant="primary" onClick={() => update(item._id)} />
+                                                <BaseButton title="Save" variant="primary" onClick={async() => await update(item._id)} />
                                             </div>
                                         </div>
                                     }
@@ -328,7 +328,7 @@ export default function PropertiesInfo() {
 
                             <div className="flex gap-x-4 justify-center my-3">
                                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                <BaseButton title="Save" variant="primary" onClick={update} />
+                                <BaseButton title="Save" variant="primary" onClick={async() => await update()} />
                             </div>
                         </div>
                     }

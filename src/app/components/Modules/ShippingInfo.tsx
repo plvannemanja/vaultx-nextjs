@@ -515,7 +515,7 @@ export default function ShippingInfo({ handler } : { handler?: (data: any) => vo
 
                             <div className="flex gap-x-4 justify-center my-3 px-4">
                                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                <BaseButton title="Save" variant="primary" onClick={update} />
+                                <BaseButton title="Save" variant="primary" onClick={async () => await update()} />
                             </div>
                         </div>
                     }

@@ -21,14 +21,14 @@ export default function ContactInfo({ handler } : { handler?: (data: any) => voi
         
         let response = null;
         if (id) {
-            response = await upsertContactInfo({ ...newContact, id });
+            response = await upsertContactInfo({ ...newContact, id: id ? id : null });
         } else {
             response = await upsertContactInfo(newContact);
         }
 
         if (response) {
             if (data) {
-                setData([...data, newContact]);
+                setData([...data, response]);
                 setNewContact({
                     id: null,
                     contactInfo: "",
@@ -94,7 +94,7 @@ export default function ContactInfo({ handler } : { handler?: (data: any) => voi
 
                                             <div className="flex gap-x-4 justify-center my-3">
                                                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                                <BaseButton title="Save" variant="primary" onClick={async () => update(item._id)} />
+                                                <BaseButton title="Save" variant="primary" onClick={async () => await update(item._id)} />
                                             </div>
                                         </div>
                                     }
@@ -130,7 +130,7 @@ export default function ContactInfo({ handler } : { handler?: (data: any) => voi
 
                             <div className="flex gap-x-4 justify-center my-3">
                                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                <BaseButton title="Save" variant="primary" onClick={update} />
+                                <BaseButton title="Save" variant="primary" onClick={async () => await update()} />
                             </div>
                         </div>
                     }
