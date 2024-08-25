@@ -22,6 +22,29 @@ import { BaseDialog } from "@/app/components/ui/BaseDialog";
 import BuyModal from "@/app/components/Modules/nft/BuyModal";
 import BidModal from "@/app/components/Modules/nft/BidModal";
 import Quotes from "@/app/components/Modules/nft/Quotes";
+import { trimString } from "@/utils/helpers";
+import { explorer, contractAddress } from "@/utils/config";
+import { ArrowTopRightOnSquareIcon, InformationCircleIcon } from "@heroicons/react/20/solid";
+import { EyeIcon } from "lucide-react";
+
+// NFT pics modal stuff
+import Modal from "@mui/material/Modal"
+import Box from '@mui/material/Box';
+import SlickCarousel from "@/app/components/Carousels/SlickCarousel";
+
+const style = {
+    borderRadius: '10px',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: "100%",
+    height: "100%",
+    bgcolor: 'rgba(200, 200, 200, 0.5)',
+    border: '2px solid #000',
+    boxShadow: 24,
+};
+
 
 export default function Page({ params }: { params: { slug: string } }) {
     const nftService = new NftServices();
@@ -33,6 +56,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [views, setViews] = useState(0);
     const [list, setList] = useState([]);
     const [mainImage, setMainImage] = useState<string | null>(null)
+    const [modal, setModal] = useState(false)
 
     const handleLike = async () => {
         try {
@@ -75,11 +99,25 @@ export default function Page({ params }: { params: { slug: string } }) {
             const previosIpAddress = localStorage.getItem("ipAddress")
             const {
                 data: { views, ipAddress },
-            } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress })
+            } = await nftService.addView({ nftId: params.slug, ip: previosIpAddress })
             localStorage.setItem("ipAddress", ipAddress)
             setViews(views)
         } catch (error) {
             console.log({ error })
+        }
+    }
+
+    const userReaction = async () => {
+        try {
+            const response = await favoriteService.getUserReactionToNft({
+                nftId: params.slug,
+            })
+
+            if (response.data) {
+                setLiked(response.data.favorite)
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -88,10 +126,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             try {
                 const response = await nftService.getNftById(params.slug)
 
-                if (list.length === 0) {
-                    getAllNftActivity(params.slug)
-                    getArtitsLikes()
-                    handleView()
+                if (list.length == 0) {
+                    await getAllNftActivity(params.slug)
+                    await getArtitsLikes()
+                    await handleView()
+                    await userReaction()
                 }
 
                 setData(response.data.nft)
@@ -108,12 +147,39 @@ export default function Page({ params }: { params: { slug: string } }) {
             {
                 data && (
                     <>
-                        <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
-                            <div className="w-full relative lg:w-[55%]">
-                                <Image src={mainImage ? mainImage : data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="cursor-zoom-in rounded-xl object-cover aspect-square w-full" />
+                        <Modal
+                            open={modal}
+                            onClose={() => setModal(false)}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={style}>
+                                <div style={{
+                                    position: "absolute",
+                                    top: "20px",
+                                    right: "20px",
+                                    backgroundColor: "white",
+                                    padding: "10px",
+                                    cursor: "pointer",
+                                    borderRadius: "100%",
+                                    zIndex: 100
+                                }}
+                                    onClick={() => setModal(false)}
+                                >
+                                    <Image src="/icons/delete_icon.svg" alt="" width={50} height={50} className="w-6 h-6 fill-black" />
+                                </div>
+                                <SlickCarousel images={[data?.cloudinaryUrl, ...(data?.attachments ? data.attachments : [])]} />
+                            </Box>
+                        </Modal>
 
-                                <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
-                                    <span className="font-medium">{likes}</span>
+                        <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between lg:items-start">
+                            <div className="w-full relative lg:w-[55%]">
+                                <Image
+                                    onClick={() => setModal(true)}
+                                    src={mainImage ? mainImage : data.cloudinaryUrl} height={100} width={100} quality={100} alt="hero" className="cursor-zoom-in rounded-xl object-cover aspect-square w-full" />
+
+                                <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
+                                    <span className="font-medium">{likes ? likes : (liked ? 1 : 0)}</span>
                                     <div
                                         onClick={() => handleLike()}
                                     >
@@ -142,7 +208,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <p className="text-lg font-medium">{data.name}</p>
                                     <div className="flex justify-between">
                                         <div className="flex gap-2 items-center">
-                                            <img src={data?.owner?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                            {
+                                                data?.owner?.avatar?.url ?
+                                                    <img src={data?.owner?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                                    : null
+                                            }
                                             <div className="flex flex-col gap-y-1 text-sm">
                                                 <p className="text-gray-400">Owned by:</p>
                                                 <p className="font-medium">{data?.owner?.username}</p>
@@ -150,7 +220,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                                         </div>
 
                                         <div className="flex gap-2 items-center">
-                                            <img src={data?.mintedBy?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                            {
+                                                data?.mintedBy?.avatar?.url ?
+                                                    <img src={data?.mintedBy?.avatar?.url} alt="avatar" className="w-8 h-8 rounded-full" />
+                                                    : null
+                                            }
                                             <div className="flex flex-col gap-y-1 text-sm">
                                                 <p className="text-gray-400">Created by:</p>
                                                 <p className="font-medium">{data?.mintedBy?.username}</p>
@@ -159,10 +233,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </div>
                                     <div className="flex gap-x-3">
                                         <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                                            {views} view
+                                            <EyeIcon width={20} height={20} />
+                                            {views ? views : 1} view
                                         </div>
                                         <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                                            Pop Art
+                                            {data.category ? data.category.name : 'N/A'}
                                         </div>
                                     </div>
                                 </div>
@@ -170,14 +245,14 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     <p className="text-sm text-gray-400">Current Price</p>
                                     <div className="flex justify-between">
                                         <div className="flex flex-col gap-y-2">
-                                            <p className="text-lg font-medium">$7500</p>
+                                            <p className="text-lg font-medium">${data.price}</p>
 
                                             <BaseDialog
                                                 trigger={
                                                     <BaseButton title="Buy Now" variant="primary" onClick={() => { }} />
                                                 }
                                                 children={<BuyModal price={data.price} />}
-                                                className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                                className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                                             />
 
                                             <BaseDialog
@@ -185,7 +260,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                                     <BaseButton title="Bid" variant="primary" onClick={() => { }} />
                                                 }
                                                 children={<BidModal title={data.name} />}
-                                                className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
+                                                className="bg-black max-h-[80%] w-[26rem] overflow-y-auto overflow-x-hidden"
                                             />
                                         </div>
                                         <div>
@@ -196,7 +271,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                                 children={<Quotes nft={data} fee={10} contractInfo={{
                                                     address: '44932KJKLJ12'
                                                 }} />}
-                                                className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                                className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                                             />
                                         </div>
                                     </div>
@@ -256,6 +331,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             )
                                         })
                                     }
+                                    {
+                                        data.attributes.length === 0 &&
+                                        <p>No properties available</p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -285,16 +364,56 @@ export default function Page({ params }: { params: { slug: string } }) {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {FileList.length > 0 && list.map((item: any, index: number) => (
-                                            <TableRow key={index}>
-                                                <TableCell className="font-medium">{item.state}</TableCell>
-                                                <TableCell>{item.price}</TableCell>
-                                                <TableCell>{item.paymentStatus}</TableCell>
-                                                <TableCell>{item.paymentMethod}</TableCell>
-                                                <TableCell>{moment(item.createdAt).format('DD MMM, YY')}</TableCell>
-                                                <TableCell className="text-right">{moment(item.createdAt).format('hh:mm A')}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {list.length > 0 && list.map((item: any, index: number) => {
+                                            const fromAddress = item?.from?.wallet
+                                                ? item.from.wallet
+                                                : item?.fromWallet
+                                                    ? item?.fromWallet
+                                                    : ""
+                                            const toAddress = item?.to?.wallet
+                                                ? item.to.wallet
+                                                : item?.toWallet
+                                                    ? item?.toWallet
+                                                    : ""
+
+                                            return (
+                                                <TableRow key={index}>
+                                                    <TableCell className="font-medium w-[14rem]">
+                                                        <div className="flex gap-x-2 items-center">
+                                                            {item.state}
+                                                            <ArrowTopRightOnSquareIcon width={20} height={20} />
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell>{item.price ? item.price : '-/-'}</TableCell>
+                                                    <TableCell>
+                                                        <div className="flex gap-x-2 items-center text-neon">
+                                                            {item.from ? trimString(item.from.wallet) : "-/-"}
+                                                            {
+                                                                fromAddress && (
+                                                                    <a target="_blank" href={`${explorer}/address/${fromAddress}`}>
+                                                                        <ArrowTopRightOnSquareIcon width={20} height={20} />
+                                                                    </a>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <div className="flex gap-x-2 items-center text-neon">
+                                                            {item.to ? trimString(item.to.wallet) : "-/-"}
+                                                            {
+                                                                toAddress && (
+                                                                    <a target="_blank" href={`${explorer}/address/${toAddress}`}>
+                                                                        <ArrowTopRightOnSquareIcon width={20} height={20} />
+                                                                    </a>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell>{moment(item.createdAt).format('DD MMM, YY')}</TableCell>
+                                                    <TableCell className="text-right">{moment(item.createdAt).format('hh:mm A')}</TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
                                     </TableBody>
                                 </Table>
                             </div>
@@ -302,26 +421,36 @@ export default function Page({ params }: { params: { slug: string } }) {
 
                         <div className="flex flex-col gap-y-2 bg-dark rounded-md py-4">
                             <div className="w-full flex flex-col gap-y-5">
-                                <div className="w-full px-6 py-2 flex">
-                                    <Label className="text-lg font-medium">Details</Label>
+                                <div className="w-full px-6 py-2 flex gap-x-2 items-center">
+                                    <InformationCircleIcon width={20} height={20} />
+                                    <Label className="font-medium">Details</Label>
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-y-5">
-                                <div className="w-full px-6 py-2 flex">
-                                    <Label className="text-lg font-medium">Erc721</Label>
-                                    <hr className="bg-white" />
+                                <div className="w-full px-6 py-2 flex gap-x-2 items-center">
+                                    <img src="/icons/ether.svg" alt="matic" className="w-[1.2rem] h-8 fill-white" />
+                                    <Label className="font-medium">Erc721</Label>
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-y-5">
-                                <div className="w-full px-6 py-2 flex">
-                                    <Label className="text-lg font-medium">View on Polygon Scan</Label>
-                                    <hr className="bg-white" />
+                                <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
+                                    <img src="/icons/ether.svg" alt="matic" className="w-[1.2rem] h-8 fill-neon" />
+                                    <Label className="font-medium">View on Polygon Scan</Label>
+                                    <a href={
+                                        `${explorer}/token/${contractAddress}` +
+                                        (data?.minted ? "?a=" : "")
+                                    }>
+                                        <ArrowTopRightOnSquareIcon width={20} height={20} className="fill-neon" />
+                                    </a>
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-y-5">
-                                <div className="w-full px-6 py-2 flex">
-                                    <Label className="text-lg font-medium">Open Original On IPFS</Label>
-                                    <hr className="bg-white" />
+                                <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
+                                    <EyeIcon width={20} height={20} />
+                                    <Label className="font-medium">Open Original On IPFS</Label>
+                                    <a target="_blank" href={data.uri}>
+                                        <ArrowTopRightOnSquareIcon width={20} height={20} className="fill-neon" />
+                                    </a>
                                 </div>
                             </div>
                         </div>

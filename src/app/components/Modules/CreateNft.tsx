@@ -11,7 +11,7 @@ import { error } from "console"
 import TriggerModal from "../ui/TriggerModal"
 import { CreateNftServices } from "@/services/createNftService"
 
-export default function CreateNft() {
+export default function CreateNft({ editMode } : { editMode?: any }) {
     const nftService = new CreateNftServices();
 
     const [step, setStep] = useState(3)

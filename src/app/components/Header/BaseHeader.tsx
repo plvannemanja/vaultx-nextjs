@@ -26,6 +26,7 @@ import {
 import { List } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import Menu from './Menu';
+import { useRouter } from 'next/navigation';
 
 const socials = [
   {
@@ -55,6 +56,7 @@ export function BaseHeader() {
   const detailsModal = useWalletDetailsModal();
   const { connect } = useConnectModal();
   const activeAccount = useActiveAccount();
+  const router = useRouter();
 
   function handleDetail() {
     detailsModal.open({ client });
@@ -99,10 +101,19 @@ export function BaseHeader() {
                   <SheetTitle>VaultX</SheetTitle>
                   <SheetDescription>
                     <div className="flex flex-col gap-y-4 text-white">
-                      <Label className="text-sm">Appreciation</Label>
+                      <Link href="/dashboard?tab=appreciate">
+                        <Label className="text-sm">Appreciation</Label>                    
+                      </Link>
+                      
+                      <Link href="/dashboard?tab=curation">
+                        <Label className="text-sm">Curation</Label>
+                      </Link>
+
+                      <Link href="https://artistvaultx.wpcomstaging.com/" target="_blank">
+                        <Label className="text-sm">Magazine</Label>
+                      </Link>
+
                       <Label className="text-sm">Artist</Label>
-                      <Label className="text-sm">Curation</Label>
-                      <Label className="text-sm">Magazine</Label>
                     </div>
                     <hr className="my-4 bg-white" />
                     <Label className="text-sm text-white">How to work</Label>
