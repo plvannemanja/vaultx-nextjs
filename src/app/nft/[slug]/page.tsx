@@ -22,18 +22,7 @@ import { BaseDialog } from "@/app/components/ui/BaseDialog";
 import BuyModal from "@/app/components/Modules/nft/BuyModal";
 import BidModal from "@/app/components/Modules/nft/BidModal";
 import Quotes from "@/app/components/Modules/nft/Quotes";
-import { getNftDataById } from "@/utils/nftutils";
-import { contract } from '@/lib/contract';
-import {
-    prepareContractCall,
-    sendTransaction,
-    readContract,
-    resolveMethod,
-    prepareEvent,
-    getContractEvents,
-  } from 'thirdweb';
-import { useActiveAccount } from "thirdweb/react";
-import { ethers } from "ethers";
+
 export default function Page({ params }: { params: { slug: string } }) {
     console.log("NFT params", params);
     const activeAccount = useActiveAccount();
@@ -46,7 +35,6 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [views, setViews] = useState(0);
     const [list, setList] = useState([]);
     const [mainImage, setMainImage] = useState<string | null>(null)
-    const [nftData, setNftData] = useState({})
 
     const handleLike = async () => {
         try {
@@ -93,84 +81,12 @@ export default function Page({ params }: { params: { slug: string } }) {
             const previosIpAddress = localStorage.getItem("ipAddress")
             const {
                 data: { views, ipAddress },
-            } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress })
+            } = await nftService.addView({ nftId: params.slug, ip: previosIpAddress })
             localStorage.setItem("ipAddress", ipAddress)
             console.log("serviews", views);
             setViews(views)
         } catch (error) {
             console.log({ error })
-        }
-    }
-
-    const handleBuy = async () => {
-        console.log("handle buy");
-        try {
-            const tokenId = params.slug;
-            const tokenDetails =  await readContract({ 
-                contract, 
-                method: "tokenDetails", 
-                params: [BigInt(tokenId)] 
-            });
-            console.log("tokenDetails", tokenDetails);
-            const transaction = prepareContractCall({
-                contract,
-                method: 'purchaseAsset',
-                params: [
-                    BigInt(tokenId)
-                ],
-                value: tokenDetails[4],
-            });
-                
-            if (activeAccount) {
-                try {
-                    const { transactionHash } = await sendTransaction({
-                        transaction,
-                        account: activeAccount,
-                    });
-                } catch (error) {
-                    console.log("error:", error);
-                }
-            } else {
-                alert("wallet is not connected");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const handleBid = async (data: number) => {
-        console.log("handle bid", data);
-        try {
-            const tokenId = params.slug;
-            const tokenDetails =  await readContract({ 
-                contract, 
-                method: "tokenDetails", 
-                params: [BigInt(tokenId)] 
-            });
-            console.log("tokenDetails", tokenDetails);
-            const transaction = prepareContractCall({
-                contract,
-                method: 'placeBid',
-                params: [
-                    BigInt(tokenId)
-                ],
-                value: BigInt(data * 1e18),
-            });
-                
-            if (activeAccount) {
-                try {
-                    const { transactionHash } = await sendTransaction({
-                        transaction,
-                        account: activeAccount,
-                    });
-                } catch (error) {
-                    console.log("error:", error);
-                }
-            } else {
-                alert("wallet is not connected");
-            }
-        } catch (error) {
-            console.log(error);
         }
     }
 
@@ -184,9 +100,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             try {
                 const response = await nftService.getNftById("6641aa41ce4eabdbb75aacf4")
 
-                console.log("setData", response.data?.nft);
                 if (list.length === 0) {
-                    getAllNftActivity("6641aa41ce4eabdbb75aacf4")
+                    getAllNftActivity(params.slug)
                     getArtitsLikes()
                     handleView()
                 }

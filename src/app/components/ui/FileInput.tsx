@@ -9,17 +9,18 @@ interface IFileInputProps {
   deSelect?: any;
   maxSizeInBytes?: number;
   acceptedFormats?: string[];
+  editMode?: any
 }
 
-export default function FileInput({ title, subtitle, onFileSelect, deSelect, maxSizeInBytes = 10*1024*1024, acceptedFormats = ['.png', 'jpeg'] }: IFileInputProps) {
+export default function FileInput({ title, subtitle, onFileSelect, deSelect, maxSizeInBytes = 10*1024*1024, acceptedFormats = ['.png', 'jpeg'], editMode }: IFileInputProps) {
   const fileInputRef = useRef(null);
-  const [file, setFile] = useState<any>(null);
+  const [fileName, setFileName] = useState<any>(null);
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     const fileExtension = file.name.split('.').pop().toLowerCase();
     if (file.size < maxSizeInBytes && acceptedFormats.includes(`.${fileExtension}`)) {
-      setFile(file);
+      setFileName(file.name);
       onFileSelect(file);
     }
   }
@@ -32,7 +33,7 @@ export default function FileInput({ title, subtitle, onFileSelect, deSelect, max
 
   useEffect(() => {
     if (deSelect) {
-      setFile(null);
+      setFileName(null);
     }
   }, [deSelect])
 
@@ -54,7 +55,7 @@ export default function FileInput({ title, subtitle, onFileSelect, deSelect, max
         <span>
           <img src="images/image_ico.svg" alt="" /> Choose file
         </span>{" "}
-        {file ? file.name : "No files selected"}
+        {editMode ? 'File Selected' : (fileName ? fileName : "No files selected")}
         </button>
         {
           subtitle && <p className="text-sm text-gray-500 font-medium">{subtitle}</p>
