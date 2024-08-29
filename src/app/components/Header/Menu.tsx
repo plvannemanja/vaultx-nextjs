@@ -24,47 +24,77 @@ import {
 import { Data, Polygon } from '@3rdweb/chain-icons';
 import { WalletId } from 'thirdweb/wallets';
 import { shortenAddress } from 'thirdweb/utils';
+import { useEffect } from 'react';
+import { ChainId } from '@thirdweb-dev/sdk';
 
 interface MenuProps {
   user: any;
 }
 
 interface WalletDetailProps {
-  walletId: WalletId | undefined;
+  walletId: WalletId;
   size: number;
 }
-
 const WalletImage = ({ walletId, size }: WalletDetailProps) => {
-  const { data: walletImageData } = walletId
-    ? useWalletImage(walletId)
-    : { data: null, status: false };
-  const { data: defaultImageData } =
-    useWalletImage('io.metamask');
-  if (walletImageData) {
+  // Always call the hooks unconditionally
+  const walletImage = useWalletImage(walletId || "walletConnect");
+  const { data: walletImageData } = walletImage;
+
+  // Fallback image if walletImageData is not available
+  const { data: defaultImageData } = useWalletImage('io.metamask');
+
+  const imageData = walletImageData || defaultImageData;
+
+  if (imageData) {
     return (
       <Image
         width={size}
         height={size}
-        src={walletImageData}
+        src={imageData}
         alt="wallet_img"
         className="rounded-full"
       />
     );
   }
 
-  if (defaultImageData) {
-    return (
-      <Image
-        width={size}
-        height={size}
-        src={defaultImageData}
-        alt="wallet_img rounded-full"
-      />
-    );
-  }
-
   return null;
 };
+// const WalletImage = ({ walletId: number, size }: WalletDetailProps) => {
+//   // if(!walletId) return null;
+//   const walletImage = useWalletImage(walletId);
+//   // const { data: walletImageData } = walletId
+//   //   ? walletImage
+//   //   : { data: null, status: false };
+//     const { data: walletImageData } = walletImage;
+  
+//   const { data: defaultImageData } =     useWalletImage('io.metamask');
+
+    
+//   if (walletImageData) {
+//     return (
+//       <Image
+//         width={size}
+//         height={size}
+//         src={walletImageData}
+//         alt="wallet_img"
+//         className="rounded-full"
+//       />
+//     );
+//   }
+
+//   if (defaultImageData) {
+//     return (
+//       <Image
+//         width={size}
+//         height={size}
+//         src={defaultImageData}
+//         alt="wallet_img rounded-full"
+//       />
+//     );
+//   }
+
+//   return null;
+// };
 
 export default function Menu({ user }: MenuProps) {
   const activeAccount = useActiveAccount();
@@ -73,17 +103,25 @@ export default function Menu({ user }: MenuProps) {
 	const { disconnect } = useDisconnect();
 	const {data, isLoading, isError} = useWalletBalance({
 		client,
+    address: activeAccount?.address,
+    chain: {  id: ChainId.Polygon,
+      name: 'Polygon',
+      rpc: 'https://polygon-rpc.com',
+      }
 	});
+  useEffect(() => {
+    console.log(user);
+  }, [user])
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className="w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
           <Image
-            className="shrink-0 aspect-square"
+            className="shrink-0 rounded-full object-cover w-10 h-10"
             width={40}
             height={40}
-            src="/icons/default_profile.svg"
-            alt="default_profile"
+            src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
+            alt="user_profile"
           />
           <div className="justify-start items-center gap-1.5 flex">
             <div>{user?.username ?? 'Themesflat'}</div>
@@ -95,10 +133,10 @@ export default function Menu({ user }: MenuProps) {
         <DropdownMenuLabel>
           <div className="w-[109px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
-              className="shrink-0 aspect-square"
+              className="shrink-0 rounded-full object-cover h-10 w-10"
               width={40}
               height={40}
-              src="/icons/default_profile.svg"
+              src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
               alt="default_profile"
             />
             <div className="justify-start items-center gap-1.5 flex">
@@ -123,14 +161,13 @@ export default function Menu({ user }: MenuProps) {
         </DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Help Center</DropdownMenuItem>
-        <DropdownMenuItem>
 					<div className='w-full mt-4'>
 						<div className="mx-auto flex">
 							<div className="justify-center w-full items-center">
 								<div className="float-left">
 									<div className="justify-start items-center gap-5 inline-flex">
 										<WalletImage
-											walletId={activeWallet?.id}
+											walletId={activeWallet?.id || "walletConnect"}
 											size={50}
 										></WalletImage>
 										<div className="justify-start items-start">
@@ -141,16 +178,20 @@ export default function Menu({ user }: MenuProps) {
 									</div>
 								</div>
 								<div className="float-right justify-center items-center gap-3 inline-flex my-auto">
-									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer">
-										<Copy size={20}></Copy>
+									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
+										<Copy size={20} onClick={() => {
+                      navigator.clipboard.writeText(activeAccount?.address || "");
+                      console.log(data);
+                      console.log(activeAccount);
+                      
+                    }}></Copy>
 									</div>
-									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer">
+									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
 										<Power size={20} onClick={() => {activeWallet && disconnect(activeWallet)}}></Power>
 									</div>
 								</div>
 							</div>
 						</div>
-						<h3>{JSON.stringify(data)}</h3>
 						<div className="px-4 py-2 mt-3 w-full rounded-lg border border-white border-opacity-5 flex-col justify-end items-start gap-9 inline-flex">
 								<div className="self-stretch justify-between items-center inline-flex">
 									<div className="justify-start items-center gap-[17px] flex">
@@ -162,12 +203,11 @@ export default function Menu({ user }: MenuProps) {
 										</div>
 									</div>
 									<div className="text-center text-neutral-400 text-base font-semibold capitalize">
-										$448.9
+                  {data ? Number(Number(data?.value) / Math.pow(10, Number(data?.decimals))).toFixed(2) : 0}
 									</div>
 								</div>
 							</div>
 					</div>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

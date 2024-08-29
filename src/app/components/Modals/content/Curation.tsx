@@ -1,10 +1,10 @@
 import React from "react";
-
+import Image from 'next/image';
 export default function Curation() {
     return (
         <div className="flex flex-col gap-y-4 py-4 text-white max-w-[35rem] text-center items-center">
             <div>
-                <img
+                <Image
                     src="/icons/ex-icon.svg"
                     alt="error"
                     className="w-20 h-20"
@@ -18,7 +18,7 @@ export default function Curation() {
                     At present, only artists who have received creation permissions from
                     the administrator can create curations.
                     <br />
-                    If you'd like to learn more about obtaining creation permissions,
+                    If you&apos;d like to learn more about obtaining creation permissions,
                     please feel free to contact us at anytime.
                 </p>
             </div>

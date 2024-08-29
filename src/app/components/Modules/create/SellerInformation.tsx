@@ -6,21 +6,12 @@ import ContactInfo from '../ContactInfo'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@headlessui/react'
-import { Checkbox } from "@/components/ui/checkbox"
 import BaseButton from '../../ui/BaseButton'
-import { string, z } from "zod"
-
-
-const detailsSchema = z.object({
-    description: z.string(),
-    accepted: z.boolean(),
-});
 
 export default function SellerInformation({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
     const [formData, setFormData] = useState({
         shipping: null,
         contact: null,
-        description: null,
         accepted: false
     })
 
@@ -43,12 +34,27 @@ export default function SellerInformation({ handler, nextStep }: { handler: (dat
     }
 
     const create = () => {
-        const result = detailsSchema.safeParse(formData)
-        if (formData.accepted && result.success) {
-            nextStep(true)
-        } else {
-            handler(formData, result.error?.message)
+        const err = []
+        if (!formData.shipping) {
+            err.push({ path: ['Shipping Information'] })
         }
+
+        if (!formData.contact) {
+            err.push({ path: ['Contact Information'] })
+        }
+
+        if (!formData.accepted) {
+            err.push({ path: ['Consent for collection and usage of personal information'] })
+        }
+
+        if (err.length > 0) {
+            handler(null, JSON.stringify(err))
+            return
+        }
+
+        console.log(formData)
+
+        handler(formData, null)
     }
 
     return (
@@ -84,19 +90,17 @@ export default function SellerInformation({ handler, nextStep }: { handler: (dat
                 <p className='text-gray-500'>Please read the following and check the appropriate boxes to indicate your consent:</p>
                 <hr />
                 <Textarea
-                onClick={(e) => setFormData({
-                    ...formData,
-                    description: (e.target as any).value
-                })}
+                disabled={true}
                 className='p-4 rounded-md' rows={4} placeholder='faucibus id malesuada aliquam. Tempus morbi turpis nulla viverra tellus mauris cum. Est consectetur commodo turpis habitasse sed. Nibh tincidunt quis nunc placerat arcu sagittis. In vitae fames nunc consectetur. Magna faucibus sit risus sed tortor malesuada purus. Donec fringilla orci lobortis quis id blandit rhoncus. ' />
             </div>
 
             <div className="flex items-center space-x-2">
-                <Checkbox id="terms"
+                <input id="terms"
+                type="checkbox"
                 checked={formData.accepted}
                 onChange={() => setFormData({
                     ...formData,
-                    accepted: true
+                    accepted: !formData.accepted
                 })}
                 />
                 <label

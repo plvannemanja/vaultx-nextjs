@@ -24,8 +24,7 @@ export function BaseDialog({ trigger, children, title, description, className, f
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
-      <DialogContent className={`max-w-2xl ${className}`}>
-        <div className="w-full overflow-x-hidden">
+      <DialogContent className={`max-w-5xl ${className}`}>
           <DialogHeader>
             {
               title && (
@@ -42,9 +41,7 @@ export function BaseDialog({ trigger, children, title, description, className, f
               )
             }
           </DialogHeader>
-          <div className="w-full">
             {children}
-          </div>
           <DialogFooter className="sm:justify-start">
             {
               footer && (
@@ -52,7 +49,6 @@ export function BaseDialog({ trigger, children, title, description, className, f
               )
             }
           </DialogFooter>
-        </div>
       </DialogContent>
     </Dialog>
   )

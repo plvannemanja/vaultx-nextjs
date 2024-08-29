@@ -112,8 +112,8 @@ export default function Favourite() {
                         {
                             data.nfts.map((nft: any, index: number) => {
                                 return (
-                                    <div className="w-[17rem]">
-                                        <NftCard key={index} data={nft} />
+                                    <div className="w-[17rem]" key={index}>
+                                        <NftCard data={nft} />
                                     </div>
                                 )
                             })
@@ -128,8 +128,8 @@ export default function Favourite() {
                         {
                             data.curation.length > 0 ? data.curation.map((collection: any, index: number) => {
                                 return (
-                                    <div className="w-[23rem]">
-                                        <CurationCard key={index} data={collection} />
+                                    <div className="w-[23rem]" key={index} >
+                                        <CurationCard data={collection} />
                                     </div>
                                 )
                             }) : null
@@ -144,9 +144,8 @@ export default function Favourite() {
                         {
                             data.artist.length > 0 ? data.artist.map((item: any, index: number) => {
                                 return (
-                                    <div className="w-[23rem]">
+                                    <div className="w-[23rem]" key={index}>
                                         <ArtistsCard
-                                            key={index}
                                             image={item.image}
                                             title={item.title}
                                             subtitle2={item.subtitle2}

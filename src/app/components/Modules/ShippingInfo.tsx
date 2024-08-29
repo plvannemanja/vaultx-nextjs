@@ -225,7 +225,7 @@ export default function ShippingInfo({ handler } : { handler?: (data: any) => vo
                         return (
                             <div key={index} 
                             onClick={() => setSelectedShipping(item)}
-                            className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md">
+                            className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${selectedShipping == item ? 'border-neon' : 'border-gray-400'}`}>
                                 <div className="flex justify-between">
                                     <div className="flex flex-col gap-y-2">
                                         <span>{item.name}</span>
@@ -243,136 +243,46 @@ export default function ShippingInfo({ handler } : { handler?: (data: any) => vo
                                     }
                                 </div>
                                 <div className="flex justify-end">
-                                    <BaseDialog
-                                        trigger={<span onClick={() => preserveState(item)} className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400">Edit</span>}
-                                        children={
-                                            <div className="flex flex-col gap-y-5 w-full">
-                                                <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-                                                    <div className="flex flex-col gap-y-3">
-                                                        <Label className="text-lg font-medium">Shipping Address Name</Label>
-                                                        <Input value={sellerInfo.type ? sellerInfo.type : item.shippingAddr} onChange={(e) => setSellerInfo({ ...sellerInfo, type: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)" />
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-y-3">
-                                                        <Label className="text-lg font-medium">Seller Information</Label>
-                                                        <hr />
-                                                        <div className="flex flex-wrap gap-2">
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">Name*</Label>
-                                                                <Input value={sellerInfo.name ? sellerInfo.name : item.name} onChange={(e) => setSellerInfo({ ...sellerInfo, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
-                                                            </div>
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">E-mail*</Label>
-                                                                <Input value={sellerInfo.email ? sellerInfo.email : item.email} onChange={(e) => setSellerInfo({ ...sellerInfo, email: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
-                                                            </div>
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">Country*</Label>
-                                                                <select
-                                                                    aria-label="select curation"
-                                                                    className="h-10 rounded-md px-2"
-                                                                    name="country"
-                                                                    value={JSON.stringify(sellerInfo.country)}
-                                                                    onChange={handleUpdateSeller}
-                                                                >
-                                                                    <option value="">Select</option>
-                                                                    {countries.map((item: any) => (
-                                                                        <option
-                                                                            key={item.isoCode}
-                                                                            value={JSON.stringify(item)}
-                                                                        >
-                                                                            {item.name}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-                                                    <div className="flex flex-col gap-y-3">
-                                                        <Label className="text-lg font-medium">Shipping Address</Label>
-                                                        <hr />
-                                                        <div className="flex flex-wrap justify-between">
-                                                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                                                <Label className="text-lg font-medium">Address 1*</Label>
-                                                                <Input value={sellerInfo.address1 ? sellerInfo.address1 : (item.address ? item.address.line1 : '')} onChange={(e) => setSellerInfo({ ...sellerInfo, address1: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
-                                                            </div>
-                                                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                                                <Label className="text-lg font-medium">Address 2*</Label>
-                                                                <Input value={sellerInfo.address2 ? sellerInfo.address2 : (item.address ? item.address.line2 : '')} onChange={(e) => setSellerInfo({ ...sellerInfo, address2: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex flex-wrap justify-between">
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">State*</Label>
-                                                                <select
-                                                                    aria-label="select curation"
-                                                                    className="h-10 rounded-md px-2"
-                                                                    name="state"
-                                                                    value={sellerInfo.state ? JSON.stringify(sellerInfo.state) : ""}
-                                                                    onChange={handleUpdateSeller}
-                                                                >
-                                                                    <option value="">Select</option>
-                                                                    {states.map((item: any) => (
-                                                                        <option key={item.isoCode} value={JSON.stringify(item)}>
-                                                                            {item.name}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">City*</Label>
-                                                                <select
-                                                                    aria-label="select curation"
-                                                                    className="h-10 rounded-md px-2"
-                                                                    name="city"
-                                                                    value={sellerInfo.city ? JSON.stringify(sellerInfo.city) : ""}
-                                                                    onChange={handleUpdateSeller}
-                                                                >
-                                                                    <option value="">Select</option>
-                                                                    {cities.map((item: any) => (
-                                                                        <option key={item.isoCode} value={JSON.stringify(item)}>
-                                                                            {item.name}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                                                <Label className="text-lg font-medium">Postal Code*</Label>
-                                                                <Input value={sellerInfo.postalCode ? sellerInfo.postalCode : (item.address ? item.address.postalCode : '')} onChange={(e) => setSellerInfo({ ...sellerInfo, postalCode: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter postcode" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex flex-col gap-y-3 mt-6">
-                                                        <PhoneInput
-                                                            enableLongNumbers={true}
-                                                            containerClass="phone-container"
-                                                            buttonClass="phone-dropdown"
-                                                            inputClass="phone-control"
-                                                            country={"us"}
-                                                            value={sellerInfo.phoneNumber ? sellerInfo.phoneNumber : item.phoneNumber}
-                                                            inputStyle={{
-                                                                width: "100%",
-                                                                height: "2.5rem",
-                                                                borderRadius: "0.375rem",
-                                                                padding: "0.5rem",
-                                                                marginTop: "0.5rem",
-                                                            }}
-                                                            onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex gap-x-4 justify-center my-3 px-4">
-                                                    <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                                    <BaseButton title="Save" variant="primary" onClick={async () => await update(item._id)} />
-                                                </div>
+                                <BaseDialog
+                                    trigger={<span onClick={() => preserveState(item)} className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400">Edit</span>}
+                                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                >
+                                    <div className="flex flex-col gap-y-5 w-full">
+                                        <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
+                                            <div className="flex flex-col gap-y-3">
+                                                <Label className="text-lg font-medium">Shipping Address Name</Label>
+                                                <Input value={sellerInfo.type ? sellerInfo.type : item.shippingAddr} onChange={(e) => setSellerInfo({ ...sellerInfo, type: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)" />
                                             </div>
-                                        }
-                                        className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                                        />
+
+                                            {/* ... Rest of the content ... */}
+
+                                            <div className="flex flex-col gap-y-3 mt-6">
+                                                <PhoneInput
+                                                    enableLongNumbers={true}
+                                                    containerClass="phone-container"
+                                                    buttonClass="phone-dropdown"
+                                                    inputClass="phone-control"
+                                                    country={"us"}
+                                                    value={sellerInfo.phoneNumber ? sellerInfo.phoneNumber : item.phoneNumber}
+                                                    inputStyle={{
+                                                        width: "100%",
+                                                        height: "2.5rem",
+                                                        borderRadius: "0.375rem",
+                                                        padding: "0.5rem",
+                                                        marginTop: "0.5rem",
+                                                    }}
+                                                    onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-x-4 justify-center my-3 px-4">
+                                            <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
+                                            <BaseButton title="Save" variant="primary" onClick={async () => await update(item._id)} />
+                                        </div>
+                                    </div>
+                                </BaseDialog>
+
                                 </div>
                             </div>
                         )
@@ -390,137 +300,140 @@ export default function ShippingInfo({ handler } : { handler?: (data: any) => vo
                             </div>
                         </div>
                     }
-                    children={
-                        <div className="flex flex-col gap-y-5">
-                            <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-                                <div className="flex flex-col gap-y-3">
-                                    <Label className="text-lg font-medium">Shipping Address Name</Label>
-                                    <Input onChange={(e) => setSellerInfo({ ...sellerInfo, type: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)" />
-                                </div>
-
-                                <div className="flex flex-col gap-y-3">
-                                    <Label className="text-lg font-medium">Seller Information</Label>
-                                    <hr />
-                                    <div className="flex flex-wrap gap-2">
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">Name*</Label>
-                                            <Input onChange={(e) => setSellerInfo({ ...sellerInfo, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
-                                        </div>
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">E-mail*</Label>
-                                            <Input onChange={(e) => setSellerInfo({ ...sellerInfo, email: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
-                                        </div>
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">Country*</Label>
-                                            <select
-                                                aria-label="select curation"
-                                                className="h-10 rounded-md px-2"
-                                                name="country"
-                                                value={JSON.stringify(sellerInfo.country)}
-                                                onChange={handleUpdateSeller}
-                                            >
-                                                <option value="">Select</option>
-                                                {countries.map((item: any) => (
-                                                    <option
-                                                        key={item.isoCode}
-                                                        value={JSON.stringify(item)}
-                                                    >
-                                                        {item.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                >
+                    <div className="flex flex-col gap-y-5">
+                        <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
+                            <div className="flex flex-col gap-y-3">
+                                <Label className="text-lg font-medium">Shipping Address Name</Label>
+                                <Input onChange={(e) => setSellerInfo({ ...sellerInfo, type: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)" />
                             </div>
 
-                            <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-                                <div className="flex flex-col gap-y-3">
-                                    <Label className="text-lg font-medium">Shipping Address</Label>
-                                    <hr />
-                                    <div className="flex flex-wrap justify-between">
-                                        <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                            <Label className="text-lg font-medium">Address 1*</Label>
-                                            <Input onChange={(e) => setSellerInfo({ ...sellerInfo, address1: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
-                                        </div>
-                                        <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                            <Label className="text-lg font-medium">Address 2*</Label>
-                                            <Input onChange={(e) => setSellerInfo({ ...sellerInfo, address2: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
-                                        </div>
+                            <div className="flex flex-col gap-y-3">
+                                <Label className="text-lg font-medium">Seller Information</Label>
+                                <hr />
+                                <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">Name*</Label>
+                                        <Input onChange={(e) => setSellerInfo({ ...sellerInfo, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
                                     </div>
-                                    <div className="flex flex-wrap justify-between">
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">State*</Label>
-                                            <select
-                                                aria-label="select curation"
-                                                className="h-10 rounded-md px-2"
-                                                name="state"
-                                                value={JSON.stringify(sellerInfo.state)}
-                                                onChange={handleUpdateSeller}
-                                            >
-                                                <option value="">Select</option>
-                                                {states.map((item: any) => (
-                                                    <option
-                                                        key={item.isoCode}
-                                                        value={JSON.stringify(item)}
-                                                    >
-                                                        {item.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">City*</Label>
-                                            <select
-                                                aria-label="select curation"
-                                                className="h-10 rounded-md px-2"
-                                                name="city"
-                                                value={sellerInfo.city ? JSON.stringify(sellerInfo.city) : ""}
-                                                onChange={handleUpdateSeller}
-                                            >
-                                                <option value="">Select</option>
-                                                {cities.map((item: any) => (
-                                                    <option key={item.isoCode} value={JSON.stringify(item)}>
-                                                        {item.name}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                            <Label className="text-lg font-medium">Postal Code*</Label>
-                                            <Input onChange={(e) => setSellerInfo({ ...sellerInfo, postalCode: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
-                                        </div>
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">E-mail*</Label>
+                                        <Input onChange={(e) => setSellerInfo({ ...sellerInfo, email: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
+                                    </div>
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">Country*</Label>
+                                        <select
+                                            aria-label="select curation"
+                                            className="h-10 rounded-md px-2"
+                                            name="country"
+                                            value={JSON.stringify(sellerInfo.country)}
+                                            onChange={handleUpdateSeller}
+                                        >
+                                            <option value="">Select</option>
+                                            {countries.map((item: any) => (
+                                                <option
+                                                    key={item.isoCode}
+                                                    value={JSON.stringify(item)}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
-
-                                <div className="flex flex-col gap-y-3 mt-6">
-                                    <PhoneInput
-                                        enableLongNumbers={true}
-                                        containerClass="phone-container"
-                                        buttonClass="phone-dropdown"
-                                        inputClass="phone-control"
-                                        country={"us"}
-                                        value={sellerInfo.phoneNumber}
-                                        inputStyle={{
-                                            width: "100%",
-                                            height: "2.5rem",
-                                            borderRadius: "0.375rem",
-                                            padding: "0.5rem",
-                                            marginTop: "0.5rem",
-                                        }}
-                                        onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="flex gap-x-4 justify-center my-3 px-4">
-                                <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                <BaseButton title="Save" variant="primary" onClick={update} />
                             </div>
                         </div>
-                    }
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                />
+
+                        <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
+                            <div className="flex flex-col gap-y-3">
+                                <Label className="text-lg font-medium">Shipping Address</Label>
+                                <hr />
+                                <div className="flex flex-wrap justify-between">
+                                    <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                                        <Label className="text-lg font-medium">Address 1*</Label>
+                                        <Input onChange={(e) => setSellerInfo({ ...sellerInfo, address1: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter name" />
+                                    </div>
+                                    <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                                        <Label className="text-lg font-medium">Address 2*</Label>
+                                        <Input onChange={(e) => setSellerInfo({ ...sellerInfo, address2: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
+                                    </div>
+                                </div>
+                                <div className="flex flex-wrap justify-between">
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">State*</Label>
+                                        <select
+                                            aria-label="select curation"
+                                            className="h-10 rounded-md px-2"
+                                            name="state"
+                                            value={JSON.stringify(sellerInfo.state)}
+                                            onChange={handleUpdateSeller}
+                                        >
+                                            <option value="">Select</option>
+                                            {states.map((item: any) => (
+                                                <option
+                                                    key={item.isoCode}
+                                                    value={JSON.stringify(item)}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">City*</Label>
+                                        <select
+                                            aria-label="select curation"
+                                            className="h-10 rounded-md px-2"
+                                            name="city"
+                                            value={sellerInfo.city ? JSON.stringify(sellerInfo.city) : ""}
+                                            onChange={handleUpdateSeller}
+                                        >
+                                            <option value="">Select</option>
+                                            {cities.map((item: any) => (
+                                                <option
+                                                    key={item.isoCode}
+                                                    value={JSON.stringify(item)}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                        <Label className="text-lg font-medium">Postal Code*</Label>
+                                        <Input onChange={(e) => setSellerInfo({ ...sellerInfo, postalCode: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter email" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-y-3 mt-6">
+                                <PhoneInput
+                                    enableLongNumbers={true}
+                                    containerClass="phone-container"
+                                    buttonClass="phone-dropdown"
+                                    inputClass="phone-control"
+                                    country={"us"}
+                                    value={sellerInfo.phoneNumber}
+                                    inputStyle={{
+                                        width: "100%",
+                                        height: "2.5rem",
+                                        borderRadius: "0.375rem",
+                                        padding: "0.5rem",
+                                        marginTop: "0.5rem",
+                                    }}
+                                    onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex gap-x-4 justify-center my-3 px-4">
+                            <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
+                            <BaseButton title="Save" variant="primary" onClick={async () => await update()} />
+                        </div>
+                    </div>
+                </BaseDialog>
+
             </div>
         </div>
     );
