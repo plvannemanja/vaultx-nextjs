@@ -11,3 +11,12 @@ export function getYouTubeVideoId(url: string) {
     const match = url.match(regExp);
     return match && match[7]?.length === 11 ? match[7] : null;
   }
+
+export function removeEmptyStrings(obj: any) {
+    Object.keys(obj).forEach(key => {
+        if (obj[key] === "") {
+            delete obj[key];
+        }
+    });
+    return obj;
+}

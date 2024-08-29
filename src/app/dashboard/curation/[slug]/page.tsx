@@ -113,7 +113,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             const imageId = getYouTubeVideoId(item.url)
 
                                             return (
-                                                <div className="flex flex-col gap-y-3 w-[20rem]">
+                                                <div className="flex flex-col gap-y-3 w-[20rem]" key={index}>
                                                     <div className="relative cursor-pointer" onClick={() => {
                                                         window.open(item.url, '_blank')
                                                     }}>

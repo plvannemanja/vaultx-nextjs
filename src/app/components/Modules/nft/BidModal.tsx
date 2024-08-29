@@ -1,16 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import BaseButton from '../../ui/BaseButton'
 
-export default function BidModal({ title }: { title: string }) {
+export default function BidModal({ title, update }: { title: string, update: (data: number) => void }) {
 
+    const [value, setValue] = useState(0);
     const cancelChanges = () => {
-        console.log('cancel')
-    }
-
-    const update = () => {
-        console.log('update')
+        close();
     }
 
     return (
@@ -22,12 +19,12 @@ export default function BidModal({ title }: { title: string }) {
 
             <div className='flex flex-col gap-y-2'>
                 <Label>Price</Label>
-                <Input placeholder='Price' className='w-full' type='number' />
+                <Input placeholder='Price' className='w-full' type='number' onChange={(e) => setValue(Number(e.target.value))} />
             </div>
 
             <div className="flex gap-x-4 justify-center my-3 px-4">
                 <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                <BaseButton title="Next" variant="primary" onClick={update} />
+                <BaseButton title="Next" variant="primary" onClick={() => update(value)} />
             </div>
         </div>
     )

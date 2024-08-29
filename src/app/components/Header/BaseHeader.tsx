@@ -7,6 +7,7 @@ import {
   useConnectModal,
   useActiveAccount,
   AutoConnect,
+  ConnectButton,
 } from 'thirdweb/react';
 import { Search } from './Search';
 import WalletIcon from '@/components/Icon/WalletIcon';
@@ -26,29 +27,30 @@ import {
 import { List } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import Menu from './Menu';
+import { useWalletContext } from '@thirdweb-dev/react';
 
 const socials = [
   {
-    link: "",
-    image: "/icons/facebook-tag.svg"
+    link: '',
+    image: '/icons/facebook-tag.svg',
   },
   {
-    link: "",
-    image: "/icons/linkedin.svg"
+    link: '',
+    image: '/icons/linkedin.svg',
   },
   {
-    link: "",
-    image: "/icons/tiktok.svg"
+    link: '',
+    image: '/icons/tiktok.svg',
   },
   {
-    link: "",
-    image: "/icons/instagram.svg"
+    link: '',
+    image: '/icons/instagram.svg',
   },
   {
-    link: "",
-    image: "/icons/youtube.svg"
-  }
-]
+    link: '',
+    image: '/icons/youtube.svg',
+  },
+];
 
 export function BaseHeader() {
   const [user, setUser] = useState<any>(null);
@@ -71,7 +73,6 @@ export function BaseHeader() {
       });
       const connectedUser = data.user;
       const connectedToken = data.token;
-      console.log("data", data, connectedUser, connectedToken);
       createCookie('user', JSON.stringify(connectedUser));
       createCookie('token', connectedToken);
       setUser(connectedUser);
@@ -86,8 +87,7 @@ export function BaseHeader() {
 
   return (
     <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex px-4">
-      <div className="flex gap-x-4 items-center">
-
+      {/* <div className="flex gap-x-4 items-center">
         <div className="h-8 relative inline-flex gap-1.5 top-1">
           <div className="hidden max-xl:block">
             <Sheet>
@@ -120,18 +120,23 @@ export function BaseHeader() {
                           <WalletIcon />
                         </div>
                       )}
-                      <AutoConnect wallets={wallets} client={client} timeout={10000} />
+                      <AutoConnect
+                        wallets={wallets}
+                        client={client}
+                        timeout={10000}
+                      />
                     </div>
                     <div className="flex gap-x-2 my-4">
-                      {
-                        socials.map((social, _) => {
-                          return (
-                            <Link href={social.link} target='_blank'>
-                              <img src={social.image} className="w-6 fill-white stroke-white" />
-                            </Link>
-                          )
-                        })
-                      }
+                      {socials.map((social, _) => {
+                        return (
+                          <Link href={social.link} target="_blank">
+                            <img
+                              src={social.image}
+                              className="w-6 fill-white stroke-white"
+                            />
+                          </Link>
+                        );
+                      })}
                     </div>
                   </SheetDescription>
                 </SheetHeader>
@@ -143,7 +148,7 @@ export function BaseHeader() {
         <Link href="/">
           <Logo />
         </Link>
-      </div>
+      </div> */}
 
       <div className="hidden xl:block">
         <div className="justify-start items-center gap-8 flex text-base text-white">
@@ -191,7 +196,15 @@ export function BaseHeader() {
             <WalletIcon />
           </div>
         )}
-        <AutoConnect wallets={wallets} client={client} timeout={10000} />
+        {/* <AutoConnect wallets={wallets} client={client} timeout={10000} /> */}
+        {/* <ConnectButton
+          client={client}
+          // className={'common_btn'}
+          appMetadata={{
+            name: 'Monster App',
+            url: 'https://tadmin.vault-x.io',
+          }}
+        /> */}
       </div>
     </header>
   );

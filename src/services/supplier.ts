@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { getCookie } from '../lib/cookie';
 import { Address } from 'thirdweb';
-import { CurationType, NFTItem, NFTItemType, UserType } from '@/types';
+import { CurationType, NFTItemType, UserType } from '@/types';
 
 const server_uri =
   process.env.Next_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
@@ -74,7 +74,7 @@ interface IGetSearchRequest {
 
 export interface IGetSearchResponse {
   success: boolean;
-  nfts: Array<Partial<NFTItem>>;
+  nfts: Array<Partial<NFTItemType>>;
   curations: Array<Partial<CurationType>>,
   artistsNfts: Array<Partial<NFTItemType>>,
   users: Array<Partial<UserType>>,

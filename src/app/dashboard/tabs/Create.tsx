@@ -5,7 +5,16 @@ import CreateNft from '@/app/components/Modules/CreateNft';
 import { userServices } from '@/services/supplier';
 import Image from 'next/image'
 import { useState } from 'react';
-
+import { contract } from '@/lib/contract';
+import {
+    prepareContractCall,
+    sendTransaction,
+    readContract,
+    resolveMethod,
+    prepareEvent,
+    getContractEvents,
+  } from 'thirdweb';
+import { useActiveAccount } from 'thirdweb/react';
 enum ModalType {
     Curation = 'curation',
     Rwa = 'rwa'
@@ -22,16 +31,26 @@ export default function Create({ modalProcess }: { modalProcess: (type: ModalTyp
         stage: 1,
         type: null
     });
-    
 
+    const activeAccount = useActiveAccount();
+ 
     const processModal = (type: string) => {
         modalProcess(type as ModalType);
     }
 
     const checkCurator = async (type: 'curation' | 'nft') => {
-        const isCurator = await userServices.getSingleUser();
-        const hasAccess = isCurator.data.user.isCurator;
+        // const isCurator = await userServices.getSingleUser();
+        // const hasAccess = isCurator.data.user.isCurator;
 
+        let hasAccess = false;
+        if(activeAccount) {
+            hasAccess = await readContract({ 
+                contract, 
+                method: "isCurator", 
+                params: [activeAccount?.address] 
+              })
+        }
+        
         if (!hasAccess) {
             processModal(type);
         } else {

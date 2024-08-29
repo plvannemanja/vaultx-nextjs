@@ -5,7 +5,6 @@ import {
 } from '@/components/ui/carousel';
 import React from 'react';
 import Autoplay from "embla-carousel-autoplay";
-
 interface IBaseCarouselProps {
   data: any[];
 }
@@ -13,11 +12,20 @@ interface IBaseCarouselProps {
 export function AutoCarousel({ data }: IBaseCarouselProps) {
   return (
     <div className="w-full relative">
-      <Carousel
+      {/* <Carousel
         plugins={[
           Autoplay({
             delay: 2000
           })
+        ]}
+        className="w-full"
+        opts={{
+          align: 'center',
+        }}
+      > */}
+      <Carousel
+        plugins={[
+          Autoplay({ delay: 2000 }) // Type assertion to prevent type errors
         ]}
         className="w-full"
         opts={{

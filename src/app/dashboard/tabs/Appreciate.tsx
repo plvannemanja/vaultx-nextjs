@@ -18,7 +18,7 @@ export default function Appreciate({ hero, nfts }: { hero: { link: string, image
             {
                 hero?.image && hero.link ?
                     <Image src={hero.image} alt="hero" width={100} height={100} quality={100} className="w-full rounded-xl object-fill"
-                        onClick={() => window.open(hero.link, "_blank")}
+                        // onClick={() => window.open(hero.link, "_blank")}
                     /> : null
             }
             <Filters />
@@ -27,10 +27,10 @@ export default function Appreciate({ hero, nfts }: { hero: { link: string, image
                 {
                     nfts.map((nft: any, index: number) => {
                         return (
-                            <div className="w-[17rem]" onClick={() => {
-                                router.push(`/nft/${nft._id}`)
+                            <div className="w-[17rem]" key={index} onClick={() => {
+                                router.push(`/nft/${nft.tokenId}`)
                             }}>
-                                <NftCard key={index} data={nft} />
+                                <NftCard data={nft} />
                             </div>
                         )
                     })

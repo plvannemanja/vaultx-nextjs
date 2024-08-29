@@ -196,68 +196,65 @@ export default function PropertiesInfo() {
                             <p>{item.name}</p>
                             <div className="absolute bottom-5 right-5">
 
-                                <BaseDialog
-                                    trigger={<span className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400" onClick={() => preserveState(item)}>Edit</span>}
-                                    children={
-                                        <div className="flex flex-col gap-y-5">
-                                            <div className="flex flex-col gap-y-4">
-                                                <Label className="text-lg font-medium">Properties Template Name</Label>
-                                                <Input value={property.name} onChange={(e) => setProperty({ ...property, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your properties template name" />
-                                            </div>
+                            <BaseDialog
+                                trigger={<span className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400" onClick={() => preserveState(item)}>Edit</span>}
+                                className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                            >
+                                <div className="flex flex-col gap-y-5">
+                                    <div className="flex flex-col gap-y-4">
+                                        <Label className="text-lg font-medium">Properties Template Name</Label>
+                                        <Input value={property.name} onChange={(e) => setProperty({ ...property, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your properties template name" />
+                                    </div>
 
-                                            <div className="flex flex-col gap-y-4 my-6">
-                                                <p className="text-xl font-medium text-white">Properties value</p>
-                                                <div className='flex gap-4 flex-wrap'>
-                                                    {
-                                                        property ?
-                                                            property.attributes.length > 0 ?
-                                                                property.attributes.map((item, index: number) => {
-                                                                    return (
-                                                                        <div className='flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md'>
-                                                                            {
-                                                                                (propMod.type && propMod.index === index && propMod.by === 'default') ?
-                                                                                    <input type="text" className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto' onChange={(e) => {
-                                                                                        modifyProp(index, 'type', e.target.value)
-                                                                                        e.target.value = e.target.value
-                                                                                    }} />
-                                                                                    :
-                                                                                    <p className='text-white text-center text-sm' onClick={() => setPropMod({ ...propMod, type: true, index: index, by: 'default' })}>{item.type}</p>
-                                                                            }
-                                                                            {
-                                                                                (propMod.value && propMod.index === index && propMod.by === 'default') ?
-                                                                                    <input type="text" className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto' onChange={(e) => {
-                                                                                        modifyProp(index, 'value', e.target.value)
-                                                                                        e.target.value = e.target.value
-                                                                                    }} />
-                                                                                    :
-                                                                                    <p className='text-gray-400 text-center' onClick={() => setPropMod({ ...propMod, value: true, index: index, by: 'default' })}>{item.value}</p>
-                                                                            }
-
-                                                                            <div className='absolute top-2 right-2 cursor-pointer' onClick={() => removeProp(index)}>
-                                                                                <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path d="M4 4L14 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                                    <path d="M14 4L4 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                                </svg>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                }) : null : null
-                                                    }
-                                                    <div className='flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md' onClick={addNewProp}>
-                                                        <img src="icons/add-new.svg" className="w-10 h-10" />
-                                                        <p className='text-center text-sm text-[#DDF247]'>Add New</p>
+                                    <div className="flex flex-col gap-y-4 my-6">
+                                        <p className="text-xl font-medium text-white">Properties value</p>
+                                        <div className='flex gap-4 flex-wrap'>
+                                            {property?.attributes.length > 0 ? property.attributes.map((item, index: number) => (
+                                                <div key={index} className='flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md'>
+                                                    {propMod.type && propMod.index === index && propMod.by === 'default' ? (
+                                                        <input
+                                                            type="text"
+                                                            className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto'
+                                                            onChange={(e) => modifyProp(index, 'type', e.target.value)}
+                                                        />
+                                                    ) : (
+                                                        <p className='text-white text-center text-sm' onClick={() => setPropMod({ ...propMod, type: true, index: index, by: 'default' })}>
+                                                            {item.type}
+                                                        </p>
+                                                    )}
+                                                    {propMod.value && propMod.index === index && propMod.by === 'default' ? (
+                                                        <input
+                                                            type="text"
+                                                            className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto'
+                                                            onChange={(e) => modifyProp(index, 'value', e.target.value)}
+                                                        />
+                                                    ) : (
+                                                        <p className='text-gray-400 text-center' onClick={() => setPropMod({ ...propMod, value: true, index: index, by: 'default' })}>
+                                                            {item.value}
+                                                        </p>
+                                                    )}
+                                                    <div className='absolute top-2 right-2 cursor-pointer' onClick={() => removeProp(index)}>
+                                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M4 4L14 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M14 4L4 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div className="flex gap-x-4 justify-center my-3">
-                                                <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                                <BaseButton title="Save" variant="primary" onClick={async() => await update(item._id)} />
+                                            )) : null}
+                                            <div className='flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md' onClick={addNewProp}>
+                                                <img src="icons/add-new.svg" className="w-10 h-10" />
+                                                <p className='text-center text-sm text-[#DDF247]'>Add New</p>
                                             </div>
                                         </div>
-                                    }
-                                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                                    />
+                                    </div>
+
+                                    <div className="flex gap-x-4 justify-center my-3">
+                                        <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
+                                        <BaseButton title="Save" variant="primary" onClick={async() => await update(item._id)} />
+                                    </div>
+                                </div>
+                            </BaseDialog>
+
                             </div>
                         </div>
                     ))
@@ -274,66 +271,63 @@ export default function PropertiesInfo() {
                             </div>
                         </div>
                     }
-                    children={
-                        <div className="flex flex-col gap-y-5">
-                            <div className="flex flex-col gap-y-4">
-                                <Label className="text-lg font-medium">Properties Template Name</Label>
-                                <Input onChange={(e) => setProperty({ ...property, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your properties template name" />
-                            </div>
+                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                >
+                    <div className="flex flex-col gap-y-5">
+                        <div className="flex flex-col gap-y-4">
+                            <Label className="text-lg font-medium">Properties Template Name</Label>
+                            <Input onChange={(e) => setProperty({ ...property, name: e.target.value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter your properties template name" />
+                        </div>
 
-                            <div className="flex flex-col gap-y-4 my-6">
-                                <p className="text-xl font-medium text-white">Properties value</p>
-                                <div className='flex gap-4 flex-wrap'>
-                                    {
-                                        property ?
-                                            property.attributes.length > 0 ?
-                                                property.attributes.map((item, index: number) => {
-                                                    return (
-                                                        <div className='flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md'>
-                                                            {
-                                                                (propMod.type && propMod.index === index && propMod.by === 'default') ?
-                                                                    <input type="text" className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto' onChange={(e) => {
-                                                                        modifyProp(index, 'type', e.target.value)
-                                                                        e.target.value = e.target.value
-                                                                    }} />
-                                                                    :
-                                                                    <p className='text-white text-center text-sm' onClick={() => setPropMod({ ...propMod, type: true, index: index, by: 'default' })}>{item.type}</p>
-                                                            }
-                                                            {
-                                                                (propMod.value && propMod.index === index && propMod.by === 'default') ?
-                                                                    <input type="text" className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto' onChange={(e) => {
-                                                                        modifyProp(index, 'value', e.target.value)
-                                                                        e.target.value = e.target.value
-                                                                    }} />
-                                                                    :
-                                                                    <p className='text-gray-400 text-center' onClick={() => setPropMod({ ...propMod, value: true, index: index, by: 'default' })}>{item.value}</p>
-                                                            }
-
-                                                            <div className='absolute top-2 right-2 cursor-pointer' onClick={() => removeProp(index)}>
-                                                                <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M4 4L14 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    <path d="M14 4L4 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                </svg>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                }) : null : null
-                                    }
-                                    <div className='flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md' onClick={addNewProp}>
-                                        <img src="icons/add-new.svg" className="w-10 h-10" />
-                                        <p className='text-center text-sm text-[#DDF247]'>Add New</p>
+                        <div className="flex flex-col gap-y-4 my-6">
+                            <p className="text-xl font-medium text-white">Properties value</p>
+                            <div className='flex gap-4 flex-wrap'>
+                                {property?.attributes.length > 0 ? property.attributes.map((item, index: number) => (
+                                    <div key={index} className='flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md'>
+                                        {propMod.type && propMod.index === index && propMod.by === 'default' ? (
+                                            <input
+                                                type="text"
+                                                className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto'
+                                                onChange={(e) => modifyProp(index, 'type', e.target.value)}
+                                            />
+                                        ) : (
+                                            <p className='text-white text-center text-sm' onClick={() => setPropMod({ ...propMod, type: true, index: index, by: 'default' })}>
+                                                {item.type}
+                                            </p>
+                                        )}
+                                        {propMod.value && propMod.index === index && propMod.by === 'default' ? (
+                                            <input
+                                                type="text"
+                                                className='text-white text-center w-[65%] rounded-md bg-transparent mx-auto'
+                                                onChange={(e) => modifyProp(index, 'value', e.target.value)}
+                                            />
+                                        ) : (
+                                            <p className='text-gray-400 text-center' onClick={() => setPropMod({ ...propMod, value: true, index: index, by: 'default' })}>
+                                                {item.value}
+                                            </p>
+                                        )}
+                                        <div className='absolute top-2 right-2 cursor-pointer' onClick={() => removeProp(index)}>
+                                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4 4L14 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M14 4L4 14" stroke="#DDF247" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
                                     </div>
+                                )) : null}
+                                <div className='flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md' onClick={addNewProp}>
+                                    <img src="icons/add-new.svg" className="w-10 h-10" />
+                                    <p className='text-center text-sm text-[#DDF247]'>Add New</p>
                                 </div>
                             </div>
-
-                            <div className="flex gap-x-4 justify-center my-3">
-                                <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
-                                <BaseButton title="Save" variant="primary" onClick={async() => await update()} />
-                            </div>
                         </div>
-                    }
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                />
+
+                        <div className="flex gap-x-4 justify-center my-3">
+                            <BaseButton title="Cancel" variant="secondary" onClick={cancelChanges} />
+                            <BaseButton title="Save" variant="primary" onClick={async() => await update()} />
+                        </div>
+                    </div>
+                </BaseDialog>
+
             </div>
         </div>
     );

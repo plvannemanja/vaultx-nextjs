@@ -12,12 +12,13 @@ interface INftCardProps {
 }
 
 export default function NftCard({ data }: { data: INftCardProps }) {
+  console.log("NftCard", data);
   return (
     <Card className="bg-dark text-white border-none max-w-[20rem]">
       <CardContent className="aspect-square p-3">
         <div className="w-full overflow-hidden">
           <img
-            src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
+            src={data.cloudinaryUrl ? "https:\\" + data.cloudinaryUrl : ''}
             className="rounded w-full aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
             loading="lazy"
