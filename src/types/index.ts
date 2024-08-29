@@ -62,9 +62,6 @@ export type NFTItemType = {
     royalty: number;
     shipmentDetailsFilled: boolean;
     uri: string;
-    category: {
-        name: string;
-    }
 }
 
 export type CurationType = {

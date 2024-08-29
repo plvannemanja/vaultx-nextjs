@@ -3,44 +3,16 @@
 import Filters from "@/app/components/ui/Filters";
 import Image from "next/image"
 import NftCard from "@/app/components/Cards/NftCard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import NftServices from "@/services/nftService";
 
 export default function Appreciate({ hero, nfts }: { hero: { link: string, image: string } | null, nfts: any[] }) {
-    const nftService = new NftServices();
-    const [data, setData] = useState<any[]>([]);
-
     const router = useRouter();
-    const [filters, setFilters] = useState({
-        searchInput: "",
-        filter: {
-            price: 1
-        },
-        category: "Fine Art"
-    })
-
-    const handleFilters = (data: any) => {
-        if (data && typeof data === "object") {
-            setFilters({
-                searchInput: data.search,
-                filter: {
-                    price: data.price.value
-                },
-                category: data.category.label
-            })
-        }
-    }
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await nftService.getAllNfts(filters)
-            setData(response.data.nfts[0]?.data);
-        }
-
-        fetchData()
-    }, [filters])
-
+        console.log(hero, nfts);
+    }, [])
+    
     return (
         <div className="flex flex-col gap-y-4 px-4">
             {
@@ -49,9 +21,9 @@ export default function Appreciate({ hero, nfts }: { hero: { link: string, image
                         // onClick={() => window.open(hero.link, "_blank")}
                     /> : null
             }
-            <Filters setState={handleFilters} />
+            <Filters />
 
-            <div className='flex gap-4 flex-wrap my-4 justify-center md:gap-6'>
+            <div className='flex gap-4 flex-wrap my-4 justify-center md:justify-between'>
                 {
                     nfts.map((nft: any, index: number) => {
                         return (

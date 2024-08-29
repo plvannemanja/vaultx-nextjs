@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import * as React from "react"
+import { Check, ChevronsUpDown } from "lucide-react"
 import { Label } from "@/components/ui/label";
 
 import { cn } from "@/lib/utils"
@@ -81,28 +82,60 @@ export const prices = [
     }
 ]
 
+export function ComboboxDemo({ data, title }: { data: any[], title: string }) {
+    const [open, setOpen] = React.useState(false)
+    const [value, setValue] = React.useState("")
 
-export default function Filters({ setState } : { setState?: any }) {
-    const [search, setSearch] = useState<any>({
-        search: '',
-        price: {
-            label: prices[0].label,
-            value: prices[0].paramValue,
-            active: false
-        },
-        category: {
-            label: categories[0].label,
-            value: categories[0].value,
-            active: false
-        }
-    })
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    size={"sm"}
+                    role="combobox"
+                    aria-expanded={open}
+                    aria-label={`Select ${title}`}
+                    className="w-[200px] justify-between dark:text-white"
+                >
+                    {value
+                        ? data.find((framework) => framework.value === value)?.label
+                        : `Select ${title}`}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 hidden lg:block" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0 bg-transparent">
+                <Command className="bg-dark text-white">
+                    <CommandList>
+                        <CommandEmpty>No {title} found.</CommandEmpty>
+                        <CommandGroup className="z-20 relative">
+                            {data.map((framework) => (
+                                <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={(currentValue) => {
+                                        setValue(currentValue === value ? "" : currentValue);
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+                                    {framework.label}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    )
+}
 
-    useEffect(() => {
-        if (setState) {
-            setState(search)
-        }
-    }, [search.search, search.price.value, search.category.label])
 
+export default function Filters() {
     return (
         <div className="flex flex-wrap md:flex-nowrap gap-4">
             <div className="flex gap-x-2 items-center">
@@ -110,68 +143,18 @@ export default function Filters({ setState } : { setState?: any }) {
                 <Label>Filter</Label>
             </div>
 
-            <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-                <p className="text-sm w-[70%]">{search.category.label}</p>
-                {
-                    search.category.active ? 
-                    <ChevronUpIcon className="h-7 w-7" onClick={() => {
-                        setSearch({ ...search, category: { ...search.category, active: !search.category.active } })
-                    }} /> :
-                    <ChevronDownIcon className="h-7 w-7" onClick={() => {
-                        setSearch({ ...search, category: { ...search.category, active: !search.category.active } })
-                    }} />
-                }
-
-                {
-                    search.category.active &&
-                    <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                    {
-                        categories.map((category, index: number) => (
-                        <span key={index} onClick={() => {
-                            setSearch({ ...search, category: { label: category.label, value: category.value, active: false } })
-                            setState(category.value)
-                        }} className="text-sm cursor-pointer">{category.label}</span>
-                        ))
-                    }
-                    </div>
-                }
+            <div className="flex gap-x-2 items-center">
+                <ComboboxDemo data={categories} title="category" />
             </div>
-            
 
-            <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-                <p className="text-sm w-[70%]">{search.price.label}</p>
-                {
-                    search.price.active ? 
-                    <ChevronUpIcon className="h-7 w-7" onClick={() => {
-                        setSearch({ ...search, price: { ...search.price, active: !search.price.active } })
-                    }} /> :
-                    <ChevronDownIcon className="h-7 w-7" onClick={() => {
-                        setSearch({ ...search, price: { ...search.price, active: !search.price.active } })
-                    }} />
-                }
-
-                {
-                    search.price.active &&
-                    <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                    {
-                        prices.map((price, index) => (
-                        <span key={index} onClick={() => {
-                            setSearch({ ...search, price: { label: price.label, value: price.paramValue, active: false } })
-                            setState(price.value)
-                        }} className="text-sm cursor-pointer">{price.label}</span>
-                        ))
-                    }
-                    </div>
-                }
-
+            <div className="flex gap-x-2 items-center">
+                <ComboboxDemo data={prices} title="filter" />
             </div>
 
             <div className="flex gap-x-2 items-center border-2 rounded-xl px-2 w-full">
                 <svg width="20px" height="20px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M17 17L21 21" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
 
-                <input placeholder="Search by name..." className="w-full bg-transparent border-none outline-none focus:outline-none"
-                onChange={(e) => setSearch({ ...search, search: (e.target as any).value })}
-                />
+                <input placeholder="Search by name..." className="w-full bg-transparent border-none outline-none focus:outline-none" />
             </div>
         </div>
     )

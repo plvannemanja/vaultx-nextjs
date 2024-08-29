@@ -99,19 +99,10 @@ export function BaseHeader() {
                   <SheetTitle>VaultX</SheetTitle>
                   <SheetDescription>
                     <div className="flex flex-col gap-y-4 text-white">
-                      <Link href="/dashboard?tab=appreciate">
-                        <Label className="text-sm">Appreciation</Label>                    
-                      </Link>
-                      
-                      <Link href="/dashboard?tab=curation">
-                        <Label className="text-sm">Curation</Label>
-                      </Link>
-
-                      <Link href="https://artistvaultx.wpcomstaging.com/" target="_blank">
-                        <Label className="text-sm">Magazine</Label>
-                      </Link>
-
+                      <Label className="text-sm">Appreciation</Label>
                       <Label className="text-sm">Artist</Label>
+                      <Label className="text-sm">Curation</Label>
+                      <Label className="text-sm">Magazine</Label>
                     </div>
                     <hr className="my-4 bg-white" />
                     <Label className="text-sm text-white">How to work</Label>
