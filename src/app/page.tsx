@@ -13,6 +13,7 @@ import ExceptionalCard from './components/Cards/ExceptionalCard';
 import { useEffect, useState } from 'react';
 import { AutoCarousel } from './components/Carousels/AutoCarousel';
 import { Skeleton } from "@/components/ui/skeleton"
+import Image from 'next/image';
 
 interface Isection1 {
   title: string;
@@ -165,8 +166,11 @@ export default function Home() {
                 })
                 : null}
             </div>{' '}
-            <div className="flex justify-center items-center mt-10">
+            <div className="flex justify-center items-center mt-10 relative">
               <button className='px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300'>Discover Artist</button>
+              <div className='absolute top-[1rem] w-[68rem] lg:flex justify-center hidden'>
+                <img src="/illustrations/neon-grid.png" alt='neon-grid' className='w-[60rem]' />
+              </div>
             </div>
           </>
         ) : null}
@@ -177,7 +181,7 @@ export default function Home() {
         </div>
         {section3 ? (
           <div className="py-20">
-            <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap">
+            <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
                 ? createTitleComp(section3.title, section3.color)
                 : null}
@@ -186,8 +190,12 @@ export default function Home() {
                   {section3.description}
                 </Label>
               ) : null}
+
+              <div className='absolute top-20 w-[36rem]'>
+                <img height={100} width={100} src="/illustrations/important.png" alt='neon-grid' className='w-[36rem] pl-7 mt-4' />
+              </div>
             </div>
-            <div className="flex md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
+            <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.length > 0
                 ? curations.map((item: any, index: number) => {
                   return (

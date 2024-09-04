@@ -16,7 +16,10 @@ export default function NewsCard({
   data,
 }: INewsCardProps) {
   return (
-    <div className="flex flex-col gap-y-10 text-white">
+    <div className="flex flex-col gap-y-10 text-white relative">
+      <img src="/illustrations/news-1.png" alt='neon-grid' className='absolute hidden lg:block top-[-9rem] left-0 w-[14rem] h-[16rem]' />
+      <img src="/illustrations/news-1.png" alt='neon-grid' className='absolute hidden lg:block bottom-[-9rem] right-0 w-[14rem] h-[16rem]' />
+
       <div className="flex flex-col gap-y-5 text-center">
         {heading}
         <p className="text-center px-10 text-gray-300 md:text-xl">
