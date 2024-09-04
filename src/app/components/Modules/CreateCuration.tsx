@@ -12,6 +12,8 @@ import { z } from "zod"
 import TriggerModal from "../ui/TriggerModal"
 import ErrorModal from "./create/ErrorModal"
 import CurationLoader from "./create/CurationLoader"
+import AddNew from "../Icons/AddNew"
+import Upload from "../Icons/Upload"
 import { pinataGateway, uploadFile, uploadMetaData } from "@/utils/uploadData"
 import { removeEmptyStrings } from "@/utils/helpers"
 import { useActiveAccount } from 'thirdweb/react';
@@ -84,6 +86,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
     const create = async () => {
         try {
+            debugger;
+            setStatus({ error: false, loading: true });
             const result = createCurationSchema.safeParse(formData);
             if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
                 setErrors({
@@ -92,11 +96,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 })
                 return null;
             }
-            console.log("Fromdata", formData);
-            setStatus({ error: false, loading: true });
-            const logoUri = await uploadFile(formData.logo);
-            const bannerUri = await uploadFile(formData.bannerImage);
-            const desUri = await uploadFile(formData.descriptionImage);
+
+            const logoUri = formData.logo ? await uploadFile(formData.logo) : "";
+            const bannerUri = formData.bannerImage ? await uploadFile(formData.bannerImage) : "";
+            const desUri = formData.descriptionImage ? await uploadFile(formData.descriptionImage) : "";
 
             const data = new FormData();
             data.append('name', formData.name);
@@ -133,24 +136,35 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             if (activeAccount) {
                 try {
                     const result = await createCollection(metaData.name, metaUri, activeAccount);
-                    debugger;
                 } catch (error) {
                     console.log("error:", error);
+                    throw error;
                 }
+            } else {
+                throw ("no active account");
             }
             try {
-                const response = await collectionServices.create(data);
-                console.log("response", response);
+                let response;
+
+                if (editMode) {
+                    response = await collectionServices.update({
+                        ...data,
+                        curationId: editMode._id
+                    })
+                } else {
+                    await collectionServices.create(data);
+                }
+
                 if (response) {
                     setStatus({ error: false, loading: false });
                     cancelChanges();
                 }
+
             } catch (error) {
-                console.log("error:", error);
                 setStatus({ error: true, loading: true });
             }
         } catch (error) {
-            console.log("error:", error);
+            setStatus({ error: true, loading: true });
         }
     }
 
@@ -213,20 +227,18 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 status.loading &&
                 <TriggerModal
                     isOpen={status.loading || status.error}
+                    children={<CurationLoader status={status} edit={editMode ? true : false} />}
                     close={() => setStatus({ error: false, loading: false })}
-                >
-                    <CurationLoader status={status} />
-                </TriggerModal>
+                />
             }
 
             {
                 errors.active &&
                 <TriggerModal
                     isOpen={errors.active}
+                    children={<ErrorModal data={errors.data} />}
                     close={() => setErrors({ active: false, data: [] })}
-                >
-                    <ErrorModal data={errors.data} />
-                </TriggerModal>
+                />
             }
 
             <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
@@ -239,11 +251,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                                     imageSrc &&
                                     <img src={imageSrc} alt="logo" className="w-[90%] object-cover mx-auto" />
                                 }
-                                {file.name ? file.name : "No files selected"}
+                                {editMode ? '' : (file.name ? file.name : "No files selected")}
                             </div>
                             :
                             <>
-                                <Image src="icons/upload.svg" height={100} width={100} alt="upload" className="w-10 h-10" />
+                                <div className="w-10 h-10">
+                                    <Upload />
+                                </div>
                                 <p className="text-lg font-medium">Upload File</p>
                                 <p className="mt-2 text-gray-400">Drag or choose your file to upload</p>
                                 <p className="text-gray-500">PNG, GIF, WEBP, MP4, or MP3. Max 1GB.</p>
@@ -304,6 +318,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                                 maxSizeInBytes={maxFileSize}
                                 onFileSelect={(file: any) => handleFileChange(file, "banner")}
                                 deSelect={!formData.bannerImage}
+                                editMode={formData.bannerImage != '' && formData.bannerImage != null}
                             />
                         </div>
                     </div>
@@ -350,11 +365,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                                     }}>Delete</p>
                                     :
                                     <div className="flex gap-x-2 items-center">
-                                        <Image src="icons/add-new.svg" className="h-6 w-6 cursor-pointer" alt="add" height={100} width={100} onClick={() => {
+                                        <div className="h-6 w-6 cursor-pointer" onClick={() => {
                                             if (youtube.length < 2) {
                                                 setYoutube([...youtube, { title: '', url: '' }])
                                             }
-                                        }} />
+                                        }}>
+                                            <AddNew />
+                                        </div>
                                         <p className="text-sm">Add New</p>
                                     </div>
                             }
@@ -395,6 +412,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                                 acceptedFormats={acceptedFormats}
                                 maxSizeInBytes={maxFileSize}
                                 onFileSelect={(file: any) => handleFileChange(file, "description")}
+                                editMode={formData.bannerImage != '' && formData.bannerImage != null}
                             />
                         </div>
                     </div>
