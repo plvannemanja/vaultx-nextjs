@@ -3,6 +3,7 @@
 import React from 'react';
 import SideBar from '../components/ui/SideBar';
 import AppHeader from '../components/Header/AppHeader';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function DashboardLayout({
   children,
@@ -17,6 +18,7 @@ export default function DashboardLayout({
       <div className="w-full lg:w-[80%] flex flex-col gap-y-2">
         <AppHeader />
         {children}
+        <Toaster />
       </div>
     </section>
   );

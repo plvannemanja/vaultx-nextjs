@@ -109,7 +109,7 @@ export default function ContactInfo({ handler } : { handler?: (data: any) => voi
                         <div className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md">
                             <div className="flex flex-col gap-y-6 items-center">
                                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                                    <Image src="icons/plus.svg" className="w-5 h-5" alt="" />
+                                    <Image src="icons/plus.svg" className="w-5 h-5" alt="" width={100} height={100} />
                                 </div>
                                 <p className="text-[#828282]">Add New Information</p>
                             </div>

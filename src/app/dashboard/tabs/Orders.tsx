@@ -14,8 +14,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import moment from "moment";
 import SelectMenu, {prices} from "@/app/components/ui/SelectMenu";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Orders() {
+    const { toast } = useToast();
     const createSellService = new CreateSellService();
 
     const [orders, setOrders] = useState([]);
@@ -27,10 +29,22 @@ export default function Orders() {
     })
 
     useEffect(() => {
+        toast({
+            title: "Fetching Orders",
+            description: "Please wait...",
+            duration: 2000
+        })
+        
+
         const fetchOrders = async () => {
             const response = await createSellService.getOrders(filters);
             
             if (response.data.nfts) {
+                toast({
+                    title: "Orders Fetched",
+                    duration: 2000
+                })
+
                 setOrders(response.data.nfts);
             }
         }

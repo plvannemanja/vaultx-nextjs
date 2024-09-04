@@ -35,12 +35,12 @@ const accountLinks = [
   },
   {
     name: 'My favorite',
-    value: 'myFavorite',
+    value: 'fav',
     icon: '/icons/sidebar_ico_7.svg',
   },
   {
     name: 'My Order',
-    value: 'myOrder',
+    value: 'order',
     icon: '/icons/sidebar_ico_8.svg',
   },
   {
@@ -126,12 +126,7 @@ export default function SideBar({ className }: { className?: string }) {
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => {
-                const url = link as any
-                if (url) {
-                  window.open(url, '_blank');
-                } else {
-                  window.location.href = `/dashboard?tab=${link.value}`
-                }
+                window.location.href = `/dashboard?tab=${link.value}`
               }}
             >
               <Image

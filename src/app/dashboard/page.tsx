@@ -26,6 +26,7 @@ import {
   } from 'thirdweb';
 import { getData } from '@/utils/uploadData';
 import { getNftDataById } from '@/utils/nftutils';
+import { useToast } from '@/hooks/use-toast';
 
 interface IImage {
   appreciateTop: {
@@ -39,13 +40,13 @@ interface IImage {
 }
 
 export default function Page() {
+  const { toast } = useToast();
   const nftService = new NftServices();
 
   const searchParams = useSearchParams();
 
   const router = useParams();
 
-  console.log("searchParams", router);
   const [images, setImages] = useState<IImage | null>(null);
   const [nfts, setNfts] = useState<any>([]);
   const [collection, setCollection] = useState<any>([]);
@@ -78,6 +79,11 @@ export default function Page() {
   };
 
   useEffect(() => {
+    toast({
+      title: "Loading...",
+      duration: 2000
+    })
+
     if (tab == 'curation') {
       const fetchCollection = async () => {
         const response = await collectionServices.getAllCollections({

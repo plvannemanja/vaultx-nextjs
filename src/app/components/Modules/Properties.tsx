@@ -6,8 +6,11 @@ import { BaseDialog } from "../ui/BaseDialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import BaseButton from "../ui/BaseButton";
+import { useToast } from "@/hooks/use-toast";
 
 export default function PropertiesInfo() {
+    const { toast } = useToast();
+
     const [data, setData] = useState<null | any[]>(null);
     const [propMod, setPropMod] = useState<{
         by: string | null,
@@ -94,6 +97,10 @@ export default function PropertiesInfo() {
     }
 
     const update = async (id?: string) => {
+        toast({
+            title: 'Properties Template',
+            duration: 2000,
+        })
 
         let response = null;
         if (id) {
@@ -111,12 +118,19 @@ export default function PropertiesInfo() {
         }
 
         if (response) {
-            if (data) {                
+            if (data) {    
+                toast({
+                    title: 'Properties Template',
+                    description: 'Saved successfully',
+                    duration: 2000,
+                })
             }
         }
     }
 
     const cancelChanges = () => {
+
+        
         setProperty({
             ...property,
             name: "",
@@ -265,7 +279,7 @@ export default function PropertiesInfo() {
                         <div className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md" onClick={resetState}>
                             <div className="flex flex-col gap-y-6 items-center">
                                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                                    <img src="icons/plus.svg" className="w-5 h-5" />
+                                    <img src="icons/plus.svg" className="w-5 h-5" width={100} height={100} />
                                 </div>
                                 <p className="text-[#828282]">Add New Template</p>
                             </div>

@@ -10,8 +10,11 @@ import BaseButton from "@/app/components/ui/BaseButton";
 import ContactInfo from "@/app/components/Modules/ContactInfo";
 import ShippingInfo from "@/app/components/Modules/ShippingInfo";
 import PropertiesInfo from "@/app/components/Modules/Properties";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Settings() {
+  const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     avatar: null,
     cover: null,
@@ -30,16 +33,35 @@ export default function Settings() {
   };
 
   const update = async () => {
+    toast({
+      title: "Updating Profile",
+      description: "Please wait...",
+      duration: 2000
+    })
+
     const json = {
       ...formData,
       userImage: formData.avatar,
       bannerImage: formData.cover,
     }
 
-    const response = await userServices.updateProfile(json as any);
+    try {
+      const response = await userServices.updateProfile(json as any);
 
-    if (response) {
-      window.location.reload();
+      if (response) {
+        toast({
+          title: "Profile Updated",
+          duration: 2000
+        })
+      }
+
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An error occurred while updating your profile",
+        duration: 2000
+      })
     }
   }
 
@@ -166,7 +188,7 @@ export default function Settings() {
           </div>
         </div>
 
-        <ShippingInfo />  
+        <ShippingInfo />
         <ContactInfo />
         <PropertiesInfo />
 
