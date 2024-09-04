@@ -15,15 +15,7 @@ import CurationLoader from "./create/CurationLoader"
 import { pinataGateway, uploadFile, uploadMetaData } from "@/utils/uploadData"
 import { removeEmptyStrings } from "@/utils/helpers"
 import { useActiveAccount } from 'thirdweb/react';
-import { contract } from '@/lib/contract';
-import {
-    prepareContractCall,
-    sendTransaction,
-    readContract,
-    resolveMethod,
-    prepareEvent,
-    getContractEvents,
-  } from 'thirdweb';
+import { createCollection } from "@/lib/helper"
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
@@ -34,7 +26,7 @@ const createCurationSchema = z.object({
     description: z.string(),
 });
 
-export default function CreateCuration() {
+export default function CreateCuration({ editMode }: { editMode?: any }) {
     const activeAccount = useActiveAccount();
     const fileInputRef = useRef(null);
     const [file, setFile] = useState<any>(null);
@@ -93,78 +85,70 @@ export default function CreateCuration() {
     const create = async () => {
         try {
             const result = createCurationSchema.safeParse(formData);
-        if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
-            setErrors({
-                active: true,
-                data: JSON.parse(result.error.message)
-            })
-            return null;
-        }
-        console.log("Fromdata", formData);
-        setStatus({ error: false, loading: true });
-        const logoUri = await uploadFile(formData.logo);
-        const bannerUri =  await uploadFile(formData.bannerImage);
-        const desUri = await uploadFile(formData.descriptionImage);
+            if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
+                setErrors({
+                    active: true,
+                    data: JSON.parse(result.error.message)
+                })
+                return null;
+            }
+            console.log("Fromdata", formData);
+            setStatus({ error: false, loading: true });
+            const logoUri = await uploadFile(formData.logo);
+            const bannerUri = await uploadFile(formData.bannerImage);
+            const desUri = await uploadFile(formData.descriptionImage);
 
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('symbol', formData.symbol);
-        data.append('discription', formData.description);
-        data.append('logo', formData.logo);
-        data.append('bannerImage', formData.bannerImage);
-        data.append('descriptionImage', formData.descriptionImage);
-        data.append('website', formData.website);
-        data.append('twitter', formData.twitter);
-        data.append('facebook', formData.facebook);
-        data.append('instagram', formData.instagram);
-        data.append('youtube', JSON.stringify(youtube));
+            const data = new FormData();
+            data.append('name', formData.name);
+            data.append('symbol', formData.symbol);
+            data.append('discription', formData.description);
+            data.append('logo', formData.logo);
+            data.append('bannerImage', formData.bannerImage);
+            data.append('descriptionImage', formData.descriptionImage);
+            data.append('website', formData.website);
+            data.append('twitter', formData.twitter);
+            data.append('facebook', formData.facebook);
+            data.append('instagram', formData.instagram);
+            data.append('youtube', JSON.stringify(youtube));
 
-        let metaData = {
-            "name": formData.name,
-            "symbol": formData.symbol,
-            "discription": formData.discription,
-            "website": formData.website,
-            "twitter": formData.twitter,
-            "facebook": formData.facebook,
-            "instagram": formData.instagram,
-            "youtube": formData.youtube,
-            "logo": logoUri,
-            "banner": bannerUri,
-            "description": desUri,
+            let metaData = {
+                "name": formData.name,
+                "symbol": formData.symbol,
+                "discription": formData.discription,
+                "website": formData.website,
+                "twitter": formData.twitter,
+                "facebook": formData.facebook,
+                "instagram": formData.instagram,
+                "youtube": formData.youtube,
+                "logo": logoUri,
+                "banner": bannerUri,
+                "description": desUri,
 
-        }
-        metaData = removeEmptyStrings(metaData);
+            }
+            metaData = removeEmptyStrings(metaData);
 
-        const metaUri = await uploadMetaData(metaData);
-        console.log("metaUri", metaUri);
-        setStatus({ error: false, loading: false });
+            const metaUri = await uploadMetaData(metaData);
+            setStatus({ error: false, loading: false });
 
-        const transaction = prepareContractCall({
-            contract,
-            method: 'createCollectionByCurator',
-            params: [metaData.name, metaUri]
-        });
-        if (activeAccount) {
+            if (activeAccount) {
+                try {
+                    const result = await createCollection(metaData.name, metaUri, activeAccount);
+                    debugger;
+                } catch (error) {
+                    console.log("error:", error);
+                }
+            }
             try {
-                const { transactionHash } = await sendTransaction({
-                  transaction,
-                  account: activeAccount,
-                });
+                const response = await collectionServices.create(data);
+                console.log("response", response);
+                if (response) {
+                    setStatus({ error: false, loading: false });
+                    cancelChanges();
+                }
             } catch (error) {
                 console.log("error:", error);
+                setStatus({ error: true, loading: true });
             }
-        }
-        try {
-            const response = await collectionServices.create(data);
-            console.log("response", response);
-            if (response) {
-                setStatus({ error: false, loading: false });
-                cancelChanges();
-            }
-        } catch (error) {
-            console.log("error:", error);
-            setStatus({ error: true, loading: true });
-        }
         } catch (error) {
             console.log("error:", error);
         }
@@ -201,18 +185,38 @@ export default function CreateCuration() {
         }
     }
 
+    useEffect(() => {
+        if (editMode) {
+            setFormData({
+                name: editMode.name,
+                symbol: editMode.symbol,
+                logo: editMode.logo,
+                bannerImage: editMode.bannerImage,
+                descriptionImage: editMode.descriptionImage,
+                description: editMode.description,
+                website: editMode.website,
+                twitter: editMode.twitter,
+                facebook: editMode.facebook,
+                instagram: editMode.instagram,
+                youtube: editMode.youtube,
+            })
+            setFile(editMode.logo);
+            setImageSrc(editMode.logo);
+        }
+    }, [editMode])
+
     return (
         <div className="flex flex-col gap-y-4 px-4">
             <p className="text-xl font-medium">Edit Your Collection</p>
 
             {
                 status.loading &&
-                    <TriggerModal
-                        isOpen={status.loading || status.error}
-                        close={() => setStatus({ error: false, loading: false })}
-                    >
-                        <CurationLoader status={status} />
-                    </TriggerModal>
+                <TriggerModal
+                    isOpen={status.loading || status.error}
+                    close={() => setStatus({ error: false, loading: false })}
+                >
+                    <CurationLoader status={status} />
+                </TriggerModal>
             }
 
             {

@@ -2,27 +2,86 @@
 
 import { FavoriteService } from "@/services/FavoriteService"
 import { collectionServices } from "@/services/supplier"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { getYouTubeVideoId, trimString } from "@/utils/helpers"
-import Image from "next/image"
+import { Label } from "@/components/ui/label"
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import SearchWithDropDown from "@/app/components/Filters/SearchWithDropDown"
+import NftCard from "@/app/components/Cards/NftCard"
+import Link from "next/link"
+import { PencilIcon } from "@heroicons/react/20/solid"
 
 interface IData {
     collection?: any
     activity?: any
     nft?: any
     likes?: any
+    info?: any
+    userReacted?: any
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
     const favoriteService = new FavoriteService()
+    const walletAddr = 'dvkklsa@2...';
 
     const [data, setData] = useState<null | IData>(null)
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
     const [now, setNow] = useState(false)
     const [showLess, setShowLess] = useState(false)
+    const [tab, setTab] = useState('items')
+    const [filters, setFilters] = useState<any>({
+        filterString: '',
+        filter: {
+            price: null,
+        }
+    })
 
-    const walletAddr = 'dvkklsa@2...';
+    const [expandImage, setExpandImage] = useState(false)
+    const [heightExpand, setHeightExpand] = useState(1000)
+
+    const containerRef = useRef(null)
+
+    const getImageDimensions = (imageUrl: any, callback: any) => {
+        if (!containerRef.current) return
+        const containerWidth = (containerRef.current as any).offsetWidth
+
+        // @ts-ignore
+        const img = new Image();
+
+        img.onload = function () {
+            const width = img.width;
+            const height = img.height;
+
+            const aspectRatio = width / height;
+            if (containerWidth) {
+                const newWidth = containerWidth;
+                const newHeight = newWidth / aspectRatio;
+                setHeightExpand(newHeight)
+
+                callback(newWidth, newHeight);
+            } else {
+                callback(width, height);
+            }
+        };
+
+        // Handle potential errors
+        img.onerror = function () {
+            console.error('Error loading the image.');
+            callback(null, null);
+        };
+
+        // Set the image source to the provided URL
+        img.src = imageUrl;
+    }
 
     const handleLike = async () => {
         try {

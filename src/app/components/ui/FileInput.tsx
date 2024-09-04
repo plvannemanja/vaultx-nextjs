@@ -9,17 +9,18 @@ interface IFileInputProps {
   deSelect?: any;
   maxSizeInBytes?: number;
   acceptedFormats?: string[];
+  editMode?: any
 }
 
-export default function FileInput({ title, subtitle, onFileSelect, deSelect, maxSizeInBytes = 10*1024*1024, acceptedFormats = ['.png', 'jpeg'] }: IFileInputProps) {
+export default function FileInput({ title, subtitle, onFileSelect, deSelect, maxSizeInBytes = 10*1024*1024, acceptedFormats = ['.png', 'jpeg'], editMode }: IFileInputProps) {
   const fileInputRef = useRef(null);
-  const [file, setFile] = useState<any>(null);
+  const [fileName, setFileName] = useState<any>(null);
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     const fileExtension = file.name.split('.').pop().toLowerCase();
     if (file.size < maxSizeInBytes && acceptedFormats.includes(`.${fileExtension}`)) {
-      setFile(file);
+      setFileName(file.name);
       onFileSelect(file);
     }
   }
