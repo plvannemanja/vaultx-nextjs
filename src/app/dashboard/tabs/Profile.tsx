@@ -1,51 +1,91 @@
 "use client";
 
-import { ComboboxDemo, prices } from "@/app/components/ui/Filters";
+import { prices } from "@/app/components/ui/Filters";
 import { Badge } from "@/components/ui/badge";
 import { trimString } from "@/utils/helpers";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
+import Tabs from "@/app/components/Modules/profile/Tabs";
+import { userServices } from "@/services/supplier";
+import { FavoriteService } from "@/services/FavoriteService";
+
+const profileFilters = [
+    {
+        label: 'Price: Low To High',
+        value: 1,
+        param: 'price'
+    },
+    {
+        label: 'Price: High To Low',
+        value: -1,
+        param: 'price'
+    },
+    {
+        label: 'Recently Minted',
+        value: -1,
+        param: 'createdAt'
+    },
+    {
+        label: 'Recently Listed',
+        value: -1,
+        param: 'updatedAt'
+    },
+    {
+        label: 'Most Favorited',
+        value: -1,
+        param: 'likes'
+    },
+    {
+        label: 'Highest Last Sale',
+        value: -1,
+        param: 'price'
+    }
+]
 
 const badges = [
     {
         label: "All",
-        value: "a",
+        value: "all",
     },
     {
         label: "Owned",
-        value: "b",
+        value: "owned",
     },
     {
         label: "Created",
-        value: "c",
+        value: "created",
     },
     {
         label: "Curation",
-        value: "d",
+        value: "curation",
     },
     {
         label: "Activity",
-        value: "e",
+        value: "activity",
     },
     {
         label: "Favorite",
-        value: "f",
+        value: "fav",
     },
     {
         label: "Order",
-        value: "g",
+        value: "order",
     },
     {
         label: "Earn",
-        value: "h",
+        value: "earn",
     }
 ]
 
 export default function Profile() {
+    const favoriteService = new FavoriteService();
+
     const [likes, setLikes] = useState(0);
     const [liked, setLiked] = useState(false);
     const [now, setNow] = useState(false)
     const [filterbadge, setFilterBadge] = useState(badges[0].value)
+    const [user, setUser] = useState<any>(null)
 
     const walletAddr = 'dvkklsa@2...';
 
@@ -64,6 +104,29 @@ export default function Profile() {
         navigator.clipboard.writeText(walletAddr)
     }
 
+    const fetchData = async () => {
+        try {
+            const user = await userServices.getSingleUser()
+            const likedArtist = await favoriteService.getArtistsTotalLikes({
+                artistId: '660689f8c7e6b1396fd9bc09'
+            })
+            const reaction = await favoriteService.getUserReactionToArtist({
+                artistId: '660689f8c7e6b1396fd9bc09'
+            })
+
+            setLikes(likedArtist.data.totalLikedArtist)
+            setLiked(reaction.data.favorite)
+            setUser(user.data.user)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (!user) {
+            fetchData()
+        }
+    }, [])
     return (
         <div className="flex flex-col gap-y-4 px-4">
             <div className="relative">
@@ -99,35 +162,32 @@ export default function Profile() {
                     </div>
                 </div>
 
-                <div className="flex justify-center items-center absolute w-full bottom-[-48px]">
-                    <img src="/images/work-default.png" alt="like" className="w-28 h-28 rounded-full object-cover border-neon border-2" />
+                <div className={`flex flex-col gap-y-2 justify-center items-center absolute w-full ${user ? 'bottom-[-84px]' : 'bottom-[-48px]'} bottom-[-48px]`}>
+                    <img src={user?.avatar?.url ? user.avatar.url : "/images/work-default.png"} alt="like" className="w-28 h-28 rounded-full object-cover border-neon border-2" />
+                    {
+                        user ?
+                            (user?.username ? user?.username : trimString(user?.wallet))
+                            : null
+                    }
                 </div>
             </div>
 
-            <div className="flex gap-x-3 flex-wrap mt-16">
+            <div className="flex gap-x-3 flex-wrap mt-[6rem]">
                 {
                     badges.map((badge, index) => {
                         return (
                             <Badge
-                            key={index} 
-                            onClick={() => setFilterBadge(badge.value)}
-                            className={`p-3 rounded-2xl border-2 border-gray-500 cursor-pointer ${filterbadge === badge.value ? 
-                                'bg-neon text-black hover:text-black hover:bg-[#ddf247]' : 'hover:bg-[#232323] bg-dark text-white'}`}
+                                key={index}
+                                onClick={() => setFilterBadge(badge.value)}
+                                className={`p-3 rounded-2xl border-2 border-gray-500 cursor-pointer ${filterbadge === badge.value ?
+                                    'bg-neon text-black hover:text-black hover:bg-[#ddf247]' : 'hover:bg-[#232323] bg-dark text-white'}`}
                             >{badge.label}</Badge>
                         )
                     })
                 }
             </div>
 
-            <div className="flex gap-x-4 my-4">
-                <div className="flex gap-x-2 items-center border-2 rounded-xl px-2 w-full">
-                    <svg width="20px" height="20px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M17 17L21 21" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-
-                    <input placeholder="Search by name or trait..." className="w-full bg-transparent border-none outline-none focus:outline-none" />
-                </div>
-                <ComboboxDemo data={prices} title="category" />
-            </div>
-
+            <Tabs tab={filterbadge as any} />
         </div>
     )
 }

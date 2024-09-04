@@ -31,9 +31,8 @@ import {
     resolveMethod,
     prepareEvent,
     getContractEvents,
-  } from 'thirdweb';
+} from 'thirdweb';
 import { useActiveAccount } from "thirdweb/react";
-import { ethers } from "ethers";
 export default function Page({ params }: { params: { slug: string } }) {
     console.log("NFT params", params);
     const activeAccount = useActiveAccount();
@@ -106,10 +105,10 @@ export default function Page({ params }: { params: { slug: string } }) {
         console.log("handle buy");
         try {
             const tokenId = params.slug;
-            const tokenDetails =  await readContract({ 
-                contract, 
-                method: "tokenDetails", 
-                params: [BigInt(tokenId)] 
+            const tokenDetails = await readContract({
+                contract,
+                method: "tokenDetails",
+                params: [BigInt(tokenId)]
             });
             console.log("tokenDetails", tokenDetails);
             const transaction = prepareContractCall({
@@ -120,7 +119,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 ],
                 value: tokenDetails[4],
             });
-                
+
             if (activeAccount) {
                 try {
                     const { transactionHash } = await sendTransaction({
@@ -142,10 +141,10 @@ export default function Page({ params }: { params: { slug: string } }) {
         console.log("handle bid", data);
         try {
             const tokenId = params.slug;
-            const tokenDetails =  await readContract({ 
-                contract, 
-                method: "tokenDetails", 
-                params: [BigInt(tokenId)] 
+            const tokenDetails = await readContract({
+                contract,
+                method: "tokenDetails",
+                params: [BigInt(tokenId)]
             });
             console.log("tokenDetails", tokenDetails);
             const transaction = prepareContractCall({
@@ -156,7 +155,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 ],
                 value: BigInt(data * 1e18),
             });
-                
+
             if (activeAccount) {
                 try {
                     const { transactionHash } = await sendTransaction({
@@ -180,7 +179,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             console.log("NFT", nft);
             setNftData(nft);
             console.log("image url", "https://" + (nftData as any).cloudinaryUrl);
-            
+
             try {
                 const response = await nftService.getNftById("6641aa41ce4eabdbb75aacf4")
 
@@ -195,18 +194,18 @@ export default function Page({ params }: { params: { slug: string } }) {
                 console.log(error)
                 setData(null)
             }
-           
+
         }
 
         fetchNftData()
     }, [params.slug])
-    useEffect(() => { console.log("image url", "https://" + (nftData as any).cloudinaryUrl);},[nftData]);
+    useEffect(() => { console.log("image url", "https://" + (nftData as any).cloudinaryUrl); }, [nftData]);
     return (
         <div className="flex flex-col gap-y-4 py-20 w-full px-10 lg:px-20">
             {data && (<>
                 <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
                     <div className="w-full relative lg:w-[55%]">
-                        <Image src={mainImage ? mainImage :  "https://" + (nftData as any).cloudinaryUrl} height={512} width={512} quality={100} alt="hero" className="cursor-zoom-in rounded-xl object-cover aspect-square w-full" />
+                        <Image src={mainImage ? mainImage : "https://" + (nftData as any).cloudinaryUrl} height={512} width={512} quality={100} alt="hero" className="cursor-zoom-in rounded-xl object-cover aspect-square w-full" />
 
                         <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
                             <span className="font-medium">{likes}</span>
@@ -273,10 +272,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </button>
                                     <BaseDialog
                                         trigger={
-                                            <BaseButton 
-                                                title="Buy Now" 
-                                                variant="primary" 
-                                                onClick={() => { /* Handle click event */ }} 
+                                            <BaseButton
+                                                title="Buy Now"
+                                                variant="primary"
+                                                onClick={() => { /* Handle click event */ }}
                                             />
                                         }
                                         className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -285,36 +284,36 @@ export default function Page({ params }: { params: { slug: string } }) {
                                     </BaseDialog>
 
 
-                                <BaseDialog
-                                trigger={
-                                    <BaseButton title="Bid" variant="primary" onClick={() => console.log("click")} />
-                                }
-                                className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
-                                >
-                                <BidModal 
-                                    title={(nftData as any).name} 
-                                    update={(value) => handleBid(value)} 
-                                />
-                                </BaseDialog>
+                                    <BaseDialog
+                                        trigger={
+                                            <BaseButton title="Bid" variant="primary" onClick={() => console.log("click")} />
+                                        }
+                                        className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
+                                    >
+                                        <BidModal
+                                            title={(nftData as any).name}
+                                            update={(value) => handleBid(value)}
+                                        />
+                                    </BaseDialog>
 
                                 </div>
                                 <div>
-                                <BaseDialog
-                                    trigger={
-                                        <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">
-                                        Check Matic Quotes
-                                        </span>
-                                    }
-                                    className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
-                                >
-                                    <Quotes 
-                                        nft={data} 
-                                        fee={10} 
-                                        contractInfo={{
-                                        address: '44932KJKLJ12'
-                                        }} 
-                                    />
-                                </BaseDialog>
+                                    <BaseDialog
+                                        trigger={
+                                            <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">
+                                                Check Matic Quotes
+                                            </span>
+                                        }
+                                        className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                                    >
+                                        <Quotes
+                                            nft={data}
+                                            fee={10}
+                                            contractInfo={{
+                                                address: '44932KJKLJ12'
+                                            }}
+                                        />
+                                    </BaseDialog>
 
                                 </div>
                             </div>
@@ -347,102 +346,102 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                 </div>
 
-                    <div className="w-full flex gap-5 flex-wrap">
-                        {
-                            [(nftData as any).cloudinaryUrl, ...(nftData as any).attachments].map((item, index) => {
-                                return (
-                                    <img key={index} onClick={() => {
-                                        setMainImage("https://" + item)
-                                    }} src={"https://" + item} className="w-[16rem] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover" />
-                                )
-                            })
-                        }
-                    </div>
+                <div className="w-full flex gap-5 flex-wrap">
+                    {
+                        [(nftData as any).cloudinaryUrl, ...(nftData as any).attachments].map((item, index) => {
+                            return (
+                                <img key={index} onClick={() => {
+                                    setMainImage("https://" + item)
+                                }} src={"https://" + item} className="w-[16rem] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover" />
+                            )
+                        })
+                    }
+                </div>
 
-                    <div className="w-full flex flex-col gap-y-5 mt-5">
-                        <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-                            <Label className="text-lg font-medium">Properties</Label>
-                            <hr className="bg-white" />
-                            <div className="flex gap-4 flex-wrap">
-                                {
-                                    data?.attributes.map((attr: any, index) => {
-                                        return (
-                                            <div className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400" key={index}>
-                                                <p className="text-lg font-medium text-center">{attr.type}</p>
-                                                <p className="font-medium text-center">{attr.value}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
+                <div className="w-full flex flex-col gap-y-5 mt-5">
+                    <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+                        <Label className="text-lg font-medium">Properties</Label>
+                        <hr className="bg-white" />
+                        <div className="flex gap-4 flex-wrap">
+                            {
+                                data?.attributes.map((attr: any, index) => {
+                                    return (
+                                        <div className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400" key={index}>
+                                            <p className="text-lg font-medium text-center">{attr.type}</p>
+                                            <p className="font-medium text-center">{attr.value}</p>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
+                </div>
 
-                    <div className="w-full flex flex-col gap-y-5 mt-5">
-                        <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-                            <Label className="text-lg font-medium">Description</Label>
-                            <hr className="bg-white" />
-                            <p className="text-gray-500">{(nftData as any)?.description}</p>
-                        </div>
+                <div className="w-full flex flex-col gap-y-5 mt-5">
+                    <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+                        <Label className="text-lg font-medium">Description</Label>
+                        <hr className="bg-white" />
+                        <p className="text-gray-500">{(nftData as any)?.description}</p>
                     </div>
+                </div>
 
-                    <div className="w-full flex flex-col gap-y-5 mt-5">
-                        <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-                            <Label className="text-lg font-medium">Item activity</Label>
-                            <hr className="bg-white" />
-                            <Table>
-                                <TableCaption>A list of your item activity.</TableCaption>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[100px]">Event</TableHead>
-                                        <TableHead>Price</TableHead>
-                                        <TableHead>From</TableHead>
-                                        <TableHead>To</TableHead>
-                                        <TableHead>Date</TableHead>
-                                        <TableHead className="text-right">Time</TableHead>
+                <div className="w-full flex flex-col gap-y-5 mt-5">
+                    <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+                        <Label className="text-lg font-medium">Item activity</Label>
+                        <hr className="bg-white" />
+                        <Table>
+                            <TableCaption>A list of your item activity.</TableCaption>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="w-[100px]">Event</TableHead>
+                                    <TableHead>Price</TableHead>
+                                    <TableHead>From</TableHead>
+                                    <TableHead>To</TableHead>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead className="text-right">Time</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {FileList.length > 0 && list.map((item: any, index: number) => (
+                                    <TableRow key={index}>
+                                        <TableCell className="font-medium">{item.state}</TableCell>
+                                        <TableCell>{item.price}</TableCell>
+                                        <TableCell>{item.paymentStatus}</TableCell>
+                                        <TableCell>{item.paymentMethod}</TableCell>
+                                        <TableCell>{moment(item.createdAt).format('DD MMM, YY')}</TableCell>
+                                        <TableCell className="text-right">{moment(item.createdAt).format('hh:mm A')}</TableCell>
                                     </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {FileList.length > 0 && list.map((item: any, index: number) => (
-                                        <TableRow key={index}>
-                                            <TableCell className="font-medium">{item.state}</TableCell>
-                                            <TableCell>{item.price}</TableCell>
-                                            <TableCell>{item.paymentStatus}</TableCell>
-                                            <TableCell>{item.paymentMethod}</TableCell>
-                                            <TableCell>{moment(item.createdAt).format('DD MMM, YY')}</TableCell>
-                                            <TableCell className="text-right">{moment(item.createdAt).format('hh:mm A')}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </div>
+                </div>
 
-                    <div className="flex flex-col gap-y-2 bg-dark rounded-md py-4">
-                        <div className="w-full flex flex-col gap-y-5">
-                            <div className="w-full px-6 py-2 flex">
-                                <Label className="text-lg font-medium">Details</Label>
-                            </div>
-                        </div>
-                        <div className="w-full flex flex-col gap-y-5">
-                            <div className="w-full px-6 py-2 flex">
-                                <Label className="text-lg font-medium">Erc721</Label>
-                                <hr className="bg-white" />
-                            </div>
-                        </div>
-                        <div className="w-full flex flex-col gap-y-5">
-                            <div className="w-full px-6 py-2 flex">
-                                <Label className="text-lg font-medium">View on Polygon Scan</Label>
-                                <hr className="bg-white" />
-                            </div>
-                        </div>
-                        <div className="w-full flex flex-col gap-y-5">
-                            <div className="w-full px-6 py-2 flex">
-                                <Label className="text-lg font-medium">Open Original On IPFS</Label>
-                                <hr className="bg-white" />
-                            </div>
+                <div className="flex flex-col gap-y-2 bg-dark rounded-md py-4">
+                    <div className="w-full flex flex-col gap-y-5">
+                        <div className="w-full px-6 py-2 flex">
+                            <Label className="text-lg font-medium">Details</Label>
                         </div>
                     </div>
+                    <div className="w-full flex flex-col gap-y-5">
+                        <div className="w-full px-6 py-2 flex">
+                            <Label className="text-lg font-medium">Erc721</Label>
+                            <hr className="bg-white" />
+                        </div>
+                    </div>
+                    <div className="w-full flex flex-col gap-y-5">
+                        <div className="w-full px-6 py-2 flex">
+                            <Label className="text-lg font-medium">View on Polygon Scan</Label>
+                            <hr className="bg-white" />
+                        </div>
+                    </div>
+                    <div className="w-full flex flex-col gap-y-5">
+                        <div className="w-full px-6 py-2 flex">
+                            <Label className="text-lg font-medium">Open Original On IPFS</Label>
+                            <hr className="bg-white" />
+                        </div>
+                    </div>
+                </div>
             </>)}
         </div>
     );

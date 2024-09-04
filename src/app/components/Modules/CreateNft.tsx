@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { collectionServices } from '@/services/supplier';
 import { z } from 'zod';
-import { ethers } from 'ethers';
 import BasicDetails from './create/BasicDetails';
 import AdvanceDetails from './create/AdvanceDetails';
 import SellerInformation from './create/SellerInformation';
@@ -14,13 +13,13 @@ import { useActiveAccount } from 'thirdweb/react';
 import CurationLoader from "./create/CurationLoader"
 import { contract } from '@/lib/contract';
 import {
-    prepareContractCall,
-    sendTransaction,
-    readContract,
-    resolveMethod,
-    prepareEvent,
-    getContractEvents,
-  } from 'thirdweb';
+  prepareContractCall,
+  sendTransaction,
+  readContract,
+  resolveMethod,
+  prepareEvent,
+  getContractEvents,
+} from 'thirdweb';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
 export enum StepType {
   basic,
@@ -102,72 +101,72 @@ export default function CreateNft() {
           nftId: id,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const createNFT = async (data: any) => {
     try {
-        console.log('create NFT');
-        console.log('base Details', basicDetails.data);
-        console.log('data', data);
-        setStatus({ error: false, loading: true });
-        const imageUri =  await uploadFile(basicDetails.data.file);
-        console.log("imageUri", imageUri);
-        let fileUris: string[] = [];
-        for(let i =0 ; i < basicDetails.data.files.length; i++) {
-            let dataUri  = await uploadFile(basicDetails.data.files[i]);
-            fileUris = [...fileUris, dataUri];
-        }
-        console.log("fileUris", fileUris);
-        const metaData = {
-            productName: basicDetails.data.productName,
-            productDescription: basicDetails.data.productDescription,
-            curationId: basicDetails.data.curation.collectionId,
-            artistName: basicDetails.data.artistName,
-            image: imageUri,
-            attachment: fileUris,
-            attributes: data.attributes,
-            unlockableContent: basicDetails.data.unlockableContent
-        }
-        
-        console.log(metaData);
-        let tokenUri = await uploadMetaData(metaData);
-        console.log("tokenUri", tokenUri);
-        setStatus({ error: false, loading: false });
+      console.log('create NFT');
+      console.log('base Details', basicDetails.data);
+      console.log('data', data);
+      setStatus({ error: false, loading: true });
+      const imageUri = await uploadFile(basicDetails.data.file);
+      console.log("imageUri", imageUri);
+      let fileUris: string[] = [];
+      for (let i = 0; i < basicDetails.data.files.length; i++) {
+        let dataUri = await uploadFile(basicDetails.data.files[i]);
+        fileUris = [...fileUris, dataUri];
+      }
+      console.log("fileUris", fileUris);
+      const metaData = {
+        productName: basicDetails.data.productName,
+        productDescription: basicDetails.data.productDescription,
+        curationId: basicDetails.data.curation.collectionId,
+        artistName: basicDetails.data.artistName,
+        image: imageUri,
+        attachment: fileUris,
+        attributes: data.attributes,
+        unlockableContent: basicDetails.data.unlockableContent
+      }
+
+      console.log(metaData);
+      let tokenUri = await uploadMetaData(metaData);
+      console.log("tokenUri", tokenUri);
+      setStatus({ error: false, loading: false });
 
 
-        let collectionId = basicDetails.data.curation.collectionId;
-        let price = BigInt(basicDetails.data.price * 1e18);
-        let royaltyAddress = data.royalty.receiver;
-        let royalPercentage = BigInt(data.royalty.percentage * 10);
-        let paymentSplits = [];
-        for (let i  = 0; i < data.splits.length; i++) {
-            paymentSplits.push({
-            paymentWallet: data.splits[i].address,
-            paymentPercentage: BigInt(data.splits[i].percentage * 10),
-            })
-        }
-        console.log("payment", paymentSplits);
-        console.log("royalty", data.royalty);
+      let collectionId = basicDetails.data.curation.collectionId;
+      let price = BigInt(basicDetails.data.price * 1e18);
+      let royaltyAddress = data.royalty.receiver;
+      let royalPercentage = BigInt(data.royalty.percentage * 10);
+      let paymentSplits = [];
+      for (let i = 0; i < data.splits.length; i++) {
+        paymentSplits.push({
+          paymentWallet: data.splits[i].address,
+          paymentPercentage: BigInt(data.splits[i].percentage * 10),
+        })
+      }
+      console.log("payment", paymentSplits);
+      console.log("royalty", data.royalty);
 
-        const transaction = prepareContractCall({
-            contract,
-            method: 'listAsset',
-            params: [
-            collectionId, tokenUri, price, royaltyAddress, royalPercentage, 
-            paymentSplits
-            
-            ]
-        });
-            
-        if (activeAccount) {
-            try {
-                const { transactionHash } = await sendTransaction({
-                transaction,
-                account: activeAccount,
-                });
-            } catch (error) {
-                console.log("error:", error);
+      const transaction = prepareContractCall({
+        contract,
+        method: 'listAsset',
+        params: [
+          collectionId, tokenUri, price, royaltyAddress, royalPercentage,
+          paymentSplits
+
+        ]
+      });
+
+      if (activeAccount) {
+        try {
+          const { transactionHash } = await sendTransaction({
+            transaction,
+            account: activeAccount,
+          });
+        } catch (error) {
+          console.log("error:", error);
         }
       }
 
@@ -225,14 +224,14 @@ export default function CreateNft() {
       //   }
       //   await handleMint(uri, nftId);
     } catch (error) {
-        console.log("error:", error);
+      console.log("error:", error);
     }
   };
 
   // Add your logic here
   const handleMint = async (uri: string, nftId: string) => {
     try {
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const nextStep = async (
@@ -267,16 +266,16 @@ export default function CreateNft() {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-       {
-                status.loading &&
-                <TriggerModal
-                    isOpen={status.loading || status.error}
-                    close={() => setStatus({ error: false, loading: false })}
-                >
-                    <CurationLoader status={status} />
-                </TriggerModal>
+      {
+        status.loading &&
+        <TriggerModal
+          isOpen={status.loading || status.error}
+          close={() => setStatus({ error: false, loading: false })}
+        >
+          <CurationLoader status={status} />
+        </TriggerModal>
 
-            }
+      }
 
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
@@ -340,19 +339,19 @@ export default function CreateNft() {
 
       {basicDetails.error && (
         <TriggerModal
-            isOpen={basicDetails.error ? true : false}
-            close={() => setBasicDetails({ ...basicDetails, error: null })}
+          isOpen={basicDetails.error ? true : false}
+          close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
-            <ErrorModal data={JSON.parse(basicDetails.error)} />
+          <ErrorModal data={JSON.parse(basicDetails.error)} />
         </TriggerModal>
       )}
 
       {advanceDetails.error && (
         <TriggerModal
-            isOpen={advanceDetails.error ? true : false}
-            close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+          isOpen={advanceDetails.error ? true : false}
+          close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
-            <ErrorModal data={JSON.parse(advanceDetails.error)} />
+          <ErrorModal data={JSON.parse(advanceDetails.error)} />
         </TriggerModal>
 
       )}
