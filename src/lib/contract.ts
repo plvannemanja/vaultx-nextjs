@@ -2,7 +2,7 @@ import { getContract } from 'thirdweb';
 import { polygon } from 'thirdweb/chains';
 import { client } from './client';
 // get a contract
-const addr = '0x4B6B92087659C7c70c5BD31902B96366af2CeEf8';
+const addr = process.env.Next_PUBLIC_APP_CONTRACT_ADDRESS;
 import { monsterNftAbi } from './abis/MonsterNFTAbi.js';
 export const contract = getContract({
   // the client you have created via `createThirdwebClient()`
@@ -1511,4 +1511,5 @@ export const contract = getContract({
   ]
 });
 
+export const chain = polygon;
 export const address = addr;

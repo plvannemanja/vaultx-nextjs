@@ -1,6 +1,6 @@
 "use client";
 
-import { client } from '@/app/client';
+import { client } from '@/lib/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import { Button } from '@/components/ui/button';
 import {
@@ -66,10 +66,10 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
 //   //   ? walletImage
 //   //   : { data: null, status: false };
 //     const { data: walletImageData } = walletImage;
-  
+
 //   const { data: defaultImageData } =     useWalletImage('io.metamask');
 
-    
+
 //   if (walletImageData) {
 //     return (
 //       <Image
@@ -100,15 +100,16 @@ export default function Menu({ user }: MenuProps) {
   const activeAccount = useActiveAccount();
   const activeWallet = useActiveWallet();
   const activeChain = useActiveWalletChain();
-	const { disconnect } = useDisconnect();
-	const {data, isLoading, isError} = useWalletBalance({
-		client,
+  const { disconnect } = useDisconnect();
+  const { data, isLoading, isError } = useWalletBalance({
+    client,
     address: activeAccount?.address,
-    chain: {  id: ChainId.Polygon,
+    chain: {
+      id: ChainId.Polygon,
       name: 'Polygon',
       rpc: 'https://polygon-rpc.com',
-      }
-	});
+    }
+  });
   useEffect(() => {
     console.log(user);
   }, [user])
@@ -161,53 +162,53 @@ export default function Menu({ user }: MenuProps) {
         </DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Help Center</DropdownMenuItem>
-					<div className='w-full mt-4'>
-						<div className="mx-auto flex">
-							<div className="justify-center w-full items-center">
-								<div className="float-left">
-									<div className="justify-start items-center gap-5 inline-flex">
-										<WalletImage
-											walletId={activeWallet?.id || "walletConnect"}
-											size={50}
-										></WalletImage>
-										<div className="justify-start items-start">
-											<div className="opacity-40 text-left text-white text-base font-medium capitalize">
-												{activeChain?.name}
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="float-right justify-center items-center gap-3 inline-flex my-auto">
-									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
-										<Copy size={20} onClick={() => {
-                      navigator.clipboard.writeText(activeAccount?.address || "");
-                      console.log(data);
-                      console.log(activeAccount);
-                      
-                    }}></Copy>
-									</div>
-									<div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
-										<Power size={20} onClick={() => {activeWallet && disconnect(activeWallet)}}></Power>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="px-4 py-2 mt-3 w-full rounded-lg border border-white border-opacity-5 flex-col justify-end items-start gap-9 inline-flex">
-								<div className="self-stretch justify-between items-center inline-flex">
-									<div className="justify-start items-center gap-[17px] flex">
-										<div className="w-5 h-5 relative">
-											<Polygon className="text-white"></Polygon>
-										</div>
-										<div className="text-center text-white text-base font-extrabold capitalize">
-											{}Matic
-										</div>
-									</div>
-									<div className="text-center text-neutral-400 text-base font-semibold capitalize">
-                  {data ? Number(Number(data?.value) / Math.pow(10, Number(data?.decimals))).toFixed(2) : 0}
-									</div>
-								</div>
-							</div>
-					</div>
+        <div className='w-full mt-4'>
+          <div className="mx-auto flex">
+            <div className="justify-center w-full items-center">
+              <div className="float-left">
+                <div className="justify-start items-center gap-5 inline-flex">
+                  <WalletImage
+                    walletId={activeWallet?.id || "walletConnect"}
+                    size={50}
+                  ></WalletImage>
+                  <div className="justify-start items-start">
+                    <div className="opacity-40 text-left text-white text-base font-medium capitalize">
+                      {activeChain?.name}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="float-right justify-center items-center gap-3 inline-flex my-auto">
+                <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
+                  <Copy size={20} onClick={() => {
+                    navigator.clipboard.writeText(activeAccount?.address || "");
+                    console.log(data);
+                    console.log(activeAccount);
+
+                  }}></Copy>
+                </div>
+                <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
+                  <Power size={20} onClick={() => { activeWallet && disconnect(activeWallet) }}></Power>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="px-4 py-2 mt-3 w-full rounded-lg border border-white border-opacity-5 flex-col justify-end items-start gap-9 inline-flex">
+            <div className="self-stretch justify-between items-center inline-flex">
+              <div className="justify-start items-center gap-[17px] flex">
+                <div className="w-5 h-5 relative">
+                  <Polygon className="text-white"></Polygon>
+                </div>
+                <div className="text-center text-white text-base font-extrabold capitalize">
+                  { }Matic
+                </div>
+              </div>
+              <div className="text-center text-neutral-400 text-base font-semibold capitalize">
+                {data ? Number(Number(data?.value) / Math.pow(10, Number(data?.decimals))).toFixed(2) : 0}
+              </div>
+            </div>
+          </div>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

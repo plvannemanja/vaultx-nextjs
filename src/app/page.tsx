@@ -153,16 +153,16 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
-                    return (
-                      <ArtistsCard
-                        key={index}
-                        image={item.image}
-                        title={item.title}
-                        subtitle1={item.subtitle1}
-                        subtitle2={item.subtitle2}
-                      />
-                    );
-                  })
+                  return (
+                    <ArtistsCard
+                      key={index}
+                      image={item.image}
+                      title={item.title}
+                      subtitle1={item.subtitle1}
+                      subtitle2={item.subtitle2}
+                    />
+                  );
+                })
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10">
@@ -190,14 +190,14 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.length > 0
                 ? curations.map((item: any, index: number) => {
-                    return (
-                      <ExceptionalCard
-                        key={index}
-                        logo={item.logo}
-                        name={item.name}
-                      />
-                    );
-                  })
+                  return (
+                    <ExceptionalCard
+                      key={index}
+                      logo={item.logo}
+                      name={item.name}
+                    />
+                  );
+                })
                 : null}
             </div>
           </div>
@@ -232,7 +232,6 @@ export default function Home() {
           </a>
         </div>
       ) : null}
-
       <BaseFooter />
     </main>
   );
