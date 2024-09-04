@@ -97,9 +97,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 return null;
             }
 
-            const logoUri = await uploadFile(formData.logo);
-            const bannerUri = await uploadFile(formData.bannerImage);
-            const desUri = await uploadFile(formData.descriptionImage);
+            const logoUri = formData.logo ? await uploadFile(formData.logo) : "";
+            const bannerUri = formData.bannerImage ? await uploadFile(formData.bannerImage) : "";
+            const desUri = formData.descriptionImage ? await uploadFile(formData.descriptionImage) : "";
 
             const data = new FormData();
             data.append('name', formData.name);
