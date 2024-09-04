@@ -25,7 +25,7 @@ import { Data, Polygon } from '@3rdweb/chain-icons';
 import { WalletId } from 'thirdweb/wallets';
 import { shortenAddress } from 'thirdweb/utils';
 import { useEffect } from 'react';
-import { ChainId } from '@thirdweb-dev/sdk';
+import { chain } from '@/lib/contract';
 
 interface MenuProps {
   user: any;
@@ -104,11 +104,7 @@ export default function Menu({ user }: MenuProps) {
   const { data, isLoading, isError } = useWalletBalance({
     client,
     address: activeAccount?.address,
-    chain: {
-      id: ChainId.Polygon,
-      name: 'Polygon',
-      rpc: 'https://polygon-rpc.com',
-    }
+    chain: chain
   });
   useEffect(() => {
     console.log(user);
