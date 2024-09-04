@@ -4,7 +4,7 @@ import { Address } from 'thirdweb';
 import { CurationType, NFTItemType, UserType } from '@/types';
 
 const server_uri =
-  process.env.Next_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
+  process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
 
 const options = {
   baseURL: server_uri,
