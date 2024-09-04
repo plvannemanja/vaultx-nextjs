@@ -134,9 +134,9 @@ export function BaseHeader() {
                     </div>
                     <div className="flex gap-x-2 my-4">
                       {
-                        socials.map((social, _) => {
+                        socials.map((social, index) => {
                           return (
-                            <Link href={social.link} target='_blank'>
+                            <Link key={index} href={social.link} target='_blank'>
                               <img src={social.image} className="w-6 fill-white stroke-white" />
                             </Link>
                           )

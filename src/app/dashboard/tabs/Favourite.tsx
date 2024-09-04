@@ -1,12 +1,13 @@
 "use client";
 
-import { ComboboxDemo, prices } from '@/app/components/ui/Filters'
 import { FavoriteService } from '@/services/FavoriteService';
 import { useEffect, useState } from 'react';
 import NftCard from '@/app/components/Cards/NftCard';
 import CurationCard from '@/app/components/Cards/CurationCard';
 import ArtistsCard from '@/app/components/Cards/ArtistsCard';
 import { collectionServices } from '@/services/supplier';
+import CurationSearch from '@/app/components/Filters/CurationSearch';
+import SearchWithDropDown from '@/app/components/Filters/SearchWithDropDown';
 
 const menu = [
     {
@@ -84,12 +85,7 @@ export default function Favourite() {
         <div className="flex flex-col gap-y-4 px-4">
 
             <div className="flex gap-x-4 my-4">
-                <div className="flex gap-x-2 items-center border-2 rounded-xl px-2 w-full">
-                    <svg width="20px" height="20px" viewBox="0 0 24 24" strokeWidth="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M17 17L21 21" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-
-                    <input placeholder="Search by name or trait..." className="w-full bg-transparent border-none outline-none focus:outline-none" />
-                </div>
-                <ComboboxDemo data={prices} title="category" />
+                <SearchWithDropDown setState={(e) => setFilters({...filters, filters: e})} />
             </div>
 
             <div className='flex gap-x-5 mb-4'>
