@@ -1,5 +1,5 @@
-import { prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
-import { chain, contract } from "./contract";
+import { Address, prepareContractCall, readContract, sendTransaction, waitForReceipt } from "thirdweb";
+import { address, chain, contract } from "./contract";
 import { Account } from "thirdweb/wallets";
 import { client } from "./client";
 
@@ -22,4 +22,14 @@ export const createCollection = async (name: string, uri: string, account: Accou
     });
 
     return receipt;
+}
+
+export const isCurator = async (address: string) => {
+    const data = await readContract({
+        contract,
+        method: "function isCurator(address) view returns (bool)",
+        params: [address]
+    });
+
+    return data;
 }

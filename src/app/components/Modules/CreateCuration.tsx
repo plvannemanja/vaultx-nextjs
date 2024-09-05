@@ -86,7 +86,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
     const create = async () => {
         try {
-            debugger;
             setStatus({ error: false, loading: true });
             const result = createCurationSchema.safeParse(formData);
             if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
