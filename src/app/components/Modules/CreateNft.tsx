@@ -1,32 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { collectionServices } from '@/services/supplier';
-import { z } from 'zod';
-import BasicDetails from './create/BasicDetails';
-import AdvanceDetails from './create/AdvanceDetails';
-import SellerInformation from './create/SellerInformation';
-import ErrorModal from './create/ErrorModal';
-import TriggerModal from '../ui/TriggerModal';
-import { CreateNftServices } from '@/services/createNftService';
+import { useState } from "react"
+import { collectionServices } from "@/services/supplier"
+import { z } from "zod"
+import BasicDetails from "./create/BasicDetails"
+import AdvanceDetails from "./create/AdvanceDetails"
+import SellerInformation from "./create/SellerInformation"
+import ErrorModal from "./create/ErrorModal"
+import { error } from "console"
+import TriggerModal from "../ui/TriggerModal"
+import { CreateNftServices } from "@/services/createNftService"
 import { useActiveAccount } from 'thirdweb/react';
 import CurationLoader from "./create/CurationLoader"
-import { contract } from '@/lib/contract';
-import {
-  prepareContractCall,
-  sendTransaction,
-  readContract,
-  resolveMethod,
-  prepareEvent,
-  getContractEvents,
-} from 'thirdweb';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
 export enum StepType {
   basic,
   advanced,
 }
-export default function CreateNft() {
+export default function CreateNft({ editMode }: { editMode?: any }) {
   const nftService = new CreateNftServices();
+
   const [status, setStatus] = useState({
     error: false,
     loading: false
@@ -53,19 +46,19 @@ export default function CreateNft() {
   const activeAccount = useActiveAccount();
   const [nftId, setNftId] = useState(null);
 
-  //   const handleBasicDetails = (data: any, error: any) => {
-  //     setBasicDetails({
-  //       data: data,
-  //       error: error,
-  //     });
-  //   };
+  const handleBasicDetails = (data: any, error: any) => {
+    setBasicDetails({
+      data: data,
+      error: error
+    })
+  }
 
-  //   const handleAdvanceDetails = (data: any, error: any) => {
-  //     setAdvanceDetails({
-  //       data: data,
-  //       error: error,
-  //     });
-  //   };
+  const handleAdvanceDetails = (data: any, error: any) => {
+    setAdvanceDetails({
+      data: data,
+      error: error
+    })
+  }
 
   const handleSellerInfo = (data: any, error: any) => {
     setSellerInfo({
@@ -77,21 +70,21 @@ export default function CreateNft() {
   const createBasicDetails = async () => {
     try {
       if (basicDetails.data) {
-        const response = await nftService.createBasicDetails(basicDetails.data);
+        const response = await nftService.createBasicDetails(basicDetails.data)
 
         if (response.data?.data?._id) {
-          setNftId(response.data.data._id);
-          return response.data.data._id;
+          setNftId(response.data.data._id)
+          return response.data.data._id
         }
 
-        return null;
+        return null
       }
 
-      return null;
+      return null
     } catch (error) {
-      return null;
+      return null
     }
-  };
+  }
 
   const createAdvanceDetails = async (id: string) => {
     try {
@@ -234,49 +227,20 @@ export default function CreateNft() {
     } catch (error) { }
   };
 
-  const nextStep = async (
-    next?: boolean,
-    data?: any,
-    error?: any,
-    type?: StepType,
-  ) => {
-    if (type == StepType.basic) {
-      setBasicDetails({
-        data: data,
-        error: error,
-      });
-    } else if ((type = StepType.advanced)) {
-      setAdvanceDetails({
-        data: data,
-        error: error,
-      });
-    }
-
-    if (next && step == 2) {
-      await createNFT(data);
-      return;
+  const nextStep = async (next?: boolean) => {
+    if (next && step == 3) {
+      await createNFT()
     }
 
     if (next) {
-      setStep(step + 1);
+      setStep(step + 1)
     } else {
-      setStep(step - 1);
+      setStep(step - 1)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      {
-        status.loading &&
-        <TriggerModal
-          isOpen={status.loading || status.error}
-          close={() => setStatus({ error: false, loading: false })}
-        >
-          <CurationLoader status={status} />
-        </TriggerModal>
-
-      }
-
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
         <div className="flex gap-x-2 items-center">
@@ -286,23 +250,7 @@ export default function CreateNft() {
           <p>Basic Details</p>
         </div>
 
-        <svg
-          width="24px"
-          height="24px"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#fff"
-        >
-          <path
-            d="M9 6L15 12L9 18"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
+        <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M9 6L15 12L9 18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
 
         <div className="flex gap-x-2 items-center">
           <div className="w-10 h-10 rounded-full relative bg-neon">
@@ -311,65 +259,52 @@ export default function CreateNft() {
           <p>Advance Details</p>
         </div>
 
-        <svg
-          width="24px"
-          height="24px"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#fff"
-        >
-          <path
-            d="M9 6L15 12L9 18"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
+        <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M9 6L15 12L9 18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
 
-        {/* <div className="flex gap-x-2 items-center">
+        <div className="flex gap-x-2 items-center">
           <div className="w-10 h-10 rounded-full relative bg-neon">
             <span className="absolute top-2 left-4">3</span>
           </div>
           <p>Seller Information</p>
-        </div> */}
+        </div>
       </div>
 
-      {basicDetails.error && (
+      {
+        basicDetails.error &&
         <TriggerModal
           isOpen={basicDetails.error ? true : false}
+          children={<ErrorModal data={JSON.parse(basicDetails.error)} />}
           close={() => setBasicDetails({ ...basicDetails, error: null })}
-        >
-          <ErrorModal data={JSON.parse(basicDetails.error)} />
-        </TriggerModal>
-      )}
+        />
+      }
 
-      {advanceDetails.error && (
+      {
+        advanceDetails.error &&
         <TriggerModal
           isOpen={advanceDetails.error ? true : false}
+          children={<ErrorModal data={JSON.parse(advanceDetails.error)} />}
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
-        >
-          <ErrorModal data={JSON.parse(advanceDetails.error)} />
-        </TriggerModal>
+        />
+      }
 
-      )}
-
-      {sellerInfo.error && (
+      {
+        sellerInfo.error &&
         <TriggerModal
           isOpen={sellerInfo.error ? true : false}
+          children={<ErrorModal data={JSON.parse(sellerInfo.error)} />}
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
-        >
-          <ErrorModal data={JSON.parse(sellerInfo.error)} />
-        </TriggerModal>
-      )}
+        />
+      }
 
-      {step === 1 && <BasicDetails nextStep={nextStep} />}
-      {step === 2 && <AdvanceDetails nextStep={nextStep} />}
-      {/* {step === 3 && (
-        <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
-      )} */}
+      {
+        step === 1 && <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
+      }
+      {
+        step === 2 && <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
+      }
+      {
+        step === 3 && <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
+      }
     </div>
-  );
+  )
 }
