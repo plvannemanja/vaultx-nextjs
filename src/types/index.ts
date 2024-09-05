@@ -1,3 +1,5 @@
+import { Address } from "thirdweb";
+
 type AvatarType = {
     url: string;
 }
@@ -25,7 +27,7 @@ type YoutubeType = {
     url: string;
 }
 
-export type NFTItemType = {    
+export type NFTItemType = {
     shippingInformation: Partial<ShippingInformationType>;
     _id: string;
     name: string;
@@ -108,4 +110,9 @@ export type UserType = {
     __v: number;
     email: string;
     username: string;
+}
+
+export type PaymentSplitType = {
+    paymentWallet: Address,
+    paymentPercentage: bigint
 }
