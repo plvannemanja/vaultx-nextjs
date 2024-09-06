@@ -86,7 +86,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
     const create = async () => {
         try {
-            debugger;
             setStatus({ error: false, loading: true });
             const result = createCurationSchema.safeParse(formData);
             if (!result.success && !formData.logo && !formData.bannerImage && !formData.descriptionImage) {
@@ -136,6 +135,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             if (activeAccount) {
                 try {
                     const result = await createCollection(metaData.name, metaUri, activeAccount);
+                    if (result === null)
+                        throw ("collection is not created!");
+                    data.append('tokenId', result.tokenId);
+                    data.append('transactionHash', result.transactionHash);
                 } catch (error) {
                     console.log("error:", error);
                     throw error;

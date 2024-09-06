@@ -1,3 +1,5 @@
+import { Address } from "thirdweb";
+
 type AvatarType = {
     url: string;
 }
@@ -25,7 +27,7 @@ type YoutubeType = {
     url: string;
 }
 
-export type NFTItemType = {    
+export type NFTItemType = {
     shippingInformation: Partial<ShippingInformationType>;
     _id: string;
     name: string;
@@ -108,4 +110,41 @@ export type UserType = {
     __v: number;
     email: string;
     username: string;
+}
+
+export type PaymentSplitType = {
+    paymentWallet: Address,
+    paymentPercentage: bigint
+}
+
+export interface IBasicDetailFormData {
+    productName: string | null,
+    productDescription: string | null,
+    artistName: string | null,
+    price: any,
+    curation: any,
+    file: File | null,
+}
+
+export interface IBasicDetail {
+    data: FormData,
+    formData: IBasicDetail,
+    error: any,
+}
+
+export interface IAdvancedDetailOption {
+    freeMint: boolean,
+    royalties: boolean,
+    unlockable: boolean,
+    category: boolean,
+    split: boolean,
+}
+
+export interface IAdvancedDetailFormData {
+    royaltyAddress: string | null,
+    royalty: number,
+    unlockable: string | null,
+    category: any,
+    address: string | null,
+    percentage: number
 }

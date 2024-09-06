@@ -55,6 +55,7 @@ export default function SellerInformation({ handler, nextStep }: { handler: (dat
         console.log(formData)
 
         handler(formData, null)
+        nextStep(true)
     }
 
     return (
@@ -90,18 +91,18 @@ export default function SellerInformation({ handler, nextStep }: { handler: (dat
                 <p className='text-gray-500'>Please read the following and check the appropriate boxes to indicate your consent:</p>
                 <hr />
                 <Textarea
-                disabled={true}
-                className='p-4 rounded-md' rows={4} placeholder='faucibus id malesuada aliquam. Tempus morbi turpis nulla viverra tellus mauris cum. Est consectetur commodo turpis habitasse sed. Nibh tincidunt quis nunc placerat arcu sagittis. In vitae fames nunc consectetur. Magna faucibus sit risus sed tortor malesuada purus. Donec fringilla orci lobortis quis id blandit rhoncus. ' />
+                    disabled={true}
+                    className='p-4 rounded-md' rows={4} placeholder='faucibus id malesuada aliquam. Tempus morbi turpis nulla viverra tellus mauris cum. Est consectetur commodo turpis habitasse sed. Nibh tincidunt quis nunc placerat arcu sagittis. In vitae fames nunc consectetur. Magna faucibus sit risus sed tortor malesuada purus. Donec fringilla orci lobortis quis id blandit rhoncus. ' />
             </div>
 
             <div className="flex items-center space-x-2">
                 <input id="terms"
-                type="checkbox"
-                checked={formData.accepted}
-                onChange={() => setFormData({
-                    ...formData,
-                    accepted: !formData.accepted
-                })}
+                    type="checkbox"
+                    checked={formData.accepted}
+                    onChange={() => setFormData({
+                        ...formData,
+                        accepted: !formData.accepted
+                    })}
                 />
                 <label
                     htmlFor="terms"
