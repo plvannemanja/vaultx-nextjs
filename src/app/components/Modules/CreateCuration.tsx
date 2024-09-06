@@ -135,6 +135,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             if (activeAccount) {
                 try {
                     const result = await createCollection(metaData.name, metaUri, activeAccount);
+                    if (result === null)
+                        throw ("collection is not created!");
+                    data.append('tokenId', result.tokenId);
+                    data.append('transactionHash', result.transactionHash);
                 } catch (error) {
                     console.log("error:", error);
                     throw error;
