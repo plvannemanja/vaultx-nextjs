@@ -38,7 +38,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
       search: search.search,
       filter: search.filter.value,
     });
-  }, [search.filter.label, search.filter.value]);
+  }, [search.search, search.filter.label, search.filter.value]);
   return (
     <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
       <div className="flex gap-x-2 items-center">

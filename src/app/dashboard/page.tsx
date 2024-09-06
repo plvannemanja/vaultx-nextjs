@@ -32,6 +32,7 @@ import {
 import { getData } from '@/utils/uploadData';
 import { getNftDataById } from '@/utils/nftutils';
 import { useToast } from '@/hooks/use-toast';
+import BaseButton from '../components/ui/BaseButton';
 
 interface IImage {
   appreciateTop: {
@@ -60,6 +61,7 @@ export default function Page() {
     active: false,
     content: '',
   });
+  const [curationPage, setCurationPage] = useState(1)
 
   const [filters, setFilters] = useState({
     filter: {
@@ -68,7 +70,9 @@ export default function Page() {
     limit: 0,
     searchInput: '',
     skip: 0,
+    curationFilter: null
   });
+
 
   const handleModalProcess = (type: string) => {
     const show = type != '';
@@ -82,6 +86,71 @@ export default function Page() {
       content: type,
     });
   };
+
+  const handleCurationFilter = async (search, filter) => {
+    try {
+      const response = await collectionServices.getAllCollections({
+        searchInput: search,
+        filter: {
+          [filter]: -1
+        }
+      });
+
+      const collections = response.data.curations;
+      const detailedInfo = await Promise.all(
+        collections
+          .filter((item: any) => (!item?.active && !item?.owner?.active))
+          .map(async (collection: any) => {
+            const info = await collectionServices.getCollectionInfo(
+              collection._id,
+            );
+
+            const extra = {
+              nftCount: info.data.collection.nftCount,
+              totalVolume: info.data.collection.totalVolume,
+              artistCount: info.data.collection.artistCount,
+            };
+
+            return {
+              ...extra,
+              name: collection.name,
+              image: collection.bannerImage,
+            };
+          }),
+      );
+
+      setCollection(detailedInfo);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'An error occurred while filtering',
+        duration: 2000,
+      });
+      console.log('error', error);
+    }
+    
+  }
+
+  const updateCurationFilter = (e) => {
+    console.log(e)
+    if (typeof e === 'object') {
+      setFilters({
+        ...filters,
+        searchInput: e.search,
+        curationFilter: e.filter
+      })
+    }
+  }
+
+
+  useEffect(() => {
+    toast({
+      title: 'Loading...',
+      duration: 2000,
+    })
+
+    handleCurationFilter(filters.searchInput, filters.curationFilter)
+  }, [filters.searchInput, filters.curationFilter])
 
   useEffect(() => {
     toast({
@@ -98,7 +167,7 @@ export default function Page() {
         const collections = response.data.curations;
         const detailedInfo = await Promise.all(
           collections
-            .filter((item: any) => item.active)
+            .filter((item: any) => (!item?.active && !item?.owner?.active))
             .map(async (collection: any) => {
               const info = await collectionServices.getCollectionInfo(
                 collection._id,
@@ -174,10 +243,13 @@ export default function Page() {
         <Appreciate hero={images ? images.appreciateTop : null} nfts={nfts} />
       ) : null}
       {tab === 'curation' ? (
+        <>
         <Curation
+          handleFilter={updateCurationFilter}
           hero={images ? images.curationTop : null}
           collections={collection}
         />
+        </>
       ) : null}
       {tab === 'work' ? <Profile /> : null}
       {tab === 'fav' ? <Favourite /> : null}
