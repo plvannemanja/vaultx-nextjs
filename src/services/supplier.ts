@@ -75,9 +75,9 @@ interface IGetSearchRequest {
 export interface IGetSearchResponse {
   success: boolean;
   nfts: Array<Partial<NFTItemType>>;
-  curations: Array<Partial<CurationType>>,
-  artistsNfts: Array<Partial<NFTItemType>>,
-  users: Array<Partial<UserType>>,
+  curations: Array<Partial<CurationType>>;
+  artistsNfts: Array<Partial<NFTItemType>>;
+  users: Array<Partial<UserType>>;
 }
 
 // API calls for NFTs
@@ -265,13 +265,13 @@ export const collectionServices = {
   ): Promise<AxiosResponse<any>> =>
     api.post(`${server_uri}/collection/getCollectionActivities/`, data),
   getSearch: (data: IGetSearchRequest): Promise<IGetSearchResponse> => {
-    return api.post(`${server_uri}/collection/search`, data)
+    return api
+      .post(`${server_uri}/collection/search`, data)
       .then((res: AxiosResponse) => {
         return res.data;
       })
-      .catch(err => err)
-
-  }
+      .catch((err) => err);
+  },
 };
 
 // API calls for auctions

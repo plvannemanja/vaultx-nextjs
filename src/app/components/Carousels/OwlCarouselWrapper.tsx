@@ -1,7 +1,5 @@
-import React from 'react'
+import React from 'react';
 
 export default function OwlCarouselWrapper() {
-  return (
-    <div>OwlCarouselWrapper</div>
-  )
+  return <div>OwlCarouselWrapper</div>;
 }

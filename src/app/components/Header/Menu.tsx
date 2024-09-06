@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { client } from '@/lib/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
@@ -37,7 +37,7 @@ interface WalletDetailProps {
 }
 const WalletImage = ({ walletId, size }: WalletDetailProps) => {
   // Always call the hooks unconditionally
-  const walletImage = useWalletImage(walletId || "walletConnect");
+  const walletImage = useWalletImage(walletId || 'walletConnect');
   const { data: walletImageData } = walletImage;
 
   // Fallback image if walletImageData is not available
@@ -68,7 +68,6 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
 //     const { data: walletImageData } = walletImage;
 
 //   const { data: defaultImageData } =     useWalletImage('io.metamask');
-
 
 //   if (walletImageData) {
 //     return (
@@ -104,11 +103,11 @@ export default function Menu({ user }: MenuProps) {
   const { data, isLoading, isError } = useWalletBalance({
     client,
     address: activeAccount?.address,
-    chain: chain
+    chain: chain,
   });
   useEffect(() => {
     console.log(user);
-  }, [user])
+  }, [user]);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -117,7 +116,9 @@ export default function Menu({ user }: MenuProps) {
             className="shrink-0 rounded-full object-cover w-10 h-10"
             width={40}
             height={40}
-            src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
+            src={
+              user?.avatar?.url ? user.avatar.url : '/icons/default_profile.svg'
+            }
             alt="user_profile"
           />
           <div className="justify-start items-center gap-1.5 flex">
@@ -133,7 +134,11 @@ export default function Menu({ user }: MenuProps) {
               className="shrink-0 rounded-full object-cover h-10 w-10"
               width={40}
               height={40}
-              src={user?.avatar?.url ? user.avatar.url : "/icons/default_profile.svg"}
+              src={
+                user?.avatar?.url
+                  ? user.avatar.url
+                  : '/icons/default_profile.svg'
+              }
               alt="default_profile"
             />
             <div className="justify-start items-center gap-1.5 flex">
@@ -158,13 +163,13 @@ export default function Menu({ user }: MenuProps) {
         </DropdownMenuItem>
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Help Center</DropdownMenuItem>
-        <div className='w-full mt-4'>
+        <div className="w-full mt-4">
           <div className="mx-auto flex">
             <div className="justify-center w-full items-center">
               <div className="float-left">
                 <div className="justify-start items-center gap-5 inline-flex">
                   <WalletImage
-                    walletId={activeWallet?.id || "walletConnect"}
+                    walletId={activeWallet?.id || 'walletConnect'}
                     size={50}
                   ></WalletImage>
                   <div className="justify-start items-start">
@@ -176,15 +181,24 @@ export default function Menu({ user }: MenuProps) {
               </div>
               <div className="float-right justify-center items-center gap-3 inline-flex my-auto">
                 <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
-                  <Copy size={20} onClick={() => {
-                    navigator.clipboard.writeText(activeAccount?.address || "");
-                    console.log(data);
-                    console.log(activeAccount);
-
-                  }}></Copy>
+                  <Copy
+                    size={20}
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        activeAccount?.address || '',
+                      );
+                      console.log(data);
+                      console.log(activeAccount);
+                    }}
+                  ></Copy>
                 </div>
                 <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
-                  <Power size={20} onClick={() => { activeWallet && disconnect(activeWallet) }}></Power>
+                  <Power
+                    size={20}
+                    onClick={() => {
+                      activeWallet && disconnect(activeWallet);
+                    }}
+                  ></Power>
                 </div>
               </div>
             </div>
@@ -196,11 +210,16 @@ export default function Menu({ user }: MenuProps) {
                   <Polygon className="text-white"></Polygon>
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">
-                  { }Matic
+                  {}Matic
                 </div>
               </div>
               <div className="text-center text-neutral-400 text-base font-semibold capitalize">
-                {data ? Number(Number(data?.value) / Math.pow(10, Number(data?.decimals))).toFixed(2) : 0}
+                {data
+                  ? Number(
+                      Number(data?.value) /
+                        Math.pow(10, Number(data?.decimals)),
+                    ).toFixed(2)
+                  : 0}
               </div>
             </div>
           </div>

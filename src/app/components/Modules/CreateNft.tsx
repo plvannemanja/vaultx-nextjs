@@ -1,22 +1,22 @@
 'use client';
 
-import { useState } from "react"
-import { collectionServices } from "@/services/supplier"
-import { z } from "zod"
-import BasicDetails from "./create/BasicDetails"
-import AdvanceDetails from "./create/AdvanceDetails"
-import SellerInformation from "./create/SellerInformation"
-import ErrorModal from "./create/ErrorModal"
-import { error } from "console"
-import TriggerModal from "../ui/TriggerModal"
-import { CreateNftServices } from "@/services/createNftService"
+import { useState } from 'react';
+import { collectionServices } from '@/services/supplier';
+import { z } from 'zod';
+import BasicDetails from './create/BasicDetails';
+import AdvanceDetails from './create/AdvanceDetails';
+import SellerInformation from './create/SellerInformation';
+import ErrorModal from './create/ErrorModal';
+import { error } from 'console';
+import TriggerModal from '../ui/TriggerModal';
+import { CreateNftServices } from '@/services/createNftService';
 import { useActiveAccount } from 'thirdweb/react';
-import CurationLoader from "./create/CurationLoader"
+import CurationLoader from './create/CurationLoader';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
-import { useCreateNFT } from "../Context/CreateNFTContext";
-import { IListAsset, listAsset } from "@/lib/helper";
-import { parseEther, zeroAddress } from "viem";
-import { Address, isAddress } from "thirdweb";
+import { useCreateNFT } from '../Context/CreateNFTContext';
+import { IListAsset, listAsset } from '@/lib/helper';
+import { parseEther, zeroAddress } from 'viem';
+import { Address, isAddress } from 'thirdweb';
 export enum StepType {
   basic,
   advanced,
@@ -26,7 +26,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   const [status, setStatus] = useState({
     error: false,
-    loading: false
+    loading: false,
   });
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState({
@@ -47,7 +47,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     error: null,
   });
 
-  const { advancedOptions, basicDetail, advancedDetails: advancedFormData, paymentSplits } = useCreateNFT();
+  const {
+    advancedOptions,
+    basicDetail,
+    advancedDetails: advancedFormData,
+    paymentSplits,
+  } = useCreateNFT();
 
   const activeAccount = useActiveAccount();
   const [nftId, setNftId] = useState(null);
@@ -55,16 +60,16 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const handleBasicDetails = (data: any, error: any) => {
     setBasicDetails({
       data: data,
-      error: error
-    })
-  }
+      error: error,
+    });
+  };
 
   const handleAdvanceDetails = (data: any, error: any) => {
     setAdvanceDetails({
       data: data,
-      error: error
-    })
-  }
+      error: error,
+    });
+  };
 
   const handleSellerInfo = (data: any, error: any) => {
     setSellerInfo({
@@ -76,21 +81,21 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const createBasicDetails = async () => {
     try {
       if (basicDetails.data) {
-        const response = await nftService.createBasicDetails(basicDetails.data)
+        const response = await nftService.createBasicDetails(basicDetails.data);
 
         if (response.data?.data?._id) {
-          setNftId(response.data.data._id)
-          return response.data.data._id
+          setNftId(response.data.data._id);
+          return response.data.data._id;
         }
 
-        return null
+        return null;
       }
 
-      return null
+      return null;
     } catch (error) {
-      return null
+      return null;
     }
-  }
+  };
 
   const createAdvanceDetails = async (id: string) => {
     try {
@@ -100,28 +105,28 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           nftId: id,
         });
       }
-    } catch (error) { }
+    } catch (error) {}
   };
 
   const createNFT = async () => {
     try {
       debugger;
-      const nftId = await createBasicDetails()
+      const nftId = await createBasicDetails();
 
       if (!nftId) {
-        throw new Error('Failed to create NFT')
+        throw new Error('Failed to create NFT');
       }
 
       if (!sellerInfo.data) {
-        throw new Error('Seller Information')
+        throw new Error('Seller Information');
       }
 
-      await createAdvanceDetails(nftId)
+      await createAdvanceDetails(nftId);
 
-      const selectedSeller = sellerInfo.data.shipping
+      const selectedSeller = sellerInfo.data.shipping;
 
       if (!selectedSeller.address) {
-        throw new Error('Address is required')
+        throw new Error('Address is required');
       }
 
       const data = {
@@ -144,25 +149,24 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         },
       };
 
-      const { data: { uri } } = await nftService.createSellerDetails(data)
+      const {
+        data: { uri },
+      } = await nftService.createSellerDetails(data);
 
       if (!uri) {
-        throw new Error('Failed to create NFT')
+        throw new Error('Failed to create NFT');
       }
 
-      await handleMint(uri, nftId)
-    } catch (error) {
-
-    }
-  }
+      await handleMint(uri, nftId);
+    } catch (error) {}
+  };
 
   // Add your logic here
   const handleMint = async (uri: string, nftId: string) => {
     debugger;
     try {
       // check free mint
-      if (advancedOptions.freeMint || !activeAccount)
-        return;
+      if (advancedOptions.freeMint || !activeAccount) return;
 
       let price = parseEther(basicDetail.price);
       let curationPayload = JSON.parse(basicDetail.curation);
@@ -170,22 +174,24 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         collectionId: curationPayload?.tokenId,
         tokenURI: uri,
         price,
-        royaltyWallet: "",
+        royaltyWallet: '',
         royaltyPercentage: BigInt(0),
         paymentSplits: [],
-        account: activeAccount
-      }
+        account: activeAccount,
+      };
 
       if (advancedOptions.royalties) {
-        nftPayload.royaltyWallet = isAddress(advancedFormData.royaltyAddress) ? advanceDetails.royaltyAddress : zeroAddress;
+        nftPayload.royaltyWallet = isAddress(advancedFormData.royaltyAddress)
+          ? advanceDetails.royaltyAddress
+          : zeroAddress;
         nftPayload.royaltyPercentage = BigInt(advancedFormData.royalty * 100);
       }
 
       if (advancedOptions.split) {
-        nftPayload.paymentSplits = paymentSplits.map(split => ({
+        nftPayload.paymentSplits = paymentSplits.map((split) => ({
           paymentWallet: split.paymentWallet,
-          paymentPercentage: split.paymentPercentage * BigInt(100)
-        }))
+          paymentPercentage: split.paymentPercentage * BigInt(100),
+        }));
       }
 
       let { tokenId } = await listAsset(nftPayload);
@@ -197,15 +203,15 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const nextStep = async (next?: boolean) => {
     debugger;
     if (next && step == 3) {
-      await createNFT()
+      await createNFT();
     }
 
     if (next) {
-      setStep(step + 1)
+      setStep(step + 1);
     } else {
-      setStep(step - 1)
+      setStep(step - 1);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
@@ -218,7 +224,23 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           <p>Basic Details</p>
         </div>
 
-        <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M9 6L15 12L9 18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+        <svg
+          width="24px"
+          height="24px"
+          strokeWidth="1.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          color="#fff"
+        >
+          <path
+            d="M9 6L15 12L9 18"
+            stroke="#fff"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
 
         <div className="flex gap-x-2 items-center">
           <div className="w-10 h-10 rounded-full relative bg-neon">
@@ -227,7 +249,23 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           <p>Advance Details</p>
         </div>
 
-        <svg width="24px" height="24px" strokeWidth="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#fff"><path d="M9 6L15 12L9 18" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+        <svg
+          width="24px"
+          height="24px"
+          strokeWidth="1.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          color="#fff"
+        >
+          <path
+            d="M9 6L15 12L9 18"
+            stroke="#fff"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          ></path>
+        </svg>
 
         <div className="flex gap-x-2 items-center">
           <div className="w-10 h-10 rounded-full relative bg-neon">
@@ -237,42 +275,42 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </div>
       </div>
 
-      {
-        basicDetails.error &&
+      {basicDetails.error && (
         <TriggerModal
           isOpen={basicDetails.error ? true : false}
-          children={<ErrorModal data={JSON.parse(basicDetails.error)} />}
           close={() => setBasicDetails({ ...basicDetails, error: null })}
-        />
-      }
+        >
+          <ErrorModal data={JSON.parse(basicDetails.error)} />
+        </TriggerModal>
+      )}
 
-      {
-        advanceDetails.error &&
+      {advanceDetails.error && (
         <TriggerModal
           isOpen={advanceDetails.error ? true : false}
-          children={<ErrorModal data={JSON.parse(advanceDetails.error)} />}
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
-        />
-      }
+        >
+          <ErrorModal data={JSON.parse(advanceDetails.error)} />
+        </TriggerModal>
+      )}
 
-      {
-        sellerInfo.error &&
+      {sellerInfo.error && (
         <TriggerModal
           isOpen={sellerInfo.error ? true : false}
-          children={<ErrorModal data={JSON.parse(sellerInfo.error)} />}
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
-        />
-      }
+        >
+          <ErrorModal data={JSON.parse(sellerInfo.error)} />
+        </TriggerModal>
+      )}
 
-      {
-        step === 1 && <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
-      }
-      {
-        step === 2 && <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
-      }
-      {
-        step === 3 && <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
-      }
+      {step === 1 && (
+        <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
+      )}
+      {step === 2 && (
+        <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
+      )}
+      {step === 3 && (
+        <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
+      )}
     </div>
-  )
+  );
 }

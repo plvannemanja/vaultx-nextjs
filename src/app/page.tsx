@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import ExceptionalCard from './components/Cards/ExceptionalCard';
 import { useEffect, useState } from 'react';
 import { AutoCarousel } from './components/Carousels/AutoCarousel';
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 import Image from 'next/image';
 
 interface Isection1 {
@@ -133,11 +133,11 @@ export default function Home() {
   return (
     <main className="flex flex-col bg-neutral-900">
       <BaseHeader />
-      {
-        images?.homeAutority ? (
-          <AutoCarousel data={images.homeAutority} />
-        ) : <Skeleton className='w-full h-[400px]' />
-      }
+      {images?.homeAutority ? (
+        <AutoCarousel data={images.homeAutority} />
+      ) : (
+        <Skeleton className="w-full h-[400px]" />
+      )}
       <div className="py-20 w-full px-10 lg:px-20">
         {section1 ? (
           <>
@@ -154,22 +154,28 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
-                  return (
-                    <ArtistsCard
-                      key={index}
-                      image={item.image}
-                      title={item.title}
-                      subtitle1={item.subtitle1}
-                      subtitle2={item.subtitle2}
-                    />
-                  );
-                })
+                    return (
+                      <ArtistsCard
+                        key={index}
+                        image={item.image}
+                        title={item.title}
+                        subtitle1={item.subtitle1}
+                        subtitle2={item.subtitle2}
+                      />
+                    );
+                  })
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10 relative">
-              <button className='px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300'>Discover Artist</button>
-              <div className='absolute top-[1rem] w-[68rem] lg:flex justify-center hidden'>
-                <img src="/illustrations/neon-grid.png" alt='neon-grid' className='w-[60rem]' />
+              <button className="px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300">
+                Discover Artist
+              </button>
+              <div className="absolute top-[1rem] w-[68rem] lg:flex justify-center hidden">
+                <img
+                  src="/illustrations/neon-grid.png"
+                  alt="neon-grid"
+                  className="w-[60rem]"
+                />
               </div>
             </div>
           </>
@@ -191,21 +197,27 @@ export default function Home() {
                 </Label>
               ) : null}
 
-              <div className='absolute top-20 w-[36rem]'>
-                <img height={100} width={100} src="/illustrations/important.png" alt='neon-grid' className='w-[36rem] pl-7 mt-4' />
+              <div className="absolute top-20 w-[36rem]">
+                <img
+                  height={100}
+                  width={100}
+                  src="/illustrations/important.png"
+                  alt="neon-grid"
+                  className="w-[36rem] pl-7 mt-4"
+                />
               </div>
             </div>
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.length > 0
                 ? curations.map((item: any, index: number) => {
-                  return (
-                    <ExceptionalCard
-                      key={index}
-                      logo={item.logo}
-                      name={item.name}
-                    />
-                  );
-                })
+                    return (
+                      <ExceptionalCard
+                        key={index}
+                        logo={item.logo}
+                        name={item.name}
+                      />
+                    );
+                  })
                 : null}
             </div>
           </div>

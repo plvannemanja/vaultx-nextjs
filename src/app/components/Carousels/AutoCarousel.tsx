@@ -1,10 +1,10 @@
 import {
   Carousel,
   CarouselContent,
-  CarouselItem
+  CarouselItem,
 } from '@/components/ui/carousel';
 import React from 'react';
-import Autoplay from "embla-carousel-autoplay";
+import Autoplay from 'embla-carousel-autoplay';
 interface IBaseCarouselProps {
   data: any[];
 }
@@ -25,7 +25,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
       > */}
       <Carousel
         plugins={[
-          Autoplay({ delay: 2000 }) // Type assertion to prevent type errors
+          Autoplay({ delay: 2000 }), // Type assertion to prevent type errors
         ]}
         className="w-full"
         opts={{
@@ -35,12 +35,10 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
         <CarouselContent>
           {data.length > 0
             ? data.map((item: any, index) => (
-              <CarouselItem
-                key={index}
-              >
-                <img src={item.image} alt={item.name} />
-              </CarouselItem>
-            ))
+                <CarouselItem key={index}>
+                  <img src={item.image} alt={item.name} />
+                </CarouselItem>
+              ))
             : null}
         </CarouselContent>
       </Carousel>

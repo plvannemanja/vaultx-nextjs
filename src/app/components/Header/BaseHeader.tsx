@@ -30,26 +30,26 @@ import { WalletAutoConnect } from '../theme-provider';
 
 const socials = [
   {
-    link: "",
-    image: "/icons/facebook-tag.svg"
+    link: '',
+    image: '/icons/facebook-tag.svg',
   },
   {
-    link: "",
-    image: "/icons/linkedin.svg"
+    link: '',
+    image: '/icons/linkedin.svg',
   },
   {
-    link: "",
-    image: "/icons/tiktok.svg"
+    link: '',
+    image: '/icons/tiktok.svg',
   },
   {
-    link: "",
-    image: "/icons/instagram.svg"
+    link: '',
+    image: '/icons/instagram.svg',
   },
   {
-    link: "",
-    image: "/icons/youtube.svg"
-  }
-]
+    link: '',
+    image: '/icons/youtube.svg',
+  },
+];
 
 export function BaseHeader() {
   const [user, setUser] = useState<any>(null);
@@ -73,7 +73,7 @@ export function BaseHeader() {
       });
       const connectedUser = data.user;
       const connectedToken = data.token;
-      console.log("data", data, connectedUser, connectedToken);
+      console.log('data', data, connectedUser, connectedToken);
       createCookie('user', JSON.stringify(connectedUser));
       createCookie('token', connectedToken);
       setUser(connectedUser);
@@ -89,7 +89,6 @@ export function BaseHeader() {
   return (
     <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex px-4">
       <div className="flex gap-x-4 items-center">
-
         <div className="h-8 relative inline-flex gap-1.5 top-1">
           <div className="hidden max-xl:block">
             <Sheet>
@@ -109,7 +108,10 @@ export function BaseHeader() {
                         <Label className="text-sm">Curation</Label>
                       </Link>
 
-                      <Link href="https://artistvaultx.wpcomstaging.com/" target="_blank">
+                      <Link
+                        href="https://artistvaultx.wpcomstaging.com/"
+                        target="_blank"
+                      >
                         <Label className="text-sm">Magazine</Label>
                       </Link>
 
@@ -133,15 +135,16 @@ export function BaseHeader() {
                       )}
                     </div>
                     <div className="flex gap-x-2 my-4">
-                      {
-                        socials.map((social, index) => {
-                          return (
-                            <Link key={index} href={social.link} target='_blank'>
-                              <img src={social.image} className="w-6 fill-white stroke-white" />
-                            </Link>
-                          )
-                        })
-                      }
+                      {socials.map((social, index) => {
+                        return (
+                          <Link key={index} href={social.link} target="_blank">
+                            <img
+                              src={social.image}
+                              className="w-6 fill-white stroke-white"
+                            />
+                          </Link>
+                        );
+                      })}
                     </div>
                   </SheetDescription>
                 </SheetHeader>
