@@ -9,7 +9,16 @@ export default function CurationLoader({
 }) {
   return (
     <div className="flex flex-col gap-y-6 w-[28rem] p-6 justify-center mx-auto">
-      <img src="/icons/refresh.svg" className="w-16 mx-auto" />
+      {
+        status.loading &&
+        <img src="/icons/refresh.svg" className="w-16 mx-auto" />
+      }
+
+      {
+        (!status.error && !status.loading) ?
+          <img src="/icons/success.svg" className="w-16 mx-auto" />
+          : null
+      }
 
       {status.error ? (
         <p className="text-center text-lg font-medium">
@@ -19,7 +28,7 @@ export default function CurationLoader({
         <p className="text-center text-lg font-medium">
           {!status.loading
             ? `Curation ${edit ? 'Updated' : 'Created'}`
-            : 'Uploading Images...'}
+            : 'Creating Your Collection Please Wait!'}
         </p>
       )}
     </div>
