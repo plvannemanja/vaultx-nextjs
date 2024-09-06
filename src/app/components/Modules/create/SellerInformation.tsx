@@ -55,6 +55,7 @@ export default function SellerInformation({ handler, nextStep }: { handler: (dat
         console.log(formData)
 
         handler(formData, null)
+        nextStep(true)
     }
 
     return (

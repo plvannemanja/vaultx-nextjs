@@ -8,6 +8,8 @@ import BaseButton from "../../ui/BaseButton"
 import Image from "next/image"
 import { collectionServices } from "@/services/supplier"
 import { z } from "zod"
+import { protocolFee } from "@/lib/helper"
+import { useCreateNFT } from "../../Context/CreateNFTContext"
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
@@ -21,6 +23,7 @@ const basicDetailsSchema = z.object({
 });
 
 export default function BasicDetails({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
+  const [fee, setFee] = useState<number>(0);
   const fileInputRef = useRef(null);
   const attachmentRef = useRef(null);
 
@@ -29,15 +32,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
   const [curations, setCurations] = useState([]);
   const [attachments, setAttachments] = useState([null]);
 
-  const [formData, setFormData] = useState<any>({
-    productName: null,
-    productDescription: null,
-    artistName: null,
-    price: 0,
-    curation: null,
-    file: null,
-  })
-
+  const { basicDetail: formData, setBasicDetail: setFormData } = useCreateNFT();
   const cancelChanges = () => {
     setFormData({
       productName: null,
@@ -50,7 +45,9 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
   }
 
   const leftAmount = useMemo(() => {
-    return formData.price - (formData.price * 0.1);
+    if (!z.isValid(formData.price))
+      return 0;
+    return Number(formData.price) - (Number(formData.price) * fee / 100);
   }, [formData.price])
 
   const create = async () => {
@@ -127,7 +124,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
 
   const fetchUserCollections = async () => {
     try {
-      const res = await collectionServices.getUserCollections();
+      const res = await collectionServices.getUserCollections({});
       setCurations(
         res.data.collection.length > 0 ? res.data.collection : []
       );
@@ -137,6 +134,10 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
   };
 
 
+  const fetchProtocolFee = async () => {
+    let fee = await protocolFee();
+    setFee(Number(fee) / 100);
+  }
   useEffect(() => {
     if (curations.length === 0) {
       fetchUserCollections();
@@ -190,7 +191,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
         <div className='flex flex-col gap-y-5 lg:w-[55%]'>
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium">Product name*</Label>
-            <Input value={formData.productName ? formData.productName : ''} onChange={(e) => setFormData({ ...formData, productName: (e.target as any).value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Collection Name" />
+            <Input value={formData.productName ? formData.productName : ''} onChange={(e) => setFormData({ ...formData, productName: (e.target as any).value })} className="w-full border-none bg-[#161616]" type="text" placeholder="Enter Product Name" />
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -207,7 +208,7 @@ export default function BasicDetails({ handler, nextStep }: { handler: (data: an
             <div className="flex flex-col gap-y-3">
               <div className="flex justify-between">
                 <Label className="font-medium">Platform Fee</Label>
-                <Label>10%</Label>
+                <Label>${fee}%</Label>
               </div>
               <hr />
               <div className="flex justify-between">

@@ -16,6 +16,7 @@ import {
 } from 'thirdweb';
 import { useActiveAccount } from 'thirdweb/react';
 import { isCurator } from '@/lib/helper';
+import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 enum ModalType {
     Curation = 'curation',
     Rwa = 'rwa'
@@ -117,7 +118,11 @@ export default function Create({ modalProcess }: { modalProcess: (type: ModalTyp
                 step.active && step.type === 'curation' && <CreateCuration />
             }
             {
-                step.active && step.type === 'nft' && <CreateNft />
+                step.active && step.type === 'nft' && (
+                    <CreateNFTProvider>
+                        <CreateNft />
+                    </CreateNFTProvider>
+                )
             }
         </>
     )

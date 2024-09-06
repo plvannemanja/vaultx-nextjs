@@ -116,3 +116,35 @@ export type PaymentSplitType = {
     paymentWallet: Address,
     paymentPercentage: bigint
 }
+
+export interface IBasicDetailFormData {
+    productName: string | null,
+    productDescription: string | null,
+    artistName: string | null,
+    price: any,
+    curation: any,
+    file: File | null,
+}
+
+export interface IBasicDetail {
+    data: FormData,
+    formData: IBasicDetail,
+    error: any,
+}
+
+export interface IAdvancedDetailOption {
+    freeMint: boolean,
+    royalties: boolean,
+    unlockable: boolean,
+    category: boolean,
+    split: boolean,
+}
+
+export interface IAdvancedDetailFormData {
+    royaltyAddress: string | null,
+    royalty: number,
+    unlockable: string | null,
+    category: any,
+    address: string | null,
+    percentage: number
+}

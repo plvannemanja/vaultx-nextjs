@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import BaseButton from '../../ui/BaseButton'
 import FileInput from '../../ui/FileInput'
 import PropertiesTemplate from './PropertiesTemplate'
+import { useCreateNFT } from '../../Context/CreateNFTContext'
 
 const category = [
   'Fine Art',
@@ -18,13 +19,7 @@ const category = [
 
 export default function AdvanceDetails({ handler, nextStep }: { handler: (data: any, error: any) => void, nextStep: (next?: boolean) => void }) {
 
-  const [options, setOptions] = useState({
-    freeMint: false,
-    royalties: false,
-    unlockable: false,
-    catgory: false,
-    split: false
-  })
+  const { advancedOptions: options, setAdvancedOptions: setOptions, setPaymentSplits } = useCreateNFT();
   const [splits, setSplits] = useState<any>({
     address: '',
     percentage: 0,
@@ -83,31 +78,26 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
     switch (e) {
       case 'free':
         setOptions({
-          ...options,
           freeMint: !options.freeMint
         })
         break;
       case 'royalty':
         setOptions({
-          ...options,
           royalties: !options.royalties
         })
         break;
       case 'unlockable':
         setOptions({
-          ...options,
           unlockable: !options.unlockable
         })
         break;
       case 'category':
         setOptions({
-          ...options,
-          catgory: !options.catgory
+          category: !options.category
         })
         break;
       case 'split':
         setOptions({
-          ...options,
           split: !options.split
         })
         break;
@@ -130,7 +120,7 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
       err.push({ path: ['Royalties'] })
     }
 
-    if (options.catgory && !formData.category) {
+    if (options.category && !formData.category) {
       err.push({ path: ['Category'] })
     }
 
@@ -158,6 +148,12 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
       data.append('certificates', unlockableFiles[i])
     }
 
+    // set payment splits
+    let splitData = splits.data.map((split) => ({
+      paymentWallet: split.address,
+      paymentPercentage: BigInt(split.percentage),
+    }));
+    setPaymentSplits(splitData);
     handler(data, null);
     nextStep(true)
   }
@@ -194,7 +190,7 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
             <p className='font-medium'>Category</p>
             <p className='text-gray-500'>Put this item into category</p>
           </div>
-          <Switch id="category" checked={options.catgory} onCheckedChange={() => toggleSwitch('category')} />
+          <Switch id="category" checked={options.category} onCheckedChange={() => toggleSwitch('category')} />
         </div>
 
         <div className='bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center'>
@@ -250,7 +246,7 @@ export default function AdvanceDetails({ handler, nextStep }: { handler: (data: 
         }
 
         {
-          options.catgory && (
+          options.category && (
             <div className="flex flex-col gap-y-2">
               <Label className="text-lg font-medium">Category</Label>
               <select

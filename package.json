@@ -46,13 +46,14 @@
     "react-dom": "^18.3",
     "react-owl-carousel": "^2.3.3",
     "react-phone-input-2": "^2.15.1",
+    "react-router-dom": "^6.26.1",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "react-router-dom": "^6.26.1",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "thirdweb": "^5",
     "use-debounce": "^10.0.2",
+    "viem": "^2.21.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {
