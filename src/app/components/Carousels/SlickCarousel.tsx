@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useRef } from "react";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { useRef } from 'react';
 
 export default function SlickCarousel(props: any) {
   const settings = {
@@ -19,7 +19,7 @@ export default function SlickCarousel(props: any) {
   return (
     <div
       style={{
-        position: "relative",
+        position: 'relative',
       }}
     >
       <Slider ref={slider} {...settings}>
@@ -30,35 +30,45 @@ export default function SlickCarousel(props: any) {
                 src={image}
                 alt="NFT"
                 style={{
-                  margin: "auto",
-                  height: "100vh",
+                  margin: 'auto',
+                  height: '100vh',
                 }}
               />
             </div>
           );
         })}
       </Slider>
-      <div style={{
-        position: "absolute",
-        top: "50%",
-        left: "5px",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "100%",
-        cursor: "pointer",
-      }} onClick={() => (slider?.current as any)?.slickPrev()}>
-        <img src="/images/image-left.png" alt="arrow"/>
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '5px',
+          backgroundColor: 'white',
+          padding: '10px',
+          borderRadius: '100%',
+          cursor: 'pointer',
+        }}
+        onClick={() => (slider?.current as any)?.slickPrev()}
+      >
+        <img src="/images/image-left.png" alt="arrow" />
       </div>
-      <div style={{
-        position: "absolute",
-        top: "50%",
-        right: "5px",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "100%",
-        cursor: "pointer",
-      }} onClick={() => (slider?.current as any)?.slickNext()}>
-        <img src="/images/image-left.png" alt="arrow" style={{ transform: 'rotate(-180deg)' }}/>
+      <div
+        style={{
+          position: 'absolute',
+          top: '50%',
+          right: '5px',
+          backgroundColor: 'white',
+          padding: '10px',
+          borderRadius: '100%',
+          cursor: 'pointer',
+        }}
+        onClick={() => (slider?.current as any)?.slickNext()}
+      >
+        <img
+          src="/images/image-left.png"
+          alt="arrow"
+          style={{ transform: 'rotate(-180deg)' }}
+        />
       </div>
     </div>
   );

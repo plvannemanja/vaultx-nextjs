@@ -3,7 +3,12 @@
 import { collectionServices, getMedia } from '@/services/supplier';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useParams,
+} from 'react-router-dom';
 
 import NftServices from '@/services/nftService';
 import Curation from './tabs/Curation';
@@ -17,13 +22,13 @@ import CreateCuration from '../components/Modules/CreateCuration';
 import CreateNft from '../components/Modules/CreateNft';
 import { contract } from '@/lib/contract';
 import {
-    prepareContractCall,
-    sendTransaction,
-    readContract,
-    resolveMethod,
-    prepareEvent,
-    getContractEvents,
-  } from 'thirdweb';
+  prepareContractCall,
+  sendTransaction,
+  readContract,
+  resolveMethod,
+  prepareEvent,
+  getContractEvents,
+} from 'thirdweb';
 import { getData } from '@/utils/uploadData';
 import { getNftDataById } from '@/utils/nftutils';
 import { useToast } from '@/hooks/use-toast';
@@ -80,9 +85,9 @@ export default function Page() {
 
   useEffect(() => {
     toast({
-      title: "Loading...",
-      duration: 2000
-    })
+      title: 'Loading...',
+      duration: 2000,
+    });
 
     if (tab == 'curation') {
       const fetchCollection = async () => {
@@ -125,23 +130,23 @@ export default function Page() {
         // console.log("nfts", response.data.nfts[0]?.data);
         // setNfts(response.data.nfts[0]?.data);
         let nftdatas: any[] = [];
-        for(let i = 1; ; i++) {
+        for (let i = 1; ; i++) {
           try {
-            const owner = await readContract({ 
-              contract, 
-              method: "ownerOf", 
-              params: [BigInt(i)] 
-          });
+            const owner = await readContract({
+              contract,
+              method:
+                'function ownerOf(uint256 tokenId) view returns (address)',
+              params: [BigInt(i)],
+            });
             const nft = await getNftDataById(i);
             nftdatas = [...nftdatas, nft];
           } catch (error) {
             break;
           }
-          console.log()
+          console.log();
         }
-        console.log("nftdatas",nftdatas);
+        console.log('nftdatas', nftdatas);
         setNfts(nftdatas);
-
       };
 
       fetchNfts();

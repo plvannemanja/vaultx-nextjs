@@ -12,7 +12,7 @@ interface ISearchDropDownProps {
 }
 
 interface IButtonProps {
-  type: "artist" | "nft" | "curation" | "user";
+  type: 'artist' | 'nft' | 'curation' | 'user';
   url: string;
 }
 
@@ -23,7 +23,7 @@ interface INFTButtonProps extends IButtonProps {
 
 interface ICurationButtonProps extends IButtonProps {
   name: string;
-  symbol: string;  
+  symbol: string;
 }
 
 interface IUserButtonProps extends IButtonProps {
@@ -38,22 +38,25 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
   const [users, setUsers] = useState<Array<Partial<UserType>>>([]);
 
   useEffect(() => {
-    function getSearchResult () {
-      collectionServices.getSearch({filterString: searchText})
+    function getSearchResult() {
+      collectionServices
+        .getSearch({ filterString: searchText })
         .then((searchResponse: IGetSearchResponse) => {
-          if(searchResponse.success) {
+          if (searchResponse.success) {
             setArtists(searchResponse.artistsNfts);
             setNFTs(searchResponse.nfts);
             setCurations(searchResponse.curations);
             setUsers(searchResponse.users);
           }
         })
-        .catch(err => {
-          console.log("Error in search result", err);
-        })
+        .catch((err) => {
+          console.log('Error in search result', err);
+        });
     }
   }, [searchText]);
-  const ButtonContainer = (buttonInfo: INFTButtonProps | ICurationButtonProps | IUserButtonProps) => {
+  const ButtonContainer = (
+    buttonInfo: INFTButtonProps | ICurationButtonProps | IUserButtonProps,
+  ) => {
     return (
       <div className="w-full h-[81px] py-4 relative cursor-pointer">
         <div className="left-1 top-0 justify-start items-center gap-3.5 inline-flex">
@@ -81,12 +84,12 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
 
   const ArtistContainer = () => (
     <div className="flex-col pb-2">
-      {artists.map(artist => (
+      {artists.map((artist) => (
         <ButtonContainer
           key={artist?._id}
           type="artist"
-          url={`/dashboard/nft/${artist?._id}`}  
-          img={artist?.cloudinaryUrl ?? ""} 
+          url={`/dashboard/nft/${artist?._id}`}
+          img={artist?.cloudinaryUrl ?? ''}
           price={artist?.price ?? 0}
         />
       ))}
@@ -95,43 +98,45 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
 
   const NFTContainer = () => (
     <div className="flex-col pb-2">
-      {nfts.map(nft => (
+      {nfts.map((nft) => (
         <ButtonContainer
           key={nft?._id}
           type="nft"
           url={`/dashboard/nft/${nft?._id}`}
-          img={nft?.cloudinaryUrl ?? ""}
+          img={nft?.cloudinaryUrl ?? ''}
           price={nft?.price ?? 0}
-        />        
+        />
       ))}
     </div>
   );
 
   const CurationContainer = () => (
     <div className="flex-col pb-2">
-      {curations.map(curation => (
+      {curations.map((curation) => (
         <ButtonContainer
           key={curation?._id}
           type="curation"
           url={`/dashboard/curation/${curation?._id}`}
-          img={curation?.logo ?? ""}
-          name={curation?.name ?? ""}
-          symbol={curation?.symbol ?? ""}
-        />  
+          img={curation?.logo ?? ''}
+          name={curation?.name ?? ''}
+          symbol={curation?.symbol ?? ''}
+        />
       ))}
     </div>
   );
 
   const UserContainer = () => (
     <div className="flex-col pb-2">
-      {users.map(user => (
+      {users.map((user) => (
         <ButtonContainer
           key={user?._id}
           type="user"
           url={`/dashboard/user/${user?._id}`}
           img={user?.avatar?.url ? user.avatar.url : 'assets/img/fox.svg'}
-          name={user.username ?? user?.wallet ? shortenAddress(user?.wallet) : ""}
-        />  
+          name={
+            user.username ?? user?.wallet ? shortenAddress(user?.wallet) : ''
+          }
+        />
       ))}
     </div>
   );

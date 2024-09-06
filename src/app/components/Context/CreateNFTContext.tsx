@@ -1,17 +1,22 @@
-'use client'
+'use client';
 
-import { IAdvancedDetailFormData, IAdvancedDetailOption, IBasicDetailFormData, PaymentSplitType } from "@/types";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  IAdvancedDetailFormData,
+  IAdvancedDetailOption,
+  IBasicDetailFormData,
+  PaymentSplitType,
+} from '@/types';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface NFTContextType {
-  basicDetail: IBasicDetailFormData,
-  setBasicDetail: (data: Partial<IBasicDetailFormData>) => void,
-  advancedOptions: IAdvancedDetailOption,
-  setAdvancedOptions: (data: Partial<IAdvancedDetailOption>) => void,
-  advancedDetails: IAdvancedDetailFormData,
-  setAdvancedDetails: (data: Partial<IAdvancedDetailFormData>) => void,
-  paymentSplits: Array<PaymentSplitType>,
-  setPaymentSplits: (data: Array<PaymentSplitType>) => void,
+  basicDetail: IBasicDetailFormData;
+  setBasicDetail: (data: Partial<IBasicDetailFormData>) => void;
+  advancedOptions: IAdvancedDetailOption;
+  setAdvancedOptions: (data: Partial<IAdvancedDetailOption>) => void;
+  advancedDetails: IAdvancedDetailFormData;
+  setAdvancedDetails: (data: Partial<IAdvancedDetailFormData>) => void;
+  paymentSplits: Array<PaymentSplitType>;
+  setPaymentSplits: (data: Array<PaymentSplitType>) => void;
 }
 
 interface CreateNFTProviderProps {
@@ -21,9 +26,10 @@ interface CreateNFTProviderProps {
 // create a NFT Context
 const CreateNFTContext = createContext<NFTContextType | undefined>(undefined);
 
-
 // context component
-export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({ children }) => {
+export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
+  children,
+}) => {
   const [basicDetail, setBasicDetail] = useState<IBasicDetailFormData>({
     productName: null,
     productDescription: null,
@@ -38,13 +44,13 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({ children }
       ...basicDetail,
       ...data,
     });
-  }
+  };
   const [options, setOptions] = useState<IAdvancedDetailOption>({
     freeMint: false,
     royalties: false,
     unlockable: false,
     category: false,
-    split: false
+    split: false,
   });
 
   const setAdvancedOptions = (data: Partial<IAdvancedDetailOption>) => {
@@ -52,18 +58,21 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({ children }
       ...options,
       ...data,
     });
-  }
+  };
 
-  const [advancedDetails, setAdvancedDetails] = useState<IAdvancedDetailFormData>({
-    royaltyAddress: null,
-    royalty: null,
-    unlockable: null,
-    category: null,
-    address: null,
-    percentage: null,
-  });
+  const [advancedDetails, setAdvancedDetails] =
+    useState<IAdvancedDetailFormData>({
+      royaltyAddress: null,
+      royalty: null,
+      unlockable: null,
+      category: null,
+      address: null,
+      percentage: null,
+    });
 
-  const setPartialAdvancedDetails = (data: Partial<IAdvancedDetailFormData>) => {
+  const setPartialAdvancedDetails = (
+    data: Partial<IAdvancedDetailFormData>,
+  ) => {
     setAdvancedDetails({
       ...advancedDetails,
       ...data,
@@ -73,27 +82,31 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({ children }
   const [paymentSplits, setPaymentSplits] = useState<Array<PaymentSplitType>>();
 
   return (
-    <CreateNFTContext.Provider value={{
-      basicDetail,
-      setBasicDetail: setPartialBasicDetail,
-      advancedOptions: options,
-      setAdvancedOptions,
-      advancedDetails,
-      setAdvancedDetails: setPartialAdvancedDetails,
-      paymentSplits,
-      setPaymentSplits(data) {
-        setPaymentSplits(data);
-      },
-    }}>
+    <CreateNFTContext.Provider
+      value={{
+        basicDetail,
+        setBasicDetail: setPartialBasicDetail,
+        advancedOptions: options,
+        setAdvancedOptions,
+        advancedDetails,
+        setAdvancedDetails: setPartialAdvancedDetails,
+        paymentSplits,
+        setPaymentSplits(data) {
+          setPaymentSplits(data);
+        },
+      }}
+    >
       {children}
     </CreateNFTContext.Provider>
-  )
-}
+  );
+};
 
 // hook
 export const useCreateNFT = () => {
   const context = useContext(CreateNFTContext);
   if (context === undefined)
-    throw new Error("create NFT context must be used within Create NFT Provider");
+    throw new Error(
+      'create NFT context must be used within Create NFT Provider',
+    );
   return context;
-}
+};

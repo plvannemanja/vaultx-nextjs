@@ -24,7 +24,9 @@ export default function NftCard({ data }: { data: INftCardProps }) {
           />
         </div>
         <div className="flex flex-col gap-y-4 my-2">
-          <p className="text-lg">{data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}</p>
+          <p className="text-lg">
+            {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
+          </p>
           <div className="flex justify-between">
             <span className="text-xs text-dark">Created by: </span>
             <span className="text-sm">
@@ -41,7 +43,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
                 width={20}
                 alt="matic"
                 loading="lazy"
-                blurDataURL={"/images/image_placeholder.png"}
+                blurDataURL={'/images/image_placeholder.png'}
                 quality={100}
               />
               ${data.price}

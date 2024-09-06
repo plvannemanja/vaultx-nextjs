@@ -126,7 +126,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
   useEffect(() => {
     if (selectedProperty !== null) {
       if (select) {
-        console.log("selectedProperty", selectedProperty);
+        console.log('selectedProperty', selectedProperty);
         select(selectedProperty);
       }
       makeUpdates();
@@ -190,30 +190,30 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                     key={index}
                   >
                     {propMod.type &&
-                      propMod.index === index &&
-                      propMod.by === 'default' ? (
-                        <input
-                          type="text"
-                          className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                          onChange={(e) => {
-                            modifyProp(index, 'type', e.target.value);
-                          }}
-                        />
-                      ) : (
-                        <p
-                          className="text-white text-center text-sm"
-                          onClick={() =>
-                            setPropMod({
-                              ...propMod,
-                              type: true,
-                              index: index,
-                              by: 'default',
-                            })
-                          }
-                        >
-                          {item.type}
-                        </p>
-                      )}
+                    propMod.index === index &&
+                    propMod.by === 'default' ? (
+                      <input
+                        type="text"
+                        className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
+                        onChange={(e) => {
+                          modifyProp(index, 'type', e.target.value);
+                        }}
+                      />
+                    ) : (
+                      <p
+                        className="text-white text-center text-sm"
+                        onClick={() =>
+                          setPropMod({
+                            ...propMod,
+                            type: true,
+                            index: index,
+                            by: 'default',
+                          })
+                        }
+                      >
+                        {item.type}
+                      </p>
+                    )}
 
                     {propMod.value &&
                     propMod.index === index &&
@@ -280,7 +280,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                       className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
                       key={index}
                     >
-                    {propMod.type &&
+                      {propMod.type &&
                       propMod.index === index &&
                       propMod.by === 'default' ? (
                         <input
