@@ -12,7 +12,6 @@ import {
 
 import NftServices from '@/services/nftService';
 import Curation from './tabs/Curation';
-import Profile from './tabs/Profile';
 import Favourite from './tabs/Favourite';
 import Orders from './tabs/Orders';
 import Settings from './tabs/Settings';
@@ -225,7 +224,6 @@ export default function Page() {
         />
         </>
       ) : null}
-      {tab === 'work' ? <Profile /> : null}
       {tab === 'fav' ? <Favourite /> : null}
       {tab === 'order' ? <Orders /> : null}
       {tab === 'settings' ? <Settings /> : null}

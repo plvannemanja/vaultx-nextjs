@@ -187,8 +187,6 @@ export default function Menu({ user }: MenuProps) {
                       navigator.clipboard.writeText(
                         activeAccount?.address || '',
                       );
-                      console.log(data);
-                      console.log(activeAccount);
                     }}
                   ></Copy>
                 </div>
@@ -197,6 +195,7 @@ export default function Menu({ user }: MenuProps) {
                     size={20}
                     onClick={() => {
                       activeWallet && disconnect(activeWallet);
+                      window.location.href = '/';
                     }}
                   ></Power>
                 </div>
