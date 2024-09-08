@@ -12,7 +12,6 @@ export default function Curation({
   handleFilter: any;
 }) {
   const handleState = (e: any) => {
-    console.log(e)
     handleFilter(e);
   }
 

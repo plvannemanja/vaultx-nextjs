@@ -134,7 +134,7 @@ export function BaseHeader() {
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-x-2 my-4">
+                    {/* <div className="flex gap-x-2 my-4">
                       {socials.map((social, index) => {
                         return (
                           <Link key={index} href={social.link} target="_blank">
@@ -145,7 +145,7 @@ export function BaseHeader() {
                           </Link>
                         );
                       })}
-                    </div>
+                    </div> */}
                   </SheetDescription>
                 </SheetHeader>
               </SheetContent>

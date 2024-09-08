@@ -9,7 +9,6 @@ const pinata = new PinataSDK({
 });
 
 export const uploadMetaData = async (data: any) => {
-  // console.log("upload");
   let response = await pinata.upload.json(data);
   return pinataGateway + '/ipfs/' + response.IpfsHash;
 };
