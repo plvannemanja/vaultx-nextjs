@@ -8,8 +8,9 @@ import PhoneInput from 'react-phone-input-2';
 import { Textarea } from '@headlessui/react';
 import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
+import { CreateSellService } from '@/services/createSellService';
 
-export default function BuyModal({ price }: { price: number }) {
+export default function BuyModal({ id, price }: { id: string, price: number }) {
   const [formData, setFormData] = useState({
     username: null,
     email: null,
@@ -51,7 +52,34 @@ export default function BuyModal({ price }: { price: number }) {
     });
   };
 
-  const update = () => { };
+  const update = async () => {
+    try {
+      // blockchain logic here to get transaction hash
+
+      const data = {
+        nftId: id,
+        name: formData.username,
+        email: formData.email,
+        country: JSON.parse(sellerInfo.country).name,
+        address: {
+          line1: sellerInfo.line1,
+          line2: sellerInfo.line2,
+          city: sellerInfo.city,
+          state: JSON.parse(sellerInfo.state).name,
+          postalCode: sellerInfo.postalCode,
+        },
+        phoneNumber: sellerInfo.phoneNumber,
+        contactInformation: formData.description,
+        concent: formData.accepted,
+        buyHash: '',
+      }
+
+      const saleService = new CreateSellService()
+      await saleService.buyItem(data)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;

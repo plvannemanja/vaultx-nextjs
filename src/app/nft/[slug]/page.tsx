@@ -36,6 +36,7 @@ import SlickCarousel from "@/app/components/Carousels/SlickCarousel";
 import { CreateSellService } from "@/services/createSellService";
 import { useToast } from "@/hooks/use-toast";
 import CancelOrderModal from "@/app/components/Modules/nft/CancelOrderModal";
+import PutSaleModal from "@/app/components/Modules/nft/PutSaleModal";
 
 const style = {
     borderRadius: '10px',
@@ -64,7 +65,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     const [list, setList] = useState([]);
     const [mainImage, setMainImage] = useState<string | null>(null)
     const [modal, setModal] = useState(false)
-    const [type, setType] = useState("release")
+    const [type, setType] = useState("buy")
     const [user, setUser] = useState(null)
     const [bids, setBids] = useState([])
 
@@ -251,7 +252,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             const user = await getUser()
             if (user.data && user.data.user) {
               setUser(user.data.user)
-              // await handleNFTType(response.data.nft, user.data.user)
+              await handleNFTType(response.data.nft, user.data.user)
             }
           }
 
@@ -384,7 +385,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                                   trigger={
                                                       <BaseButton title="Buy Now" variant="primary" onClick={() => { }} />
                                                   }
-                                                  children={<BuyModal price={data.price} />}
+                                                  children={<BuyModal id={params.slug} price={data.price} />}
                                                   className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                                                 />
 
@@ -413,7 +414,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                                   trigger={
                                                     <BaseButton title="Cancel Order" variant="primary" onClick={() => { }} />
                                                   }
-                                                  children={<CancelOrderModal />}
+                                                  children={<CancelOrderModal id={params.slug} />}
                                                 />
                                               </div> : null
                                             }
@@ -421,7 +422,13 @@ export default function Page({ params }: { params: { slug: string } }) {
                                             {
                                               type === 'resell' ? 
                                               <div className="flex flex-col gap-x-2 items-center">
-                                                <BaseButton title="Put On Sale" variant="primary" onClick={() => { }} />
+                                                <BaseDialog 
+                                                className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                                                trigger={
+                                                    <BaseButton title="Put On Sale" variant="primary" onClick={() => { }} />
+                                                }
+                                                children={<PutSaleModal nftId={params.slug} nft={data} />}
+                                                />
                                               </div> : null
                                             }
 

@@ -1,33 +1,42 @@
 "use client"
 
 import { Textarea } from '@/components/ui/textarea';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import _ from 'lodash'
+import { ArrowUpTrayIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
+import { CreateSellService } from '@/services/createSellService';
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
-export default function CancelOrderModal() {
+interface ICancelOrderModal {
+    id: string;
+}
+
+export default function CancelOrderModal({ id }) {
     const [step, setStep] = useState(1);
     const [description, setDescription] = useState('');
     const [numberOfInputs, setNumberOfInputs] = useState(1)
     const [discriptionImage, setDiscriptionImage] = useState([])
 
     const discriptionImageRef = useRef<HTMLInputElement>(null);
+    const salesService = new CreateSellService()
 
     const submit = async () => {
         try {
             const formData = new FormData()
-            formData.append("nftId", nft?._id)
-            formData.append("request", request)
+            formData.append("nftId", id)
+            formData.append("request", description)
             for (const file of discriptionImage) {
                 formData.append("files", file)
             }
 
             // blockchain logic
 
+            // await salesService.cancelRequest(formData) 
 
+            setStep(2)
         } catch (error) {
             console.log(error);
         }
@@ -42,6 +51,7 @@ export default function CancelOrderModal() {
                     align-items: center;
                     border-radius: 12px;
                     background: var(--Text-in-Bg, #161616);
+                    justify-content: space-between;
                 }
 
                 #custom-button {
@@ -52,7 +62,6 @@ export default function CancelOrderModal() {
                     border-radius: 14px;
                     background: var(--Light, #dee8e8);
                     color: var(--Text-in-Bg, #161616);
-                    font-family: Manrope;
                     font-size: 14px;
                     font-style: normal;
                     font-weight: 800;
@@ -64,10 +73,6 @@ export default function CancelOrderModal() {
                     flex: 0 0 auto;
                     justify-content: center;
                     transition: 0.3s all;
-                }
-
-                #custom-button:hover {
-                    background-color: #ddf247;
                 }
             `}</style>
 
@@ -102,42 +107,41 @@ export default function CancelOrderModal() {
                     />
 
                     <div className='flex flex-col gap-y-4 mt-2'>
-                        <p>Attachments</p>
+                        <div className="flex items-center justify-between">
+                            <p>Attachments</p>
+                            <PlusCircleIcon className="w-6 cursor-pointer" onClick={() => {
+                                setNumberOfInputs(numberOfInputs + 1)
+                            }} />
+                        </div>
                         <p className='text-sm text-gray-500'>PNG, GIF, WEBP, MP4 or MP3.Max 1Gb.</p>
                         <div className='flex flex-wrap gap-3 justify-between'>
                             {
                                 _.times(numberOfInputs).map((_, index) => {
                                     return (
-                                        <div className="pb-2">
+                                        <div className="pb-2 w-full">
                                             <div className="upload__file__with__name">
-                                                {index === 0 && (
-                                                    <input
-                                                        type="file"
-                                                        id="discription-image"
-                                                        ref={discriptionImageRef}
-                                                        style={{ display: "none" }}
-                                                        onChange={e =>
-                                                            setDiscriptionImage([
-                                                                ...discriptionImage,
-                                                                e.target.files[0],
-                                                            ])
-                                                        }
-                                                    />
-                                                )}
+                                                <input
+                                                    type="file"
+                                                    id="discription-image"
+                                                    ref={discriptionImageRef}
+                                                    style={{ display: "none" }}
+                                                    onChange={e => {
+                                                        console.log('adding new file')
+                                                        const newFile = e.target.files[0];
+                                                        setDiscriptionImage([...discriptionImage, newFile])
+                                                    }}
+                                                />
                                                 <button
                                                     type="button"
                                                     id="custom-button"
-                                                    onClick={() =>
+                                                    onClick={() => {
                                                         discriptionImageRef &&
-                                                        discriptionImageRef.current.click()
-                                                    }
+                                                            (discriptionImageRef.current as any).click()
+                                                    }}
                                                 >
                                                     Upload{" "}
                                                     <span>
-                                                        <img
-                                                            src="/icons/upload.svg"
-                                                            alt=""
-                                                        />
+                                                        <ArrowUpTrayIcon className='w-5' />
                                                     </span>
                                                 </button>
                                                 <span id="custom-text">
@@ -147,10 +151,12 @@ export default function CancelOrderModal() {
                                                 </span>
                                                 <img
                                                     src="/icons/trash.svg"
-                                                    alt=""
-                                                    onClick={() =>
-                                                        setNumberOfInputs(numberOfInputs - 1)
-                                                    }
+                                                    className='w-6 mr-3'
+                                                    onClick={() => {
+                                                        if (numberOfInputs > 1) {
+                                                            setNumberOfInputs(numberOfInputs - 1)
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                         </div>
