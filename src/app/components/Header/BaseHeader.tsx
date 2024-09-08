@@ -104,7 +104,7 @@ export function BaseHeader() {
                         <Label className="text-sm">Appreciation</Label>
                       </Link>
 
-                      <Link href="/dashboard?tab=curation">
+                      <Link href="/dashboard/curation">
                         <Label className="text-sm">Curation</Label>
                       </Link>
 

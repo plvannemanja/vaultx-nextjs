@@ -76,7 +76,7 @@ export default function SideBar({ className }: { className?: string }) {
       <button
         className="flex items-center justify-center gap-x-2 my-5 py-3 px-3 bg-neon rounded-xl w-[80%] mx-auto"
         onClick={() => {
-          window.location.href = '/dashboard?tab=create';
+          window.location.href = '/dashboard/create';
         }}
       >
         <span className="font-bold text-black">Create</span>

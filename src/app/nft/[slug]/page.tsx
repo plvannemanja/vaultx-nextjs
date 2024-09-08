@@ -231,11 +231,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         else setType("bid")
       }
     }
-
-    useEffect(() => {
-      console.log(type)
-    }, [type])
-
+    
     const fetchNftData = async () => {
       try {
           const response = await nftService.getNftById(params.slug)
