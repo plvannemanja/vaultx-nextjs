@@ -12,7 +12,6 @@ import {
 
 import NftServices from '@/services/nftService';
 import Curation from './tabs/Curation';
-import Appreciate from './tabs/Appreciate';
 import Profile from './tabs/Profile';
 import Favourite from './tabs/Favourite';
 import Orders from './tabs/Orders';
@@ -153,7 +152,9 @@ export default function Page() {
       duration: 2000,
     })
 
-    handleCurationFilter(filters.searchInput, filters.curationFilter)
+    if (tab == 'curation') {
+      handleCurationFilter(filters.searchInput, filters.curationFilter)
+    }
   }, [filters.searchInput, filters.curationFilter])
 
   useEffect(() => {
@@ -197,34 +198,6 @@ export default function Page() {
       fetchCollection();
     }
 
-    if (tab == 'appreciate') {
-      const fetchNfts = async () => {
-        // const response = await nftService.getAllNfts(filters);
-        // console.log("nfts", response.data.nfts[0]?.data);
-        // setNfts(response.data.nfts[0]?.data);
-        let nftdatas: any[] = [];
-        for (let i = 1; ; i++) {
-          try {
-            const owner = await readContract({
-              contract,
-              method:
-                'function ownerOf(uint256 tokenId) view returns (address)',
-              params: [BigInt(i)],
-            });
-            const nft = await getNftDataById(i);
-            nftdatas = [...nftdatas, nft];
-          } catch (error) {
-            break;
-          }
-          console.log();
-        }
-        console.log('nftdatas', nftdatas);
-        setNfts(nftdatas);
-      };
-
-      fetchNfts();
-    }
-
     const modal = searchParams.get('show') == 'true' ? true : false;
     setModal({
       active: modal,
@@ -243,9 +216,6 @@ export default function Page() {
   }, [tab]);
   return (
     <div>
-      {tab === 'appreciate' ? (
-        <Appreciate hero={images ? images.appreciateTop : null} nfts={nfts} />
-      ) : null}
       {tab === 'curation' ? (
         <>
         <Curation

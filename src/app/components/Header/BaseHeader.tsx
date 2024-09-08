@@ -100,7 +100,7 @@ export function BaseHeader() {
                   <SheetTitle>VaultX</SheetTitle>
                   <SheetDescription>
                     <div className="flex flex-col gap-y-4 text-white">
-                      <Link href="/dashboard?tab=appreciate">
+                      <Link href="/dashboard/appreciate">
                         <Label className="text-sm">Appreciation</Label>
                       </Link>
 
@@ -162,7 +162,7 @@ export function BaseHeader() {
         <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
-            href="/dashboard?tab=appreciate"
+            href="/dashboard/appreciate"
           >
             Appreciation
           </Link>
