@@ -12,7 +12,15 @@ export default function Curation({
   handleFilter: any;
 }) {
   const handleState = (e: any) => {
-    handleFilter(e);
+    let obj = {
+      search: e.search,
+    };
+
+    if (e.filter) {
+      obj['filter'] = e.filter;
+    }
+
+    handleFilter(obj);
   }
 
   useEffect(() => {

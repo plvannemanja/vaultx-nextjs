@@ -89,12 +89,17 @@ export default function Page() {
 
   const handleCurationFilter = async (search, filter) => {
     try {
-      const response = await collectionServices.getAllCollections({
-        searchInput: search,
-        filter: {
+      const queryObject = {
+        searchInput: search ? search : '',
+      }
+
+      if (filter) {
+        queryObject["filter"] = {
           [filter]: -1
         }
-      });
+      }
+
+      const response = await collectionServices.getAllCollections(queryObject);
 
       const collections = response.data.curations;
       const detailedInfo = await Promise.all(
@@ -142,7 +147,6 @@ export default function Page() {
     }
   }
 
-
   useEffect(() => {
     toast({
       title: 'Loading...',
@@ -165,7 +169,7 @@ export default function Page() {
         });
 
         const collections = response.data.curations;
-        const detailedInfo = await Promise.all(
+        let detailedInfo = await Promise.all(
           collections
             .filter((item: any) => (!item?.active && !item?.owner?.active))
             .map(async (collection: any) => {
