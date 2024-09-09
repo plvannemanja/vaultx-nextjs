@@ -10,6 +10,8 @@ import { collectionServices } from '@/services/supplier';
 import { z } from 'zod';
 import { protocolFee } from '@/lib/helper';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { BaseDialog } from '../../ui/BaseDialog';
+import CancelModal from './CancelModal';
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
@@ -29,6 +31,8 @@ export default function BasicDetails({
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
 }) {
+  const { basicDetail, setBasicDetail } = useCreateNFT();
+
   const [fee, setFee] = useState<number>(0);
   const fileInputRef = useRef(null);
   const attachmentRef = useRef(null);
@@ -38,47 +42,40 @@ export default function BasicDetails({
   const [curations, setCurations] = useState([]);
   const [attachments, setAttachments] = useState([null]);
 
-  const { basicDetail: formData, setBasicDetail: setFormData } = useCreateNFT();
   const cancelChanges = () => {
-    setFormData({
+    setBasicDetail({
       productName: null,
       productDescription: null,
       artistName: null,
       price: 0,
       curation: null,
       file: null,
-    });
+      imageSrc: null,
+      attachments: null,
+    })
   };
 
   const leftAmount = useMemo(() => {
-    if (!z.isValid(formData.price)) return 0;
-    return Number(formData.price) - (Number(formData.price) * fee) / 100;
-  }, [formData.price]);
+    if (!z.isValid(basicDetail.price)) return 0;
+    return Number(basicDetail.price) - (Number(basicDetail.price) * fee) / 100;
+  }, [basicDetail.price]);
 
   const create = async () => {
-    const result = basicDetailsSchema.safeParse(formData);
-    if (!result.success && !formData.file) {
+    const result = basicDetailsSchema.safeParse(basicDetail);
+    if (!result.success && !basicDetail.file) {
       handler(null, result.error.message);
       console.log(result.error.message);
       return;
     }
 
-    const data = new FormData();
-    data.append('file', file);
-    data.append('productName', formData.productName);
-    data.append('productDescription', formData.productDescription);
-    data.append('artistName', formData.artistName);
-    data.append('price', formData.price);
-    data.append('curation', formData.curation);
+    setBasicDetail({
+      ...basicDetail,
+      file: file,
+      imageSrc: imageSrc,
+      attachments: attachments,
+    })
 
-    const files = [file, ...attachments];
-    files.forEach((file, index) => {
-      if (file) {
-        data.append(`files`, file);
-      }
-    });
-
-    handler(data, null);
+    handler({}, null);
     nextStep(true);
   };
 
@@ -95,6 +92,11 @@ export default function BasicDetails({
       };
       reader.readAsDataURL(file);
       setFile(file);
+      setBasicDetail({
+        ...basicDetail,
+        file: file,
+        imageSrc: URL.createObjectURL(file),
+      })
     }
   };
 
@@ -115,6 +117,10 @@ export default function BasicDetails({
       newAttachments[index] = attachment;
 
       setAttachments(newAttachments);
+      setBasicDetail({
+        ...basicDetail,
+        attachments: newAttachments,
+      })
     }
   };
 
@@ -125,18 +131,30 @@ export default function BasicDetails({
     const newAttachments = [...attachments, null];
 
     setAttachments(newAttachments);
+    setBasicDetail({
+      ...basicDetail,
+      attachments: newAttachments,
+    })
   };
 
   const removeAttachment = (index: number) => {
     const newAttachments = attachments.filter((_, i) => i !== index);
 
     setAttachments(newAttachments);
+    setBasicDetail({
+      ...basicDetail,
+      attachments: newAttachments,
+    })
   };
 
   const fetchUserCollections = async () => {
     try {
       const res = await collectionServices.getUserCollections({});
       setCurations(res.data.collection.length > 0 ? res.data.collection : []);
+      setBasicDetail({
+        ...basicDetail,
+        curations: res.data.collection.length > 0 ? res.data.collection : [],
+      })
     } catch (error) {
       console.log(error);
     }
@@ -156,23 +174,23 @@ export default function BasicDetails({
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
         <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[42%] bg-dark rounded-lg self-start">
-          {file ? (
+          {basicDetail.file ? (
             <div className="flex flex-col gap-y-5 text-center">
-              {imageSrc && (
+              {(basicDetail.imageSrc) && (
                 <img
-                  src={imageSrc}
+                  src={basicDetail.imageSrc}
                   alt="logo"
                   className="w-[90%] object-cover mx-auto"
                 />
               )}
-              {file.name ? file.name : 'No files selected'}
+              {
+                (basicDetail.file ? basicDetail.file.name : 'No files selected')
+              }
             </div>
           ) : (
             <>
-              <Image
-                src="icons/upload.svg"
-                height={100}
-                width={100}
+              <img
+                src="/icons/upload.svg"
                 alt="upload"
                 className="w-10 h-10"
               />
@@ -193,7 +211,7 @@ export default function BasicDetails({
             >
               <span className="flex gap-x-2 items-center justify-center">
                 Browse file
-                <img src="icons/arrow_ico.svg" alt="" />
+                <img src="/icons/arrow_ico.svg" alt="" />
               </span>{' '}
             </button>
             <input
@@ -206,7 +224,14 @@ export default function BasicDetails({
               <BaseButton
                 title="Reset"
                 variant="secondary"
-                onClick={() => setFile(null)}
+                onClick={() => {
+                  setFile(null)
+                  setBasicDetail({
+                    ...basicDetail,
+                    file: null,
+                    imageSrc: null,
+                  })
+                }}
               />
             )}
           </div>
@@ -216,10 +241,10 @@ export default function BasicDetails({
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium">Product name*</Label>
             <Input
-              value={formData.productName ? formData.productName : ''}
+              value={basicDetail.productName ? basicDetail.productName : ''}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setBasicDetail({
+                  ...basicDetail,
                   productName: (e.target as any).value,
                 })
               }
@@ -233,11 +258,11 @@ export default function BasicDetails({
             <Label className="font-medium">Description*</Label>
             <Textarea
               value={
-                formData.productDescription ? formData.productDescription : ''
+                basicDetail.productDescription ? basicDetail.productDescription : ''
               }
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setBasicDetail({
+                  ...basicDetail,
                   productDescription: (e.target as any).value,
                 })
               }
@@ -249,10 +274,10 @@ export default function BasicDetails({
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium">Price(USD)*</Label>
             <Input
-              value={formData.price ? formData.price : ''}
+              value={basicDetail.price ? basicDetail.price : ''}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setBasicDetail({
+                  ...basicDetail,
                   price: parseInt((e.target as any).value),
                 })
               }
@@ -279,16 +304,16 @@ export default function BasicDetails({
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium">Artist name*</Label>
             <Input
-              value={formData.artistName ? formData.artistName : ''}
+              value={basicDetail.artistName ? basicDetail.artistName : ''}
               onChange={(e) =>
-                setFormData({
-                  ...formData,
+                setBasicDetail({
+                  ...basicDetail,
                   artistName: (e.target as any).value,
                 })
               }
               className="w-full border-none bg-[#161616]"
               type="text"
-              placeholder="Enter Collection Name"
+              placeholder="Enter Artist Name"
             />
           </div>
 
@@ -299,15 +324,16 @@ export default function BasicDetails({
               className="h-10 rounded-md px-2 w-full"
               name="country"
               onChange={(e) =>
-                setFormData({ ...formData, curation: (e.target as any).value })
+                setBasicDetail({ ...basicDetail, curation: (e.target as any).value })
               }
+              value={basicDetail.curation}
             >
               <option value="">Select</option>
-              {curations.map((item: any) => (
+              {basicDetail.curations.length > 0 ? basicDetail.curations.map((item: any) => (
                 <option key={item.isoCode} value={JSON.stringify(item)}>
                   {item.name}
                 </option>
-              ))}
+              )) : null}
             </select>
           </div>
 
@@ -315,7 +341,7 @@ export default function BasicDetails({
             <Label className="font-medium text-lg">Attachment</Label>
             <hr />
             <div className="flex gap-4 flex-wrap my-2">
-              {attachments.map((attachment, index) => {
+              {(basicDetail.attachments).map((attachment, index) => {
                 return (
                   <div key={index} className="flex flex-col gap-y-2">
                     <input
@@ -344,7 +370,7 @@ export default function BasicDetails({
                       >
                         <span className="text-neon">Delete</span>
                         <img
-                          src="icons/trash.svg"
+                          src="/icons/trash.svg"
                           alt="attachment"
                           className="w-5 h-5"
                         />
@@ -356,7 +382,7 @@ export default function BasicDetails({
                       >
                         <span className="text-neon">Upload</span>
                         <img
-                          src="icons/upload.svg"
+                          src="/icons/upload.svg"
                           alt="attachment"
                           className="w-5 h-5"
                         />
@@ -369,11 +395,18 @@ export default function BasicDetails({
           </div>
 
           <div className="flex gap-x-4 justify-center my-5">
-            <BaseButton
-              title="Cancel"
-              variant="secondary"
-              onClick={cancelChanges}
+            <BaseDialog 
+            trigger={
+              <BaseButton
+                title="Cancel"
+                variant="secondary"
+                onClick={cancelChanges}
+              />
+            }
+            children={<CancelModal />}
+            className="bg-dark max-h-[80%] w-[36rem] overflow-y-auto overflow-x-hidden"
             />
+            
             <BaseButton title="Next" variant="primary" onClick={create} />
           </div>
         </div>

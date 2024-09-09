@@ -341,7 +341,7 @@ export default function PropertiesInfo() {
                             onClick={addNewProp}
                           >
                             <img
-                              src="icons/add-new.svg"
+                              src="/icons/add-new.svg"
                               className="w-10 h-10"
                             />
                             <p className="text-center text-sm text-[#DDF247]">

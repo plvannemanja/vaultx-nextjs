@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@headlessui/react';
@@ -22,8 +22,12 @@ export default function AdvanceDetails({
   const {
     advancedOptions: options,
     setAdvancedOptions: setOptions,
+    paymentSplits,
     setPaymentSplits,
+    advancedDetails, 
+    setAdvancedDetails
   } = useCreateNFT();
+
   const [splits, setSplits] = useState<any>({
     address: '',
     percentage: 0,
@@ -49,6 +53,10 @@ export default function AdvanceDetails({
     });
 
     setUnlockableFiles(newFiles);
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: newFiles
+    })
   };
 
   const removeUnlockable = (index: number) => {
@@ -57,6 +65,10 @@ export default function AdvanceDetails({
     );
 
     setUnlockableFiles(newFiles);
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: newFiles
+    })
   };
 
   const addSplit = () => {
@@ -78,6 +90,7 @@ export default function AdvanceDetails({
       ...splits,
       data: newSplits,
     });
+    setPaymentSplits(newSplits);
   };
 
   const toggleSwitch = (e: any) => {
@@ -118,23 +131,23 @@ export default function AdvanceDetails({
 
   const create = async () => {
     const err = [];
-    if (!selectedProperty) {
+    if (!advancedDetails.attributes) {
       err.push({ path: ['Properties'] });
     }
 
-    if (options.royalties && !formData.royalty) {
+    if (options.royalties && !advancedDetails.royalty) {
       err.push({ path: ['Royalties'] });
     }
 
-    if (options.category && !formData.category) {
+    if (options.category && !advancedDetails.category) {
       err.push({ path: ['Category'] });
     }
 
-    if (options.unlockable && !formData.unlockable) {
+    if (options.unlockable && !advancedDetails.unlockable) {
       err.push({ path: ['Unlockable Content'] });
     }
 
-    if (options.split && !splits.data.length) {
+    if (options.split && !paymentSplits.length) {
       err.push({ path: ['Split Payments'] });
     }
 
@@ -143,29 +156,7 @@ export default function AdvanceDetails({
       return;
     }
 
-    const data = new FormData();
-    data.append('freeMinting', options.freeMint as any);
-    data.append('royalty', formData.royalty);
-    data.append('category', formData.category);
-    data.append('unlockableContent', formData.unlockable);
-    data.append(
-      'attributes',
-      JSON.stringify(
-        selectedProperty.attributes ? selectedProperty.attributes : [],
-      ),
-    );
-
-    for (let i = 0; i < unlockableFiles.length; i++) {
-      data.append('certificates', unlockableFiles[i]);
-    }
-
-    // set payment splits
-    let splitData = splits.data.map((split) => ({
-      paymentWallet: split.address,
-      paymentPercentage: BigInt(split.percentage),
-    }));
-    setPaymentSplits(splitData);
-    handler(data, null);
+    handler({}, null);
     nextStep(true);
   };
 
@@ -242,22 +233,32 @@ export default function AdvanceDetails({
             <div className="flex gap-x-2">
               <Input
                 className="bg-dark max-w-[22rem]"
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormData({
                     ...formData,
                     royaltyAddress: (e.target as any).value,
                   })
-                }
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    royaltyAddress: (e.target as any).value,
+                  })
+                }}
                 placeholder="Address"
                 type="text"
+                value={advancedDetails.royaltyAddress}
               />
               <Input
                 className="bg-dark max-w-20"
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormData({ ...formData, royalty: (e.target as any).value })
-                }
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    royalty: parseInt((e.target as any).value)
+                  })
+                }}
                 placeholder="0"
                 type="number"
+                value={(advancedDetails.royalty).toString()}
               />
             </div>
           </div>
@@ -268,13 +269,18 @@ export default function AdvanceDetails({
             <p className="text-lg font-medium">Unlockable Content</p>
             <Textarea
               className="bg-dark p-4 rounded-md"
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   unlockable: (e.target as any).value,
                 })
-              }
+                setAdvancedDetails({
+                  ...advancedDetails,
+                  unlockable: (e.target as any).value,
+                })
+              }}
               rows={4}
+              value={advancedDetails.unlockable}
               placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
             />
             <div className="flex gap-x-4 items-center">
@@ -283,13 +289,17 @@ export default function AdvanceDetails({
                 className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
                 onClick={() => {
                   setUnlockableFiles([...unlockableFiles, null]);
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    certificates: [...unlockableFiles, null]
+                  })
                 }}
               >
-                <img src="icons/plus.svg" alt="plus" className="w-4 h-4" />
+                <img src="/icons/plus.svg" alt="plus" className="w-4 h-4" />
                 <p className="text-neon">Add</p>
               </div>
             </div>
-            {unlockableFiles.map((item: any, index: number) => {
+            {(advancedDetails.certificates).map((item: any, index: number) => {
               return (
                 <div className="flex gap-x-4 items-center" key={index}>
                   <FileInput
@@ -297,7 +307,7 @@ export default function AdvanceDetails({
                     maxSizeInBytes={1024 * 1024}
                   />
                   <img
-                    src="icons/trash.svg"
+                    src="/icons/trash.svg"
                     alt="trash"
                     className="w-6 h-6 cursor-pointer"
                     onClick={() => removeUnlockable(index)}
@@ -315,9 +325,14 @@ export default function AdvanceDetails({
               aria-label="Select category"
               className="h-10 rounded-md px-2 w-full"
               name="country"
-              onChange={(e) =>
+              onChange={(e) => {
                 setFormData({ ...formData, category: (e.target as any).value })
-              }
+                setAdvancedDetails({
+                  ...advancedDetails,
+                  category: (e.target as any).value
+                })
+              }}
+              value={advancedDetails.category}
             >
               <option value="">Select</option>
               {category.map((item: any) => (
@@ -336,19 +351,24 @@ export default function AdvanceDetails({
               <Input
                 className="bg-dark max-w-[22rem]"
                 onChange={(e) =>
-                  setFormData({ ...formData, address: (e.target as any).value })
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    address: (e.target as any).value,
+                  })
                 }
                 placeholder="Address"
                 type="text"
+                value={advancedDetails.address}
               />
               <Input
                 className="bg-dark max-w-20"
                 onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    percentage: (e.target as any).value,
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    percentage: parseInt((e.target as any).value),
                   })
                 }
+                value={(advancedDetails.percentage).toString()}
                 placeholder="%"
                 type="number"
               />
@@ -356,12 +376,12 @@ export default function AdvanceDetails({
                 className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
                 onClick={addSplit}
               >
-                <img src="icons/plus.svg" alt="plus" className="w-4 h-4" />
+                <img src="/icons/plus.svg" alt="plus" className="w-4 h-4" />
                 <p className="text-neon">Add</p>
               </div>
             </div>
             <div className="flex flex-col gap-y-2">
-              {splits.data.map((item: any, index: number) => (
+              {paymentSplits.map((item: any, index: number) => (
                 <div key={index} className="flex gap-x-2 items-center">
                   <Input
                     className="bg-dark max-w-[22rem]"
@@ -376,7 +396,7 @@ export default function AdvanceDetails({
                     value={item.percentage}
                   />
                   <img
-                    src="icons/trash.svg"
+                    src="/icons/trash.svg"
                     alt="plus"
                     className="w-6 h-6 cursor-pointer"
                     onClick={() => removeSplit(index)}
@@ -390,6 +410,7 @@ export default function AdvanceDetails({
         <PropertiesTemplate
           select={(e: any) => {
             setSelectedProperty(e);
+            console.log(e)
           }}
         />
 
