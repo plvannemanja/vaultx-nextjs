@@ -27,6 +27,7 @@ import { Label } from '@/components/ui/label';
 import Menu from './Menu';
 import { useRouter } from 'next/navigation';
 import { WalletAutoConnect } from '../theme-provider';
+import { checksumAddress } from 'viem';
 
 const socials = [
   {
@@ -83,7 +84,10 @@ export function BaseHeader() {
   };
 
   useEffect(() => {
-    if (activeAccount?.address) login(activeAccount?.address as Address);
+    if (activeAccount?.address) {
+      const address = checksumAddress(activeAccount.address) as Address;
+      login(address);
+    }
   }, [activeAccount]);
 
   return (

@@ -19,6 +19,7 @@ import WalletIcon from '@/components/Icon/WalletIcon';
 import { client, wallets } from '@/lib/client';
 import { authenticationServices } from '@/services/supplier';
 import { Address } from 'thirdweb';
+import { checksumAddress } from 'viem';
 
 export default function AppHeader() {
   const [user, setUser] = useState<any>(null);
@@ -47,7 +48,10 @@ export default function AppHeader() {
   };
 
   useEffect(() => {
-    if (activeAccount?.address) login(activeAccount?.address as Address);
+    if (activeAccount?.address) {
+      const address = checksumAddress(activeAccount.address) as Address;
+      login(address);
+    }
   }, [activeAccount]);
 
   useEffect(() => {

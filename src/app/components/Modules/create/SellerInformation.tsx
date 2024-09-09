@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@headlessui/react';
 import BaseButton from '../../ui/BaseButton';
+import { State } from 'country-state-city';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 export default function SellerInformation({
   handler,
@@ -15,6 +17,7 @@ export default function SellerInformation({
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
 }) {
+  const { paymentSplits } = useCreateNFT();
   const [formData, setFormData] = useState({
     shipping: null,
     contact: null,
@@ -62,7 +65,35 @@ export default function SellerInformation({
 
     console.log(formData);
 
-    handler(formData, null);
+    const splitData = paymentSplits.map(item => ({
+      address: item.paymentWallet,
+      percentage: item.paymentPercentage,
+    }));
+    const data = {
+      name: formData.shipping.name,
+      email: formData.shipping.email,
+      country: formData.shipping.country,
+      address: {
+        line1: formData.shipping.address1,
+        line2: formData.shipping.address2,
+        city: formData.shipping.city,
+        state: formData.shipping.state,
+        postalCode: formData.shipping.postalCode,
+      },
+      phoneNumber: formData.shipping.phoneNumber,
+      contactInformation: formData.contact.contactInfo,
+      concent: formData.contact.name,
+      // TODO shipping information for length, width, height, weight
+      shippingInformation: {
+        length: null,
+        width: null,
+        height: null,
+        weight: null,
+      },
+      splitPayments: splitData,
+    };
+
+    handler(data, null);
     nextStep(true);
   };
 

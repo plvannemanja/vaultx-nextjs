@@ -145,9 +145,12 @@ export default function AdvanceDetails({
 
     const data = new FormData();
     data.append('freeMinting', options.freeMint as any);
-    data.append('royalty', formData.royalty);
-    data.append('category', formData.category);
-    data.append('unlockableContent', formData.unlockable);
+    if (options.royalties)
+      data.append('royalty', formData.royalty);
+    if (options.category)
+      data.append('category', formData.category);
+    if (options.unlockable)
+      data.append('unlockableContent', formData.unlockable);
     data.append(
       'attributes',
       JSON.stringify(

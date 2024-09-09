@@ -100,12 +100,11 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const createAdvanceDetails = async (id: string) => {
     try {
       if (advanceDetails.data) {
-        await nftService.createAdvancedDetails({
-          ...advanceDetails.data,
-          nftId: id,
-        });
+        let formData = advanceDetails.data;
+        formData.append('nftId', id);
+        await nftService.createAdvancedDetails(formData);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const createNFT = async () => {
@@ -123,42 +122,24 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
       await createAdvanceDetails(nftId);
 
-      const selectedSeller = sellerInfo.data.shipping;
-
-      if (!selectedSeller.address) {
+      const sellerDetails = sellerInfo.data;
+      if (!sellerDetails.address) {
         throw new Error('Address is required');
       }
 
-      const data = {
-        name: selectedSeller.name,
-        email: selectedSeller.email,
-        country: selectedSeller.country,
-        address: {
-          line1: selectedSeller.address.line1,
-          line2: selectedSeller.address.line2,
-          city: selectedSeller.address.city,
-          state: selectedSeller.address.state,
-          postalCode: selectedSeller.address.postalCode,
-        },
-        phoneNumber: selectedSeller.phoneNumber,
-        shippingInformation: {
-          lengths: sellerInfo.lengths,
-          width: sellerInfo.width,
-          height: sellerInfo.height,
-          weight: sellerInfo.weight,
-        },
-      };
-
       const {
         data: { uri },
-      } = await nftService.createSellerDetails(data);
+      } = await nftService.createSellerDetails({
+        ...sellerDetails,
+        nftId,
+      });
 
       if (!uri) {
         throw new Error('Failed to create NFT');
       }
 
       await handleMint(uri, nftId);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // Add your logic here
@@ -204,6 +185,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     debugger;
     if (next && step == 3) {
       await createNFT();
+      return;
     }
 
     if (next) {

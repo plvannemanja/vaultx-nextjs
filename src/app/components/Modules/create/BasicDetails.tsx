@@ -63,13 +63,14 @@ export default function BasicDetails({
       return;
     }
 
+    const curation = JSON.parse(formData.curation);
     const data = new FormData();
-    data.append('file', file);
-    data.append('productName', formData.productName);
-    data.append('productDescription', formData.productDescription);
-    data.append('artistName', formData.artistName);
+    data.append('name', formData.productName);
+    data.append('description', formData.productDescription);
+    data.append('artist', formData.artistName);
     data.append('price', formData.price);
-    data.append('curation', formData.curation);
+    data.append('curation', curation?._id);
+
 
     const files = [file, ...attachments];
     files.forEach((file, index) => {
@@ -288,7 +289,7 @@ export default function BasicDetails({
               }
               className="w-full border-none bg-[#161616]"
               type="text"
-              placeholder="Enter Collection Name"
+              placeholder="Enter Artist Name"
             />
           </div>
 
