@@ -7,52 +7,52 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@headlessui/react';
 import BaseButton from '../../ui/BaseButton';
-import { State } from 'country-state-city';
+import { BaseDialog } from '../../ui/BaseDialog';
+import MintLoader from './MintLoader';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 export default function SellerInformation({
   handler,
-  nextStep,
+  nextStep
 }: {
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
 }) {
-  const { paymentSplits } = useCreateNFT();
-  const [formData, setFormData] = useState({
-    shipping: null,
-    contact: null,
-    accepted: false,
-  });
+  const { sellerInfo, setSellerInfo } = useCreateNFT();
 
   const handleShip = (data: any) => {
-    setFormData({
-      ...formData,
+    setSellerInfo({
+      ...sellerInfo,
       shipping: data,
     });
   };
 
   const handleContact = (data: any) => {
-    setFormData({
-      ...formData,
+    setSellerInfo({
+      ...sellerInfo,
       contact: data,
     });
   };
 
   const cancelChanges = () => {
+    setSellerInfo({
+      shipping: null,
+      contact: null,
+    })
     nextStep(false);
   };
 
   const create = () => {
     const err = [];
-    if (!formData.shipping) {
+    if (!sellerInfo.shipping) {
       err.push({ path: ['Shipping Information'] });
     }
 
-    if (!formData.contact) {
+    if (!sellerInfo.contact) {
       err.push({ path: ['Contact Information'] });
     }
 
-    if (!formData.accepted) {
+    if (!sellerInfo.accepted) {
       err.push({
         path: ['Consent for collection and usage of personal information'],
       });
@@ -63,37 +63,7 @@ export default function SellerInformation({
       return;
     }
 
-    console.log(formData);
-
-    const splitData = paymentSplits.map(item => ({
-      address: item.paymentWallet,
-      percentage: item.paymentPercentage,
-    }));
-    const data = {
-      name: formData.shipping.name,
-      email: formData.shipping.email,
-      country: formData.shipping.country,
-      address: {
-        line1: formData.shipping.address1,
-        line2: formData.shipping.address2,
-        city: formData.shipping.city,
-        state: formData.shipping.state,
-        postalCode: formData.shipping.postalCode,
-      },
-      phoneNumber: formData.shipping.phoneNumber,
-      contactInformation: formData.contact.contactInfo,
-      concent: formData.contact.name,
-      // TODO shipping information for length, width, height, weight
-      shippingInformation: {
-        length: null,
-        width: null,
-        height: null,
-        weight: null,
-      },
-      splitPayments: splitData,
-    };
-
-    handler(data, null);
+    handler(sellerInfo, null);
     nextStep(true);
   };
 
@@ -108,19 +78,47 @@ export default function SellerInformation({
         <div className="flex gap-3">
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Length(cm)</Label>
-            <Input type="number" placeholder="--" />
+            <Input
+              value={sellerInfo.length}
+              type="number" placeholder="--" onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  length: (e.target as any).value
+                })
+              }} />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Width(cm)</Label>
-            <Input type="number" placeholder="--" />
+            <Input
+              value={sellerInfo.width}
+              type="number" placeholder="--" onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  width: (e.target as any).value
+                })
+              }} />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Height(cm)</Label>
-            <Input type="number" placeholder="--" />
+            <Input
+              value={sellerInfo.height}
+              type="number" placeholder="--" onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  height: (e.target as any).value
+                })
+              }} />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Weight(kg)</Label>
-            <Input type="number" placeholder="--" />
+            <Input
+              value={sellerInfo.weight}
+              type="number" placeholder="--" onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  weight: (e.target as any).value
+                })
+              }} />
           </div>
         </div>
       </div>
@@ -144,11 +142,11 @@ export default function SellerInformation({
         <input
           id="terms"
           type="checkbox"
-          checked={formData.accepted}
+          checked={sellerInfo.accepted}
           onChange={() =>
-            setFormData({
-              ...formData,
-              accepted: !formData.accepted,
+            setSellerInfo({
+              ...sellerInfo,
+              accepted: !sellerInfo.accepted,
             })
           }
         />
@@ -166,10 +164,17 @@ export default function SellerInformation({
           variant="secondary"
           onClick={cancelChanges}
         />
-        <BaseButton
-          title="Proceed To Create NFT"
-          variant="primary"
-          onClick={create}
+
+        <BaseDialog
+          trigger={
+            <BaseButton
+              title="Proceed To Create NFT"
+              variant="primary"
+              onClick={create}
+            />
+          }
+          children={<MintLoader />}
+          className="bg-dark max-h-[80%] w-[27rem] overflow-y-auto overflow-x-hidden"
         />
       </div>
     </div>

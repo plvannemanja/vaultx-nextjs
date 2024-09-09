@@ -306,7 +306,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             >
               <span className="flex gap-x-2 items-center justify-center">
                 Browse file
-                <img src="icons/arrow_ico.svg" alt="" />
+                <img src="/icons/arrow_ico.svg" alt="" />
               </span>{' '}
             </button>
             <input

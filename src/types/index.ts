@@ -124,11 +124,14 @@ export interface IBasicDetailFormData {
   price: any;
   curation: any;
   file: File | null;
+  imageSrc: string;
+  attachments: File[] | null;
+  curations: any[] | null;
 }
 
 export interface IBasicDetail {
   data: FormData;
-  formData: IBasicDetail;
+  formData: any;
   error: any;
 }
 
@@ -147,4 +150,20 @@ export interface IAdvancedDetailFormData {
   category: any;
   address: string | null;
   percentage: number;
+  unlockableContent: string | null;
+  certificates: any[];
+  propertyTemplateId: string | null;
+  attributes: any[] | null;
+}
+
+export interface ISellerInfo {
+  shipping: any | null,
+  contact: any | null,
+  shippingId: string | null,
+  contactId: string | null,
+  accepted: boolean,
+  width: string | null,
+  height: string | null,
+  length: string | null,
+  weight: string | null,
 }
