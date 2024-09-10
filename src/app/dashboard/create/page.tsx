@@ -34,6 +34,8 @@ export default function page() {
     type: null,
   });
 
+  const [hovered, setHovered] = useState<any>(false);
+
   const activeAccount = useActiveAccount();
 
   const processModal = (type: string) => {};
@@ -91,11 +93,13 @@ export default function page() {
             <div className="flex flex-col flex-wrap items-center justify-between md:flex-row">
               <div className="flex flex-col gap-y-3 w-full">
                 <div
-                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border-2 border-gray-300 bg-dark"
+                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-gray-300 bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                  onMouseEnter={() => setHovered("curation")}
+                  onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('curation')}
                 >
                   <svg
-                    className="bottom-5 right-5 absolute"
+                    className="bottom-[2.75rem] right-5 absolute"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
@@ -118,14 +122,14 @@ export default function page() {
                       alt="add"
                       height={100}
                       width={100}
-                      src="/images/create-curation.svg"
-                      className="w-6 h-6"
+                      src={hovered !== 'curation' ? "/images/create-curation.svg" : "/icons/curation_black.svg"}
+                      className="w-8 h-8 hover:fill-black"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-xl font-bold">
                         Create Curation
                       </span>
-                      <p className="text-sm text-gray-500">
+                      <p className={`text-sm ${hovered === 'curation' ? 'text-black' : 'text-gray-500'}`}>
                         Become an NFT tastemaker. Create your own Curation for
                         others to mint.
                       </p>
@@ -134,11 +138,13 @@ export default function page() {
                 </div>
 
                 <div
-                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border-2 border-gray-300 bg-dark"
+                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-gray-300 bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                  onMouseEnter={() => setHovered("nft")}
+                  onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('nft')}
                 >
                   <svg
-                    className="bottom-5 right-5 absolute"
+                    className="bottom-[2.75rem] right-5 absolute"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
@@ -161,14 +167,14 @@ export default function page() {
                       alt="add"
                       height={100}
                       width={100}
-                      src="/images/create-nft.svg"
-                      className="w-6 h-6"
+                      src={hovered !== 'nft' ? "/images/create-nft.svg" : "/icons/nft_black.svg"}
+                      className="w-8 h-8"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-xl font-bold">
                         Create Artwork NFTs
                       </span>
-                      <p className="w-[80%] text-sm text-gray-500">
+                      <p className={`w-[80%] text-sm ${hovered === 'nft' ? 'text-black' : 'text-gray-500'}`}>
                         Transform your art into a collectible, with one simple
                         tap.
                       </p>
@@ -176,9 +182,12 @@ export default function page() {
                   </div>
                 </div>
 
-                <div className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border-2 border-gray-300 bg-dark">
+                <div className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-gray-300 bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                onMouseEnter={() => setHovered("mint")}
+                onMouseLeave={() => setHovered(false)}
+                >
                   <svg
-                    className="bottom-5 right-5 absolute"
+                    className="bottom-[2.75rem] right-5 absolute"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
@@ -201,14 +210,14 @@ export default function page() {
                       alt="add"
                       height={100}
                       width={100}
-                      src="/images/mint.png"
-                      className="w-6 h-6"
+                      src={hovered !== 'mint' ? "/images/mint.png" : "/icons/mint_black.svg"}
+                      className="w-8 h-8"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-xl font-bold">
                         Mint NFTs Using NFC
                       </span>
-                      <p className="w-[80%] text-sm text-gray-500">
+                      <p className={`w-[80%] text-sm ${hovered === 'mint' ? 'text-black' : 'text-gray-500'}`}>
                         Bridging the physical and digital worlds: Mint NFTs with
                         a tap.
                       </p>
