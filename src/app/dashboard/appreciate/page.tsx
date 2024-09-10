@@ -13,7 +13,7 @@ import { getMedia } from '@/services/supplier';
 import { useDebounce } from 'use-debounce';
 import { useToast } from '@/hooks/use-toast';
 
-export default function page() {
+export default function Page() {
   const nftService = new NftServices();
   const [data, setData] = useState<any[]>([]);
   const [nfts, setNfts] = useState<any[]>([]);

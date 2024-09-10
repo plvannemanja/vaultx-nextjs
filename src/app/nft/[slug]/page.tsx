@@ -443,11 +443,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={
-                            <BuyModal id={params.slug} price={data.price} />
-                          }
                           className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                        />
+                        >
+                          <BuyModal id={params.slug} price={data.price} />
+                        </BaseDialog>
 
                         <BaseDialog
                           trigger={
@@ -457,11 +456,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={
-                            <BidModal title={data.name} update={() => {}} />
-                          }
                           className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
-                        />
+                        >
+                          <BidModal title={data.name} update={() => {}} />
+                        </BaseDialog>
                       </div>
                     ) : null}
 
@@ -476,8 +474,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={<EscrowModal />}
-                        />
+                        >
+                          <EscrowModal />
+                        </BaseDialog>
                         <BaseDialog
                           className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
                           trigger={
@@ -487,8 +486,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={<CancelOrderModal id={params.slug} />}
-                        />
+                        >
+                          <CancelOrderModal id={params.slug} />
+                        </BaseDialog>
                       </div>
                     ) : null}
 
@@ -503,10 +503,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={
-                            <PutSaleModal nftId={params.slug} nft={data} />
-                          }
-                        />
+                        >
+                          <PutSaleModal nftId={params.slug} nft={data} />
+                        </BaseDialog>
                       </div>
                     ) : null}
 
@@ -540,9 +539,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                               onClick={() => {}}
                             />
                           }
-                          children={<EscrowRequestModal />}
                           className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
-                        />
+                        >
+                          <EscrowRequestModal />
+                        </BaseDialog>
                       </div>
                     ) : null}
 
@@ -563,17 +563,16 @@ export default function Page({ params }: { params: { slug: string } }) {
                           Check Matic Quotes
                         </span>
                       }
-                      children={
-                        <Quotes
-                          nft={data}
-                          fee={10}
-                          contractInfo={{
-                            address: '44932KJKLJ12',
-                          }}
-                        />
-                      }
                       className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
-                    />
+                    >
+                      <Quotes
+                        nft={data}
+                        fee={10}
+                        contractInfo={{
+                          address: '44932KJKL'
+                        }}
+                      />                        
+                    </BaseDialog>
                   </div>
                 </div>
               </div>
@@ -611,6 +610,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             {[data.cloudinaryUrl, ...data.attachments].map((item, index) => {
               return (
                 <img
+                  key={index}
                   onClick={() => {
                     setMainImage(item);
                   }}
@@ -628,7 +628,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div className="flex gap-4 flex-wrap">
                 {data.attributes.map((attr, index) => {
                   return (
-                    <div className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400">
+                    <div key={index} className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400">
                       <p className="text-lg font-medium text-center">
                         {attr.type}
                       </p>

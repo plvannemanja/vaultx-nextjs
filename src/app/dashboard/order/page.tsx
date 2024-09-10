@@ -16,7 +16,7 @@ import moment from 'moment';
 import SelectMenu, { prices } from '@/app/components/ui/SelectMenu';
 import { useToast } from '@/hooks/use-toast';
 
-export default function page() {
+export default function Page() {
   const { toast } = useToast();
   const createSellService = new CreateSellService();
 

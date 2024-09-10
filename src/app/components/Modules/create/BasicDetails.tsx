@@ -404,9 +404,10 @@ export default function BasicDetails({
                   onClick={cancelChanges}
                 />
               }
-              children={<CancelModal />}
               className="bg-dark max-h-[80%] w-[36rem] overflow-y-auto overflow-x-hidden"
-            />
+            >
+              <CancelModal />
+            </BaseDialog>
 
             <BaseButton title="Next" variant="primary" onClick={create} />
           </div>

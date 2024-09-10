@@ -22,7 +22,7 @@ enum ModalType {
   Rwa = 'rwa',
 }
 
-export default function page() {
+export default function Page() {
   // For banner image in the create section
   const [banner, setBanner] = useState({
     image: null,
