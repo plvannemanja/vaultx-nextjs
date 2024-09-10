@@ -1,426 +1,414 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@headlessui/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import BaseButton from '../../ui/BaseButton';
-import FileInput from '../../ui/FileInput';
-import PropertiesTemplate from './PropertiesTemplate';
+import Image from 'next/image';
+import { collectionServices } from '@/services/supplier';
+import { z } from 'zod';
+import { protocolFee } from '@/lib/helper';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { BaseDialog } from '../../ui/BaseDialog';
+import CancelModal from './CancelModal';
 
-const category = ['Fine Art', 'Abstract Art', 'Pop Art', 'Test Category'];
+// 1GB file size
+const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
+const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
-export default function AdvanceDetails({
+const basicDetailsSchema = z.object({
+  productName: z.string(),
+  productDescription: z.string(),
+  price: z.number().gt(0),
+  curation: z.string(),
+});
+
+export default function BasicDetails({
   handler,
   nextStep,
 }: {
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
 }) {
-  const {
-    advancedOptions: options,
-    setAdvancedOptions: setOptions,
-    paymentSplits,
-    setPaymentSplits,
-    advancedDetails,
-    setAdvancedDetails
-  } = useCreateNFT();
+  const { basicDetail, setBasicDetail } = useCreateNFT();
 
-  const [splits, setSplits] = useState<any>({
-    address: '',
-    percentage: 0,
-    data: [],
-  });
-  const [unlockableFiles, setUnlockableFiles] = useState<any>([]);
-  const [formData, setFormData] = useState<any>({
-    royaltyAddress: null,
-    royalty: null,
-    unlockable: null,
-    category: null,
-    address: null,
-    percentage: null,
-  });
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+  const [fee, setFee] = useState<number>(0);
+  const fileInputRef = useRef(null);
+  const attachmentRef = useRef(null);
 
-  const handleFileChange = (file: any, index: number) => {
-    const newFiles = unlockableFiles.map((item: any, i: number) => {
-      if (i === index) {
-        return file;
-      }
-      return item;
-    });
-
-    setUnlockableFiles(newFiles);
-    setAdvancedDetails({
-      ...advancedDetails,
-      certificates: newFiles
-    })
-  };
-
-  const removeUnlockable = (index: number) => {
-    const newFiles = unlockableFiles.filter(
-      (item: any, i: number) => i !== index,
-    );
-
-    setUnlockableFiles(newFiles);
-    setAdvancedDetails({
-      ...advancedDetails,
-      certificates: newFiles
-    })
-  };
-
-  const addSplit = () => {
-    const newSplit = {
-      address: splits.address,
-      percentage: splits.percentage,
-    };
-
-    setSplits({
-      ...splits,
-      data: [...splits.data, newSplit],
-    });
-  };
-
-  const removeSplit = (index: number) => {
-    const newSplits = splits.data.filter((item: any, i: number) => i !== index);
-
-    setSplits({
-      ...splits,
-      data: newSplits,
-    });
-    setPaymentSplits(newSplits);
-  };
-
-  const toggleSwitch = (e: any) => {
-    switch (e) {
-      case 'free':
-        setOptions({
-          freeMint: !options.freeMint,
-        });
-        break;
-      case 'royalty':
-        setOptions({
-          royalties: !options.royalties,
-        });
-        break;
-      case 'unlockable':
-        setOptions({
-          unlockable: !options.unlockable,
-        });
-        break;
-      case 'category':
-        setOptions({
-          category: !options.category,
-        });
-        break;
-      case 'split':
-        setOptions({
-          split: !options.split,
-        });
-        break;
-      default:
-        break;
-    }
-  };
+  const [file, setFile] = useState<any>(null);
+  const [imageSrc, setImageSrc] = useState(null);
+  const [curations, setCurations] = useState([]);
+  const [attachments, setAttachments] = useState([null]);
 
   const cancelChanges = () => {
-    nextStep(false);
+    setBasicDetail({
+      productName: null,
+      productDescription: null,
+      artistName: null,
+      price: 0,
+      curation: null,
+      file: null,
+      imageSrc: null,
+      attachments: null,
+    })
   };
 
+  const leftAmount = useMemo(() => {
+    if (!z.isValid(basicDetail.price)) return 0;
+    return Number(basicDetail.price) - (Number(basicDetail.price) * fee) / 100;
+  }, [basicDetail.price]);
+
   const create = async () => {
-    const err = [];
-    if (!advancedDetails.attributes) {
-      err.push({ path: ['Properties'] });
-    }
-
-    if (options.royalties && !advancedDetails.royalty) {
-      err.push({ path: ['Royalties'] });
-    }
-
-    if (options.category && !advancedDetails.category) {
-      err.push({ path: ['Category'] });
-    }
-
-    if (options.unlockable && !advancedDetails.unlockable) {
-      err.push({ path: ['Unlockable Content'] });
-    }
-
-    if (options.split && !paymentSplits.length) {
-      err.push({ path: ['Split Payments'] });
-    }
-
-    if (err.length > 0) {
-      handler(null, JSON.stringify(err));
+    const result = basicDetailsSchema.safeParse(basicDetail);
+    if (!result.success && !basicDetail.file) {
+      handler(null, result.error.message);
+      console.log(result.error.message);
       return;
     }
+
+    setBasicDetail({
+      ...basicDetail,
+      file: file,
+      imageSrc: imageSrc,
+      attachments: attachments,
+    })
 
     handler({}, null);
     nextStep(true);
   };
 
+  const handleLogoChange = (event: any) => {
+    const file = event.target.files[0];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+    if (
+      file.size < maxFileSize &&
+      acceptedFormats.includes(`.${fileExtension}`)
+    ) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        setImageSrc(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      setFile(file);
+      setBasicDetail({
+        ...basicDetail,
+        file: file,
+        imageSrc: URL.createObjectURL(file),
+      })
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      (fileInputRef.current as any).click();
+    }
+  };
+
+  const handleAttachment = (file: any, index: number) => {
+    const attachment = file.target.files[0];
+    const fileExtension = attachment.name.split('.').pop().toLowerCase();
+    if (
+      attachment.size < maxFileSize &&
+      acceptedFormats.includes(`.${fileExtension}`)
+    ) {
+      const newAttachments = [...attachments];
+      newAttachments[index] = attachment;
+
+      setAttachments(newAttachments);
+      setBasicDetail({
+        ...basicDetail,
+        attachments: newAttachments,
+      })
+    }
+  };
+
+  const addAttachment = () => {
+    if (attachmentRef.current) {
+      (attachmentRef.current as any).click();
+    }
+    const newAttachments = [...attachments, null];
+
+    setAttachments(newAttachments);
+    setBasicDetail({
+      ...basicDetail,
+      attachments: newAttachments,
+    })
+  };
+
+  const removeAttachment = (index: number) => {
+    const newAttachments = attachments.filter((_, i) => i !== index);
+
+    setAttachments(newAttachments);
+    setBasicDetail({
+      ...basicDetail,
+      attachments: newAttachments,
+    })
+  };
+
+  const fetchUserCollections = async () => {
+    try {
+      const res = await collectionServices.getUserCollections({});
+      setCurations(res.data.collection.length > 0 ? res.data.collection : []);
+      setBasicDetail({
+        ...basicDetail,
+        curations: res.data.collection.length > 0 ? res.data.collection : [],
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchProtocolFee = async () => {
+    let fee = await protocolFee();
+    setFee(Number(fee) / 100);
+  };
+  useEffect(() => {
+    if (curations.length === 0) {
+      fetchUserCollections();
+    }
+  }, []);
+
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex gap-3 flex-wrap">
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
-            <p className="font-medium">Free Minting</p>
-            <p className="text-gray-500">{`Free mint your nft. You don't need any gas fee`}</p>
-          </div>
-          <Switch
-            id="free"
-            checked={options.freeMint}
-            onCheckedChange={() => toggleSwitch('free')}
-          />
-        </div>
-
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
-            <p className="font-medium">Royalties</p>
-            <p className="text-gray-500">Earn a % on secondary sales</p>
-          </div>
-          <Switch
-            id="royalty"
-            checked={options.royalties}
-            onCheckedChange={() => toggleSwitch('royalty')}
-          />
-        </div>
-
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
-            <p className="font-medium">Unlockable Content</p>
-            <p className="text-gray-500">Only owner can view this content</p>
-          </div>
-          <Switch
-            id="unlockable"
-            checked={options.unlockable}
-            onCheckedChange={() => toggleSwitch('unlockable')}
-          />
-        </div>
-
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
-            <p className="font-medium">Category</p>
-            <p className="text-gray-500">Put this item into category</p>
-          </div>
-          <Switch
-            id="category"
-            checked={options.category}
-            onCheckedChange={() => toggleSwitch('category')}
-          />
-        </div>
-
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
-            <p className="font-medium">Split Payments</p>
-            <p className="text-gray-500">
-              Add multiple address to receive payments
-            </p>
-          </div>
-          <Switch
-            id="split"
-            checked={options.split}
-            onCheckedChange={() => toggleSwitch('split')}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-y-5">
-        {options.royalties && (
-          <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Royalties(%)</p>
-            <div className="flex gap-x-2">
-              <Input
-                className="bg-dark max-w-[22rem]"
-                onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    royaltyAddress: (e.target as any).value,
-                  })
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    royaltyAddress: (e.target as any).value,
-                  })
-                }}
-                placeholder="Address"
-                type="text"
-                value={advancedDetails.royaltyAddress}
-              />
-              <Input
-                className="bg-dark max-w-20"
-                onChange={(e) => {
-                  setFormData({ ...formData, royalty: (e.target as any).value })
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    royalty: parseInt((e.target as any).value)
-                  })
-                }}
-                placeholder="0"
-                type="number"
-                value={(advancedDetails.royalty).toString()}
-              />
+      <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
+        <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[42%] bg-dark rounded-lg self-start">
+          {basicDetail.file ? (
+            <div className="flex flex-col gap-y-5 text-center">
+              {(basicDetail.imageSrc) && (
+                <img
+                  src={basicDetail.imageSrc}
+                  alt="logo"
+                  className="w-[90%] object-cover mx-auto"
+                />
+              )}
+              {
+                (basicDetail.file ? basicDetail.file.name : 'No files selected')
+              }
             </div>
-          </div>
-        )}
+          ) : (
+            <>
+              <img
+                src="/icons/upload.svg"
+                alt="upload"
+                className="w-10 h-10"
+              />
+              <p className="text-lg font-medium">Upload File</p>
+              <p className="mt-2 text-gray-400">
+                Drag or choose your file to upload
+              </p>
+              <p className="text-gray-500">
+                PNG, GIF, WEBP, MP4, or MP3. Max 1GB.
+              </p>
+            </>
+          )}
 
-        {options.unlockable && (
-          <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Unlockable Content</p>
-            <Textarea
-              className="bg-dark p-4 rounded-md"
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  unlockable: (e.target as any).value,
-                })
-                setAdvancedDetails({
-                  ...advancedDetails,
-                  unlockable: (e.target as any).value,
-                })
-              }}
-              rows={4}
-              value={advancedDetails.unlockable}
-              placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
+          <div className="flex flex-col gap-y-2">
+            <button
+              className="py-3 w-[20rem] rounded-lg text-black font-semibold bg-[#dee8e8]"
+              onClick={handleButtonClick}
+            >
+              <span className="flex gap-x-2 items-center justify-center">
+                Browse file
+                <img src="/icons/arrow_ico.svg" alt="" />
+              </span>{' '}
+            </button>
+            <input
+              className="hidden"
+              type="file"
+              ref={fileInputRef}
+              onChange={handleLogoChange}
             />
-            <div className="flex gap-x-4 items-center">
-              <p>File Selected</p>
-              <div
-                className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+            {file && (
+              <BaseButton
+                title="Reset"
+                variant="secondary"
                 onClick={() => {
-                  setUnlockableFiles([...unlockableFiles, null]);
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    certificates: [...unlockableFiles, null]
+                  setFile(null)
+                  setBasicDetail({
+                    ...basicDetail,
+                    file: null,
+                    imageSrc: null,
                   })
                 }}
-              >
-                <img src="/icons/plus.svg" alt="plus" className="w-4 h-4" />
-                <p className="text-neon">Add</p>
+              />
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-5 lg:w-[55%]">
+          <div className="flex flex-col gap-y-2">
+            <Label className="font-medium">Product name*</Label>
+            <Input
+              value={basicDetail.productName ? basicDetail.productName : ''}
+              onChange={(e) =>
+                setBasicDetail({
+                  ...basicDetail,
+                  productName: (e.target as any).value,
+                })
+              }
+              className="w-full border-none bg-[#161616]"
+              type="text"
+              placeholder="Enter Product Name"
+            />
+          </div>
+
+          <div className="flex flex-col gap-y-2">
+            <Label className="font-medium">Description*</Label>
+            <Textarea
+              value={
+                basicDetail.productDescription ? basicDetail.productDescription : ''
+              }
+              onChange={(e) =>
+                setBasicDetail({
+                  ...basicDetail,
+                  productDescription: (e.target as any).value,
+                })
+              }
+              className="w-full border-none bg-[#161616]"
+              placeholder="Please describe your product"
+            />
+          </div>
+
+          <div className="flex flex-col gap-y-2">
+            <Label className="font-medium">Price(USD)*</Label>
+            <Input
+              value={basicDetail.price ? basicDetail.price : ''}
+              onChange={(e) =>
+                setBasicDetail({
+                  ...basicDetail,
+                  price: parseInt((e.target as any).value),
+                })
+              }
+              className="w-full border-none bg-[#161616]"
+              type="number"
+              placeholder="0"
+            />
+          </div>
+
+          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+            <div className="flex flex-col gap-y-3">
+              <div className="flex justify-between">
+                <Label className="font-medium">Platform Fee</Label>
+                <Label>${fee}%</Label>
+              </div>
+              <hr />
+              <div className="flex justify-between">
+                <Label className="font-medium">You will receive</Label>
+                <Label>${leftAmount}</Label>
               </div>
             </div>
-            {(advancedDetails.certificates).map((item: any, index: number) => {
-              return (
-                <div className="flex gap-x-4 items-center" key={index}>
-                  <FileInput
-                    onFileSelect={(file: any) => handleFileChange(file, index)}
-                    maxSizeInBytes={1024 * 1024}
-                  />
-                  <img
-                    src="/icons/trash.svg"
-                    alt="trash"
-                    className="w-6 h-6 cursor-pointer"
-                    onClick={() => removeUnlockable(index)}
-                  />
-                </div>
-              );
-            })}
           </div>
-        )}
 
-        {options.category && (
           <div className="flex flex-col gap-y-2">
-            <Label className="text-lg font-medium">Category</Label>
+            <Label className="font-medium">Artist name*</Label>
+            <Input
+              value={basicDetail.artistName ? basicDetail.artistName : ''}
+              onChange={(e) =>
+                setBasicDetail({
+                  ...basicDetail,
+                  artistName: (e.target as any).value,
+                })
+              }
+              className="w-full border-none bg-[#161616]"
+              type="text"
+              placeholder="Enter Artist Name"
+            />
+          </div>
+
+          <div className="flex flex-col gap-y-2">
+            <Label className="text-lg font-medium">Curation*</Label>
             <select
-              aria-label="Select category"
+              aria-label="Select curation"
               className="h-10 rounded-md px-2 w-full"
               name="country"
-              onChange={(e) => {
-                setFormData({ ...formData, category: (e.target as any).value })
-                setAdvancedDetails({
-                  ...advancedDetails,
-                  category: (e.target as any).value
-                })
-              }}
-              value={advancedDetails.category}
+              onChange={(e) =>
+                setBasicDetail({ ...basicDetail, curation: (e.target as any).value })
+              }
+              value={basicDetail.curation}
             >
               <option value="">Select</option>
-              {category.map((item: any) => (
-                <option key={item} value={item}>
-                  {item}
+              {basicDetail.curations.length > 0 ? basicDetail.curations.map((item: any) => (
+                <option key={item.isoCode} value={JSON.stringify(item)}>
+                  {item.name}
                 </option>
-              ))}
+              )) : null}
             </select>
           </div>
-        )}
 
-        {options.split && (
-          <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Split Payments (%)</p>
-            <div className="flex gap-x-2">
-              <Input
-                className="bg-dark max-w-[22rem]"
-                onChange={(e) =>
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    address: (e.target as any).value,
-                  })
-                }
-                placeholder="Address"
-                type="text"
-                value={advancedDetails.address}
-              />
-              <Input
-                className="bg-dark max-w-20"
-                onChange={(e) =>
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    percentage: parseInt((e.target as any).value),
-                  })
-                }
-                value={(advancedDetails.percentage).toString()}
-                placeholder="%"
-                type="number"
-              />
-              <div
-                className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                onClick={addSplit}
-              >
-                <img src="/icons/plus.svg" alt="plus" className="w-4 h-4" />
-                <p className="text-neon">Add</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              {paymentSplits.map((item: any, index: number) => (
-                <div key={index} className="flex gap-x-2 items-center">
-                  <Input
-                    className="bg-dark max-w-[22rem]"
-                    placeholder="Address"
-                    type="text"
-                    value={item.address}
-                  />
-                  <Input
-                    className="bg-dark max-w-20"
-                    placeholder="%"
-                    type="number"
-                    value={item.percentage}
-                  />
-                  <img
-                    src="/icons/trash.svg"
-                    alt="plus"
-                    className="w-6 h-6 cursor-pointer"
-                    onClick={() => removeSplit(index)}
-                  />
-                </div>
-              ))}
+          <div className="flex flex-col gap-y-2 bg-dark px-4 py-3 rounded-lg">
+            <Label className="font-medium text-lg">Attachment</Label>
+            <hr />
+            <div className="flex gap-4 flex-wrap my-2">
+              {(basicDetail.attachments).map((attachment, index) => {
+                return (
+                  <div key={index} className="flex flex-col gap-y-2">
+                    <input
+                      type="file"
+                      className="hidden"
+                      ref={attachmentRef}
+                      onChange={(e) => handleAttachment(e, index)}
+                    />
+                    {!attachment ? (
+                      <img
+                        src="https://i.ibb.co/c8FMdw1/attachment-link.png"
+                        alt="attachment"
+                        className="w-28 mx-auto h-36 rounded-md object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={URL.createObjectURL(attachment)}
+                        alt="attachment"
+                        className="w-28 mx-auto h-36 rounded-md object-cover"
+                      />
+                    )}
+                    {attachment ? (
+                      <div
+                        className="flex gap-x-2 justify-center items-center cursor-pointer"
+                        onClick={() => removeAttachment(index)}
+                      >
+                        <span className="text-neon">Delete</span>
+                        <img
+                          src="/icons/trash.svg"
+                          alt="attachment"
+                          className="w-5 h-5"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="flex gap-x-2 justify-center items-center cursor-pointer"
+                        onClick={() => addAttachment()}
+                      >
+                        <span className="text-neon">Upload</span>
+                        <img
+                          src="/icons/upload.svg"
+                          alt="attachment"
+                          className="w-5 h-5"
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
-        )}
 
-        <PropertiesTemplate
-          select={(e: any) => {
-            setSelectedProperty(e);
-            console.log(e)
-          }}
-        />
+          <div className="flex gap-x-4 justify-center my-5">
+            <BaseDialog
+              trigger={
+                <BaseButton
+                  title="Cancel"
+                  variant="secondary"
+                  onClick={cancelChanges}
+                />
+              }
+              children={<CancelModal />}
+              className="bg-dark max-h-[80%] w-[36rem] overflow-y-auto overflow-x-hidden"
+            />
 
-        <div className="flex gap-x-4 justify-center my-5">
-          <BaseButton
-            title="Previous"
-            variant="secondary"
-            onClick={cancelChanges}
-          />
-          <BaseButton title="Next" variant="primary" onClick={create} />
+            <BaseButton title="Next" variant="primary" onClick={create} />
+          </div>
         </div>
       </div>
     </div>
