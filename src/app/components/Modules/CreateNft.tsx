@@ -230,7 +230,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
       await handleMint(uri, nftId);
       setMintLoaderStep(2);
-
       setTimeout(() => {
         setModal(false)
       }, 2000)
@@ -309,11 +308,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         mintHash: transactionHash,
         tokenId: Number(tokenId),
       });
-      // TODO success modal
       toast({
         title: 'NFT minted',
         description: 'Success to create NFT',
-        variant: 'destructive',
       });
     } catch (error) {
       throw error;
@@ -343,7 +340,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       open={modal}
       onClose={() => setModal(false)}
       >
-        <MintLoader progress={mintLoaderStep} />
+        <MintLoader progress={mintLoaderStep} nftId={nftId} />
       </RestrictiveModal>
 
 
