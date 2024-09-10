@@ -32,7 +32,7 @@ const defaultAttributes = [
 ];
 
 export default function PropertiesTemplate({ select }: { select?: any }) {
-  const { advancedDetails, setAdvancedDetails } = useCreateNFT()
+  const { advancedDetails, setAdvancedDetails } = useCreateNFT();
 
   const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
   const [data, setData] = useState([]);
@@ -114,11 +114,11 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
       setSelectedProperty({
         ...selectedProperty,
         attributes: [...selectedProperty.attributes, newProp],
-      })
+      });
       setAdvancedDetails({
         ...advancedDetails,
         attributes: [...advancedDetails.attributes, newProp],
-      })
+      });
     } else {
       setProperty({
         ...property,
@@ -127,7 +127,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
       setAdvancedDetails({
         ...advancedDetails,
         attributes: [...advancedDetails.attributes, newProp],
-      })
+      });
     }
   };
 
@@ -141,19 +141,22 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
     }
   };
 
-  const isSelected = useMemo(() => (item: any) => {
-    const id = advancedDetails.propertyTemplateId;
+  const isSelected = useMemo(
+    () => (item: any) => {
+      const id = advancedDetails.propertyTemplateId;
 
-    if (id !== null && item !== null) {
-      return id == item._id;
-    }
+      if (id !== null && item !== null) {
+        return id == item._id;
+      }
 
-    if (selectedProperty !== null && item !== null) {
-      return selectedProperty._id == item._id;
-    }
+      if (selectedProperty !== null && item !== null) {
+        return selectedProperty._id == item._id;
+      }
 
-    return false;
-  }, [selectedProperty, advancedDetails.attributes]);
+      return false;
+    },
+    [selectedProperty, advancedDetails.attributes],
+  );
 
   useEffect(() => {
     if (selectedProperty !== null) {
@@ -199,7 +202,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                 ...advancedDetails,
                 propertyTemplateId: null,
                 attributes: null,
-              })
+              });
             }}
             className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-gray-400'}`}
           >
@@ -211,13 +214,13 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                   <div
                     key={index}
                     onClick={() => {
-                      setSelectedProperty(item)
-                      
+                      setSelectedProperty(item);
+
                       setAdvancedDetails({
                         ...advancedDetails,
                         propertyTemplateId: item._id,
                         attributes: item.attributes,
-                      })
+                      });
                     }}
                     className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
                   >
@@ -319,8 +322,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                   </div>
                 );
               })
-            : selectedProperty &&
-                selectedProperty.attributes.length > 0
+            : selectedProperty && selectedProperty.attributes.length > 0
               ? selectedProperty.attributes.map((item: any, index: number) => {
                   return (
                     <div

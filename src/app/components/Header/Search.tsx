@@ -42,47 +42,43 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
         .catch((err) => {
           console.log('Error in search result', err);
         });
-    }
+    };
 
     getSearchResult();
   }, [searchText]);
-  const ButtonContainer = (
-    buttonInfo: IButtonProps,
-  ) => {
+  const ButtonContainer = (buttonInfo: IButtonProps) => {
     return (
       <>
-      <Link href={buttonInfo.url}>
-      <div className="w-full h-[81px] py-4 relative cursor-pointer">
-        <div className="left-1 top-0 justify-start items-center gap-3.5 flex">
-          <div className="w-[66px] h-[66px] relative rounded-xl">
-            <Image
-              width={66}
-              height={66}
-              className="shrink-0 aspect-square"
-              src={buttonInfo.img}
-              alt="default_profile"
-            />
-          </div>
-          <div className="flex-col justify-start items-start gap-[5px] flex">
-            <div className="text-white text-sm font-semibold font-['Azeret Mono'] leading-snug">
-              {buttonInfo.name}
+        <Link href={buttonInfo.url}>
+          <div className="w-full h-[81px] py-4 relative cursor-pointer">
+            <div className="left-1 top-0 justify-start items-center gap-3.5 flex">
+              <div className="w-[66px] h-[66px] relative rounded-xl">
+                <Image
+                  width={66}
+                  height={66}
+                  className="shrink-0 aspect-square"
+                  src={buttonInfo.img}
+                  alt="default_profile"
+                />
+              </div>
+              <div className="flex-col justify-start items-start gap-[5px] flex">
+                <div className="text-white text-sm font-semibold font-['Azeret Mono'] leading-snug">
+                  {buttonInfo.name}
+                </div>
+                {buttonInfo.price ? (
+                  <div className="text-white text-sm font-normal font-['Azeret Mono'] leading-snug">
+                    Price: {buttonInfo.price} MATIC
+                  </div>
+                ) : null}
+                {buttonInfo.symbol ? (
+                  <div className="text-white text-sm font-normal font-['Azeret Mono'] leading-snug">
+                    {buttonInfo.symbol}
+                  </div>
+                ) : null}
+              </div>
             </div>
-            {
-              buttonInfo.price ? 
-              <div className="text-white text-sm font-normal font-['Azeret Mono'] leading-snug">
-                Price: {buttonInfo.price} MATIC
-              </div> : null
-            }
-            {
-              buttonInfo.symbol ? 
-              <div className="text-white text-sm font-normal font-['Azeret Mono'] leading-snug">
-                {buttonInfo.symbol}
-              </div> : null
-            }
           </div>
-        </div>
-      </div>
-      </Link>
+        </Link>
       </>
     );
   };
@@ -160,16 +156,16 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
         <TabsTrigger value="curation">Curation</TabsTrigger>
         <TabsTrigger value="user">Users</TabsTrigger>
       </TabsList>
-      <TabsContent value="artist" className='w-full pr-4'>
+      <TabsContent value="artist" className="w-full pr-4">
         <ArtistContainer />
       </TabsContent>
-      <TabsContent value="nft" className='w-full pr-4'>
+      <TabsContent value="nft" className="w-full pr-4">
         <NFTContainer />
       </TabsContent>
-      <TabsContent value="curation" className='w-full pr-4'>
+      <TabsContent value="curation" className="w-full pr-4">
         <CurationContainer />
       </TabsContent>
-      <TabsContent value="user" className='w-full pr-4'>
+      <TabsContent value="user" className="w-full pr-4">
         <UserContainer />
       </TabsContent>
     </Tabs>

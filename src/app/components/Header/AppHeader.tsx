@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Sheet,
@@ -28,8 +28,8 @@ export default function AppHeader() {
 
   const handleConnect = async () => {
     const result = await connect({ client, wallets });
-    console.log(result)
-  }
+    console.log(result);
+  };
 
   const login = async (address: Address) => {
     try {

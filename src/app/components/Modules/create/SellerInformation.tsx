@@ -13,7 +13,7 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 export default function SellerInformation({
   handler,
-  nextStep
+  nextStep,
 }: {
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
@@ -38,7 +38,7 @@ export default function SellerInformation({
     setSellerInfo({
       shipping: null,
       contact: null,
-    })
+    });
     nextStep(false);
   };
 
@@ -80,45 +80,57 @@ export default function SellerInformation({
             <Label>Length(cm)</Label>
             <Input
               value={sellerInfo.length}
-              type="number" placeholder="--" onChange={(e) => {
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
-                  length: (e.target as any).value
-                })
-              }} />
+                  length: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Width(cm)</Label>
             <Input
               value={sellerInfo.width}
-              type="number" placeholder="--" onChange={(e) => {
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
-                  width: (e.target as any).value
-                })
-              }} />
+                  width: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Height(cm)</Label>
             <Input
               value={sellerInfo.height}
-              type="number" placeholder="--" onChange={(e) => {
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
-                  height: (e.target as any).value
-                })
-              }} />
+                  height: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Weight(kg)</Label>
             <Input
               value={sellerInfo.weight}
-              type="number" placeholder="--" onChange={(e) => {
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
-                  weight: (e.target as any).value
-                })
-              }} />
+                  weight: (e.target as any).value,
+                });
+              }}
+            />
           </div>
         </div>
       </div>

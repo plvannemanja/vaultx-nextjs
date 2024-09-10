@@ -42,7 +42,7 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     file: null,
     imageSrc: null,
     attachments: [null],
-    curations: []
+    curations: [],
   });
 
   const setPartialBasicDetail = (data: Partial<IBasicDetailFormData>) => {
@@ -92,7 +92,9 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     });
   };
 
-  const [paymentSplits, setPaymentSplits] = useState<Array<PaymentSplitType>>();
+  const [paymentSplits, setPaymentSplits] = useState<Array<PaymentSplitType>>(
+    [],
+  );
 
   const [sellerInfo, setSellerInfo] = useState<ISellerInfo>({
     shipping: null,
@@ -104,11 +106,9 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     height: null,
     length: null,
     weight: null,
-  })
+  });
 
-  const setPartialSellerInfo = (
-    data: Partial<ISellerInfo>,
-  ) => {
+  const setPartialSellerInfo = (data: Partial<ISellerInfo>) => {
     setSellerInfo({
       ...sellerInfo,
       ...data,

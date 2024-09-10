@@ -25,7 +25,7 @@ export default function AdvanceDetails({
     paymentSplits,
     setPaymentSplits,
     advancedDetails,
-    setAdvancedDetails
+    setAdvancedDetails,
   } = useCreateNFT();
 
   const [splits, setSplits] = useState<any>({
@@ -55,8 +55,8 @@ export default function AdvanceDetails({
     setUnlockableFiles(newFiles);
     setAdvancedDetails({
       ...advancedDetails,
-      certificates: newFiles
-    })
+      certificates: newFiles,
+    });
   };
 
   const removeUnlockable = (index: number) => {
@@ -67,8 +67,8 @@ export default function AdvanceDetails({
     setUnlockableFiles(newFiles);
     setAdvancedDetails({
       ...advancedDetails,
-      certificates: newFiles
-    })
+      certificates: newFiles,
+    });
   };
 
   const addSplit = () => {
@@ -237,11 +237,11 @@ export default function AdvanceDetails({
                   setFormData({
                     ...formData,
                     royaltyAddress: (e.target as any).value,
-                  })
+                  });
                   setAdvancedDetails({
                     ...advancedDetails,
                     royaltyAddress: (e.target as any).value,
-                  })
+                  });
                 }}
                 placeholder="Address"
                 type="text"
@@ -250,15 +250,22 @@ export default function AdvanceDetails({
               <Input
                 className="bg-dark max-w-20"
                 onChange={(e) => {
-                  setFormData({ ...formData, royalty: (e.target as any).value })
+                  setFormData({
+                    ...formData,
+                    royalty: (e.target as any).value,
+                  });
                   setAdvancedDetails({
                     ...advancedDetails,
-                    royalty: parseInt((e.target as any).value)
-                  })
+                    royalty: parseInt((e.target as any).value),
+                  });
                 }}
                 placeholder="0"
                 type="number"
-                value={(advancedDetails.royalty).toString()}
+                value={
+                  advancedDetails.royalty
+                    ? advancedDetails.royalty.toString()
+                    : ''
+                }
               />
             </div>
           </div>
@@ -273,11 +280,11 @@ export default function AdvanceDetails({
                 setFormData({
                   ...formData,
                   unlockable: (e.target as any).value,
-                })
+                });
                 setAdvancedDetails({
                   ...advancedDetails,
                   unlockable: (e.target as any).value,
-                })
+                });
               }}
               rows={4}
               value={advancedDetails.unlockable}
@@ -291,15 +298,15 @@ export default function AdvanceDetails({
                   setUnlockableFiles([...unlockableFiles, null]);
                   setAdvancedDetails({
                     ...advancedDetails,
-                    certificates: [...unlockableFiles, null]
-                  })
+                    certificates: [...unlockableFiles, null],
+                  });
                 }}
               >
                 <img src="/icons/plus.svg" alt="plus" className="w-4 h-4" />
                 <p className="text-neon">Add</p>
               </div>
             </div>
-            {(advancedDetails.certificates).map((item: any, index: number) => {
+            {advancedDetails.certificates.map((item: any, index: number) => {
               return (
                 <div className="flex gap-x-4 items-center" key={index}>
                   <FileInput
@@ -326,11 +333,11 @@ export default function AdvanceDetails({
               className="h-10 rounded-md px-2 w-full"
               name="country"
               onChange={(e) => {
-                setFormData({ ...formData, category: (e.target as any).value })
+                setFormData({ ...formData, category: (e.target as any).value });
                 setAdvancedDetails({
                   ...advancedDetails,
-                  category: (e.target as any).value
-                })
+                  category: (e.target as any).value,
+                });
               }}
               value={advancedDetails.category}
             >
@@ -368,7 +375,7 @@ export default function AdvanceDetails({
                     percentage: parseInt((e.target as any).value),
                   })
                 }
-                value={(advancedDetails.percentage).toString()}
+                value={advancedDetails.percentage.toString()}
                 placeholder="%"
                 type="number"
               />
@@ -410,7 +417,7 @@ export default function AdvanceDetails({
         <PropertiesTemplate
           select={(e: any) => {
             setSelectedProperty(e);
-            console.log(e)
+            console.log(e);
           }}
         />
 

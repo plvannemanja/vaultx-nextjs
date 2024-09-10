@@ -138,10 +138,22 @@ export default function Home() {
         <Skeleton className="w-full h-[400px]" />
       )}
       <div className="py-20 w-full px-10 lg:px-20 lg:relative">
-        <img src='/illustrations/circle-outline-half.png' className='hidden lg:block absolute left-0 top-[28.5rem]' />
-        <img src='/illustrations/circle-outline.png' className='hidden lg:block absolute left-24' />
-        <img src='/illustrations/circle-outline.png' className='hidden lg:block absolute right-16 bottom-[10rem]' />
-        <img src='/illustrations/circle-filled.png' className='hidden lg:block absolute right-12 top-[10rem]' />
+        <img
+          src="/illustrations/circle-outline-half.png"
+          className="hidden lg:block absolute left-0 top-[28.5rem]"
+        />
+        <img
+          src="/illustrations/circle-outline.png"
+          className="hidden lg:block absolute left-24"
+        />
+        <img
+          src="/illustrations/circle-outline.png"
+          className="hidden lg:block absolute right-16 bottom-[10rem]"
+        />
+        <img
+          src="/illustrations/circle-filled.png"
+          className="hidden lg:block absolute right-12 top-[10rem]"
+        />
 
         {section1 ? (
           <>
@@ -191,8 +203,14 @@ export default function Home() {
         </div>
         {section3 ? (
           <div className="py-20 lg:relative">
-            <img src='/illustrations/left-lines.png' className='hidden lg:block absolute w-24 left-0 top-[30rem]' />
-            <img src='/illustrations/circle-half-translucent.png' className='hidden lg:block absolute w-24 right-0' />
+            <img
+              src="/illustrations/left-lines.png"
+              className="hidden lg:block absolute w-24 left-0 top-[30rem]"
+            />
+            <img
+              src="/illustrations/circle-half-translucent.png"
+              className="hidden lg:block absolute w-24 right-0"
+            />
 
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
@@ -231,7 +249,10 @@ export default function Home() {
         ) : null}
 
         <div className="flex justify-center lg:relative lg:bg-[url('/illustrations/wave-top-left-bottom-right.png')]">
-          <img src='/illustrations/right-lines.png' className='hidden lg:block absolute w-24 right-0 top-[15rem]' />
+          <img
+            src="/illustrations/right-lines.png"
+            className="hidden lg:block absolute w-24 right-0 top-[15rem]"
+          />
 
           <NFTList />
         </div>

@@ -52,7 +52,7 @@ export default function BasicDetails({
       file: null,
       imageSrc: null,
       attachments: null,
-    })
+    });
   };
 
   const leftAmount = useMemo(() => {
@@ -73,7 +73,7 @@ export default function BasicDetails({
       file: file,
       imageSrc: imageSrc,
       attachments: attachments,
-    })
+    });
 
     handler({}, null);
     nextStep(true);
@@ -96,7 +96,7 @@ export default function BasicDetails({
         ...basicDetail,
         file: file,
         imageSrc: URL.createObjectURL(file),
-      })
+      });
     }
   };
 
@@ -120,7 +120,7 @@ export default function BasicDetails({
       setBasicDetail({
         ...basicDetail,
         attachments: newAttachments,
-      })
+      });
     }
   };
 
@@ -134,7 +134,7 @@ export default function BasicDetails({
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,
-    })
+    });
   };
 
   const removeAttachment = (index: number) => {
@@ -144,7 +144,7 @@ export default function BasicDetails({
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,
-    })
+    });
   };
 
   const fetchUserCollections = async () => {
@@ -154,7 +154,7 @@ export default function BasicDetails({
       setBasicDetail({
         ...basicDetail,
         curations: res.data.collection.length > 0 ? res.data.collection : [],
-      })
+      });
     } catch (error) {
       console.log(error);
     }
@@ -176,24 +176,18 @@ export default function BasicDetails({
         <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[42%] bg-dark rounded-lg self-start">
           {basicDetail.file ? (
             <div className="flex flex-col gap-y-5 text-center">
-              {(basicDetail.imageSrc) && (
+              {basicDetail.imageSrc && (
                 <img
                   src={basicDetail.imageSrc}
                   alt="logo"
                   className="w-[90%] object-cover mx-auto"
                 />
               )}
-              {
-                (basicDetail.file ? basicDetail.file.name : 'No files selected')
-              }
+              {basicDetail.file ? basicDetail.file.name : 'No files selected'}
             </div>
           ) : (
             <>
-              <img
-                src="/icons/upload.svg"
-                alt="upload"
-                className="w-10 h-10"
-              />
+              <img src="/icons/upload.svg" alt="upload" className="w-10 h-10" />
               <p className="text-lg font-medium">Upload File</p>
               <p className="mt-2 text-gray-400">
                 Drag or choose your file to upload
@@ -225,12 +219,12 @@ export default function BasicDetails({
                 title="Reset"
                 variant="secondary"
                 onClick={() => {
-                  setFile(null)
+                  setFile(null);
                   setBasicDetail({
                     ...basicDetail,
                     file: null,
                     imageSrc: null,
-                  })
+                  });
                 }}
               />
             )}
@@ -258,7 +252,9 @@ export default function BasicDetails({
             <Label className="font-medium">Description*</Label>
             <Textarea
               value={
-                basicDetail.productDescription ? basicDetail.productDescription : ''
+                basicDetail.productDescription
+                  ? basicDetail.productDescription
+                  : ''
               }
               onChange={(e) =>
                 setBasicDetail({
@@ -324,16 +320,21 @@ export default function BasicDetails({
               className="h-10 rounded-md px-2 w-full"
               name="country"
               onChange={(e) =>
-                setBasicDetail({ ...basicDetail, curation: (e.target as any).value })
+                setBasicDetail({
+                  ...basicDetail,
+                  curation: (e.target as any).value,
+                })
               }
               value={basicDetail.curation}
             >
               <option value="">Select</option>
-              {basicDetail.curations.length > 0 ? basicDetail.curations.map((item: any) => (
-                <option key={item.isoCode} value={JSON.stringify(item)}>
-                  {item.name}
-                </option>
-              )) : null}
+              {basicDetail.curations.length > 0
+                ? basicDetail.curations.map((item: any) => (
+                    <option key={item.isoCode} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
+                : null}
             </select>
           </div>
 
@@ -341,7 +342,7 @@ export default function BasicDetails({
             <Label className="font-medium text-lg">Attachment</Label>
             <hr />
             <div className="flex gap-4 flex-wrap my-2">
-              {(basicDetail.attachments).map((attachment, index) => {
+              {basicDetail.attachments.map((attachment, index) => {
                 return (
                   <div key={index} className="flex flex-col gap-y-2">
                     <input

@@ -37,7 +37,8 @@ export default function page() {
         filter: {
           price: data.price.value,
         },
-        category: data.category.label === 'Test Category' ? null : data.category.label,
+        category:
+          data.category.label === 'Test Category' ? null : data.category.label,
       });
     }
   };
@@ -56,9 +57,9 @@ export default function page() {
         filter: {
           price: filters.filter.price,
         },
-      }
+      };
       if (filters.category) {
-        queryObject["category"] = filters.category;
+        queryObject['category'] = filters.category;
       }
 
       const response = await nftService.getAllNfts(queryObject);
@@ -74,15 +75,15 @@ export default function page() {
 
   useEffect(() => {
     const fetchMedia = async () => {
-        const response = await getMedia();
+      const response = await getMedia();
 
-        if (response) {
-            setHero(response.appreciateTop)
-        }
+      if (response) {
+        setHero(response.appreciateTop);
+      }
     };
-  
+
     fetchMedia();
-  }, [])
+  }, []);
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
@@ -93,25 +94,27 @@ export default function page() {
           width={100}
           height={100}
           className="w-full rounded-xl object-fill"
-          onClick={() => window.open(hero.link, "_blank")}
+          onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
       <Filters setState={handleFilters} />
 
       <div className="flex gap-4 flex-wrap my-4 justify-center md:justify-between">
-        {nfts.length > 0 ? nfts.map((nft: any, index: number) => {
-          return (
-            <div
-              className="w-[17rem]"
-              key={index}
-              onClick={() => {
-                router.push(`/nft/${nft.tokenId}`);
-              }}
-            >
-              <NftCard data={nft} />
-            </div>
-          );
-        }) : null}
+        {nfts.length > 0
+          ? nfts.map((nft: any, index: number) => {
+              return (
+                <div
+                  className="w-[17rem]"
+                  key={index}
+                  onClick={() => {
+                    router.push(`/nft/${nft.tokenId}`);
+                  }}
+                >
+                  <NftCard data={nft} />
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );
