@@ -40,6 +40,7 @@ import { CreateSellService } from '@/services/createSellService';
 import { useToast } from '@/hooks/use-toast';
 import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
 import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
+import { NFTDetailProvider, useNFTDetail } from '@/app/components/Context/NFTDetailContext';
 
 const style = {
   borderRadius: '10px',
@@ -54,13 +55,13 @@ const style = {
   boxShadow: 24,
 };
 
-export default function Page({ params }: { params: { slug: string } }) {
+function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
   const favoriteService = new FavoriteService();
   const createSellService = new CreateSellService();
   const { toast } = useToast();
 
-  const [data, setData] = useState<null | NFTItemType>(null);
+  const { NFTDetail: data, setNFTDetail: setData } = useNFTDetail();
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [views, setViews] = useState(0);
@@ -440,7 +441,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Buy Now"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -453,12 +454,12 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Bid"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                         >
-                          <BidModal title={data.name} update={() => {}} />
+                          <BidModal title={data.name} update={() => { }} />
                         </BaseDialog>
                       </div>
                     ) : null}
@@ -471,7 +472,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Release Escrow"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                         >
@@ -483,7 +484,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Cancel Order"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                         >
@@ -500,7 +501,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Put On Sale"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                         >
@@ -514,7 +515,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         <BaseButton
                           title="Remove From Sale"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       </div>
                     ) : null}
@@ -524,7 +525,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         <BaseButton
                           title="Cancel Requested"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       </div>
                     ) : null}
@@ -536,7 +537,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <BaseButton
                               title="Escrow Release Request"
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
@@ -551,7 +552,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         <BaseButton
                           title="In Escrow"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       </div>
                     ) : null}
@@ -571,7 +572,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                         contractInfo={{
                           address: '44932KJKL'
                         }}
-                      />                        
+                      />
                     </BaseDialog>
                   </div>
                 </div>
@@ -681,8 +682,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <TableCell>
                               {item?.createdAt
                                 ? new Date(item?.createdAt)
-                                    .toLocaleString()
-                                    .slice(0, 10)
+                                  .toLocaleString()
+                                  .slice(0, 10)
                                 : '-/-'}
                             </TableCell>
                             <TableCell>
@@ -707,7 +708,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                                 <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
                                   <button
                                     className="w-full h-full"
-                                    onClick={() => {}}
+                                    onClick={() => { }}
                                   >
                                     Bidded
                                   </button>
@@ -865,4 +866,13 @@ export default function Page({ params }: { params: { slug: string } }) {
       )}
     </div>
   );
+}
+
+
+export default function Page({ params }: { params: { slug: string } }) {
+  return (
+    <NFTDetailProvider>
+      <PageDetail params={params} />
+    </NFTDetailProvider>
+  )
 }
