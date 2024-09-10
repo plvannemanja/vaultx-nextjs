@@ -77,8 +77,8 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
         address: {
           line1: sellerInfo.line1,
           line2: sellerInfo.line2,
-          city: sellerInfo.city,
-          state: sellerInfo.state ? sellerInfo.state : '',
+          city: sellerInfo.city ? sellerInfo.city.name : '',
+          state: sellerInfo.state ? sellerInfo.state.name : '',
           postalCode: sellerInfo.postalCode,
         },
         phoneNumber: sellerInfo.phoneNumber,

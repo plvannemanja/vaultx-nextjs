@@ -379,7 +379,7 @@ export default function PropertiesInfo() {
               <div className="flex flex-col gap-y-6 items-center">
                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
                   <img
-                    src="icons/plus.svg"
+                    src="/icons/plus.svg"
                     className="w-5 h-5"
                     width={100}
                     height={100}
@@ -499,7 +499,7 @@ export default function PropertiesInfo() {
                   className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
                   onClick={addNewProp}
                 >
-                  <img src="icons/add-new.svg" className="w-10 h-10" />
+                  <img src="/icons/add-new.svg" className="w-10 h-10" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
                 </div>
               </div>
