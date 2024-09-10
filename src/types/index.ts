@@ -167,3 +167,31 @@ export interface ISellerInfo {
   length: string | null;
   weight: string | null;
 }
+
+
+export interface IBuyerInfo {
+  buyer: Address;
+  amount: bigint;
+}
+
+export interface IRoyaltyDetails {
+  royaltyWallet: Address;
+  royaltyPercentage: bigint;
+}
+
+export enum TokenStatusEnum {
+  NotListed,
+  Listed,
+  Escrowed,
+}
+
+export interface ITokenDetail {
+  tokenId: number;
+  collectionId: number;
+  owner: Address;
+  usdAmount: bigint;
+  nativeAmount: bigint;
+  buyerInfo: IBuyerInfo;
+  royalty: IRoyaltyDetails;
+  status: TokenStatusEnum;
+}
