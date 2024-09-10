@@ -30,12 +30,12 @@ const marketPlaceLinks = [
 const accountLinks = [
   {
     name: 'My Profile',
-    value: 'myProfile',
+    value: 'profile',
     icon: '/icons/sidebar_ico_6.svg',
   },
   {
     name: 'My favorite',
-    value: 'fav',
+    value: 'favourite',
     icon: '/icons/sidebar_ico_7.svg',
   },
   {
@@ -76,7 +76,7 @@ export default function SideBar({ className }: { className?: string }) {
       <button
         className="flex items-center justify-center gap-x-2 my-5 py-3 px-3 bg-neon rounded-xl w-[80%] mx-auto"
         onClick={() => {
-          window.location.href = '/dashboard?tab=create';
+          window.location.href = '/dashboard/create';
         }}
       >
         <span className="font-bold text-black">Create</span>
@@ -95,7 +95,7 @@ export default function SideBar({ className }: { className?: string }) {
                 if (link.link) {
                   window.open(link.link, '_blank');
                 } else {
-                  window.location.href = `/dashboard?tab=${link.value}`;
+                  window.location.href = `/dashboard/${link.value}`;
                 }
               }}
             >
@@ -130,7 +130,7 @@ export default function SideBar({ className }: { className?: string }) {
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => {
-                window.location.href = `/dashboard?tab=${link.value}`;
+                window.location.href = `/dashboard/${link.value}`;
               }}
             >
               <Image

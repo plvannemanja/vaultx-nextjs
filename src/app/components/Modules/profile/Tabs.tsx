@@ -26,6 +26,7 @@ import { Label } from '@/components/ui/label';
 import { CreateSellService } from '@/services/createSellService';
 import Link from 'next/link';
 import ArtistsCard from '../../Cards/ArtistsCard';
+import { useToast } from '@/hooks/use-toast';
 
 const profileFilters = [
   {
@@ -90,6 +91,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const favoriteService = new FavoriteService();
   const nftService = new NftServices();
   const createAndSellService = new CreateSellService();
+  const { toast } = useToast();
 
   const [favType, setFavType] = useState<string>('nft');
   const [filters, setFilters] = useState<any>({
@@ -355,6 +357,10 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   };
 
   useEffect(() => {
+    toast({
+      title: 'Loading...',
+    });
+
     if (tab === ProfileTabs.All) {
       fetchUser();
     }

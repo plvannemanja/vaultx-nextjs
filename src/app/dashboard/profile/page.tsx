@@ -1,14 +1,13 @@
 'use client';
 
-import { prices } from '@/app/components/ui/Filters';
 import { Badge } from '@/components/ui/badge';
 import { trimString } from '@/utils/helpers';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import Tabs from '@/app/components/Modules/profile/Tabs';
 import { userServices } from '@/services/supplier';
 import { FavoriteService } from '@/services/FavoriteService';
+import { toast, useToast } from '@/hooks/use-toast';
 
 const profileFilters = [
   {
@@ -78,7 +77,7 @@ const badges = [
   },
 ];
 
-export default function Profile() {
+export default function Page() {
   const favoriteService = new FavoriteService();
 
   const [likes, setLikes] = useState(0);
@@ -86,8 +85,7 @@ export default function Profile() {
   const [now, setNow] = useState(false);
   const [filterbadge, setFilterBadge] = useState(badges[0].value);
   const [user, setUser] = useState<any>(null);
-
-  const walletAddr = 'dvkklsa@2...';
+  const { toast } = useToast();
 
   const handleLike = async () => {
     try {
@@ -101,31 +99,48 @@ export default function Profile() {
   };
 
   const copyAddr = () => {
-    navigator.clipboard.writeText(walletAddr);
+    navigator.clipboard.writeText(user?.wallet);
+    toast({
+      title: 'Copied to clipboard',
+      duration: 2000,
+    });
   };
 
   const fetchData = async () => {
     try {
-      const user = await userServices.getSingleUser();
+      let user = await userServices.getSingleUser();
+
+      let artistId = null;
+
+      if (user.data && user.data.user) {
+        setUser(user.data.user);
+        artistId = user.data.user._id;
+      }
+
+      if (!artistId) return;
+
       const likedArtist = await favoriteService.getArtistsTotalLikes({
-        artistId: '660689f8c7e6b1396fd9bc09',
+        artistId: artistId,
       });
       const reaction = await favoriteService.getUserReactionToArtist({
-        artistId: '660689f8c7e6b1396fd9bc09',
+        artistId: artistId,
       });
 
       setLikes(likedArtist.data.totalLikedArtist);
       setLiked(reaction.data.favorite);
-      setUser(user.data.user);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    if (!user) {
-      fetchData();
-    }
+    toast({
+      title: 'Loading Profile details',
+      description: 'Please be patient',
+      duration: 2000,
+    });
+
+    fetchData();
   }, []);
   return (
     <div className="flex flex-col gap-y-4 px-4">
@@ -144,7 +159,7 @@ export default function Profile() {
             className="flex gap-x-3 items-center p-3 rounded-xl text-white border-2 border-white cursor-pointer"
             onClick={() => copyAddr()}
           >
-            {trimString(walletAddr)}
+            {user ? (user?.wallet ? trimString(user?.wallet) : null) : null}
             <svg
               width="24px"
               height="24px"

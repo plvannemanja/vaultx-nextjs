@@ -18,6 +18,7 @@ import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
 import { removeEmptyStrings } from '@/utils/helpers';
 import { useActiveAccount } from 'thirdweb/react';
 import { createCollection } from '@/lib/helper';
+import { useToast } from '@/hooks/use-toast';
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
@@ -29,6 +30,7 @@ const createCurationSchema = z.object({
 });
 
 export default function CreateCuration({ editMode }: { editMode?: any }) {
+  const { toast } = useToast();
   const activeAccount = useActiveAccount();
   const fileInputRef = useRef(null);
   const [file, setFile] = useState<any>(null);
@@ -40,6 +42,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   const [status, setStatus] = useState({
     error: false,
     loading: false,
+    active: false,
   });
 
   const [formData, setFormData] = useState<any>({
@@ -86,8 +89,11 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   ]);
 
   const create = async () => {
+    toast({
+      title: 'Processing Transaction',
+      description: 'Please wait...',
+    });
     try {
-      setStatus({ error: false, loading: true });
       const result = createCurationSchema.safeParse(formData);
       if (
         !result.success &&
@@ -137,9 +143,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         description: desUri,
       };
       metaData = removeEmptyStrings(metaData);
-
       const metaUri = await uploadMetaData(metaData);
-      setStatus({ error: false, loading: false });
 
       if (activeAccount) {
         try {
@@ -149,36 +153,45 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             activeAccount,
           );
           if (result === null) throw 'collection is not created!';
+          setStatus({ error: false, loading: true, active: true });
+
           data.append('tokenId', result.tokenId);
           data.append('transactionHash', result.transactionHash);
+
+          const response = await collectionServices.create(data);
+          if (response) {
+            setStatus({ error: false, loading: false, active: true });
+          }
         } catch (error) {
+          setStatus({ error: false, loading: true, active: true });
           console.log('error:', error);
           throw error;
         }
       } else {
         throw 'no active account';
       }
-      try {
-        let response;
 
-        if (editMode) {
-          response = await collectionServices.update({
-            ...data,
-            curationId: editMode._id,
-          });
-        } else {
-          await collectionServices.create(data);
-        }
+      if (editMode) {
+        try {
+          let response;
 
-        if (response) {
-          setStatus({ error: false, loading: false });
-          cancelChanges();
+          if (editMode) {
+            response = await collectionServices.update({
+              ...data,
+              curationId: editMode._id,
+            });
+          }
+
+          if (response) {
+            setStatus({ error: false, loading: false, active: true });
+            cancelChanges();
+          }
+        } catch (error) {
+          setStatus({ error: true, loading: true, active: true });
         }
-      } catch (error) {
-        setStatus({ error: true, loading: true });
       }
     } catch (error) {
-      setStatus({ error: true, loading: true });
+      setStatus({ error: true, loading: true, active: true });
     }
   };
 
@@ -240,10 +253,12 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
     <div className="flex flex-col gap-y-4 px-4">
       <p className="text-xl font-medium">Edit Your Collection</p>
 
-      {status.loading && (
+      {status.active && (
         <TriggerModal
           isOpen={status.loading || status.error}
-          close={() => setStatus({ error: false, loading: false })}
+          close={() =>
+            setStatus({ error: false, loading: false, active: false })
+          }
         >
           <CurationLoader status={status} edit={editMode ? true : false} />
         </TriggerModal>
@@ -293,7 +308,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             >
               <span className="flex gap-x-2 items-center justify-center">
                 Browse file
-                <img src="icons/arrow_ico.svg" alt="" />
+                <img src="/icons/arrow_ico.svg" alt="" />
               </span>{' '}
             </button>
             <input

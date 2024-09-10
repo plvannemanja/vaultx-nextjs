@@ -36,7 +36,8 @@ export default function FileInput({
     }
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e) => {
+    console.log(fileInputRef, fileInputRef.current)
     if (fileInputRef.current) {
       (fileInputRef.current as any).click();
     }
@@ -51,13 +52,13 @@ export default function FileInput({
   return (
     <div className="flex flex-col gap-y-2">
       {title && <p className="text-sm font-medium">{title}</p>}
+      <input
+        type="file"
+        className="file-input hidden"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+      />
       <button className="file-upload" onClick={handleButtonClick}>
-        <input
-          type="file"
-          className="file-input"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-        />
         <span>
           <img src="images/image_ico.svg" alt="" /> Choose file
         </span>{' '}

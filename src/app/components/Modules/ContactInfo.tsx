@@ -1,13 +1,14 @@
 'use client';
 
 import { getContactsInfo, upsertContactInfo } from '@/services/supplier';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BaseDialog } from '../ui/BaseDialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import BaseButton from '../ui/BaseButton';
 import Image from 'next/image';
+import { useCreateNFT } from '../Context/CreateNFTContext';
 export default function ContactInfo({
   handler,
 }: {
@@ -20,6 +21,8 @@ export default function ContactInfo({
     name: '',
   });
   const [selectedContact, setSelectedContact] = useState(null);
+
+  const nftContext = useCreateNFT();
 
   const update = async (id?: string) => {
     let response = null;
@@ -49,6 +52,23 @@ export default function ContactInfo({
     });
   };
 
+  const isSelected = useMemo(
+    () => (item: any) => {
+      const id = nftContext.sellerInfo.contactId;
+
+      if (id !== null && item !== null) {
+        return id == item._id;
+      }
+
+      if (selectedContact !== null && item !== null) {
+        return selectedContact._id == item._id;
+      }
+
+      return false;
+    },
+    [selectedContact, nftContext.sellerInfo.contact],
+  );
+
   useEffect(() => {
     if (handler) {
       handler(selectedContact);
@@ -75,8 +95,16 @@ export default function ContactInfo({
           ? data.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${selectedContact == item ? 'border-neon' : 'border-gray-400'}`}
-                onClick={() => setSelectedContact(item)}
+                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
+                onClick={() => {
+                  setSelectedContact(item);
+
+                  nftContext.setSellerInfo({
+                    ...nftContext.sellerInfo,
+                    contactId: item._id,
+                    contact: item,
+                  });
+                }}
               >
                 <span>{item.name ? item.name : `#${index + 1}`}</span>
                 <div>
@@ -161,7 +189,7 @@ export default function ContactInfo({
               <div className="flex flex-col gap-y-6 items-center">
                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
                   <Image
-                    src="icons/plus.svg"
+                    src="/icons/plus.svg"
                     className="w-5 h-5"
                     alt=""
                     width={100}

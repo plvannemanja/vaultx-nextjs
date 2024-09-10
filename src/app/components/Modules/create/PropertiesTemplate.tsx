@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getProperties, upsertProperty } from '@/services/supplier';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 const defaultAttributes = [
   {
@@ -31,6 +32,8 @@ const defaultAttributes = [
 ];
 
 export default function PropertiesTemplate({ select }: { select?: any }) {
+  const { advancedDetails, setAdvancedDetails } = useCreateNFT();
+
   const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
   const [data, setData] = useState([]);
   const [propMod, setPropMod] = useState<any>({
@@ -107,10 +110,29 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
       value: 'Write it here',
     };
 
-    setProperty({
-      ...property,
-      attributes: [...property.attributes, newProp],
-    });
+    if (selectedProperty !== null) {
+      setSelectedProperty({
+        ...selectedProperty,
+        attributes: [...selectedProperty.attributes, newProp],
+      });
+
+      const currAttributes = advancedDetails.attributes ? advancedDetails.attributes : [];
+      setAdvancedDetails({
+        ...advancedDetails,
+        attributes: [...currAttributes, newProp],
+      });
+    } else {
+      setProperty({
+        ...property,
+        attributes: [...property.attributes, newProp],
+      });
+
+      const currAttributes = advancedDetails.attributes ? advancedDetails.attributes : [];
+      setAdvancedDetails({
+        ...advancedDetails,
+        attributes: [...currAttributes, newProp],
+      });
+    }
   };
 
   const makeUpdates = async () => {
@@ -122,6 +144,23 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
       });
     }
   };
+
+  const isSelected = useMemo(
+    () => (item: any) => {
+      const id = advancedDetails.propertyTemplateId;
+
+      if (id !== null && item !== null) {
+        return id == item._id;
+      }
+
+      if (selectedProperty !== null && item !== null) {
+        return selectedProperty._id == item._id;
+      }
+
+      return false;
+    },
+    [selectedProperty, advancedDetails.attributes],
+  );
 
   useEffect(() => {
     if (selectedProperty !== null) {
@@ -161,8 +200,15 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
 
         <div className="flex flex-wrap gap-5">
           <div
-            onClick={() => setSelectedProperty(null)}
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${selectedProperty == null ? 'border-neon' : 'border-gray-400'}`}
+            onClick={() => {
+              setSelectedProperty(null);
+              setAdvancedDetails({
+                ...advancedDetails,
+                propertyTemplateId: null,
+                attributes: null,
+              });
+            }}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-gray-400'}`}
           >
             <p>Basic Template</p>
           </div>
@@ -171,8 +217,16 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                 return (
                   <div
                     key={index}
-                    onClick={() => setSelectedProperty(item)}
-                    className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${selectedProperty == item ? 'border-neon' : 'border-gray-400'}`}
+                    onClick={() => {
+                      setSelectedProperty(item);
+
+                      setAdvancedDetails({
+                        ...advancedDetails,
+                        propertyTemplateId: item._id,
+                        attributes: item.attributes,
+                      });
+                    }}
+                    className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
                   >
                     <p>{item.name}</p>
                   </div>
@@ -183,7 +237,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
 
         <div className="flex flex-wrap gap-3 my-5">
           {selectedProperty === null
-            ? defaultAttributes.map((item, index) => {
+            ? property.attributes.map((item, index) => {
                 return (
                   <div
                     className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
@@ -272,8 +326,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                   </div>
                 );
               })
-            : selectedProperty.attributes &&
-                selectedProperty.attributes.length > 0
+            : selectedProperty && selectedProperty.attributes.length > 0
               ? selectedProperty.attributes.map((item: any, index: number) => {
                   return (
                     <div
@@ -368,12 +421,12 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
             className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
             onClick={addNewProp}
           >
-            <img src="icons/add-new.svg" className="w-10 h-10" />
+            <img src="/icons/add-new.svg" className="w-10 h-10" />
             <p className="text-center text-sm text-[#DDF247]">Add New</p>
           </div>
         </div>
         <div className="flex gap-x-3 item-center">
-          <img src="icons/dot.svg" className="w-5 h-5" />
+          <img src="/icons/dot.svg" className="w-5 h-5" />
           <span>
             You can freely change properties values ​​by clicking on the title
             and content.

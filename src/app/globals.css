@@ -105,6 +105,10 @@ body {
   background-color: #ddf247;
 }
 
+.bg-light {
+  background-color: #dee8e8;
+}
+
 .border-neon {
   border: 1px solid #ddf247;
 }

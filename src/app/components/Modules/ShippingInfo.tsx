@@ -1,13 +1,14 @@
 'use client';
 
 import { getSellerInfo, upsertSellerInfo } from '@/services/supplier';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BaseDialog } from '../ui/BaseDialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import BaseButton from '../ui/BaseButton';
 import PhoneInput from 'react-phone-input-2';
 import { City, Country, State } from 'country-state-city';
+import { useCreateNFT } from '../Context/CreateNFTContext';
 
 export default function ShippingInfo({
   handler,
@@ -34,6 +35,8 @@ export default function ShippingInfo({
   const [countryCode, setCountryCode] = useState('');
   const countries = Country.getAllCountries();
   const [selectedShipping, setSelectedShipping] = useState<any>(null);
+
+  const nftContext = useCreateNFT();
 
   const update = async (id?: string) => {
     let response = null;
@@ -233,6 +236,23 @@ export default function ShippingInfo({
     return null;
   };
 
+  const isSelected = useMemo(
+    () => (item: any) => {
+      const id = nftContext.sellerInfo.shippingId;
+
+      if (id !== null && item !== null) {
+        return id === item._id;
+      }
+
+      if (selectedShipping !== null && item !== null) {
+        return selectedShipping._id === item._id;
+      }
+
+      return false;
+    },
+    [selectedShipping, nftContext.sellerInfo.shipping],
+  );
+
   useEffect(() => {
     if (handler) {
       handler(selectedShipping);
@@ -260,8 +280,16 @@ export default function ShippingInfo({
               return (
                 <div
                   key={index}
-                  onClick={() => setSelectedShipping(item)}
-                  className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${selectedShipping == item ? 'border-neon' : 'border-gray-400'}`}
+                  onClick={() => {
+                    setSelectedShipping(item);
+
+                    nftContext.setSellerInfo({
+                      ...nftContext.sellerInfo,
+                      shippingId: item._id,
+                      shipping: item,
+                    });
+                  }}
+                  className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
                 >
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
@@ -375,7 +403,7 @@ export default function ShippingInfo({
             >
               <div className="flex flex-col gap-y-6 items-center">
                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                  <img src="icons/plus.svg" className="w-5 h-5" />
+                  <img src="/icons/plus.svg" className="w-5 h-5" />
                 </div>
                 <p className="text-[#828282]">Add New Address</p>
               </div>

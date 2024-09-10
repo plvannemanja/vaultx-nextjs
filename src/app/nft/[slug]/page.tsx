@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getAllNftActivitys } from '@/services/supplier';
+import { getAllNftActivitys, userServices } from '@/services/supplier';
 import moment from 'moment';
 import { FavoriteService } from '@/services/FavoriteService';
 import BaseButton from '@/app/components/ui/BaseButton';
@@ -22,30 +22,55 @@ import { BaseDialog } from '@/app/components/ui/BaseDialog';
 import BuyModal from '@/app/components/Modules/nft/BuyModal';
 import BidModal from '@/app/components/Modules/nft/BidModal';
 import Quotes from '@/app/components/Modules/nft/Quotes';
-import { getNftDataById } from '@/utils/nftutils';
-import { contract } from '@/lib/contract';
+import { trimString } from '@/utils/helpers';
 import {
-  prepareContractCall,
-  sendTransaction,
-  readContract,
-  resolveMethod,
-  prepareEvent,
-  getContractEvents,
-} from 'thirdweb';
-import { useActiveAccount } from 'thirdweb/react';
-export default function Page({ params }: { params: { slug: string } }) {
-  console.log('NFT params', params);
-  const activeAccount = useActiveAccount();
+  ArrowTopRightOnSquareIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/20/solid';
+import { EyeIcon } from 'lucide-react';
+import AcceptBidModal from '@/app/components/Modules/nft/AcceptBidModal';
+import EscrowModal from '@/app/components/Modules/nft/EscrowModal';
+import EscrowRequestModal from '@/app/components/Modules/nft/EscrowRequestModal';
+
+// NFT pics modal stuff
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import SlickCarousel from '@/app/components/Carousels/SlickCarousel';
+import { CreateSellService } from '@/services/createSellService';
+import { useToast } from '@/hooks/use-toast';
+import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
+import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
+import { NFTDetailProvider, useNFTDetail } from '@/app/components/Context/NFTDetailContext';
+
+const style = {
+  borderRadius: '10px',
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '100%',
+  height: '100%',
+  bgcolor: 'rgba(200, 200, 200, 0.5)',
+  border: '2px solid #000',
+  boxShadow: 24,
+};
+
+function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
   const favoriteService = new FavoriteService();
+  const createSellService = new CreateSellService();
+  const { toast } = useToast();
 
-  const [data, setData] = useState<null | NFTItemType>(null);
+  const { NFTDetail: data, setNFTDetail: setData } = useNFTDetail();
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [views, setViews] = useState(0);
   const [list, setList] = useState([]);
   const [mainImage, setMainImage] = useState<string | null>(null);
-  const [nftData, setNftData] = useState({});
+  const [modal, setModal] = useState(false);
+  const [type, setType] = useState('buy');
+  const [user, setUser] = useState(null);
+  const [bids, setBids] = useState([]);
 
   const handleLike = async () => {
     try {
@@ -62,11 +87,41 @@ export default function Page({ params }: { params: { slug: string } }) {
       const {
         data: { data },
       } = await getAllNftActivitys({ nftId: id });
-
-      console.log('setList', data);
       setList(data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const cancelBid = async () => {
+    toast({
+      title: 'Cancelling Bid',
+      duration: 5000,
+    });
+
+    try {
+      // blockchain response
+      const data = {
+        bidId: '',
+        transactionHash: '',
+      };
+
+      await createSellService.cancelBidOnNft(data);
+      await fetchNftData();
+      await getBids();
+
+      toast({
+        title: 'Bid Cancelled',
+        description: 'Refreshing Details',
+        duration: 2000,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: 'Error cancelling bid',
+        description: 'Please try again later or contact support',
+        duration: 5000,
+      });
     }
   };
 
@@ -74,16 +129,10 @@ export default function Page({ params }: { params: { slug: string } }) {
     try {
       const {
         data: { totalLikedNfts },
-      } = await favoriteService.getNftTotalLikes({
-        nftId: '6641aa41ce4eabdbb75aacf4',
-      });
+      } = await favoriteService.getNftTotalLikes({ nftId: data?._id });
       const {
         data: { favorite },
-      } = await favoriteService.getUserReactionToNft({
-        nftId: '6641aa41ce4eabdbb75aacf4',
-      });
-      console.log('setLikes', totalLikedNfts);
-      console.log('setLiked', favorite);
+      } = await favoriteService.getUserReactionToNft({ nftId: data?._id });
       setLikes(totalLikedNfts);
       setLiked(favorite);
     } catch (error) {
@@ -96,142 +145,192 @@ export default function Page({ params }: { params: { slug: string } }) {
       const previosIpAddress = localStorage.getItem('ipAddress');
       const {
         data: { views, ipAddress },
-      } = await nftService.addView({ nftId: data?._id, ip: previosIpAddress });
+      } = await nftService.addView({
+        nftId: params.slug,
+        ip: previosIpAddress,
+      });
       localStorage.setItem('ipAddress', ipAddress);
-      console.log('serviews', views);
       setViews(views);
     } catch (error) {
       console.log({ error });
     }
   };
 
-  const handleBuy = async () => {
-    console.log('handle buy');
+  const getBids = async () => {
     try {
-      const tokenId = params.slug;
-      const tokenDetails = await readContract({
-        contract,
-        method:
-          'function tokenDetails(uint256) view returns (uint256 tokenId, uint256 collectionId, address owner, uint256 price, uint256 priceInMatic, (address buyer, uint256 amount) buyerInfo, (address royaltyWallet, uint256 royaltyPercentage) royalty, uint8 status)',
-        params: [BigInt(tokenId)],
-      });
-      console.log('tokenDetails', tokenDetails);
-      const transaction = prepareContractCall({
-        contract,
-        method: 'function purchaseAsset(uint256 tokenId) payable',
-        params: [BigInt(tokenId)],
-        value: tokenDetails[4],
+      const createSellService = new CreateSellService();
+      const {
+        data: { bids },
+      } = await createSellService.getNftBids({ nftId: params.slug });
+      setBids(bids);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const userReaction = async () => {
+    try {
+      const response = await favoriteService.getUserReactionToNft({
+        nftId: params.slug,
       });
 
-      if (activeAccount) {
-        try {
-          const { transactionHash } = await sendTransaction({
-            transaction,
-            account: activeAccount,
-          });
-        } catch (error) {
-          console.log('error:', error);
-        }
-      } else {
-        alert('wallet is not connected');
+      if (response.data) {
+        setLiked(response.data.favorite);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleBid = async (data: number) => {
-    console.log('handle bid', data);
+  const getUser = async () => {
     try {
-      const tokenId = params.slug;
-      const tokenDetails = await readContract({
-        contract,
-        method:
-          'function tokenDetails(uint256) view returns (uint256 tokenId, uint256 collectionId, address owner, uint256 price, uint256 priceInMatic, (address buyer, uint256 amount) buyerInfo, (address royaltyWallet, uint256 royaltyPercentage) royalty, uint8 status)',
-        params: [BigInt(tokenId)],
-      });
-      console.log('tokenDetails', tokenDetails);
-      const transaction = prepareContractCall({
-        contract,
-        method: 'function placeBid(uint256 tokenId) payable',
-        params: [BigInt(tokenId)],
-        value: BigInt(data * 1e18),
-      });
+      const user = await userServices.getSingleUser();
 
-      if (activeAccount) {
-        try {
-          const { transactionHash } = await sendTransaction({
-            transaction,
-            account: activeAccount,
-          });
-        } catch (error) {
-          console.log('error:', error);
-        }
+      if (user.data && user.data.user) {
+        setUser(user.data.user);
+      }
+
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleNFTType = async (nft: any, userData: any) => {
+    if (
+      nft?.mintedBy?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()
+    ) {
+      if (
+        nft?.saleId?.saleStatus === 'Sold' ||
+        nft?.saleId?.saleStatus === 'Cancelled' ||
+        nft?.saleId?.saleStatus === 'NotForSale'
+      )
+        setType('resell');
+      else if (nft?.saleId?.saleStatus === 'CancellationRequested')
+        setType('CancelRequested');
+      else if (nft?.saleId?.saleStatus === 'Ordered') {
+        const purchaseDate = new Date(nft?.saleId?.ItemPurchasedOn).getTime();
+
+        // get release time - blockchain logic
+        // const time = await releaseTime()
+        const time = new Date().getTime(); // temporary edit
+        if (purchaseDate + time <= new Date().getTime())
+          setType('EscrowReleaseRequest');
+        else setType('inEscrow');
       } else {
-        alert('wallet is not connected');
+        setType('remove');
+      }
+    } else {
+      if (
+        nft?.saleId?.saleStatus === 'Sold' ||
+        nft?.saleId?.saleStatus === 'Cancelled' ||
+        nft?.saleId?.saleStatus === 'NotForSale'
+      )
+        setType('bid');
+      else if (
+        nft?.saleId?.saleStatus === 'CancellationRequested' ||
+        nft?.saleId?.saleStatus === 'Ordered'
+      ) {
+        if (nft?.saleId?.saleWinner === JSON.parse(user)?._id)
+          setType('release');
+        else setType('NotForSale');
+      } else if (nft?.saleId?.saleStatus === 'Active') setType('buy');
+      else setType('bid');
+    }
+  };
+
+  const fetchNftData = async () => {
+    try {
+      const response = await nftService.getNftById(params.slug);
+
+      if (list.length == 0) {
+        await getAllNftActivity(params.slug);
+        await getArtitsLikes();
+        await handleView();
+        await userReaction();
+      }
+
+      setData(response.data.nft);
+      if (response.data.nft) {
+        const user = await getUser();
+        if (user.data && user.data.user) {
+          setUser(user.data.user);
+          await handleNFTType(response.data.nft, user.data.user);
+        }
       }
     } catch (error) {
       console.log(error);
+      setData(null);
     }
   };
 
   useEffect(() => {
-    const fetchNftData = async () => {
-      const nft = await getNftDataById(Number(params.slug));
-      console.log('NFT', nft);
-      setNftData(nft);
-      console.log('image url', 'https://' + (nftData as any).cloudinaryUrl);
-
-      try {
-        const response = await nftService.getNftById(
-          '6641aa41ce4eabdbb75aacf4',
-        );
-
-        console.log('setData', response.data?.nft);
-        if (list.length === 0) {
-          getAllNftActivity('6641aa41ce4eabdbb75aacf4');
-          getArtitsLikes();
-          handleView();
-        }
-        setData(response.data?.nft);
-      } catch (error) {
-        console.log(error);
-        setData(null);
-      }
-    };
-
     fetchNftData();
   }, [params.slug]);
-  useEffect(() => {
-    console.log('image url', 'https://' + (nftData as any).cloudinaryUrl);
-  }, [nftData]);
   return (
     <div className="flex flex-col gap-y-4 py-20 w-full px-10 lg:px-20">
       {data && (
         <>
-          <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between">
+          <Modal
+            open={modal}
+            onClose={() => setModal(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '20px',
+                  right: '20px',
+                  backgroundColor: 'white',
+                  padding: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '100%',
+                  zIndex: 100,
+                }}
+                onClick={() => setModal(false)}
+              >
+                <Image
+                  src="/icons/delete_icon.svg"
+                  alt=""
+                  width={50}
+                  height={50}
+                  className="w-6 h-6 fill-black"
+                />
+              </div>
+              <SlickCarousel
+                images={[
+                  data?.cloudinaryUrl,
+                  ...(data?.attachments ? data.attachments : []),
+                ]}
+              />
+            </Box>
+          </Modal>
+
+          <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between lg:items-start">
             <div className="w-full relative lg:w-[55%]">
               <Image
-                src={
-                  mainImage
-                    ? mainImage
-                    : 'https://' + (nftData as any).cloudinaryUrl
-                }
-                height={512}
-                width={512}
+                onClick={() => setModal(true)}
+                src={mainImage ? mainImage : data.cloudinaryUrl}
+                height={100}
+                width={100}
                 quality={100}
                 alt="hero"
                 className="cursor-zoom-in rounded-xl object-cover aspect-square w-full"
               />
 
-              <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center bg-gray-700 cursor-pointer">
-                <span className="font-medium">{likes}</span>
-                <div onClick={() => handleLike()}>
+              <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
+                <span className="font-medium">
+                  {likes ? likes : liked ? 1 : 0}
+                </span>
+                <div>
                   <input
                     title="like"
                     type="checkbox"
                     className="sr-only"
                     checked={liked}
+                    onChange={() => handleLike()}
                   />
                   <div className="checkmark">
                     {liked ? (
@@ -285,14 +384,16 @@ export default function Page({ params }: { params: { slug: string } }) {
 
             <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
               <div className="w-full flex flex-col gap-y-6">
-                <p className="text-lg font-medium">{(nftData as any).name}</p>
+                <p className="text-lg font-medium">{data.name}</p>
                 <div className="flex justify-between">
                   <div className="flex gap-2 items-center">
-                    <img
-                      src={data?.owner?.avatar?.url}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full"
-                    />
+                    {data?.owner?.avatar?.url ? (
+                      <img
+                        src={data?.owner?.avatar?.url}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    ) : null}
                     <div className="flex flex-col gap-y-1 text-sm">
                       <p className="text-gray-400">Owned by:</p>
                       <p className="font-medium">{data?.owner?.username}</p>
@@ -300,11 +401,13 @@ export default function Page({ params }: { params: { slug: string } }) {
                   </div>
 
                   <div className="flex gap-2 items-center">
-                    <img
-                      src={data?.mintedBy?.avatar?.url}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full"
-                    />
+                    {data?.mintedBy?.avatar?.url ? (
+                      <img
+                        src={data?.mintedBy?.avatar?.url}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full"
+                      />
+                    ) : null}
                     <div className="flex flex-col gap-y-1 text-sm">
                       <p className="text-gray-400">Created by:</p>
                       <p className="font-medium">{data?.mintedBy?.username}</p>
@@ -313,57 +416,146 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </div>
                 <div className="flex gap-x-3">
                   <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                    {views} view
+                    <EyeIcon width={20} height={20} />
+                    {views ? views : 1} view
                   </div>
                   <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
-                    Pop Art
+                    {data.category ? data.category.name : 'N/A'}
                   </div>
                 </div>
               </div>
-
               <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-lg">
-                <p className="text-sm text-gray-400">Current Price</p>
+                <p className="text-sm text-gray-400">
+                  {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
+                </p>
                 <div className="flex justify-between">
                   <div className="flex flex-col gap-y-2">
-                    <p className="text-lg font-medium">
-                      {(nftData as any).price}
-                    </p>
-                    <button
-                      className="bg-[#DDFE47] hover:bg-[#c0e83e] text-black font-bold py-3 px-4 rounded w-full mt-2"
-                      onClick={handleBuy}
-                    >
-                      Buy Now
-                    </button>
-                    <BaseDialog
-                      trigger={
-                        <BaseButton
-                          title="Buy Now"
-                          variant="primary"
-                          onClick={() => {
-                            /* Handle click event */
-                          }}
-                        />
-                      }
-                      className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
-                    >
-                      <BuyModal price={(nftData as any).price} />
-                    </BaseDialog>
+                    {type === 'NotForSale' ? null : (
+                      <p className="text-lg font-medium">${data.price}</p>
+                    )}
 
-                    <BaseDialog
-                      trigger={
+                    {type === 'buy' ? (
+                      <div className="flex flex-col gap-y-2 items-center">
+                        <BaseDialog
+                          trigger={
+                            <BaseButton
+                              title="Buy Now"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                          className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                        >
+                          <BuyModal id={params.slug} price={data.price} />
+                        </BaseDialog>
+
+                        <BaseDialog
+                          trigger={
+                            <BaseButton
+                              title="Bid"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                          className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
+                        >
+                          <BidModal title={data.name} update={() => { }} />
+                        </BaseDialog>
+                      </div>
+                    ) : null}
+
+                    {type === 'release' ? (
+                      <div className="flex flex-col gap-y-2 items-center">
+                        <BaseDialog
+                          className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                          trigger={
+                            <BaseButton
+                              title="Release Escrow"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                        >
+                          <EscrowModal />
+                        </BaseDialog>
+                        <BaseDialog
+                          className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                          trigger={
+                            <BaseButton
+                              title="Cancel Order"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                        >
+                          <CancelOrderModal id={params.slug} />
+                        </BaseDialog>
+                      </div>
+                    ) : null}
+
+                    {type === 'resell' ? (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseDialog
+                          className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                          trigger={
+                            <BaseButton
+                              title="Put On Sale"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                        >
+                          <PutSaleModal nftId={params.slug} nft={data} />
+                        </BaseDialog>
+                      </div>
+                    ) : null}
+
+                    {type === 'remove' ? (
+                      <div className="flex flex-col gap-x-2 items-center">
                         <BaseButton
-                          title="Bid"
+                          title="Remove From Sale"
                           variant="primary"
-                          onClick={() => console.log('click')}
+                          onClick={() => { }}
                         />
-                      }
-                      className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
-                    >
-                      <BidModal
-                        title={(nftData as any).name}
-                        update={(value) => handleBid(value)}
-                      />
-                    </BaseDialog>
+                      </div>
+                    ) : null}
+
+                    {type === 'CancelRequested' ? (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseButton
+                          title="Cancel Requested"
+                          variant="primary"
+                          onClick={() => { }}
+                        />
+                      </div>
+                    ) : null}
+
+                    {type === 'EscrowReleaseRequest' ? (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseDialog
+                          trigger={
+                            <BaseButton
+                              title="Escrow Release Request"
+                              variant="primary"
+                              onClick={() => { }}
+                            />
+                          }
+                          className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
+                        >
+                          <EscrowRequestModal />
+                        </BaseDialog>
+                      </div>
+                    ) : null}
+
+                    {type === 'inEscrow' ? (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseButton
+                          title="In Escrow"
+                          variant="primary"
+                          onClick={() => { }}
+                        />
+                      </div>
+                    ) : null}
                   </div>
                   <div>
                     <BaseDialog
@@ -372,13 +564,13 @@ export default function Page({ params }: { params: { slug: string } }) {
                           Check Matic Quotes
                         </span>
                       }
-                      className="bg-black max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                     >
                       <Quotes
                         nft={data}
                         fee={10}
                         contractInfo={{
-                          address: '44932KJKLJ12',
+                          address: '44932KJKL'
                         }}
                       />
                     </BaseDialog>
@@ -390,43 +582,40 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <hr />
                 <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                   <span className="font-medium">Artist</span>
-                  <span className="text-gray-400">{(nftData as any).name}</span>
+                  <span className="text-gray-400">{data.name}</span>
                 </div>
                 <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                   <span className="font-medium">Shipping Country</span>
-                  <span className="text-gray-400">{'Singapore'}</span>
+                  <span className="text-gray-400">
+                    {data.saleId ? data.saleId.sellerShippingId.country : ''}
+                  </span>
                 </div>
                 <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                   <span className="font-medium">Royalties</span>
-                  <span className="text-gray-400">
-                    {Number((nftData as any).royalty.royaltyPercentage)}%
-                  </span>
+                  <span className="text-gray-400">{data.royalty}%</span>
                 </div>
-                {/* <div className="flex px-4 py-2 flex-col rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                                <p className="font-medium">Size</p>
-                                <div className="mt-2 flex flex-col gap-y-2">
-                                    <p>Length: {(nftData as any).attributes[0].value && ""}</p>
-                                    <p>Height: {(nftData as any).attributes[1].value && ""}</p>
-                                    <p>Width: {(nftData as any).attributes[2].value && ""}</p>
-                                    <p>Weight: {(nftData as any).attributes[3].value && ""}</p>
-                                </div>
-                            </div> */}
+                <div className="flex px-4 py-2 flex-col rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                  <p className="font-medium">Size</p>
+                  <div className="mt-2 flex flex-col gap-y-2">
+                    <p>Length: {data?.shippingInformation?.lengths}cm</p>
+                    <p>Height: {data?.shippingInformation?.height}cm</p>
+                    <p>Width: {data?.shippingInformation?.width}cm</p>
+                    <p>Weight: {data?.shippingInformation?.weight}cm</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="w-full flex gap-5 flex-wrap">
-            {[
-              (nftData as any).cloudinaryUrl,
-              ...(nftData as any).attachments,
-            ].map((item, index) => {
+            {[data.cloudinaryUrl, ...data.attachments].map((item, index) => {
               return (
                 <img
                   key={index}
                   onClick={() => {
-                    setMainImage('https://' + item);
+                    setMainImage(item);
                   }}
-                  src={'https://' + item}
+                  src={item}
                   className="w-[16rem] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover"
                 />
               );
@@ -438,12 +627,9 @@ export default function Page({ params }: { params: { slug: string } }) {
               <Label className="text-lg font-medium">Properties</Label>
               <hr className="bg-white" />
               <div className="flex gap-4 flex-wrap">
-                {data?.attributes.map((attr: any, index) => {
+                {data.attributes.map((attr, index) => {
                   return (
-                    <div
-                      className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400"
-                      key={index}
-                    >
+                    <div key={index} className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400">
                       <p className="text-lg font-medium text-center">
                         {attr.type}
                       </p>
@@ -451,6 +637,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                   );
                 })}
+                {data.attributes.length === 0 && <p>No properties available</p>}
               </div>
             </div>
           </div>
@@ -459,9 +646,83 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
               <Label className="text-lg font-medium">Description</Label>
               <hr className="bg-white" />
-              <p className="text-gray-500">{(nftData as any)?.description}</p>
+              <p className="text-gray-500">{data.description}</p>
             </div>
           </div>
+
+          {bids.length > 0 ? (
+            <div className="w-full flex flex-col gap-y-5 mt-5">
+              <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+                <Label className="text-lg font-medium">Bid Offers</Label>
+                <hr className="bg-white" />
+                <Table>
+                  <TableCaption>A list of your Bid activity.</TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[100px]">Price</TableHead>
+                      <TableHead>USD Price</TableHead>
+                      <TableHead>Placed On</TableHead>
+                      <TableHead>From</TableHead>
+                      <TableHead className="text-right">Confirmation</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {bids.length > 0 &&
+                      bids.map((item: any, index: number) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableCell className="font-medium w-[14rem]">
+                              <div className="flex gap-x-2 items-center">
+                                {item.bidValue}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              ${(2 * item?.bidValue).toLocaleString('en-US')}
+                            </TableCell>
+                            <TableCell>
+                              {item?.createdAt
+                                ? new Date(item?.createdAt)
+                                  .toLocaleString()
+                                  .slice(0, 10)
+                                : '-/-'}
+                            </TableCell>
+                            <TableCell>
+                              {item.bidder?.username
+                                ? item.bidder?.username
+                                : trimString(item.bidder?.wallet)}
+                            </TableCell>
+                            <TableCell>
+                              {moment(item.createdAt).format('DD MMM, YY')}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {item?.bidder?._id === user?._id ? (
+                                <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-neon">
+                                  <button
+                                    className="w-full h-full"
+                                    onClick={async () => await cancelBid()}
+                                  >
+                                    Cancel Bid
+                                  </button>
+                                </div>
+                              ) : (
+                                <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
+                                  <button
+                                    className="w-full h-full"
+                                    onClick={() => { }}
+                                  >
+                                    Bidded
+                                  </button>
+                                </div>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          ) : null}
 
           <div className="w-full flex flex-col gap-y-5 mt-5">
             <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
@@ -480,23 +741,74 @@ export default function Page({ params }: { params: { slug: string } }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {FileList.length > 0 &&
-                    list.map((item: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">
-                          {item.state}
-                        </TableCell>
-                        <TableCell>{item.price}</TableCell>
-                        <TableCell>{item.paymentStatus}</TableCell>
-                        <TableCell>{item.paymentMethod}</TableCell>
-                        <TableCell>
-                          {moment(item.createdAt).format('DD MMM, YY')}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {moment(item.createdAt).format('hh:mm A')}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                  {list.length > 0 &&
+                    list.map((item: any, index: number) => {
+                      const fromAddress = item?.from?.wallet
+                        ? item.from.wallet
+                        : item?.fromWallet
+                          ? item?.fromWallet
+                          : '';
+                      const toAddress = item?.to?.wallet
+                        ? item.to.wallet
+                        : item?.toWallet
+                          ? item?.toWallet
+                          : '';
+
+                      return (
+                        <TableRow key={index}>
+                          <TableCell className="font-medium w-[14rem]">
+                            <div className="flex gap-x-2 items-center">
+                              {item.state}
+                              <ArrowTopRightOnSquareIcon
+                                width={20}
+                                height={20}
+                              />
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {item.price ? item.price : '-/-'}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-x-2 items-center text-neon">
+                              {item.from ? trimString(item.from.wallet) : '-/-'}
+                              {fromAddress && (
+                                <a
+                                  target="_blank"
+                                  href={`/address/${fromAddress}`}
+                                >
+                                  <ArrowTopRightOnSquareIcon
+                                    width={20}
+                                    height={20}
+                                  />
+                                </a>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-x-2 items-center text-neon">
+                              {item.to ? trimString(item.to.wallet) : '-/-'}
+                              {toAddress && (
+                                <a
+                                  target="_blank"
+                                  href={`/address/${toAddress}`}
+                                >
+                                  <ArrowTopRightOnSquareIcon
+                                    width={20}
+                                    height={20}
+                                  />
+                                </a>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {moment(item.createdAt).format('DD MMM, YY')}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {moment(item.createdAt).format('hh:mm A')}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
             </div>
@@ -504,30 +816,49 @@ export default function Page({ params }: { params: { slug: string } }) {
 
           <div className="flex flex-col gap-y-2 bg-dark rounded-md py-4">
             <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex">
-                <Label className="text-lg font-medium">Details</Label>
+              <div className="w-full px-6 py-2 flex gap-x-2 items-center">
+                <InformationCircleIcon width={20} height={20} />
+                <Label className="font-medium">Details</Label>
               </div>
             </div>
             <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex">
-                <Label className="text-lg font-medium">Erc721</Label>
-                <hr className="bg-white" />
+              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
+                <img
+                  src="/icons/ether.svg"
+                  alt="matic"
+                  className="w-[1.2rem] h-8 fill-white"
+                />
+                <Label className="font-medium">Erc721</Label>
               </div>
             </div>
             <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex">
-                <Label className="text-lg font-medium">
-                  View on Polygon Scan
-                </Label>
-                <hr className="bg-white" />
+              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
+                <img
+                  src="/icons/ether.svg"
+                  alt="matic"
+                  className="w-[1.2rem] h-8 fill-neon"
+                />
+                <Label className="font-medium">View on Polygon Scan</Label>
+                <a href={data?.minted ? '?a=' : ''}>
+                  <ArrowTopRightOnSquareIcon
+                    width={20}
+                    height={20}
+                    className="fill-neon"
+                  />
+                </a>
               </div>
             </div>
             <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex">
-                <Label className="text-lg font-medium">
-                  Open Original On IPFS
-                </Label>
-                <hr className="bg-white" />
+              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
+                <EyeIcon width={20} height={20} />
+                <Label className="font-medium">Open Original On IPFS</Label>
+                <a target="_blank" href={data.uri}>
+                  <ArrowTopRightOnSquareIcon
+                    width={20}
+                    height={20}
+                    className="fill-neon"
+                  />
+                </a>
               </div>
             </div>
           </div>
@@ -535,4 +866,13 @@ export default function Page({ params }: { params: { slug: string } }) {
       )}
     </div>
   );
+}
+
+
+export default function Page({ params }: { params: { slug: string } }) {
+  return (
+    <NFTDetailProvider>
+      <PageDetail params={params} />
+    </NFTDetailProvider>
+  )
 }

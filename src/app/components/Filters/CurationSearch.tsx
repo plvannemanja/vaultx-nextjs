@@ -27,8 +27,8 @@ export default function CurationSearch({ setState }: { setState: any }) {
   const [search, setSearch] = useState<any>({
     search: '',
     filter: {
-      value: curationFilter[0].value,
-      label: curationFilter[0].label,
+      value: null,
+      label: null,
       active: false,
     },
   });
@@ -38,7 +38,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
       search: search.search,
       filter: search.filter.value,
     });
-  }, [search.filter.label, search.filter.value]);
+  }, [search.search, search.filter.label, search.filter.value]);
   return (
     <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
       <div className="flex gap-x-2 items-center">
@@ -63,7 +63,9 @@ export default function CurationSearch({ setState }: { setState: any }) {
       </div>
 
       <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-        <p className="text-sm w-[70%]">{search.filter.label}</p>
+        <p className="text-sm w-[70%]">
+          {search.filter.label ? search.filter.label : 'Recently Listed'}
+        </p>
         {search.filter.active ? (
           <ChevronUpIcon
             className="h-7 w-7"

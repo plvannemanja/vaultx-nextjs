@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import Image from 'next/image';
 
 interface ICurationCard {
   name: string;
@@ -15,16 +14,13 @@ export default function CurationCard({ data }: { data: ICurationCard }) {
     <Card className="bg-dark text-white border-none max-w-[25rem] rounded-none">
       <CardContent className="aspect-square p-3">
         <div className="w-full overflow-hidden">
-          <Image
+          <img
             src={data.image ? data.image : ''}
-            placeholder="blur"
-            blurDataURL="/images/image_placeholder.png"
             height={100}
             width={100}
             className="w-full h-[368px] aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
             loading="lazy"
-            quality={100}
           />
         </div>
         <div className="flex flex-col gap-y-4 my-2">

@@ -11,8 +11,9 @@ import ContactInfo from '@/app/components/Modules/ContactInfo';
 import ShippingInfo from '@/app/components/Modules/ShippingInfo';
 import PropertiesInfo from '@/app/components/Modules/Properties';
 import { useToast } from '@/hooks/use-toast';
+import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 
-export default function Settings() {
+export default function Page() {
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -28,6 +29,8 @@ export default function Settings() {
   });
 
   const handleFileChange = (file: any, type: string) => {
+
+
     if (type === 'avatar') setFormData({ ...formData, avatar: file });
     if (type === 'cover') setFormData({ ...formData, cover: file });
   };
@@ -101,6 +104,7 @@ export default function Settings() {
     fetchUserDetails();
   }, []);
   return (
+    <CreateNFTProvider>
     <div className="flex flex-col gap-y-4 px-4">
       <div className="w-full justify-center items-center">
         <p className="text-center text-xl font-medium">Edit Profile</p>
@@ -113,7 +117,7 @@ export default function Settings() {
           <div className="flex gap-x-4 items-center my-5">
             {formData.avatar ? (
               <img
-                src={formData.avatar}
+                src={typeof formData.avatar === 'string' ? formData.avatar : URL.createObjectURL(formData.avatar)}
                 alt="cover"
                 className="w-28 h-28 object-cover rounded-full"
               />
@@ -134,8 +138,8 @@ export default function Settings() {
           <div className="flex gap-x-4 items-center my-5">
             {formData.cover ? (
               <img
-                src={formData.cover}
-                alt="cover"
+              src={typeof formData.cover === 'string' ? formData.cover : URL.createObjectURL(formData.cover)}
+              alt="cover"
                 className="w-28 h-28 object-cover rounded-full"
               />
             ) : (
@@ -271,5 +275,6 @@ export default function Settings() {
         </div>
       </div>
     </div>
+    </CreateNFTProvider>
   );
 }

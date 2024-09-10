@@ -11,7 +11,7 @@ import {
 import { chain, contract } from './contract';
 import { Account } from 'thirdweb/wallets';
 import { client } from './client';
-import { PaymentSplitType } from '@/types';
+import { IBuyerInfo, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
 
 export const createCollection = async (
   name: string,
@@ -117,7 +117,12 @@ export const listAsset = async ({
     logs: receipt.logs,
     events: [AssetListedEvent],
   });
-  return events ? events[0].args : null;
+  return events
+    ? {
+      ...events[0].args,
+      transactionHash,
+    }
+    : null;
 };
 
 export const protocolFee = async () => {
@@ -127,4 +132,64 @@ export const protocolFee = async () => {
     params: [],
   });
   return fee;
+};
+
+
+export const tokenDetail = async (tokenId: bigint) => {
+  const detail = await readContract({
+    contract,
+    method:
+      'function tokenDetails(uint256) view returns (uint256 tokenId, uint256 collectionId, address owner, uint256 price, uint256 priceInMatic, (address buyer, uint256 amount) buyerInfo, (address royaltyWallet, uint256 royaltyPercentage) royalty, uint8 status)',
+    params: [BigInt(tokenId)],
+  });
+
+  const tokenDetail: ITokenDetail = {
+    tokenId: Number(detail[0]),
+    collectionId: Number(detail[1]),
+    owner: detail[2] as Address,
+    usdAmount: detail[3],
+    nativeAmount: detail[4],
+    buyerInfo: detail[5] as IBuyerInfo,
+    royalty: detail[6] as IRoyaltyDetails,
+    status: Number(detail[7],)
+  }
+  return tokenDetail;
+}
+
+export const purchaseAsset = async (tokenId: bigint, account: Account) => {
+  const detail = await tokenDetail(tokenId);
+
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function purchaseAsset(uint256 tokenId) payable",
+    params: [tokenId],
+    value: detail.nativeAmount,
+  });
+
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+
+  const AssetPurchasedEvent = prepareEvent({
+    signature: "event AssetPurchased(uint256 indexed tokenId)"
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [AssetPurchasedEvent],
+  });
+
+  return events
+    ? {
+      ...events[0].args,
+      transactionHash,
+    }
+    : null;
 };

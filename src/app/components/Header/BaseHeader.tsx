@@ -27,6 +27,7 @@ import { Label } from '@/components/ui/label';
 import Menu from './Menu';
 import { useRouter } from 'next/navigation';
 import { WalletAutoConnect } from '../theme-provider';
+import { checksumAddress } from 'viem';
 
 const socials = [
   {
@@ -83,7 +84,10 @@ export function BaseHeader() {
   };
 
   useEffect(() => {
-    if (activeAccount?.address) login(activeAccount?.address as Address);
+    if (activeAccount?.address) {
+      const address = checksumAddress(activeAccount.address) as Address;
+      login(address);
+    }
   }, [activeAccount]);
 
   return (
@@ -100,11 +104,11 @@ export function BaseHeader() {
                   <SheetTitle>VaultX</SheetTitle>
                   <SheetDescription>
                     <div className="flex flex-col gap-y-4 text-white">
-                      <Link href="/dashboard?tab=appreciate">
+                      <Link href="/dashboard/appreciate">
                         <Label className="text-sm">Appreciation</Label>
                       </Link>
 
-                      <Link href="/dashboard?tab=curation">
+                      <Link href="/dashboard/curation">
                         <Label className="text-sm">Curation</Label>
                       </Link>
 
@@ -134,7 +138,7 @@ export function BaseHeader() {
                         </div>
                       )}
                     </div>
-                    <div className="flex gap-x-2 my-4">
+                    {/* <div className="flex gap-x-2 my-4">
                       {socials.map((social, index) => {
                         return (
                           <Link key={index} href={social.link} target="_blank">
@@ -145,7 +149,7 @@ export function BaseHeader() {
                           </Link>
                         );
                       })}
-                    </div>
+                    </div> */}
                   </SheetDescription>
                 </SheetHeader>
               </SheetContent>
@@ -162,7 +166,7 @@ export function BaseHeader() {
         <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
-            href="/dashboard?tab=appreciate"
+            href="/dashboard/appreciate"
           >
             Appreciation
           </Link>

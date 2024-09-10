@@ -4,6 +4,7 @@ import {
   IAdvancedDetailFormData,
   IAdvancedDetailOption,
   IBasicDetailFormData,
+  ISellerInfo,
   PaymentSplitType,
 } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
@@ -17,6 +18,8 @@ interface NFTContextType {
   setAdvancedDetails: (data: Partial<IAdvancedDetailFormData>) => void;
   paymentSplits: Array<PaymentSplitType>;
   setPaymentSplits: (data: Array<PaymentSplitType>) => void;
+  sellerInfo: ISellerInfo;
+  setSellerInfo: (data: Partial<ISellerInfo>) => void;
 }
 
 interface CreateNFTProviderProps {
@@ -37,6 +40,9 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     price: 0,
     curation: null,
     file: null,
+    imageSrc: null,
+    attachments: [null],
+    curations: [],
   });
 
   const setPartialBasicDetail = (data: Partial<IBasicDetailFormData>) => {
@@ -62,12 +68,19 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
 
   const [advancedDetails, setAdvancedDetails] =
     useState<IAdvancedDetailFormData>({
+      // toggle switched
       royaltyAddress: null,
       royalty: null,
       unlockable: null,
       category: null,
       address: null,
       percentage: null,
+
+      // data fields
+      unlockableContent: null,
+      certificates: [],
+      propertyTemplateId: null,
+      attributes: null,
     });
 
   const setPartialAdvancedDetails = (
@@ -79,13 +92,36 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     });
   };
 
-  const [paymentSplits, setPaymentSplits] = useState<Array<PaymentSplitType>>();
+  const [paymentSplits, setPaymentSplits] = useState<Array<PaymentSplitType>>(
+    [],
+  );
+
+  const [sellerInfo, setSellerInfo] = useState<ISellerInfo>({
+    shipping: null,
+    shippingId: null,
+    contactId: null,
+    contact: null,
+    accepted: false,
+    width: null,
+    height: null,
+    length: null,
+    weight: null,
+  });
+
+  const setPartialSellerInfo = (data: Partial<ISellerInfo>) => {
+    setSellerInfo({
+      ...sellerInfo,
+      ...data,
+    });
+  };
 
   return (
     <CreateNFTContext.Provider
       value={{
         basicDetail,
         setBasicDetail: setPartialBasicDetail,
+        sellerInfo,
+        setSellerInfo: setPartialSellerInfo,
         advancedOptions: options,
         setAdvancedOptions,
         advancedDetails,
