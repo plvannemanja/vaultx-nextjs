@@ -40,7 +40,7 @@ import { CreateSellService } from '@/services/createSellService';
 import { useToast } from '@/hooks/use-toast';
 import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
 import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
-import { useNFTDetail } from '@/app/components/Context/NFTDetailContext';
+import { NFTDetailProvider, useNFTDetail } from '@/app/components/Context/NFTDetailContext';
 
 const style = {
   borderRadius: '10px',
@@ -55,7 +55,7 @@ const style = {
   boxShadow: 24,
 };
 
-export default function Page({ params }: { params: { slug: string } }) {
+function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
   const favoriteService = new FavoriteService();
   const createSellService = new CreateSellService();
@@ -866,4 +866,13 @@ export default function Page({ params }: { params: { slug: string } }) {
       )}
     </div>
   );
+}
+
+
+export default function Page({ params }: { params: { slug: string } }) {
+  return (
+    <NFTDetailProvider>
+      <PageDetail params={params} />
+    </NFTDetailProvider>
+  )
 }

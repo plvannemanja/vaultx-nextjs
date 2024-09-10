@@ -67,6 +67,8 @@ export type NFTItemType = {
   category: {
     name: string;
   };
+  mintHash: string;
+  tokenId: number;
 };
 
 export type CurationType = {

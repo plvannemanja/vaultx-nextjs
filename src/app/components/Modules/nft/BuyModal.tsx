@@ -9,8 +9,14 @@ import { Textarea } from '@headlessui/react';
 import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { purchaseAsset } from '@/lib/helper';
+import { useActiveAccount } from 'thirdweb/react';
 
 export default function BuyModal({ id, price }: { id: string; price: number }) {
+  const { NFTDetail } = useNFTDetail();
+  const activeAccount = useActiveAccount();
+
   const [formData, setFormData] = useState({
     username: null,
     email: null,
@@ -54,7 +60,14 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
 
   const update = async () => {
     try {
-      // blockchain logic here to get transaction hash
+      // Blockchain logic to purchase
+      debugger;
+      try {
+        const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
+      } catch (error) {
+        console.log(error);
+      }
+      const transactionHash = "0x123444";
 
       const data = {
         nftId: id,

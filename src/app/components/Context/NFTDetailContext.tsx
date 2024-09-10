@@ -17,7 +17,7 @@ interface NFTDetailProviderProps {
 const NFTDetailContext = createContext<INFTDetailContext | undefined>(undefined);
 
 //context component
-export const NFTDetailProvider: React.FC<NFTDetailProviderProps> ({
+export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
   children,
 }) => {
   const [NFTDetail, setNFTDetail] = useState<null | NFTItemType>(null);
