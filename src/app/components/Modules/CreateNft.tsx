@@ -18,6 +18,7 @@ import { IListAsset, listAsset } from '@/lib/helper';
 import { parseEther, zeroAddress } from 'viem';
 import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
+import { PaymentSplitType } from '@/types';
 export enum StepType {
   basic,
   advanced,
@@ -198,6 +199,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         throw new Error('Address is required');
       }
 
+      // payment split
+      let splitData = paymentSplits.map(item => ({
+        address: item.paymentWallet,
+        percentage: Number(item.paymentPercentage),
+      }));
+
       const data = {
         name: selectedSeller.name,
         email: selectedSeller.email,
@@ -216,6 +223,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           height: sellerInfo.height,
           weight: sellerInfo.weight,
         },
+        splitPayments: splitData,
       };
 
       const {
