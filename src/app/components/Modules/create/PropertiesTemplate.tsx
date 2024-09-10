@@ -115,18 +115,22 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
         ...selectedProperty,
         attributes: [...selectedProperty.attributes, newProp],
       });
+
+      const currAttributes = advancedDetails.attributes ? advancedDetails.attributes : [];
       setAdvancedDetails({
         ...advancedDetails,
-        attributes: [...advancedDetails.attributes, newProp],
+        attributes: [...currAttributes, newProp],
       });
     } else {
       setProperty({
         ...property,
         attributes: [...property.attributes, newProp],
       });
+
+      const currAttributes = advancedDetails.attributes ? advancedDetails.attributes : [];
       setAdvancedDetails({
         ...advancedDetails,
-        attributes: [...advancedDetails.attributes, newProp],
+        attributes: [...currAttributes, newProp],
       });
     }
   };

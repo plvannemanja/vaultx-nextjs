@@ -350,7 +350,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
               onChange={() =>
                 setFormData({
                   ...formData,
-                  accepted: true,
+                  accepted: !formData.accepted,
                 })
               }
             />

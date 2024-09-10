@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import BaseButton from '../../ui/BaseButton';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
-export default function MintLoader() {
-  const [step, setStep] = useState(1);
+export default function MintLoader({ progress } : { progress: number }) {
+  const [step, setStep] = useState(progress ? progress : 1);
 
   return (
-    <div className="w-[24rem]">
+    <div className="w-[28rem] px-10 py-6 bg-dark rounded-md">
       {step === 1 && (
         <div className="flex flex-col gap-y-4">
           <p className="text-lg font-medium">NFT Creation is in Progress</p>

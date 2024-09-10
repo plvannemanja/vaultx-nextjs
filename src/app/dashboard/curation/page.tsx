@@ -6,7 +6,7 @@ import CurationSearch from '@/app/components/Filters/CurationSearch';
 import { collectionServices, getMedia } from '@/services/supplier';
 import { useToast } from '@/hooks/use-toast';
 
-export default function page() {
+export default function Page() {
   const { toast } = useToast();
   const [collections, setCollection] = useState([]);
   const [filters, setFilters] = useState({

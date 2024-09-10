@@ -132,7 +132,7 @@ export default function CancelOrderModal({ id }) {
             <div className="flex flex-wrap gap-3 justify-between">
               {_.times(numberOfInputs).map((_, index) => {
                 return (
-                  <div className="pb-2 w-full">
+                  <div className="pb-2 w-full" key={index}>
                     <div className="upload__file__with__name">
                       <input
                         type="file"

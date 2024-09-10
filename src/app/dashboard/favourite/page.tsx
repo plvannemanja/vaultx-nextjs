@@ -24,7 +24,7 @@ const menu = [
   },
 ];
 
-export default function page() {
+export default function Page() {
   const favouriteService = new FavoriteService();
 
   const [tab, setTab] = useState('nfts');

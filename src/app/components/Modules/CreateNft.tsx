@@ -1,44 +1,33 @@
 'use client';
 
 import { useState } from 'react';
-import { collectionServices } from '@/services/supplier';
-import { z } from 'zod';
 import BasicDetails from './create/BasicDetails';
 import AdvanceDetails from './create/AdvanceDetails';
 import SellerInformation from './create/SellerInformation';
 import ErrorModal from './create/ErrorModal';
-import { error } from 'console';
 import TriggerModal from '../ui/TriggerModal';
 import { CreateNftServices } from '@/services/createNftService';
 import { useActiveAccount } from 'thirdweb/react';
-import CurationLoader from './create/CurationLoader';
-import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
 import { useCreateNFT } from '../Context/CreateNFTContext';
 import { IListAsset, listAsset } from '@/lib/helper';
 import { parseEther, zeroAddress } from 'viem';
 import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
-import { PaymentSplitType } from '@/types';
-import { split } from 'postcss/lib/list';
+import MintLoader from './create/MintLoader';
+import RestrictiveModal from '../Modals/RestrictiveModal';
+
 export enum StepType {
   basic,
   advanced,
 }
+
 export default function CreateNft({ editMode }: { editMode?: any }) {
   const nftService = new CreateNftServices();
   const nftContext = useCreateNFT();
   const { toast } = useToast();
 
-  const [status, setStatus] = useState({
-    error: false,
-    loading: false,
-  });
   const [step, setStep] = useState(1);
-  const [progress, setProgress] = useState({
-    basic: 0,
-    advance: 0,
-    seller: 0,
-  });
+  const [nftId, setNftId] = useState(null);
   const [basicDetails, setBasicDetails] = useState<any>({
     data: null,
     error: null,
@@ -52,25 +41,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     error: null,
   });
 
-  // state preservation upon navigation
-  const [basicState, setBasicState] = useState<any>(null);
-  const [advanceState, setAdvanceState] = useState<any>(null);
-  const [sellerState, setSellerState] = useState<any>(null);
-
-  // state preserveration functions
-  const handleBasicState = (data: any) => {
-    console.log(data);
-    setBasicState(data);
-  };
-  const handleAdvanceState = (data: any) => {
-    console.log(data);
-    setAdvanceState(data);
-  };
-  const handleSellerState = (data: any) => {
-    console.log(data);
-    setSellerState(data);
-  };
-
   const {
     advancedOptions,
     basicDetail,
@@ -79,7 +49,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   } = useCreateNFT();
 
   const activeAccount = useActiveAccount();
-  const [nftId, setNftId] = useState(null);
 
   const handleBasicDetails = (data: any, error: any) => {
     setBasicDetails({
@@ -126,7 +95,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         const response = await nftService.createBasicDetails(data);
 
         if (response.data?.data?._id) {
-          setNftId(response.data.data._id);
           return response.data.data._id;
         }
 
@@ -140,6 +108,11 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         description: 'Failed to create NFT',
         variant: 'destructive',
       });
+      if (nftId) {
+        await nftService.removeFromDb({
+          nftId: nftId
+        });
+      }
       return null;
     }
   };
@@ -211,6 +184,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       }
 
       await createAdvanceDetails(nftId);
+      setNftId(nftId);
 
       const selectedSeller = nftContext.sellerInfo.shipping;
 
@@ -255,7 +229,23 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       }
 
       await handleMint(uri, nftId);
-    } catch (error) {}
+      setMintLoaderStep(2);
+
+      setTimeout(() => {
+        setModal(false)
+      }, 2000)
+    } catch (error) {
+      setModal(false);
+      toast({
+        title: 'An error occurred',
+        description: 'Failed to create NFT, please try again',
+        variant: 'destructive',
+      });
+
+      await nftService.removeFromDb({
+        nftId: nftId
+      });
+    }
   };
 
   // Add your logic here
@@ -330,8 +320,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     }
   };
 
+  const [modal, setModal] = useState(false);
+  const [mintLoaderStep, setMintLoaderStep] = useState(1);
+
   const nextStep = async (next?: boolean) => {
     if (next && step == 3) {
+      setModal(true);
       await createNFT();
       return;
     }
@@ -345,6 +339,14 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
+      <RestrictiveModal
+      open={modal}
+      onClose={() => setModal(false)}
+      >
+        <MintLoader progress={mintLoaderStep} />
+      </RestrictiveModal>
+
+
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
         <div

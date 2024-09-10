@@ -7,8 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@headlessui/react';
 import BaseButton from '../../ui/BaseButton';
-import { BaseDialog } from '../../ui/BaseDialog';
-import MintLoader from './MintLoader';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 export default function SellerInformation({
@@ -19,6 +17,7 @@ export default function SellerInformation({
   nextStep: (next?: boolean) => void;
 }) {
   const { sellerInfo, setSellerInfo } = useCreateNFT();
+  const [modal, setModal] = useState(false)
 
   const handleShip = (data: any) => {
     setSellerInfo({
@@ -61,10 +60,11 @@ export default function SellerInformation({
     if (err.length > 0) {
       handler(null, JSON.stringify(err));
       return;
+    } else {
+      setModal(true);
+      handler(sellerInfo, null);
+      nextStep(true);
     }
-
-    handler(sellerInfo, null);
-    nextStep(true);
   };
 
   return (
@@ -82,6 +82,7 @@ export default function SellerInformation({
               value={sellerInfo.length}
               type="number"
               placeholder="--"
+              className='bg-dark border border-white'
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -96,6 +97,7 @@ export default function SellerInformation({
               value={sellerInfo.width}
               type="number"
               placeholder="--"
+              className='bg-dark border border-white'
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -110,6 +112,7 @@ export default function SellerInformation({
               value={sellerInfo.height}
               type="number"
               placeholder="--"
+              className='bg-dark border border-white'
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -124,6 +127,7 @@ export default function SellerInformation({
               value={sellerInfo.weight}
               type="number"
               placeholder="--"
+              className='bg-dark border border-white'
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -177,16 +181,10 @@ export default function SellerInformation({
           onClick={cancelChanges}
         />
 
-        <BaseDialog
-          trigger={
-            <BaseButton
-              title="Proceed To Create NFT"
-              variant="primary"
-              onClick={create}
-            />
-          }
-          children={<MintLoader />}
-          className="bg-dark max-h-[80%] w-[27rem] overflow-y-auto overflow-x-hidden"
+        <BaseButton
+          title="Proceed To Create NFT"
+          variant="primary"
+          onClick={create}
         />
       </div>
     </div>

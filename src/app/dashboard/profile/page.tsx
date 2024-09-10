@@ -77,7 +77,7 @@ const badges = [
   },
 ];
 
-export default function page() {
+export default function Page() {
   const favoriteService = new FavoriteService();
 
   const [likes, setLikes] = useState(0);
