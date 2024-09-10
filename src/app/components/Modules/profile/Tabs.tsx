@@ -358,8 +358,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
   useEffect(() => {
     toast({
-      title: 'Loading...'
-    })
+      title: 'Loading...',
+    });
 
     if (tab === ProfileTabs.All) {
       fetchUser();

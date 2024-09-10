@@ -13,7 +13,7 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 export default function SellerInformation({
   handler,
-  nextStep
+  nextStep,
 }: {
   handler: (data: any, error: any) => void;
   nextStep: (next?: boolean) => void;
@@ -38,7 +38,7 @@ export default function SellerInformation({
     setSellerInfo({
       shipping: null,
       contact: null,
-    })
+    });
     nextStep(false);
   };
 
@@ -79,46 +79,58 @@ export default function SellerInformation({
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Length(cm)</Label>
             <Input
-            value={sellerInfo.length}
-            type="number" placeholder="--" onChange={(e) => {
-              setSellerInfo({
-                ...sellerInfo,
-                length: (e.target as any).value
-              })
-            }} />
+              value={sellerInfo.length}
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  length: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Width(cm)</Label>
-            <Input 
-            value={sellerInfo.width}
-            type="number" placeholder="--" onChange={(e) => {
-              setSellerInfo({
-                ...sellerInfo,
-                width: (e.target as any).value
-              })
-            }} />
+            <Input
+              value={sellerInfo.width}
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  width: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Height(cm)</Label>
-            <Input 
-            value={sellerInfo.height}
-            type="number" placeholder="--" onChange={(e) => {
-              setSellerInfo({
-                ...sellerInfo,
-                height: (e.target as any).value
-              })
-            }} />
+            <Input
+              value={sellerInfo.height}
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  height: (e.target as any).value,
+                });
+              }}
+            />
           </div>
           <div className="flex flex-col gap-y-2 max-w-[20rem]">
             <Label>Weight(kg)</Label>
             <Input
-            value={sellerInfo.weight}
-            type="number" placeholder="--" onChange={(e) => {
-              setSellerInfo({
-                ...sellerInfo,
-                weight: (e.target as any).value
-              })
-            }} />
+              value={sellerInfo.weight}
+              type="number"
+              placeholder="--"
+              onChange={(e) => {
+                setSellerInfo({
+                  ...sellerInfo,
+                  weight: (e.target as any).value,
+                });
+              }}
+            />
           </div>
         </div>
       </div>
@@ -165,16 +177,16 @@ export default function SellerInformation({
           onClick={cancelChanges}
         />
 
-        <BaseDialog 
-        trigger={
-          <BaseButton
-          title="Proceed To Create NFT"
-          variant="primary"
-          onClick={create}
-          />
-        }
-        children={<MintLoader />}
-        className="bg-dark max-h-[80%] w-[27rem] overflow-y-auto overflow-x-hidden"
+        <BaseDialog
+          trigger={
+            <BaseButton
+              title="Proceed To Create NFT"
+              variant="primary"
+              onClick={create}
+            />
+          }
+          children={<MintLoader />}
+          className="bg-dark max-h-[80%] w-[27rem] overflow-y-auto overflow-x-hidden"
         />
       </div>
     </div>

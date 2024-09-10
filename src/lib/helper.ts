@@ -117,7 +117,12 @@ export const listAsset = async ({
     logs: receipt.logs,
     events: [AssetListedEvent],
   });
-  return events ? events[0].args : null;
+  return events
+    ? {
+        ...events[0].args,
+        transactionHash,
+      }
+    : null;
 };
 
 export const protocolFee = async () => {

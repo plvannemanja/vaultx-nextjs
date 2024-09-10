@@ -157,13 +157,13 @@ export interface IAdvancedDetailFormData {
 }
 
 export interface ISellerInfo {
-  shipping: any | null,
-  contact: any | null,
-  shippingId: string | null,
-  contactId: string | null,
-  accepted: boolean,
-  width: string | null,
-  height: string | null,
-  length: string | null,
-  weight: string | null,
+  shipping: any | null;
+  contact: any | null;
+  shippingId: string | null;
+  contactId: string | null;
+  accepted: boolean;
+  width: string | null;
+  height: string | null;
+  length: string | null;
+  weight: string | null;
 }

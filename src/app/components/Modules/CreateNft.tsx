@@ -18,6 +18,8 @@ import { IListAsset, listAsset } from '@/lib/helper';
 import { parseEther, zeroAddress } from 'viem';
 import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
+import { PaymentSplitType } from '@/types';
+import { split } from 'postcss/lib/list';
 export enum StepType {
   basic,
   advanced,
@@ -50,13 +52,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     error: null,
   });
 
-
-  // state preservation upon navigation 
+  // state preservation upon navigation
   const [basicState, setBasicState] = useState<any>(null);
   const [advanceState, setAdvanceState] = useState<any>(null);
   const [sellerState, setSellerState] = useState<any>(null);
 
-  // state preserveration functions 
+  // state preserveration functions
   const handleBasicState = (data: any) => {
     console.log(data);
     setBasicState(data);
@@ -64,11 +65,11 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const handleAdvanceState = (data: any) => {
     console.log(data);
     setAdvanceState(data);
-  }
+  };
   const handleSellerState = (data: any) => {
     console.log(data);
     setSellerState(data);
-  }
+  };
 
   const {
     advancedOptions,
@@ -112,7 +113,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         data.append('price', nftContext.basicDetail.price);
         data.append('curation', curation?._id);
 
-        const files = [nftContext.basicDetail.file, ...nftContext.basicDetail.attachments];
+        const files = [
+          nftContext.basicDetail.file,
+          ...nftContext.basicDetail.attachments,
+        ];
         files.forEach((file, index) => {
           if (file) {
             data.append(`files`, file);
@@ -132,10 +136,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       return null;
     } catch (error) {
       toast({
-        title: "An error occurred",
-        description: "Failed to create NFT",
-        variant: "destructive",
-      })
+        title: 'An error occurred',
+        description: 'Failed to create NFT',
+        variant: 'destructive',
+      });
       return null;
     }
   };
@@ -144,36 +148,56 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     try {
       if (nftContext.advancedDetails) {
         const data = new FormData();
-        data.append("nftId", id);
+        data.append('nftId', id);
         if (nftContext.advancedOptions.freeMint) {
-          data.append("freeMinting", nftContext.advancedOptions.freeMint as any);
+          data.append(
+            'freeMinting',
+            nftContext.advancedOptions.freeMint as any,
+          );
         }
         if (nftContext.advancedOptions.royalties) {
           if (!nftContext.advancedDetails.royalty) return;
-          data.append("royalty", nftContext.advancedDetails.royalty as any);
+          data.append('royalty', nftContext.advancedDetails.royalty as any);
         }
         if (nftContext.advancedDetails.category) {
           if (!nftContext.advancedDetails.category) return;
-          data.append("category", nftContext.advancedDetails.category.category);
+          data.append('category', nftContext.advancedDetails.category.category);
         }
         if (nftContext.advancedDetails.unlockable) {
           if (!nftContext.advancedDetails.category.unlockable) return;
-          data.append("unlockableContent", nftContext.advancedDetails.category.unlockable);
-          for (let i = 0; i < nftContext.advancedDetails.certificates.length; i++) {
-            data.append("certificates", nftContext.advancedDetails.certificates[i]);
+          data.append(
+            'unlockableContent',
+            nftContext.advancedDetails.category.unlockable,
+          );
+          for (
+            let i = 0;
+            i < nftContext.advancedDetails.certificates.length;
+            i++
+          ) {
+            data.append(
+              'certificates',
+              nftContext.advancedDetails.certificates[i],
+            );
           }
         }
-        data.append("attributes", JSON.stringify(nftContext.advancedDetails.attributes ? nftContext.advancedDetails.attributes : []));
+        data.append(
+          'attributes',
+          JSON.stringify(
+            nftContext.advancedDetails.attributes
+              ? nftContext.advancedDetails.attributes
+              : [],
+          ),
+        );
 
         await nftService.createAdvancedDetails(data);
       }
     } catch (error) {
       console.log(error);
       toast({
-        title: "An error occurred",
-        description: "Failed to create NFT",
-        variant: "destructive",
-      })
+        title: 'An error occurred',
+        description: 'Failed to create NFT',
+        variant: 'destructive',
+      });
       return null;
     }
   };
@@ -186,10 +210,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         throw new Error('Failed to create NFT');
       }
 
-      if (!sellerInfo.data) {
-        throw new Error('Seller Information');
-      }
-
       await createAdvanceDetails(nftId);
 
       const selectedSeller = nftContext.sellerInfo.shipping;
@@ -197,6 +217,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       if (!selectedSeller.address) {
         throw new Error('Address is required');
       }
+
+      // payment split
+      let splitData = paymentSplits.map((item) => ({
+        address: item.paymentWallet,
+        percentage: Number(item.paymentPercentage),
+      }));
 
       const data = {
         name: selectedSeller.name,
@@ -216,6 +242,8 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           height: sellerInfo.height,
           weight: sellerInfo.weight,
         },
+        splitPayments: splitData,
+        nftId,
       };
 
       const {
@@ -227,7 +255,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       }
 
       await handleMint(uri, nftId);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   // Add your logic here
@@ -236,7 +264,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       // check free mint
       if (advancedOptions.freeMint || !activeAccount) return;
 
-      let price = parseEther(basicDetail.price);
+      let price = parseEther(String(basicDetail.price));
       let curationPayload = JSON.parse(basicDetail.curation);
       let nftPayload: IListAsset = {
         collectionId: curationPayload?.tokenId,
@@ -250,27 +278,62 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
       if (advancedOptions.royalties) {
         nftPayload.royaltyWallet = isAddress(advancedFormData.royaltyAddress)
-          ? advanceDetails.royaltyAddress
+          ? advancedFormData.royaltyAddress
           : zeroAddress;
         nftPayload.royaltyPercentage = BigInt(advancedFormData.royalty * 100);
+      } else {
+        nftPayload.royaltyWallet = activeAccount?.address as Address;
+        nftPayload.royaltyPercentage = BigInt(0);
       }
 
       if (advancedOptions.split) {
-        nftPayload.paymentSplits = paymentSplits.map((split) => ({
-          paymentWallet: split.paymentWallet,
-          paymentPercentage: split.paymentPercentage * BigInt(100),
-        }));
+        let sum = BigInt(0);
+        let splitArr = [];
+        paymentSplits.forEach((split) => {
+          splitArr.push({
+            paymentWallet: split.paymentWallet,
+            paymentPercentage: split.paymentPercentage * BigInt(100), // decimal 2
+          });
+          sum += split.paymentPercentage;
+        });
+        if (sum > BigInt(100)) {
+          throw new Error('Total split percentage exceeds 100%.');
+        }
+        splitArr.push({
+          paymentWallet: activeAccount?.address as Address,
+          paymentPercentage: (BigInt(100) - sum) * BigInt(100),
+        });
+        nftPayload.paymentSplits = splitArr;
+      } else {
+        nftPayload.paymentSplits = [
+          {
+            paymentWallet: activeAccount?.address as Address,
+            paymentPercentage: BigInt(100 * 100),
+          },
+        ];
       }
 
-      let { tokenId } = await listAsset(nftPayload);
+      let { tokenId, transactionHash } = await listAsset(nftPayload);
+      await nftService.mintAndSale({
+        nftId,
+        mintHash: transactionHash,
+        tokenId: Number(tokenId),
+      });
+      // TODO success modal
+      toast({
+        title: 'NFT minted',
+        description: 'Success to create NFT',
+        variant: 'destructive',
+      });
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   };
 
   const nextStep = async (next?: boolean) => {
     if (next && step == 3) {
       await createNFT();
+      return;
     }
 
     if (next) {
@@ -284,7 +347,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
     <div className="flex flex-col gap-y-4 px-4">
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
-        <div className={`flex gap-x-2 items-center ${step !== 1 ? 'opacity-60' : ''}`}>
+        <div
+          className={`flex gap-x-2 items-center ${step !== 1 ? 'opacity-60' : ''}`}
+        >
           <div className="w-10 h-10 rounded-full relative bg-neon">
             <span className={`absolute top-2 left-4 text-black`}>1</span>
           </div>
@@ -310,7 +375,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           ></path>
         </svg>
 
-        <div className={`flex gap-x-2 items-center ${step !== 2 ? 'opacity-60' : ''}`}>
+        <div
+          className={`flex gap-x-2 items-center ${step !== 2 ? 'opacity-60' : ''}`}
+        >
           <div className="w-10 h-10 rounded-full relative bg-neon">
             <span className={`absolute top-2 left-4 text-black`}>2</span>
           </div>
@@ -336,7 +403,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           ></path>
         </svg>
 
-        <div className={`flex gap-x-2 items-center ${step !== 3 ? 'opacity-60' : ''}`}>
+        <div
+          className={`flex gap-x-2 items-center ${step !== 3 ? 'opacity-60' : ''}`}
+        >
           <div className="w-10 h-10 rounded-full relative bg-neon">
             <span className={`absolute top-2 left-4 text-black`}>3</span>
           </div>

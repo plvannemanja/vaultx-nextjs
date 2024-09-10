@@ -63,7 +63,9 @@ export default function CurationSearch({ setState }: { setState: any }) {
       </div>
 
       <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-        <p className="text-sm w-[70%]">{search.filter.label ? search.filter.label : 'Recently Listed'}</p>
+        <p className="text-sm w-[70%]">
+          {search.filter.label ? search.filter.label : 'Recently Listed'}
+        </p>
         {search.filter.active ? (
           <ChevronUpIcon
             className="h-7 w-7"

@@ -52,19 +52,22 @@ export default function ContactInfo({
     });
   };
 
-  const isSelected = useMemo(() => (item: any) => {
-    const id = nftContext.sellerInfo.contactId;
+  const isSelected = useMemo(
+    () => (item: any) => {
+      const id = nftContext.sellerInfo.contactId;
 
-    if (id !== null && item !== null) { 
-      return id == item._id;
-    }
+      if (id !== null && item !== null) {
+        return id == item._id;
+      }
 
-    if (selectedContact !== null && item !== null) {
-      return selectedContact._id == item._id;
-    }
+      if (selectedContact !== null && item !== null) {
+        return selectedContact._id == item._id;
+      }
 
-    return false;
-  }, [selectedContact, nftContext.sellerInfo.contact])
+      return false;
+    },
+    [selectedContact, nftContext.sellerInfo.contact],
+  );
 
   useEffect(() => {
     if (handler) {

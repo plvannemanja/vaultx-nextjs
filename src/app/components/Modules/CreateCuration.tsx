@@ -90,9 +90,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
   const create = async () => {
     toast({
-        title: 'Processing Transaction',
-        description: 'Please wait...',
-    })
+      title: 'Processing Transaction',
+      description: 'Please wait...',
+    });
     try {
       const result = createCurationSchema.safeParse(formData);
       if (
@@ -158,7 +158,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           data.append('tokenId', result.tokenId);
           data.append('transactionHash', result.transactionHash);
 
-          const response = await collectionServices.create(data)
+          const response = await collectionServices.create(data);
           if (response) {
             setStatus({ error: false, loading: false, active: true });
           }
@@ -173,21 +173,21 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
       if (editMode) {
         try {
-            let response;
+          let response;
 
-            if (editMode) {
+          if (editMode) {
             response = await collectionServices.update({
-                ...data,
-                curationId: editMode._id,
+              ...data,
+              curationId: editMode._id,
             });
-            }
+          }
 
-            if (response) {
+          if (response) {
             setStatus({ error: false, loading: false, active: true });
             cancelChanges();
-            }
+          }
         } catch (error) {
-            setStatus({ error: true, loading: true, active: true });
+          setStatus({ error: true, loading: true, active: true });
         }
       }
     } catch (error) {
@@ -256,7 +256,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       {status.active && (
         <TriggerModal
           isOpen={status.loading || status.error}
-          close={() => setStatus({ error: false, loading: false, active: false })}
+          close={() =>
+            setStatus({ error: false, loading: false, active: false })
+          }
         >
           <CurationLoader status={status} edit={editMode ? true : false} />
         </TriggerModal>

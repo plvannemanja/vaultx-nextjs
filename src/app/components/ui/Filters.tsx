@@ -66,7 +66,13 @@ export const prices = [
   },
 ];
 
-export default function Filters({ setState, isCuration = false }: { setState?: any, isCuration?: boolean }) {
+export default function Filters({
+  setState,
+  isCuration = false,
+}: {
+  setState?: any;
+  isCuration?: boolean;
+}) {
   const [search, setSearch] = useState<any>({
     search: '',
     price: {
@@ -110,62 +116,61 @@ export default function Filters({ setState, isCuration = false }: { setState?: a
         <Label>Filter</Label>
       </div>
 
-      {
-        !isCuration && (
-          <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-            <p className="text-sm w-[70%]">{search.category.label}</p>
-            {search.category.active ? (
-              <ChevronUpIcon
-                className="h-7 w-7"
-                onClick={() => {
-                  setSearch({
-                    ...search,
-                    category: {
-                      ...search.category,
-                      active: !search.category.active,
-                    },
-                  });
-                }}
-              />
-            ) : (
-              <ChevronDownIcon
-                className="h-7 w-7"
-                onClick={() => {
-                  setSearch({
-                    ...search,
-                    category: {
-                      ...search.category,
-                      active: !search.category.active,
-                    },
-                  });
-                }}
-              />
-            )}
+      {!isCuration && (
+        <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
+          <p className="text-sm w-[70%]">{search.category.label}</p>
+          {search.category.active ? (
+            <ChevronUpIcon
+              className="h-7 w-7"
+              onClick={() => {
+                setSearch({
+                  ...search,
+                  category: {
+                    ...search.category,
+                    active: !search.category.active,
+                  },
+                });
+              }}
+            />
+          ) : (
+            <ChevronDownIcon
+              className="h-7 w-7"
+              onClick={() => {
+                setSearch({
+                  ...search,
+                  category: {
+                    ...search.category,
+                    active: !search.category.active,
+                  },
+                });
+              }}
+            />
+          )}
 
-            {search.category.active && (
-              <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                {categories.map((category, index: number) => (
-                  <span
-                    key={index}
-                    onClick={() => {
-                      setSearch({
-                        ...search,
-                        category: {
-                          label: category.label,
-                          value: category.value,
-                          active: false,
-                        },
-                      });
-                      setState(category.value);
-                    }}
-                    className="text-sm cursor-pointer"
-                  >
-                    {category.label}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+          {search.category.active && (
+            <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
+              {categories.map((category, index: number) => (
+                <span
+                  key={index}
+                  onClick={() => {
+                    setSearch({
+                      ...search,
+                      category: {
+                        label: category.label,
+                        value: category.value,
+                        active: false,
+                      },
+                    });
+                    setState(category.value);
+                  }}
+                  className="text-sm cursor-pointer"
+                >
+                  {category.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">

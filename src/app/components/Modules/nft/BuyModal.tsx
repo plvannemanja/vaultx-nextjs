@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
 
-export default function BuyModal({ id, price }: { id: string, price: number }) {
+export default function BuyModal({ id, price }: { id: string; price: number }) {
   const [formData, setFormData] = useState({
     username: null,
     email: null,
@@ -72,10 +72,10 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
         contactInformation: formData.description,
         concent: formData.accepted,
         buyHash: '',
-      }
+      };
 
-      const saleService = new CreateSellService()
-      await saleService.buyItem(data)
+      const saleService = new CreateSellService();
+      await saleService.buyItem(data);
     } catch (error) {
       console.log(error);
     }
@@ -122,8 +122,7 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
 
   return (
     <>
-      {
-        step === 1 &&
+      {step === 1 && (
         <div className="flex flex-col gap-y-5 w-full">
           <div className="mt-5 flex gap-x-3">
             <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
@@ -150,7 +149,10 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
                   <Input
                     value={formData.email ? formData.email : ''}
                     onChange={(e) =>
-                      setFormData({ ...formData, email: (e.target as any).value })
+                      setFormData({
+                        ...formData,
+                        email: (e.target as any).value,
+                      })
                     }
                     className="w-full border-none bg-[#161616]"
                     type="text"
@@ -216,7 +218,9 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
                     aria-label="select curation"
                     className="h-10 rounded-md px-2"
                     name="state"
-                    value={sellerInfo.state ? JSON.stringify(sellerInfo.state) : ''}
+                    value={
+                      sellerInfo.state ? JSON.stringify(sellerInfo.state) : ''
+                    }
                     onChange={handleUpdateSeller}
                   >
                     <option value="">Select</option>
@@ -233,7 +237,9 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
                     aria-label="select curation"
                     className="h-10 rounded-md px-2"
                     name="city"
-                    value={sellerInfo.city ? JSON.stringify(sellerInfo.city) : ''}
+                    value={
+                      sellerInfo.city ? JSON.stringify(sellerInfo.city) : ''
+                    }
                     onChange={handleUpdateSeller}
                   >
                     <option value="">Select</option>
@@ -249,7 +255,10 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
                   <Input
                     value={sellerInfo.postalCode ? sellerInfo.postalCode : ''}
                     onChange={(e) =>
-                      setSellerInfo({ ...sellerInfo, postalCode: e.target.value })
+                      setSellerInfo({
+                        ...sellerInfo,
+                        postalCode: e.target.value,
+                      })
                     }
                     className="w-full border-none bg-[#161616]"
                     type="text"
@@ -274,7 +283,9 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
                   padding: '0.5rem',
                   marginTop: '0.5rem',
                 }}
-                onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
+                onChange={(e) =>
+                  setSellerInfo({ ...sellerInfo, phoneNumber: e })
+                }
               />
             </div>
           </div>
@@ -288,7 +299,10 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
               <Textarea
                 value={formData.description ? formData.description : ''}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: (e.target as any).value })
+                  setFormData({
+                    ...formData,
+                    description: (e.target as any).value,
+                  })
                 }
                 className="w-full border-none bg-[#161616] p-4 rounded"
                 placeholder="Please describe your product"
@@ -299,8 +313,8 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
           <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
             <p>Consent for collection and usage of personal information</p>
             <p className="text-gray-500">
-              Please read the following and check the appropriate boxes to indicate
-              your consent:
+              Please read the following and check the appropriate boxes to
+              indicate your consent:
             </p>
             <hr />
             <Textarea
@@ -345,9 +359,9 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
             <hr />
             <p>
               You will pay the purchase amount in cryptocurrency based on the
-              real-time CoinMarketCap exchange rate at the current moment. If the
-              bidding is not successful, all cryptocurrency used in the purchase
-              price, excluding gas fees, will be refunded.
+              real-time CoinMarketCap exchange rate at the current moment. If
+              the bidding is not successful, all cryptocurrency used in the
+              purchase price, excluding gas fees, will be refunded.
             </p>
           </div>
 
@@ -360,133 +374,161 @@ export default function BuyModal({ id, price }: { id: string, price: number }) {
             <BaseButton title="Submit" variant="primary" onClick={update} />
           </div>
         </div>
-      }
+      )}
 
-      {
-        step === 2 &&
-        <div className='flex flex-col gap-y-4 w-full'>
+      {step === 2 && (
+        <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className='text-lg font-medium'>Caution</p>
+            <p className="text-lg font-medium">Caution</p>
           </div>
 
           <p>
             Do not disclose buyer shipping information to third parties!
-            <br /><br />
-            To maintain the confidentiality of buyer information and ensure smooth transactions, please pay close attention to the following points:
-            <br /><br />
-            1. Confidentiality of Shipping Information: Buyer shipping information should remain confidential to sellers. Be cautious to prevent any external disclosures.
             <br />
-            2. Tips for Safe Transactions: Handle buyer shipping information securely to sustain safe and transparent transactions.
             <br />
-            3. Protection of Personal Information: As a seller, it is imperative to treat buyer personal information with utmost care. Avoid disclosing it to third parties.We kindly request your strict adherence to these guidelines to uphold transparency and trust in your transactions. Ensuring a secure transaction environment benefits everyone involved.
-            <br /><br /><br />
+            To maintain the confidentiality of buyer information and ensure
+            smooth transactions, please pay close attention to the following
+            points:
+            <br />
+            <br />
+            1. Confidentiality of Shipping Information: Buyer shipping
+            information should remain confidential to sellers. Be cautious to
+            prevent any external disclosures.
+            <br />
+            2. Tips for Safe Transactions: Handle buyer shipping information
+            securely to sustain safe and transparent transactions.
+            <br />
+            3. Protection of Personal Information: As a seller, it is imperative
+            to treat buyer personal information with utmost care. Avoid
+            disclosing it to third parties.We kindly request your strict
+            adherence to these guidelines to uphold transparency and trust in
+            your transactions. Ensuring a secure transaction environment
+            benefits everyone involved.
+            <br />
+            <br />
+            <br />
             Thank You
           </p>
 
-          <div className='py-3 w-full rounded-lg text-black font-semibold bg-neon'>
-            <button className='w-full h-full' onClick={() => setStep(3)}>I Agree</button>
+          <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
+            <button className="w-full h-full" onClick={() => setStep(3)}>
+              I Agree
+            </button>
           </div>
         </div>
-      }
+      )}
 
-      {
-        step === 3 &&
-        <div className='flex flex-col gap-y-4 w-full'>
-          <p className='text-lg font-medium'>Checkout</p>
+      {step === 3 && (
+        <div className="flex flex-col gap-y-4 w-full">
+          <p className="text-lg font-medium">Checkout</p>
           <p>You are about to purchase Dhruv from fjas3</p>
 
           {/* Wallet Connection - Blockchain */}
 
-          <div className='flex flex-col gap-y-2 mt-5'>
-            <div className='flex justify-between items-center'>
+          <div className="flex flex-col gap-y-2 mt-5">
+            <div className="flex justify-between items-center">
               <span>Price</span>
               <span>{price} MATIC</span>
             </div>
             <hr />
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <span>VaultX Fee</span>
               <span>5 %</span>
             </div>
             <hr />
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <span>You will pay</span>
               <span>{Number(price + 0.05 * price).toFixed(2)} MATIC</span>
             </div>
           </div>
 
-          <div className='flex justify-between'>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-light'>
-              <button className='w-full h-full' onClick={() => setStep(2)}>Cancel</button>
+          <div className="flex justify-between">
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+              <button className="w-full h-full" onClick={() => setStep(2)}>
+                Cancel
+              </button>
             </div>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-neon'>
-              <button className='w-full h-full' onClick={() => setStep(4)}>Checkout</button>
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+              <button className="w-full h-full" onClick={() => setStep(4)}>
+                Checkout
+              </button>
             </div>
           </div>
         </div>
-      }
+      )}
 
-      {
-        step === 4 &&
-        <div className='flex flex-col gap-y-4'>
-          <div className='flex flex-col gap-y-2 justify-center text-center'>
-            <img src='/icons/success.svg' className='w-16 mx-auto' />
-            <p className='text-lg font-medium'>Payment Success</p>
-            <p className='text-gray-500'>Your payment is completed successfully</p>
+      {step === 4 && (
+        <div className="flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-2 justify-center text-center">
+            <img src="/icons/success.svg" className="w-16 mx-auto" />
+            <p className="text-lg font-medium">Payment Success</p>
+            <p className="text-gray-500">
+              Your payment is completed successfully
+            </p>
           </div>
 
           <div className="flex flex-col gap-y-3">
             <div className="flex justify-between">
-              <div className='w-[48%] p-4 rounded-md border border-gray-400'>
-                <p className='text-sm text-gray-500'>From</p>
-                <p className='text-neon'>hhgkjhkjh#$34224</p>
+              <div className="w-[48%] p-4 rounded-md border border-gray-400">
+                <p className="text-sm text-gray-500">From</p>
+                <p className="text-neon">hhgkjhkjh#$34224</p>
               </div>
-              <div className='w-[48%] p-4 rounded-md border border-gray-400'>
-                <p className='text-sm text-gray-500'>From</p>
-                <p className='text-neon'>hhgkjhkjh#$34224</p>
+              <div className="w-[48%] p-4 rounded-md border border-gray-400">
+                <p className="text-sm text-gray-500">From</p>
+                <p className="text-neon">hhgkjhkjh#$34224</p>
               </div>
             </div>
             <div className="flex justify-between">
-              <div className='w-[48%] p-4 rounded-md border border-gray-400'>
-                <p className='text-sm text-gray-500'>Payment Method</p>
-                <p className='text-neon'>Polygon</p>
+              <div className="w-[48%] p-4 rounded-md border border-gray-400">
+                <p className="text-sm text-gray-500">Payment Method</p>
+                <p className="text-neon">Polygon</p>
               </div>
-              <div className='w-[48%] p-4 rounded-md border border-gray-400'>
-                <p className='text-sm text-gray-500'>Payment Time</p>
-                <p className='text-neon'>11/19/2023, 11:49:57 PM</p>
+              <div className="w-[48%] p-4 rounded-md border border-gray-400">
+                <p className="text-sm text-gray-500">Payment Time</p>
+                <p className="text-neon">11/19/2023, 11:49:57 PM</p>
               </div>
             </div>
           </div>
 
-          <div className='py-3 w-full rounded-lg text-black font-semibold bg-neon'>
-            <button className='w-full h-full' onClick={() => setStep(5)}>Next</button>
+          <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
+            <button className="w-full h-full" onClick={() => setStep(5)}>
+              Next
+            </button>
           </div>
         </div>
-      }
+      )}
 
-      {
-        step === 5 &&
-        <div className='flex flex-col gap-y-4 w-full'>
+      {step === 5 && (
+        <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className='text-lg font-medium'>Bid Information</p>
+            <p className="text-lg font-medium">Bid Information</p>
           </div>
 
           <p>
             Bid Success
             <br />
-            If a seller accepts your bid, this bid will be converted to the BuyNow stage.
-            <br /><br />
+            If a seller accepts your bid, this bid will be converted to the
+            BuyNow stage.
+            <br />
+            <br />
             Bid Cancellation
             <br />
-            If the seller does not accept the bid request within the period set by the buyer in the place bid, the bid will be canceled. Alternatively, if the buyer who applied for a bid cancels the bid application, the transaction will be cancelled.
-            <br /><br /><br />
+            If the seller does not accept the bid request within the period set
+            by the buyer in the place bid, the bid will be canceled.
+            Alternatively, if the buyer who applied for a bid cancels the bid
+            application, the transaction will be cancelled.
+            <br />
+            <br />
+            <br />
             If you have any questions regarding Bid, please contact us.
-            <br /><br />
+            <br />
+            <br />
             Thank You
           </p>
         </div>
-      }
+      )}
     </>
   );
 }

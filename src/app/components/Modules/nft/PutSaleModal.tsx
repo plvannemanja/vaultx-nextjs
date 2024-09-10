@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -40,7 +40,7 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
     city: '',
     postalCode: '',
     phoneNumber: '',
-  })
+  });
 
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;
@@ -95,8 +95,7 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
     try {
       // blockchain logic
 
-
-      // 
+      //
       const data = {
         nftId: nftId,
         name: formData.username,
@@ -114,28 +113,28 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
         concent: formData.accepted,
         saleHash: '',
         price: nft.price,
-      }
+      };
 
       await salesService.resellItem(data);
       setStep(3);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const handleMint = async () => {
     try {
-      let splitPayments = []
+      let splitPayments = [];
       splitPayments =
         nft?.walletAddresses?.length > 0
           ? nft?.paymentPercentage
-            ? nft?.walletAddresses?.map(item => ({
-              paymentWallet: item.address,
-              paymentPercentage: item.percentage,
-            }))
+            ? nft?.walletAddresses?.map((item) => ({
+                paymentWallet: item.address,
+                paymentPercentage: item.percentage,
+              }))
             : []
-          : []
-        
+          : [];
+
       // blockchain logic
       // const result = await listNf(
       //   nft?.uri,
@@ -146,72 +145,86 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
       //   address
       // )
 
-      setStep(3)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const submit = async () => {
-    try {
-      if (nft?.minted) await resellNft()
-      else await handleMint()
-
-      // blockchain logic
-      setStep(3)
+      setStep(3);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  const submit = async () => {
+    try {
+      if (nft?.minted) await resellNft();
+      else await handleMint();
+
+      // blockchain logic
+      setStep(3);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className='w-[38rem]'>
-      {
-        step === 1 &&
-        <div className='flex flex-col gap-y-4'>
-          <p className='text-lg font-medium'>List item for sale</p>
+    <div className="w-[38rem]">
+      {step === 1 && (
+        <div className="flex flex-col gap-y-4">
+          <p className="text-lg font-medium">List item for sale</p>
 
           {/* Blockchain card  */}
 
-          <div className='flex flex-col gap-y-2'>
-            <div className='flex justify-between items-center border border-gray-400 rounded-md p-3 my-1'>
+          <div className="flex flex-col gap-y-2">
+            <div className="flex justify-between items-center border border-gray-400 rounded-md p-3 my-1">
               <span>Price</span>
-              <div className='flex items-center gap-x-2'>100
-                <img src='/icons/ether.svg' className='w-5 inline' />
+              <div className="flex items-center gap-x-2">
+                100
+                <img src="/icons/ether.svg" className="w-5 inline" />
               </div>
             </div>
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <span>Royalties</span>
               <span>5%</span>
             </div>
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <span>Marketplace fee</span>
               <span>2.5%</span>
             </div>
             <hr />
-            <div className='flex justify-between items-center'>
+            <div className="flex justify-between items-center">
               <span>You will get</span>
-              <span>{Number(nft.price - 0.075 * nft.price).toFixed(2)} MATIC</span>
+              <span>
+                {Number(nft.price - 0.075 * nft.price).toFixed(2)} MATIC
+              </span>
             </div>
           </div>
 
-          <div className='flex justify-between'>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-light'>
-              <button className='w-full h-full' onClick={() => { }}>Discard</button>
+          <div className="flex justify-between">
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+              <button className="w-full h-full" onClick={() => {}}>
+                Discard
+              </button>
             </div>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-neon'>
-              <button className='w-full h-full' onClick={async () => setStep(2)}>Next</button>
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+              <button
+                className="w-full h-full"
+                onClick={async () => setStep(2)}
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
-      }
-      {
-        step === 2 &&
-        <div className='flex flex-col gap-y-4'>
+      )}
+      {step === 2 && (
+        <div className="flex flex-col gap-y-4">
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <Label className="text-lg font-medium">Give a new price to put this asset for sale.</Label>
+            <Label className="text-lg font-medium">
+              Give a new price to put this asset for sale.
+            </Label>
             <hr className="bg-white" />
             <div className="flex justify-between">
-              <Input type="number" placeholder="Enter The Price" className='w-full rounded bg-[#161616]' />
+              <Input
+                type="number"
+                placeholder="Enter The Price"
+                className="w-full rounded bg-[#161616]"
+              />
             </div>
           </div>
 
@@ -304,7 +317,9 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
                     aria-label="select curation"
                     className="h-10 rounded-md px-2"
                     name="state"
-                    value={sellerInfo.state ? JSON.stringify(sellerInfo.state) : ''}
+                    value={
+                      sellerInfo.state ? JSON.stringify(sellerInfo.state) : ''
+                    }
                     onChange={handleUpdateSeller}
                   >
                     <option value="">Select</option>
@@ -321,7 +336,9 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
                     aria-label="select curation"
                     className="h-10 rounded-md px-2"
                     name="city"
-                    value={sellerInfo.city ? JSON.stringify(sellerInfo.city) : ''}
+                    value={
+                      sellerInfo.city ? JSON.stringify(sellerInfo.city) : ''
+                    }
                     onChange={handleUpdateSeller}
                   >
                     <option value="">Select</option>
@@ -337,7 +354,10 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
                   <Input
                     value={sellerInfo.postalCode ? sellerInfo.postalCode : ''}
                     onChange={(e) =>
-                      setSellerInfo({ ...sellerInfo, postalCode: e.target.value })
+                      setSellerInfo({
+                        ...sellerInfo,
+                        postalCode: e.target.value,
+                      })
                     }
                     className="w-full border-none bg-[#161616]"
                     type="text"
@@ -362,7 +382,9 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
                   padding: '0.5rem',
                   marginTop: '0.5rem',
                 }}
-                onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
+                onChange={(e) =>
+                  setSellerInfo({ ...sellerInfo, phoneNumber: e })
+                }
               />
             </div>
           </div>
@@ -376,7 +398,10 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
               <Textarea
                 value={formData.description ? formData.description : ''}
                 onChange={(e) =>
-                  setFormData({ ...formData, description: (e.target as any).value })
+                  setFormData({
+                    ...formData,
+                    description: (e.target as any).value,
+                  })
                 }
                 className="w-full border-none bg-[#161616] p-4 rounded"
                 placeholder="Please describe your product"
@@ -387,8 +412,8 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
           <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
             <p>Consent for collection and usage of personal information</p>
             <p className="text-gray-500">
-              Please read the following and check the appropriate boxes to indicate
-              your consent:
+              Please read the following and check the appropriate boxes to
+              indicate your consent:
             </p>
             <hr />
             <Textarea
@@ -423,23 +448,31 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
             </label>
           </div>
 
-          <div className='flex justify-between'>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-light'>
-              <button className='w-full h-full' onClick={() => { }}>Discard</button>
+          <div className="flex justify-between">
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+              <button className="w-full h-full" onClick={() => {}}>
+                Discard
+              </button>
             </div>
-            <div className='py-3 w-[48%] rounded-lg text-black font-semibold bg-neon'>
-              <button className='w-full h-full' onClick={async () => await submit()}>Next</button>
+            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+              <button
+                className="w-full h-full"
+                onClick={async () => await submit()}
+              >
+                Next
+              </button>
             </div>
           </div>
         </div>
-      }
-      {
-        step === 3 &&
-        <div className='flex flex-col gap-y-4 items-center text-center'>
-          <img src='/icons/refresh.svg' className='w-20 mx-auto' />
-          <p className='text-lg font-medium'>Please wait while we put it on sale</p>
+      )}
+      {step === 3 && (
+        <div className="flex flex-col gap-y-4 items-center text-center">
+          <img src="/icons/refresh.svg" className="w-20 mx-auto" />
+          <p className="text-lg font-medium">
+            Please wait while we put it on sale
+          </p>
         </div>
-      }
+      )}
     </div>
-  )
+  );
 }

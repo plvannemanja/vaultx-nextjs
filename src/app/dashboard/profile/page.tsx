@@ -87,7 +87,6 @@ export default function page() {
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
-
   const handleLike = async () => {
     try {
       setLiked(!liked);
@@ -102,14 +101,14 @@ export default function page() {
   const copyAddr = () => {
     navigator.clipboard.writeText(user?.wallet);
     toast({
-        title: 'Copied to clipboard',
-        duration: 2000
-    })
+      title: 'Copied to clipboard',
+      duration: 2000,
+    });
   };
 
   const fetchData = async () => {
     try {
-      let user = await userServices.getSingleUser()
+      let user = await userServices.getSingleUser();
 
       let artistId = null;
 
@@ -136,10 +135,10 @@ export default function page() {
 
   useEffect(() => {
     toast({
-        title: 'Loading Profile details',
-        description: 'Please be patient',
-        duration: 2000
-    })
+      title: 'Loading Profile details',
+      description: 'Please be patient',
+      duration: 2000,
+    });
 
     fetchData();
   }, []);
@@ -160,11 +159,7 @@ export default function page() {
             className="flex gap-x-3 items-center p-3 rounded-xl text-white border-2 border-white cursor-pointer"
             onClick={() => copyAddr()}
           >
-            {user
-            ? user?.wallet
-              ? trimString(user?.wallet)
-              : null
-            : null}
+            {user ? (user?.wallet ? trimString(user?.wallet) : null) : null}
             <svg
               width="24px"
               height="24px"
