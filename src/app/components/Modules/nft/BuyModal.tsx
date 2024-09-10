@@ -61,7 +61,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
   const update = async () => {
     try {
       // Blockchain logic to purchase
-      debugger;
+      // debugger;
       try {
         const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
       } catch (error) {
@@ -73,12 +73,12 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
         nftId: id,
         name: formData.username,
         email: formData.email,
-        country: JSON.parse(sellerInfo.country).name,
+        country: sellerInfo.country ? sellerInfo.country.name : '',
         address: {
           line1: sellerInfo.line1,
           line2: sellerInfo.line2,
           city: sellerInfo.city,
-          state: JSON.parse(sellerInfo.state).name,
+          state: sellerInfo.state ? sellerInfo.state : '',
           postalCode: sellerInfo.postalCode,
         },
         phoneNumber: sellerInfo.phoneNumber,
@@ -208,7 +208,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
                     }
                     className="w-full border-none bg-[#161616]"
                     type="text"
-                    placeholder="Enter name"
+                    placeholder="Enter address"
                   />
                 </div>
                 <div className="flex flex-col gap-y-2 lg:w-[48%]">
@@ -220,7 +220,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
                     }
                     className="w-full border-none bg-[#161616]"
                     type="text"
-                    placeholder="Enter email"
+                    placeholder="Enter address"
                   />
                 </div>
               </div>
@@ -343,9 +343,10 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
             />
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
+          <div className="flex items-center space-x-2 p-4">
+            <input
               id="terms"
+              type="checkbox"
               checked={formData.accepted}
               onChange={() =>
                 setFormData({
