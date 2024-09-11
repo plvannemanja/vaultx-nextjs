@@ -61,13 +61,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
   const update = async () => {
     try {
       // Blockchain logic to purchase
-      // debugger;
-      try {
-        const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
-      } catch (error) {
-        console.log(error);
-      }
-      const transactionHash = "0x123444";
+      const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
 
       const data = {
         nftId: id,
@@ -84,13 +78,15 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
         phoneNumber: sellerInfo.phoneNumber,
         contactInformation: formData.description,
         concent: formData.accepted,
-        buyHash: '',
+        buyHash: transactionHash,
       };
 
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
+      //TODO success modal
     } catch (error) {
       console.log(error);
+      // TODO error modal
     }
   };
 
