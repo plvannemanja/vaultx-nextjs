@@ -15,6 +15,7 @@ export default function ShippingInfo({
 }: {
   handler?: (data: any) => void;
 }) {
+ 
   const [data, setData] = useState<null | any[]>(null);
   const [sellerInfo, setSellerInfo] = useState({
     id: null,

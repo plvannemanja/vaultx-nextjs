@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Rwa() {
   return (
-    <div className="flex flex-col gap-y-4 py-4 text-white max-w-[35rem] text-center items-center">
+    <div className="flex flex-col gap-y-4 py-4 text-white max-w-[35rem] text-center items-center bg-dark rounded-md px-6">
       <div>
         <img src="/icons/ex-icon.svg" alt="error" className="w-20 h-20" />
       </div>

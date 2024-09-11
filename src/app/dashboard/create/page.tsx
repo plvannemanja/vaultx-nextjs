@@ -17,10 +17,9 @@ import {
 import { useActiveAccount } from 'thirdweb/react';
 import { isCurator } from '@/lib/helper';
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
-enum ModalType {
-  Curation = 'curation',
-  Rwa = 'rwa',
-}
+import RestrictiveModal from '@/app/components/Modals/RestrictiveModal';
+import Curation from '@/app/components/Modals/content/Curation';
+import Rwa from '@/app/components/Modals/content/Rwa';
 
 export default function Page() {
   // For banner image in the create section
@@ -35,19 +34,25 @@ export default function Page() {
   });
 
   const [hovered, setHovered] = useState<any>(false);
+  const [modal, setModal] = useState<any>({
+    active: false,
+    type: null,
+  });
 
   const activeAccount = useActiveAccount();
 
-  const processModal = (type: string) => {};
+  const processModal = (type: string) => {
+    setModal({
+      active: true,
+      type: type,
+    });
+  };
 
   const checkCurator = async (type: 'curation' | 'nft') => {
     let hasAccess = false;
     if (activeAccount) {
       hasAccess = await isCurator(activeAccount?.address);
     }
-
-    // allow set curation to everyone
-    hasAccess = true;
 
     if (!hasAccess) {
       processModal(type);
@@ -77,6 +82,19 @@ export default function Page() {
 
   return (
     <>
+      <RestrictiveModal
+      closeButton={true}
+      open={modal.active}
+      onClose={() => setModal({ active: false, type: null })}
+      >
+        {
+          modal.type === 'curation' && <Curation />
+        }
+        {
+          modal.type === 'nft' && <Rwa />
+        }
+      </RestrictiveModal>
+
       {!step.active && (
         <div className="flex gap-4 px-4 justify-between w-full items-center lg:justify-between">
           <div className="flex flex-col gap-y-10 w-full lg:w-[48%]">

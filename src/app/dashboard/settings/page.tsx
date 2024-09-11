@@ -13,7 +13,6 @@ import PropertiesInfo from '@/app/components/Modules/Properties';
 import { useToast } from '@/hooks/use-toast';
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import { checkUrl } from '@/utils/helpers';
-import { SettingsProvider } from '@/app/components/Context/SettingsContext';
 
 export default function Page() {
   const { toast } = useToast();
@@ -305,11 +304,9 @@ export default function Page() {
             </div>
           </div>
 
-          <SettingsProvider>
-            <ShippingInfo />
-            <ContactInfo />
-            <PropertiesInfo />
-          </SettingsProvider>
+          <ShippingInfo />
+          <ContactInfo />
+          <PropertiesInfo />
 
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton
