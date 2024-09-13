@@ -101,7 +101,7 @@ export default function Home() {
   useEffect(() => {
     const getData = async () => {
       const server_uri =
-        // process.env.NEXT_PUBLIC_APP_BACKEND_URL ||
+         process.env.NEXT_PUBLIC_APP_BACKEND_URL ||
         'https://tapi.vault-x.io/api/v1';
       const { data } = await axios.get(`${server_uri}/homepage/get-sections`);
 
