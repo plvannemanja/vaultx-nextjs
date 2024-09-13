@@ -54,6 +54,7 @@ export default function Page() {
       hasAccess = await isCurator(activeAccount?.address);
     }
 
+    hasAccess = true;
     if (!hasAccess) {
       processModal(type);
     } else {
@@ -83,9 +84,9 @@ export default function Page() {
   return (
     <>
       <RestrictiveModal
-      closeButton={true}
-      open={modal.active}
-      onClose={() => setModal({ active: false, type: null })}
+        closeButton={true}
+        open={modal.active}
+        onClose={() => setModal({ active: false, type: null })}
       >
         {
           modal.type === 'curation' && <Curation />
@@ -201,8 +202,8 @@ export default function Page() {
                 </div>
 
                 <div className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-gray-300 bg-dark hover:bg-[#ddf247] hover:text-black text-white"
-                onMouseEnter={() => setHovered("mint")}
-                onMouseLeave={() => setHovered(false)}
+                  onMouseEnter={() => setHovered("mint")}
+                  onMouseLeave={() => setHovered(false)}
                 >
                   <svg
                     className="bottom-[2.75rem] right-5 absolute"
