@@ -172,7 +172,7 @@ export function BaseHeader() {
           </Link>
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-            href="/dashboard?tab=curation"
+            href="/dashboard/curation"
           >
             Curation
           </Link>

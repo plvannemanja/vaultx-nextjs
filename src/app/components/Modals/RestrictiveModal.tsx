@@ -1,8 +1,9 @@
 "use client";
 
 import React from 'react'
-import { Modal, Box } from '@mui/material'
+// import { Modal, Box } from '@mui/material'
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import { Dialog } from '@headlessui/react'
 
 const style = {
   borderRadius: '10px',
@@ -23,13 +24,10 @@ const style = {
 export default function RestrictiveModal({ children, open, onClose, closeButton = false }) {
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
+    <Dialog open={open} onClose={onClose}>
+      <Dialog.Panel>
+        
+
         <div className='relative'>
           {
             closeButton &&
@@ -37,7 +35,23 @@ export default function RestrictiveModal({ children, open, onClose, closeButton 
           }
           {children}
         </div>
-      </Box>
-    </Modal>
+      </Dialog.Panel>
+    </Dialog>
+    // <Modal
+    //   open={open}
+    //   onClose={onClose}
+    //   aria-labelledby="modal-modal-title"
+    //   aria-describedby="modal-modal-description"
+    // >
+    //   <Box sx={style}>
+    //     <div className='relative'>
+    //       {
+    //         closeButton &&
+    //         <XMarkIcon className='absolute w-10 top-[1rem] right-[1rem] fill-white cursor-pointer' onClick={() => { onClose() }} />
+    //       }
+    //       {children}
+    //     </div>
+    //   </Box>
+    // </Modal>
   )
 }

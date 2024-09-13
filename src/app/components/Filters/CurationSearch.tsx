@@ -42,33 +42,24 @@ export default function CurationSearch({ setState }: { setState: any }) {
   return (
     <div className="flex flex-wrap md:flex-nowrap gap-4 items-center">
       <div className="flex gap-x-2 items-center">
-        <svg
-          width="24px"
-          height="24px"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#fff"
-        >
-          <path
-            d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
+      <svg width="17" height="18" viewBox="0 0 17 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.01367 3.85314C2.01367 3.35877 2.41443 2.95801 2.9088 2.95801H13.2028C13.6971 2.95801 14.0979 3.35877 14.0979 3.85314V5.27262C14.0979 5.51002 14.0036 5.7377 13.8357 5.90557L9.66066 10.0806C9.49279 10.2485 9.39848 10.4762 9.39848 10.7136V12.3569L6.71309 15.0422V10.7136C6.71309 10.4762 6.61879 10.2485 6.45092 10.0806L2.27585 5.90557C2.10798 5.7377 2.01367 5.51002 2.01367 5.27262V3.85314Z" stroke="white" stroke-width="1.34269" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
         <Label>Filter</Label>
       </div>
 
-      <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
+      <div className="relative flex  min-w-[18rem] justify-between items-center px-3 py-2  text-white pl-4 bg-transparent rounded-[12px] border border-[#ffffff12]">
+      <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20.3633 7.5L19.7383 18.132C19.7046 18.705 19.4532 19.2436 19.0355 19.6373C18.6177 20.031 18.0653 20.2502 17.4913 20.25H6.73528C6.16124 20.2502 5.60883 20.031 5.19111 19.6373C4.77339 19.2436 4.52196 18.705 4.48828 18.132L3.86328 7.5M10.1133 11.25H14.1133M3.48828 7.5H20.7383C21.3593 7.5 21.8633 6.996 21.8633 6.375V4.875C21.8633 4.254 21.3593 3.75 20.7383 3.75H3.48828C2.86728 3.75 2.36328 4.254 2.36328 4.875V6.375C2.36328 6.996 2.86728 7.5 3.48828 7.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
         <p className="text-sm w-[70%]">
           {search.filter.label ? search.filter.label : 'Recently Listed'}
         </p>
         {search.filter.active ? (
           <ChevronUpIcon
-            className="h-7 w-7"
+            className="h-7 w-7 text-[#ffffff12]"
             onClick={() => {
               setSearch({
                 ...search,
@@ -78,8 +69,8 @@ export default function CurationSearch({ setState }: { setState: any }) {
           />
         ) : (
           <ChevronDownIcon
-            className="h-7 w-7"
-            onClick={() => {
+          className="h-7 w-7 text-[#ffffff12]"
+          onClick={() => {
               setSearch({
                 ...search,
                 filter: { ...search.filter, active: !search.filter.active },
@@ -113,7 +104,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
         )}
       </div>
 
-      <div className="flex gap-x-2 items-center border-2 rounded-xl px-2 w-full py-2">
+      <div className="flex gap-x-2 items-center border border-[#ffffff12] rounded-xl px-2 w-full py-2">
         <svg
           width="20px"
           height="20px"
