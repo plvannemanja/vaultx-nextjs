@@ -8,6 +8,7 @@ import {
   PaymentSplitType,
 } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
+import ConnectedCard from '../Cards/ConnectedCard';
 
 interface NFTContextType {
   basicDetail: IBasicDetailFormData;

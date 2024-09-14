@@ -274,7 +274,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           isOpen={errors.active}
           close={() => setErrors({ active: false, data: [] })}
         >
-          <ErrorModal data={errors.data} />
+          <ErrorModal data={errors.data} close={() => setErrors({ active: false, data: [] })} />
         </TriggerModal>
       )}
 
