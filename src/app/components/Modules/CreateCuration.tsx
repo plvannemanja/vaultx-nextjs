@@ -58,6 +58,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
     facebook: null,
     instagram: null,
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleFileChange = (file: any, type: string) => {
     console.log('file', file);
@@ -250,6 +251,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       setImageSrc(editMode.logo);
     }
   }, [editMode]);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
@@ -273,8 +277,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         <TriggerModal
           isOpen={errors.active}
           close={() => setErrors({ active: false, data: [] })}
+
         >
-          <ErrorModal data={errors.data} close={() => setErrors({ active: false, data: [] })} />
+          <ErrorModal data={errors.data} close={() => {setErrors({ active: false, data: [] });handleCloseModal()}}/>
         </TriggerModal>
       )}
 
