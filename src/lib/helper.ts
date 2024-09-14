@@ -8,10 +8,10 @@ import {
   sendTransaction,
   waitForReceipt,
 } from 'thirdweb';
-import { chain, contract } from './contract';
+import { address, chain, contract } from './contract';
 import { Account } from 'thirdweb/wallets';
 import { client } from './client';
-import { IBuyerInfo, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
+import { IBuyerInfo, INFTVoucher, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
 
 export const createCollection = async (
   name: string,
@@ -20,7 +20,7 @@ export const createCollection = async (
 ) => {
   const transaction = await prepareContractCall({
     contract,
-    method: 'function createCollectionByCurator(string name, string uri)',
+    method: 'function createCurationByCurator(string name, string uri)',
     params: [name, uri],
   });
   const { transactionHash } = await sendTransaction({
@@ -37,7 +37,7 @@ export const createCollection = async (
   // get event log
   const createCollectionEvent = prepareEvent({
     signature:
-      'event CreateCollection(string name, string uri, address curator, uint256 id)',
+      'event CreateCuration(string name, string uri, address curator, uint256 id)',
   });
 
   const events = parseEventLogs({
@@ -66,7 +66,7 @@ export const isCurator = async (address: string) => {
 };
 
 export interface IListAsset {
-  collectionId: number;
+  curationId: number;
   tokenURI: string;
   price: bigint;
   royaltyWallet: Address | '';
@@ -76,7 +76,7 @@ export interface IListAsset {
 }
 
 export const listAsset = async ({
-  collectionId,
+  curationId,
   tokenURI,
   price,
   royaltyWallet,
@@ -87,9 +87,9 @@ export const listAsset = async ({
   const transaction = await prepareContractCall({
     contract,
     method:
-      'function listAsset(uint256 collectionId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, (address paymentWallet, uint256 paymentPercentage)[] paymentSplits)',
+      'function listAsset(uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, (address paymentWallet, uint256 paymentPercentage)[] paymentSplits)',
     params: [
-      BigInt(collectionId),
+      BigInt(curationId),
       tokenURI,
       BigInt(price),
       royaltyWallet,
@@ -139,16 +139,16 @@ export const tokenDetail = async (tokenId: bigint) => {
   const detail = await readContract({
     contract,
     method:
-      'function tokenDetails(uint256) view returns (uint256 tokenId, uint256 collectionId, address owner, uint256 price, uint256 priceInMatic, (address buyer, uint256 amount) buyerInfo, (address royaltyWallet, uint256 royaltyPercentage) royalty, uint8 status)',
+      'function tokenDetails(uint256) view returns (uint256 tokenId, uint256 curationId, address owner, uint256 price, uint256 shipTime, (address buyer, uint256 amount) buyerInfo, (address royaltyWallet, uint256 royaltyPercentage) royalty, uint8 status)',
     params: [BigInt(tokenId)],
   });
 
   const tokenDetail: ITokenDetail = {
     tokenId: Number(detail[0]),
-    collectionId: Number(detail[1]),
+    curationId: Number(detail[1]),
     owner: detail[2] as Address,
     usdAmount: detail[3],
-    nativeAmount: detail[4],
+    shipTime: detail[4],
     buyerInfo: detail[5] as IBuyerInfo,
     royalty: detail[6] as IRoyaltyDetails,
     status: Number(detail[7],)
@@ -159,11 +159,12 @@ export const tokenDetail = async (tokenId: bigint) => {
 export const purchaseAsset = async (tokenId: bigint, account: Account) => {
   const detail = await tokenDetail(tokenId);
 
+  // get 
   const transaction = await prepareContractCall({
     contract,
     method: "function purchaseAsset(uint256 tokenId) payable",
     params: [tokenId],
-    value: detail.nativeAmount,
+    value: BigInt(10),
   });
 
   const { transactionHash } = await sendTransaction({
@@ -193,3 +194,40 @@ export const purchaseAsset = async (tokenId: bigint, account: Account) => {
     }
     : null;
 };
+
+
+export const getVoucherSignature = async (NFTVoucher: INFTVoucher, account: Account) => {
+  // Define the domain for EIP-712 signature
+  const domain = {
+    name: "MonsterXNFT-Voucher",
+    version: "1",
+    verifyingContract: address,
+    chainId: chain.id,
+  };
+
+  // Define the types for the NFTVoucher
+  const types = {
+    NFTVoucher: [
+      { name: "curationId", type: "uint256" },
+      { name: "tokenURI", type: "string" },
+      { name: "price", type: "uint256" },
+      { name: "royaltyWallet", type: "address" },
+      { name: "royaltyPercentage", type: "uint256" },
+      { name: "paymentWallets", type: "address[]" },
+      { name: "paymentPercentages", type: "uint256[]" },
+    ],
+  };
+
+  const signature = await account.signTypedData({ domain, types, message: NFTVoucher, primaryType: "NFTVoucher" });
+  NFTVoucher.signature = signature;
+  // check signature
+  const signerAddr = await readContract({
+    contract,
+    method: "function _verify((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) view returns (address)",
+    params: [{ ...NFTVoucher, signature }]
+  })
+  if (signerAddr !== account.address)
+    throw new Error("signature is not valid.");
+
+  return NFTVoucher;
+}

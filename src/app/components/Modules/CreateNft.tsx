@@ -256,7 +256,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       let price = parseEther(String(basicDetail.price));
       let curationPayload = JSON.parse(basicDetail.curation);
       let nftPayload: IListAsset = {
-        collectionId: curationPayload?.tokenId,
+        curationId: curationPayload?.tokenId,
         tokenURI: uri,
         price,
         royaltyWallet: '',
@@ -337,8 +337,8 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   return (
     <div className="flex flex-col gap-y-4 px-4">
       <RestrictiveModal
-      open={modal}
-      onClose={() => setModal(false)}
+        open={modal}
+        onClose={() => setModal(false)}
       >
         <MintLoader progress={mintLoaderStep} nftId={nftId} />
       </RestrictiveModal>

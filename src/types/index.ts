@@ -189,11 +189,22 @@ export enum TokenStatusEnum {
 
 export interface ITokenDetail {
   tokenId: number;
-  collectionId: number;
+  curationId: number;
   owner: Address;
   usdAmount: bigint;
-  nativeAmount: bigint;
+  shipTime: bigint;
   buyerInfo: IBuyerInfo;
   royalty: IRoyaltyDetails;
   status: TokenStatusEnum;
+}
+
+export interface INFTVoucher {
+  curationId: bigint;
+  tokenURI: string;
+  price: bigint;
+  royaltyWallet: Address;
+  royaltyPercentage: bigint;
+  paymentWallets: Address[],
+  paymentPercentages: bigint[],
+  signature?: `0x${string}`;
 }
