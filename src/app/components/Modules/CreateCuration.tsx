@@ -19,6 +19,7 @@ import { removeEmptyStrings } from '@/utils/helpers';
 import { useActiveAccount } from 'thirdweb/react';
 import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
+import ConnectedCard from '../Cards/ConnectedCard';
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
@@ -60,6 +61,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
   const handleFileChange = (file: any, type: string) => {
     console.log('file', file);
+    console.log('type', type);
     if (type === 'banner') setFormData({ ...formData, bannerImage: file });
     if (type === 'description')
       setFormData({ ...formData, descriptionImage: file });
@@ -251,7 +253,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <p className="text-xl font-medium">Edit Your Collection</p>
+     
+    <p className="text-xl font-medium">Create Curation</p>
+    
+    <ConnectedCard />
 
       {status.active && (
         <TriggerModal
@@ -273,77 +278,81 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         </TriggerModal>
       )}
 
-      <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
-        <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[49%] bg-dark rounded-lg self-start">
-          {file ? (
-            <div className="flex flex-col gap-y-5 text-center">
-              {imageSrc && (
-                <img
-                  src={imageSrc}
-                  alt="logo"
-                  className="w-[90%] object-cover mx-auto"
-                />
-              )}
-              {editMode ? '' : file.name ? file.name : 'No files selected'}
-            </div>
-          ) : (
-            <>
-              <div className="w-10 h-10">
-                <Upload />
-              </div>
-              <p className="text-lg font-medium">Upload File</p>
-              <p className="mt-2 text-gray-400">
-                Drag or choose your file to upload
-              </p>
-              <p className="text-gray-500">
-                PNG, GIF, WEBP, MP4, or MP3. Max 1GB.
-              </p>
-            </>
-          )}
+      <div className=" grid grid-cols-12 flex gap-[50px] gap-y-5 flex-col lg:flex-row lg:justify-between">
 
-          <div className="flex flex-col gap-y-2">
-            <button
-              className="py-3 w-[20rem] rounded-lg text-black font-semibold bg-[#dee8e8]"
-              onClick={handleButtonClick}
-            >
-              <span className="flex gap-x-2 items-center justify-center">
-                Browse file
-                <img src="/icons/arrow_ico.svg" alt="" />
-              </span>{' '}
-            </button>
-            <input
-              className="hidden"
-              type="file"
-              ref={fileInputRef}
-              onChange={handleLogoChange}
-            />
-            {file && (
-              <BaseButton
-                title="Reset"
-                variant="secondary"
-                onClick={() => setFile(null)}
+        <div className="flex flex-col col-span-12 lg:col-span-5 items-center gap-y-2 justify-center py-24 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
+
+        {file ? (
+          <div className="flex flex-col text-center gap-y-[23px]  ">
+            {imageSrc && (
+              <img
+                src={imageSrc}
+                alt="logo"
+                className="w-[90%] object-cover mx-auto"
               />
             )}
+            {file ? file.name : 'No files selected'}
           </div>
-        </div>
+        ) : (
+          <div className='flex flex-col justify-center items-center gap-y-[23px] '>
+            <img src="/icons/upload.svg" alt="upload" className="w-[66px] h-[66px]" />
+            <div className='gap-y-[2px]'>
+              <p className="text-center text-white text-lg font-extrabold font-['Manrope']">Upload original RWA File</p>
+              <div>
+                <p className="mt-2 text-gray-400 mb-[4px]">Drag or choose your file to IPFS upload</p>
+                <p className="opacity-30 text-center text-white text-xs font-normal font-['Azeret Mono'] leading-tight">PNG, GIF, WEBP, MP4 or MP3. Max 50mb.</p>
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="flex flex-col gap-y-2">
 
-        <div className="flex flex-col gap-y-5 lg:w-[49%]">
-          <div className="w-full rounded-md py-3 flex flex-col gap-y-2">
+          <button
+            className="py-3 w-[20rem] h-[50px] text-black font-semibold bg-[#dee8e8]  p-2.5 rounded-[14px] justify-center items-center gap-2.5"
+            onClick={handleButtonClick}
+          >
+            <span className="flex gap-x-[10px] items-center justify-center">
+              <p className="text-[#161616] text-sm font-extrabold font-['Manrope'] capitalize">Browse file</p>
+              <img src="/icons/arrow_ico.svg" alt="" className='w-[18px] h-[18px] ' />
+            </span>{' '}
+          </button>
+          <input
+            className="hidden"
+            type="file"
+            ref={fileInputRef}
+            onChange={handleLogoChange}
+            title='file'
+          />
+          {file && (
+            <BaseButton
+              title="Reset"
+              variant="secondary"
+              onClick={() => {
+                setFile(null);
+                
+              }}
+              className={"rounded-[14px]"}
+            />
+          )}
+        </div>
+        </div>
+        <div className="flex flex-col col-span-12 lg:col-span-7 gap-y-[26px] lg:w-full">
+          <div className="w-full rounded-md pb-3 flex flex-col gap-y-2">
             <div className="flex gap-x-3">
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">Name*</Label>
+              <div className="flex flex-col gap-y-[16px] basis-1/2">
+                <Label className="font-medium text-[11px]">Curation Title*</Label>
                 <Input
                   value={formData.name ? formData.name : ''}
                   onChange={(e) =>
                     setFormData({ ...formData, name: (e.target as any).value })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter Collection Name"
                 />
               </div>
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">Symbol*</Label>
+              <div className="flex flex-col gap-y-[16px] basis-1/2">
+                <Label className="font-medium text-[11px]">Symbol*</Label>
                 <Input
                   value={formData.symbol ? formData.symbol : ''}
                   onChange={(e) =>
@@ -352,7 +361,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       symbol: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] font-['Azeret Mono'] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="i.e TAT"
                 />
@@ -360,9 +369,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             </div>
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+          <div className="w-full rounded-[20px] px-5 py-3 bg-[#232323] flex flex-col gap-y-[16px]">
             <div className="flex justify-between items-center">
-              <Label className="text-lg font-medium">Banner Image</Label>
+              <Label className="text-[15px] font-medium">Banner Image</Label>
               {formData.bannerImage && (
                 <span
                   className="cursor-pointer"
@@ -374,22 +383,24 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 </span>
               )}
             </div>
-            <hr className="bg-white" />
-            <div className="flex gap-x-4 items-center my-5">
+            <hr className="border-white opacity-[0.2] mt-[15px] mb-[15px]" />
+            <div className="flex gap-x-4 items-center my-5 mb-0">
               <FileInput
                 title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                titleStyles={"text-[#979797] text-sm font-normal font-['Azeret Mono'] leading-snug"}
                 acceptedFormats={acceptedFormats}
                 maxSizeInBytes={maxFileSize}
                 onFileSelect={(file: any) => handleFileChange(file, 'banner')}
                 deSelect={!formData.bannerImage}
-                editMode={
-                  formData.bannerImage != '' && formData.bannerImage != null
-                }
+                // editMode={
+                //   formData.bannerImage != '' && formData.bannerImage != null
+                // }
+                editMode={!!formData.bannerImage}
               />
             </div>
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-[16px]">
             <Label className="font-medium">Description*</Label>
             <Textarea
               value={formData.description ? formData.description : ''}
@@ -399,17 +410,17 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   description: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#161616]"
+              className="w-full border-none bg-[#232323] rounded-[20px] placeholder-[#fff] h-[180px] resize-none py-[15px] px-[26px]"
               placeholder="Please describe your product"
             />
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <Label className="text-lg font-medium">Your links</Label>
-            <hr className="bg-white" />
+          <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-[16px]">
+            <Label className="font-medium text-[15px]">Your links</Label>
+            <hr className="border-white opacity-[0.2] " />
             <div className="mt-5 flex gap-x-3">
               <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">Website</Label>
+                <Label className="font-medium text-[11px]">Website</Label>
                 <Input
                   value={formData.website ? formData.website : ''}
                   onChange={(e) =>
@@ -418,13 +429,14 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       website: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your website link"
+                  showIcon
                 />
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">X(Twitter)</Label>
+                <Label className="font-medium text-[11px]">X(Twitter)</Label>
                 <Input
                   value={formData.twitter ? formData.twitter : ''}
                   onChange={(e) =>
@@ -433,15 +445,16 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       twitter: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your twitter link"
+                  showIcon
                 />
               </div>
             </div>
             <div className="mt-2 flex gap-x-3">
               <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">Facebook</Label>
+                <Label className="font-medium text-[11px]">Facebook</Label>
                 <Input
                   value={formData.facebook ? formData.facebook : ''}
                   onChange={(e) =>
@@ -450,13 +463,14 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       facebook: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your facebook link"
+                  showIcon
                 />
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium">Instagram</Label>
+                <Label className="font-medium text-[11px]">Instagram</Label>
                 <Input
                   value={formData.instagram ? formData.instagram : ''}
                   onChange={(e) =>
@@ -465,17 +479,18 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       instagram: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your instagram link"
+                  showIcon
                 />
               </div>
             </div>
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+          <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-2">
             <div className="flex justify-between items-center">
-              <Label className="text-lg font-medium">Youtube Video Link</Label>
+              <Label className="text-[15px] font-medium">Youtube Video Link</Label>
               {youtube.length == 2 ? (
                 <p
                   className="text-sm cursor-pointer"
@@ -503,26 +518,26 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 </div>
               )}
             </div>
-            <hr className="bg-white" />
+            <hr className="border-white opacity-[0.2] my-[10px]"/>
             {youtube.map((item, index) => {
               return (
                 <div key={index} className="mt-5 flex gap-x-3">
                   <div className="flex flex-col gap-y-2 basis-1/2">
-                    <Label className="font-medium">Title</Label>
+                    <Label className="font-medium text-[11px]">Title</Label>
                     <Input
                       value={item.title ? item.title : ''}
                       onChange={(e) => handleVideo(index, e, 'title')}
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                       type="text"
                       placeholder="Enter video title"
                     />
                   </div>
                   <div className="flex flex-col gap-y-2 basis-1/2">
-                    <Label className="font-medium">Video Link</Label>
+                    <Label className="font-medium text-[11px]">Video Link</Label>
                     <Input
                       value={item.url ? item.url : ''}
                       onChange={(e) => handleVideo(index, e, 'link')}
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                       type="text"
                       placeholder="Enter video link"
                     />
@@ -532,9 +547,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             })}
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
+          <div className="w-full rounded-[20px] px-[20px] py-[20px]  bg-dark flex flex-col gap-y-2">
             <div className="flex justify-between items-center">
-              <Label className="text-lg font-medium">
+              <Label className="text-[15px] font-medium">
                 Custom Description Image
               </Label>
               {formData.descriptionImage && (
@@ -548,7 +563,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 </span>
               )}
             </div>
-            <hr className="bg-white" />
+            <hr className="border-white opacity-[0.2] my-[10px]" />
             <div className="flex gap-x-4 items-center my-5">
               <FileInput
                 title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
@@ -557,9 +572,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 onFileSelect={(file: any) =>
                   handleFileChange(file, 'description')
                 }
-                editMode={
-                  formData.bannerImage != '' && formData.bannerImage != null
-                }
+                // editMode={
+                //   formData.bannerImage != '' && formData.bannerImage != null
+                // }
+                editMode={!!formData.descriptionImage}
               />
             </div>
           </div>
