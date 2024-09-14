@@ -251,7 +251,9 @@ export default function BasicDetails({
                   productName: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl font-['Azeret Mono'] text-[11px]"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+
+              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl font-['Azeret Mono'] text-[11px]"
               type="text"
               placeholder="Enter Product Name"
             />
@@ -272,7 +274,9 @@ export default function BasicDetails({
                   productDescription: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
+              className="w-full border-none bg-[#232323] rounded-[20px] placeholder-[#fff] h-[180px] resize-none py-[15px] px-[26px]"
+
+              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               placeholder="Please describe your product"
             />
           </div>
@@ -287,16 +291,18 @@ export default function BasicDetails({
                   price: parseInt((e.target as any).value),
                 })
               }
-              className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+
+              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               type="number"
               placeholder="0"
             />
           </div>
 
-          <div className="w-full rounded-[17px] px-4 py-[12px] bg-dark flex flex-col gap-y-2">
+          <div className="w-full rounded-[17px] px-5 py-[12px] bg-dark flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-3">
               <div className="flex justify-between">
-                <Label className="font-bold text-[13px]">Platform Fee</Label>
+                <Label className="font-bold text-[14px]">Marketplace Fee</Label>
                 <Label className='font-bold'>${fee}%</Label>
               </div>
               <hr className='border-t-[#ffffff] opacity-[0.3]' />
@@ -317,7 +323,9 @@ export default function BasicDetails({
                   artistName: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
+              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+
               type="text"
               placeholder="Enter Artist Name"
             />
@@ -327,7 +335,9 @@ export default function BasicDetails({
             <Label className="font-medium text-[11px]">Curation*</Label>
             <select
               aria-label="Select curation"
-              className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl appearance-none text-[11px]"
+              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl appearance-none text-[11px]"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+
               name="curation"
               onChange={(e) =>
                 setBasicDetail({
@@ -367,13 +377,13 @@ export default function BasicDetails({
                       <img
                         src="https://i.ibb.co/c8FMdw1/attachment-link.png"
                         alt="attachment"
-                        className="w-28 mx-auto h-36 rounded-md object-cover"
+                        className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
                       />
                     ) : (
                       <img
                         src={URL.createObjectURL(attachment)}
                         alt="attachment"
-                        className="w-28 mx-auto h-36 rounded-md object-cover"
+                        className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
                       />
                     )}
                     {attachment ? (

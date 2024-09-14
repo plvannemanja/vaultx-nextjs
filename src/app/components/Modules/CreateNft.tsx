@@ -15,6 +15,7 @@ import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
 import MintLoader from './create/MintLoader';
 import RestrictiveModal from '../Modals/RestrictiveModal';
+import ConnectedCard from '../Cards/ConnectedCard';
 
 export enum StepType {
   basic,
@@ -438,6 +439,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           <ErrorModal data={JSON.parse(sellerInfo.error)} />
         </TriggerModal>
       )}
+      <div className="flex mb-[30px]">
+        <ConnectedCard/>
+      </div>
 
       {step === 1 && (
         <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
