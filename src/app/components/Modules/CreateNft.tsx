@@ -9,13 +9,14 @@ import TriggerModal from '../ui/TriggerModal';
 import { CreateNftServices } from '@/services/createNftService';
 import { useActiveAccount } from 'thirdweb/react';
 import { useCreateNFT } from '../Context/CreateNFTContext';
-import { IListAsset, listAsset } from '@/lib/helper';
+import { getVoucherSignature, IListAsset, listAsset } from '@/lib/helper';
 import { parseEther, zeroAddress } from 'viem';
 import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
 import MintLoader from './create/MintLoader';
 import RestrictiveModal from '../Modals/RestrictiveModal';
 import ConnectedCard from '../Cards/ConnectedCard';
+import { INFTVoucher } from '@/types';
 
 export enum StepType {
   basic,
@@ -109,11 +110,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         description: 'Failed to create NFT',
         variant: 'destructive',
       });
-      if (nftId) {
-        await nftService.removeFromDb({
-          nftId: nftId
-        });
-      }
       return null;
     }
   };
@@ -177,8 +173,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   };
 
   const createNFT = async () => {
+    let nftId = null;
     try {
-      const nftId = await createBasicDetails();
+      nftId = await createBasicDetails();
 
       if (!nftId) {
         throw new Error('Failed to create NFT');
@@ -230,6 +227,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       }
 
       await handleMint(uri, nftId);
+      toast({
+        title: 'NFT minted',
+        description: 'Success to create NFT',
+      });
       setMintLoaderStep(2);
       setTimeout(() => {
         setModal(false)
@@ -241,18 +242,20 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         description: 'Failed to create NFT, please try again',
         variant: 'destructive',
       });
-
-      await nftService.removeFromDb({
-        nftId: nftId
-      });
+      if (nftId) {
+        await nftService.removeFromDb({
+          nftId: nftId
+        });
+      }
     }
   };
 
   // Add your logic here
   const handleMint = async (uri: string, nftId: string) => {
     try {
-      // check free mint
-      if (advancedOptions.freeMint || !activeAccount) return;
+      if (!activeAccount) {
+        throw new Error("You should login a wallet.");
+      }
 
       let price = parseEther(String(basicDetail.price));
       let curationPayload = JSON.parse(basicDetail.curation);
@@ -302,17 +305,45 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           },
         ];
       }
+      // check free mint
+      if (advancedOptions.freeMint) {
+        let paymentWallets: Address[] = [];
+        let paymentPercentages: bigint[] = [];
+        nftPayload.paymentSplits.forEach(split => {
+          paymentWallets.push(split.paymentWallet);
+          paymentPercentages.push(split.paymentPercentage);
+        });
+        const NFTVoucher: INFTVoucher = {
+          curationId: BigInt(nftPayload.curationId),
+          tokenURI: nftPayload.tokenURI,
+          price: nftPayload.price,
+          royaltyWallet: nftPayload.royaltyWallet,
+          royaltyPercentage: nftPayload.royaltyPercentage,
+          paymentWallets,
+          paymentPercentages,
+        };
 
-      let { tokenId, transactionHash } = await listAsset(nftPayload);
-      await nftService.mintAndSale({
-        nftId,
-        mintHash: transactionHash,
-        tokenId: Number(tokenId),
-      });
-      toast({
-        title: 'NFT minted',
-        description: 'Success to create NFT',
-      });
+        const signature = await getVoucherSignature(NFTVoucher, activeAccount);
+
+        const voucherString = JSON.stringify({ ...NFTVoucher, signature }, (key, value) =>
+          typeof value === 'bigint' ? Number(value) : value
+        );
+
+        // update voucher
+        await nftService.createVoucher({
+          nftId,
+          voucher: voucherString,
+        });
+
+        return;
+      } else {
+        let { tokenId, transactionHash } = await listAsset(nftPayload);
+        await nftService.mintAndSale({
+          nftId,
+          mintHash: transactionHash,
+          tokenId: Number(tokenId),
+        });
+      }
     } catch (error) {
       throw error;
     }
@@ -440,7 +471,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </TriggerModal>
       )}
       <div className="flex mb-[30px]">
-        <ConnectedCard/>
+        <ConnectedCard />
       </div>
 
       {step === 1 && (

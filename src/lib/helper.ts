@@ -109,13 +109,13 @@ export const listAsset = async ({
     transactionHash,
   });
 
-  const AssetListedEvent = prepareEvent({
-    signature: 'event AssetListed(uint256 indexed tokenId)',
+  const ListedEvent = prepareEvent({
+    signature: 'event Listed(uint256 indexed tokenId)',
   });
 
   const events = parseEventLogs({
     logs: receipt.logs,
-    events: [AssetListedEvent],
+    events: [ListedEvent],
   });
   return events
     ? {
@@ -196,7 +196,7 @@ export const purchaseAsset = async (tokenId: bigint, account: Account) => {
 };
 
 
-export const getVoucherSignature = async (NFTVoucher: INFTVoucher, account: Account) => {
+export const getVoucherSignature = async (NFTVoucher: Omit<INFTVoucher, 'signature'>, account: Account) => {
   // Define the domain for EIP-712 signature
   const domain = {
     name: "MonsterXNFT-Voucher",
@@ -219,7 +219,7 @@ export const getVoucherSignature = async (NFTVoucher: INFTVoucher, account: Acco
   };
 
   const signature = await account.signTypedData({ domain, types, message: NFTVoucher, primaryType: "NFTVoucher" });
-  NFTVoucher.signature = signature;
+
   // check signature
   const signerAddr = await readContract({
     contract,
@@ -229,5 +229,5 @@ export const getVoucherSignature = async (NFTVoucher: INFTVoucher, account: Acco
   if (signerAddr !== account.address)
     throw new Error("signature is not valid.");
 
-  return NFTVoucher;
+  return signature;
 }
