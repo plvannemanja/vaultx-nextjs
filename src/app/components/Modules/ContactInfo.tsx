@@ -95,7 +95,7 @@ export default function ContactInfo({
           ? data.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
+                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
                 onClick={() => {
                   setSelectedContact(item);
 
@@ -108,7 +108,7 @@ export default function ContactInfo({
               >
                 <span>{item.name ? item.name : `#${index + 1}`}</span>
                 <div>
-                  <p className="text-[#A6A6A6] py-1">
+                  <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
                     {item.contactInfo.length > 150
                       ? `${item.contactInfo.slice(0, 150)}...`
                       : item.contactInfo}
@@ -118,8 +118,9 @@ export default function ContactInfo({
                 <div className="flex justify-end">
                   <BaseDialog
                     trigger={
-                      <span className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400 text-sm">
-                        Edit
+                      <span 
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]">
+                      Edit
                       </span>
                     }
                     className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"

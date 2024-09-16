@@ -290,8 +290,8 @@ export default function ShippingInfo({
                       shipping: item,
                     });
                   }}
-                  className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
-                >
+                  className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
+                > 
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
                       <span>{item.name}</span>
@@ -301,7 +301,7 @@ export default function ShippingInfo({
                   </div>
                   <div>
                     {item.address && item.country ? (
-                      <p className="text-[#A6A6A6]">
+                      <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
                         {`${item.address.line1 + item.address.line2 + item.address.state + item.address.city + item.country}`
                           .length > 150
                           ? `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + item.address.city + ' ' + item.country}`.slice(
@@ -312,12 +312,12 @@ export default function ShippingInfo({
                       </p>
                     ) : null}
                   </div>
-                  <div className="flex justify-end">
+                  <div className="flex justify-end ">
                     <BaseDialog
                       trigger={
                         <span
                           onClick={() => preserveState(item)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400"
+                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
                         >
                           Edit
                         </span>

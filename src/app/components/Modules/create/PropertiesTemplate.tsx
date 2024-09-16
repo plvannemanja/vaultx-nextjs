@@ -189,9 +189,9 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
   }, []);
 
   return (
-    <div className="bg-dark p-4 gap-y-2 rounded-lg flex flex-col">
+    <div className="bg-template-gradient p-4 gap-y-2 rounded-lg flex flex-col">
       <p>Properties</p>
-      <span className="text-gray-400">
+      <span className="text-gray-400 azeret-mono-font">
         Textual Traits that show up as rectangle.
       </span>
 
@@ -208,10 +208,11 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                 attributes: null,
               });
             }}
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-gray-400'}`}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-none'}`}
           >
             <p>Basic Template</p>
           </div>
+          
           {data && data.length > 0
             ? data.map((item: any, index: number) => {
                 return (
@@ -226,13 +227,29 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                         attributes: item.attributes,
                       });
                     }}
-                    className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
+                    className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${isSelected(item) ? 'border-neon' : 'border-none'}`}
                   >
                     <p>{item.name}</p>
+                    <button className='absolute bottom-2 right-2 text-[#DDF247] border border-[#ffffff20] px-[10px] rounded py-1  text-[14px]'>Edit</button>
+
                   </div>
                 );
               })
             : null}
+            <div
+            onClick={() => {
+              setSelectedProperty(null);
+              setAdvancedDetails({
+                ...advancedDetails,
+                propertyTemplateId: null,
+                attributes: null,
+              });
+            }}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex flex-col justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-none'}`}
+          >
+            <div className="w-12 h-12 rounded-full bg-[#111] border border-[#ffffff38] flex items-center justify-center"><img src='/icons/plus.svg'/> </div>
+            <p className="text-[#828282]">Add new template</p>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-3 my-5">
@@ -240,7 +257,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
             ? property.attributes.map((item, index) => {
                 return (
                   <div
-                    className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
+                    className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border border-[#ffffff12] rounded-md"
                     key={index}
                   >
                     {propMod.type &&
@@ -282,7 +299,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                       />
                     ) : (
                       <p
-                        className="text-gray-400 text-center"
+                        className="text-[#888] text-center"
                         onClick={() =>
                           setPropMod({
                             ...propMod,
@@ -297,10 +314,10 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                     )}
 
                     <div
-                      className="absolute top-2 right-2 cursor-pointer"
+                      className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
                       onClick={() => removeProp(index)}
                     >
-                      <svg
+                      {/* <svg
                         width="18"
                         height="19"
                         viewBox="0 0 18 19"
@@ -321,7 +338,9 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
-                      </svg>
+                      </svg> */}
+                                              <img src='/icons/trash.svg' className='w-4 h-4'/>
+
                     </div>
                   </div>
                 );
@@ -390,7 +409,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => removeProp(index)}
                       >
-                        <svg
+                        {/* <svg
                           width="18"
                           height="19"
                           viewBox="0 0 18 19"
@@ -411,7 +430,8 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           />
-                        </svg>
+                        </svg> */}
+                        <img src='/icons/trash.svg'/>
                       </div>
                     </div>
                   );

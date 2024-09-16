@@ -20,8 +20,9 @@ const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 const basicDetailsSchema = z.object({
   productName: z.string(),
   productDescription: z.string(),
-  price: z.number().gt(0),
-  curation: z.string(),
+  price: z.number().refine((value) => value % 1 !== 0 || value >= 0, {
+    message: "Price must be a decimal number or zero",
+  }),     curation: z.string(),
 });
 
 export default function BasicDetails({
@@ -106,6 +107,36 @@ export default function BasicDetails({
     }
   };
 
+  // const handleAttachment = (file: any, index: number) => {
+  //   const attachment = file.target.files[0];
+  //   const fileExtension = attachment?.name.split('.').pop().toLowerCase();
+  //   if (
+  //     attachment &&
+  //     attachment.size < maxFileSize &&
+  //     acceptedFormats.includes(`.${fileExtension}`)
+  //   ) {
+  //     const newAttachments = [...attachments];
+  //     newAttachments[index] = attachment;
+  
+  //     setAttachments(newAttachments);
+  //     setBasicDetail({
+  //       ...basicDetail,
+  //       attachments: newAttachments,
+  //     });
+  
+  //     // Add a new attachment box only after a file is selected
+  //     if (newAttachments.length === index + 1) {
+  //       const nextAttachments = [...newAttachments, null];
+  //       setAttachments(nextAttachments);
+  //       setBasicDetail({
+  //         ...basicDetail,
+  //         attachments: nextAttachments,
+  //       });
+  //     }
+  //   }
+  // };
+  
+
   const handleAttachment = (file: any, index: number) => {
     const attachment = file.target.files[0];
     const fileExtension = attachment.name.split('.').pop().toLowerCase();
@@ -123,12 +154,19 @@ export default function BasicDetails({
       });
     }
   };
+  // const addAttachment = () => {
+  //   if (attachmentRef.current) {
+  //     (attachmentRef.current as any).click();
+  //   }
+  // };
 
   const addAttachment = () => {
     if (attachmentRef.current) {
       (attachmentRef.current as any).click();
     }
     const newAttachments = [...attachments, null];
+    console.log("attachment",newAttachments);
+    console.log("attachment",newAttachments);
 
     setAttachments(newAttachments);
     setBasicDetail({
@@ -285,17 +323,19 @@ export default function BasicDetails({
             <Label className="font-medium text-[11px]">Price(USD)*</Label>
             <Input
               value={basicDetail.price ? basicDetail.price : ''}
-              onChange={(e) =>
-                setBasicDetail({
-                  ...basicDetail,
-                  price: parseInt((e.target as any).value),
-                })
-              }
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-
-              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
-              type="number"
-              placeholder="0"
+              onChange={(e) => {
+                const value = e.target.value;
+                // Validate the value to allow decimals and numbers only
+                if (!isNaN(Number(value)) && Number(value) >= 0) {
+                  setBasicDetail({
+                    ...basicDetail,
+                    price: value, // Keep the value as string to allow decimals
+                  });
+                }
+              }}
+              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+              type="text" // Change to 'text' to allow decimals
+              placeholder="0.0000000004"
             />
           </div>
 

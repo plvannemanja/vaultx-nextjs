@@ -133,6 +133,7 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
         },
       }}
     >
+      <ConnectedCard/>
       {children}
     </CreateNFTContext.Provider>
   );
