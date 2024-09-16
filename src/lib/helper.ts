@@ -8,7 +8,7 @@ import {
   sendTransaction,
   waitForReceipt,
 } from 'thirdweb';
-import { address, chain, contract } from './contract';
+import { address, chain, contract, explorer } from './contract';
 import { Account } from 'thirdweb/wallets';
 import { client } from './client';
 import { IBuyerInfo, INFTVoucher, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
@@ -230,4 +230,12 @@ export const getVoucherSignature = async (NFTVoucher: Omit<INFTVoucher, 'signatu
     throw new Error("signature is not valid.");
 
   return signature;
+}
+
+export const getExplorerURL = (type: 'address' | 'transaction', value: string) => {
+  if (type === 'address')
+    return `${explorer}address/${value}`;
+  if (type === 'transaction')
+    return `${explorer}tx/${value}`;
+  return "";
 }

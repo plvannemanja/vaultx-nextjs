@@ -9,13 +9,10 @@ import PhoneInput from 'react-phone-input-2';
 import { City, Country, State } from 'country-state-city';
 import { useToast } from '@/hooks/use-toast';
 import { CreateSellService } from '@/services/createSellService';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
 
-interface IPutSale {
-  nftId: string;
-  nft: any;
-}
-
-export default function PutSaleModal({ nftId, nft }: IPutSale) {
+export default function PutSaleModal() {
+  const { nftId, NFTDetail: nft } = useNFTDetail();
   const [countryCode, setCountryCode] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -129,9 +126,9 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
         nft?.walletAddresses?.length > 0
           ? nft?.paymentPercentage
             ? nft?.walletAddresses?.map((item) => ({
-                paymentWallet: item.address,
-                paymentPercentage: item.percentage,
-              }))
+              paymentWallet: item.address,
+              paymentPercentage: item.percentage,
+            }))
             : []
           : [];
 
@@ -197,7 +194,7 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => {}}>
+              <button className="w-full h-full" onClick={() => { }}>
                 Discard
               </button>
             </div>
@@ -450,7 +447,7 @@ export default function PutSaleModal({ nftId, nft }: IPutSale) {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => {}}>
+              <button className="w-full h-full" onClick={() => { }}>
                 Discard
               </button>
             </div>

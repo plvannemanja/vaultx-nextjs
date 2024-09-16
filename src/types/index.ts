@@ -204,7 +204,31 @@ export interface INFTVoucher {
   price: bigint;
   royaltyWallet: Address;
   royaltyPercentage: bigint;
-  paymentWallets: Address[],
-  paymentPercentages: bigint[],
+  paymentWallets: Address[];
+  paymentPercentages: bigint[];
   signature?: `0x${string}`;
+}
+
+export interface INFTActivity {
+  _id: string;
+  nftId: NFTItemType;
+  state: "Listed" | "Minted" | "Bid Placed" | "Listed for Sale" | "Added Funds in Escrow" | "Purchased" | "End Sale" | "In Escrow" | "Bid Accepted" | "Transferred" | "Unlisted" | "Cancel Bid" | "Dispute Registered" | "Order Canceled";
+  createdAt: Date;
+  updatedAt: Date;
+  actionHash?: `0x${string}`;
+  from?: UserType;
+  to?: UserType;
+  price: number;
+}
+
+export interface IBid {
+  _id: string;
+  nftId: NFTItemType;
+  bidId: number;
+  bidValue: number;
+  bidder: UserType;
+  bidHash: `0x${string}`;
+  bidSuccess: boolean;
+  bidCanceled: boolean;
+  biddderShippingId: string;
 }

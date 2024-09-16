@@ -5,16 +5,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import { ArrowUpTrayIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { CreateSellService } from '@/services/createSellService';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
-interface ICancelOrderModal {
-  id: string;
-}
 
-export default function CancelOrderModal({ id }) {
+export default function CancelOrderModal() {
+  const { nftId: id } = useNFTDetail();
   const [step, setStep] = useState(1);
   const [description, setDescription] = useState('');
   const [numberOfInputs, setNumberOfInputs] = useState(1);
@@ -181,7 +180,7 @@ export default function CancelOrderModal({ id }) {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => {}}>
+              <button className="w-full h-full" onClick={() => { }}>
                 Cancel
               </button>
             </div>

@@ -6,9 +6,6 @@ import NftCard from '@/app/components/Cards/NftCard';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NftServices from '@/services/nftService';
-import { readContract } from 'thirdweb';
-import { contract } from '@/lib/contract';
-import { getNftDataById } from '@/utils/nftutils';
 import { getMedia } from '@/services/supplier';
 import { useDebounce } from 'use-debounce';
 import { useToast } from '@/hooks/use-toast';
@@ -102,18 +99,18 @@ export default function Page() {
       <div className="flex gap-4 flex-wrap my-4 justify-center md:justify-between">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-              return (
-                <div
-                  className="w-[17rem]"
-                  key={index}
-                  onClick={() => {
-                    router.push(`/nft/${nft.tokenId}`);
-                  }}
-                >
-                  <NftCard data={nft} />
-                </div>
-              );
-            })
+            return (
+              <div
+                className="w-[17rem]"
+                key={index}
+                onClick={() => {
+                  router.push(`/nft/${nft.tokenId}`);
+                }}
+              >
+                <NftCard data={nft} />
+              </div>
+            );
+          })
           : null}
       </div>
     </div>
