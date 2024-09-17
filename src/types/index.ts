@@ -115,7 +115,7 @@ export type UserType = {
 };
 
 export type PaymentSplitType = {
-  paymentWallet: Address;
+  paymentWallet: string;
   paymentPercentage: bigint;
 };
 
@@ -156,6 +156,7 @@ export interface IAdvancedDetailFormData {
   certificates: any[];
   propertyTemplateId: string | null;
   attributes: any[] | null;
+  royalties: any[]
 }
 
 export interface ISellerInfo {

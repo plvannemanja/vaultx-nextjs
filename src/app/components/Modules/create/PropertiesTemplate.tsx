@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getProperties, upsertProperty } from '@/services/supplier';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
+import PropertiesInfo from '../Properties';
 
 const defaultAttributes = [
   {
@@ -36,6 +37,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
 
   const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
   const [data, setData] = useState([]);
+  const [isModalOpenTemplate, setIsModalOpenTemplate] = useState(false);
   const [propMod, setPropMod] = useState<any>({
     by: null,
     index: null,
@@ -244,6 +246,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                 propertyTemplateId: null,
                 attributes: null,
               });
+              setIsModalOpenTemplate(true);
             }}
             className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex flex-col justify-center items-center rounded-md relative ${isSelected(null) ? 'border-neon' : 'border-none'}`}
           >
@@ -339,7 +342,7 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
                           strokeLinejoin="round"
                         />
                       </svg> */}
-                                              <img src='/icons/trash.svg' className='w-4 h-4'/>
+                      <img src='/icons/trash.svg' className='w-4 h-4'/>
 
                     </div>
                   </div>
@@ -453,6 +456,9 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
           </span>
         </div>
       </div>
+      {
+        isModalOpenTemplate && <PropertiesInfo close={() => setIsModalOpenTemplate(false)}/>
+      }
     </div>
   );
 }

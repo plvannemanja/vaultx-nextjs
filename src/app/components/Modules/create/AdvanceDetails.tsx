@@ -9,6 +9,9 @@ import BaseButton from '../../ui/BaseButton';
 import FileInput from '../../ui/FileInput';
 import PropertiesTemplate from './PropertiesTemplate';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { PaymentSplitType } from '@/types';
+import { BaseDialog } from '../../ui/BaseDialog';
+import PropertiesInfo from '../Properties';
 
 const category = ['Fine Art', 'Abstract Art', 'Pop Art', 'Test Category'];
 
@@ -40,9 +43,13 @@ export default function AdvanceDetails({
 
 
 
-  const [royalties, setRoyalties] = useState([{ address: '', percentage: '' }]);
-  const [splits, setSplits] = useState([{ address: '', percentage: '' }]);
+  const [royalties, setRoyalties] = useState<Array<{ address: string; percentage: string }>>([{ address: '', percentage: '' }]);
+  
+  const [splits, setSplits] = useState<PaymentSplitType[]>([{ paymentWallet: '', paymentPercentage: BigInt(0) }]);
+  // const [splits, setSplits] = useState([{ paymentWallet: '', paymentPercentage: '' }]);
   const [unlockableFiles, setUnlockableFiles] = useState<any>([]);
+  
+
   const [formData, setFormData] = useState<any>({
     royaltyAddress: null,
     royalty: null,
@@ -80,7 +87,7 @@ export default function AdvanceDetails({
     });
   };
   const addRoyalty = () => {
-    const newRoyalties = [...royalties, { address: '', percentage: '' }];
+    const newRoyalties = [...royalties, {address: '', percentage: ''}];
     setRoyalties(newRoyalties);
     updateAdvancedDetailsRoyalties(newRoyalties);
   };
@@ -104,9 +111,9 @@ export default function AdvanceDetails({
     updateAdvancedDetailsRoyalties(newRoyalties);
   };
   const addSplit = () => {
-    setSplits([...splits, { address: '', percentage: '' }]);
+    setSplits([...splits, { paymentWallet: '', paymentPercentage: BigInt(0) }]);
   };
-
+  
   const removeSplit = (index: number) => {
     if (splits.length > 1) {
       const newSplits = splits.filter((_, i) => i !== index);
@@ -115,10 +122,13 @@ export default function AdvanceDetails({
     }
   };
 
-  const updateSplit = (index: number, field: 'address' | 'percentage', value: string | number) => {
+  const updateSplit = (index: number, field: 'paymentWallet' | 'paymentPercentage', value: string | bigint) => {
     const newSplits = splits.map((split, i) => {
       if (i === index) {
-        return { ...split, [field]: field === 'percentage' ? Number(value) : value };
+        return { 
+          ...split, 
+          [field]: field === 'paymentPercentage' ? BigInt(value) : value 
+        };
       }
       return split;
     });
@@ -186,7 +196,7 @@ export default function AdvanceDetails({
       err.push({ path: ['Properties'] });
     }
 
-    if (options.royalties && !advancedDetails.royalty) {
+    if (options.royalties && !advancedDetails.royalties) {
       err.push({ path: ['Royalties'] });
     }
 
@@ -428,23 +438,26 @@ export default function AdvanceDetails({
           <div className="col-span-4">
             <Input
               className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-              onChange={(e) => updateSplit(index, 'address', e.target.value)}
+              onChange={(e) => updateSplit(index, 'paymentWallet', e.target.value)}
               placeholder="Address"
               type="text"
-              value={split.address}
+              value={split.paymentWallet}
             />
           </div>
           <div className="col-span-1 flex">
             <div className='relative'>
-              <Input
-                className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
-                onChange={(e) => updateSplit(index, 'percentage', e.target.value)}
-                placeholder="0"
-                min={0}
-                max={100}
-                type="number"
-                value={split.percentage}
-              />
+            <Input
+          className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+          onChange={(e) => {
+            const value = BigInt(e.target.value);  // Convert the input value to bigint
+            updateSplit(index, 'paymentPercentage', value);
+          }}
+          placeholder="0"
+          min={0}
+          max={100}
+          type="number"
+          value={split.paymentPercentage.toString()} // Convert bigint to string for display
+        />
               <p className='absolute top-4 right-2 text-[#979797]'>%</p>
             </div>
           </div>

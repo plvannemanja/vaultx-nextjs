@@ -8,10 +8,11 @@ import { Label } from '@/components/ui/label';
 import BaseButton from '../ui/BaseButton';
 import { useToast } from '@/hooks/use-toast';
 
-export default function PropertiesInfo() {
+export default function PropertiesInfo({close}) {
   const { toast } = useToast();
 
   const [data, setData] = useState<null | any[]>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [propMod, setPropMod] = useState<{
     by: string | null;
     type: boolean;
@@ -126,6 +127,7 @@ export default function PropertiesInfo() {
         });
       }
     }
+    close();
   };
 
   const cancelChanges = () => {
@@ -211,14 +213,11 @@ export default function PropertiesInfo() {
                 <p>{item.name}</p>
                 <div className="absolute bottom-5 right-5">
                   <BaseDialog
-                    trigger={
-                      <span
-                        className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400"
-                        onClick={() => preserveState(item)}
-                      >
-                        Edit
-                      </span>
-                    }
+                  isOpen
+                  onClose={() => {
+                    
+                  }}
+                    
                     className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                   >
                     <div className="flex flex-col gap-y-5">
@@ -509,7 +508,7 @@ export default function PropertiesInfo() {
               <BaseButton
                 title="Cancel"
                 variant="secondary"
-                onClick={cancelChanges}
+                onClick={()=>{cancelChanges();close()}}
               />
               <BaseButton
                 title="Save"
