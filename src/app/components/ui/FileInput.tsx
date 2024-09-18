@@ -69,7 +69,7 @@ export default function FileInput({
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <button className="file-upload bg-[#161616] w-full rounded-xl justify-start items-center gap-[30px] inline-flex"  >
+      <div className="file-upload bg-[#161616] w-full rounded-xl justify-start items-center gap-[30px] inline-flex"  >
         <BaseButton 
         title='Upload'
         variant='secondary'
@@ -81,7 +81,7 @@ export default function FileInput({
         />
         {' '}
         {editMode ? 'File Selected' : fileName ? fileName : 'No files selected'}
-      </button>
+      </div>
       {subtitle && (
         <p className="text-sm text-gray-500 font-medium">{subtitle}</p>
       )}

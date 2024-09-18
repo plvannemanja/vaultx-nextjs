@@ -449,7 +449,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={basicDetails.error ? true : false}
           close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(basicDetails.error)} />
+          <ErrorModal data={JSON.parse(basicDetails.error)}  close={() => setBasicDetails({ ...basicDetails, error: null })}/>
         </TriggerModal>
       )}
 
@@ -458,7 +458,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={advanceDetails.error ? true : false}
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(advanceDetails.error)} />
+          <ErrorModal data={JSON.parse(advanceDetails.error)} close={() => setAdvanceDetails({ ...advanceDetails, error: null })}/>
         </TriggerModal>
       )}
 
@@ -467,7 +467,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={sellerInfo.error ? true : false}
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
         >
-          <ErrorModal data={JSON.parse(sellerInfo.error)} />
+          <ErrorModal data={JSON.parse(sellerInfo.error)} close={() => setSellerInfo({ ...sellerInfo, error: null })} />
         </TriggerModal>
       )}
       <div className="flex mb-[30px]">
@@ -477,9 +477,12 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       {step === 1 && (
         <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
       )}
+
+
       {step === 2 && (
         <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
       )}
+
       {step === 3 && (
         <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
       )}

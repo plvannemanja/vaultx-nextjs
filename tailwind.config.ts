@@ -28,6 +28,7 @@ const config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
+          // DEFAULT: 'hsl(var(--primary))',
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
@@ -74,6 +75,10 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      backgroundImage: {
+        'template-gradient': 'linear-gradient(101deg, rgba(255, 255, 255, 0.05) -0.78%, rgba(255, 255, 255, 0.01) 100%)',
+      
       },
     },
   },

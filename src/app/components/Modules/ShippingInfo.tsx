@@ -36,10 +36,12 @@ export default function ShippingInfo({
   const [countryCode, setCountryCode] = useState('');
   const countries = Country.getAllCountries();
   const [selectedShipping, setSelectedShipping] = useState<any>(null);
-
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const nftContext = useCreateNFT();
 
-  const update = async (id?: string) => {
+
+  const update = async (id) => {
     let response = null;
 
     if (id) {
@@ -89,10 +91,11 @@ export default function ShippingInfo({
         phoneNumber: sellerInfo.phoneNumber,
       });
     }
+    console.log('response:', response);
 
     if (response) {
       if (data) {
-        setData([...data, response]);
+        setData([...data]);
       }
     }
   };
@@ -151,12 +154,17 @@ export default function ShippingInfo({
       postalCode: '',
       phoneNumber: '',
     });
+    setIsModalOpen(false);
+    setIsUpdateModalOpen(false);
   };
 
   const resetState = () => {
+   
     setStates([]);
     setCities([]);
     setCountryCode('');
+    setIsModalOpen(true);
+   console.log('sellerInfo', sellerInfo);
   };
 
   const preserveState = (value: any) => {
@@ -271,13 +279,14 @@ export default function ShippingInfo({
 
     fetchSellers();
   }, []);
+  console.log("shipping Data",data)
 
   return (
     <div className="flex flex-col gap-y-5">
       <p className="text-lg font-medium">Shipping Information</p>
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
-          ? data.map((item: any, index: number) => {
+          ? data?.map((item: any, index: number) => {
               return (
                 <div
                   key={index}
@@ -290,18 +299,18 @@ export default function ShippingInfo({
                       shipping: item,
                     });
                   }}
-                  className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
-                >
+                  className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
+                > 
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
                       <span>{item.name}</span>
                       <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
                     </div>
-                    <div className="text-[#A6A6A6]">{item.shippingAddr}</div>
+                    <div className="text-[#A6A6A6]">{sellerInfo.type ? sellerInfo.type : item.shippingAddr}</div>
                   </div>
                   <div>
                     {item.address && item.country ? (
-                      <p className="text-[#A6A6A6]">
+                      <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
                         {`${item.address.line1 + item.address.line2 + item.address.state + item.address.city + item.country}`
                           .length > 150
                           ? `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + item.address.city + ' ' + item.country}`.slice(
@@ -310,18 +319,23 @@ export default function ShippingInfo({
                             ) + '...'
                           : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
                       </p>
+                    
                     ) : null}
-                  </div>
-                  <div className="flex justify-end">
-                    <BaseDialog
-                      trigger={
+
                         <span
-                          onClick={() => preserveState(item)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400"
+                          onClick={() => {preserveState(item);
+                            setIsUpdateModalOpen(true);
+                          }}
+                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
                         >
                           Edit
                         </span>
-                      }
+                  </div>
+
+                  <div className="flex justify-end ">
+                    <BaseDialog
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
                       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                     >
                       <div className="flex flex-col gap-y-5 w-full">
@@ -383,9 +397,11 @@ export default function ShippingInfo({
                             onClick={cancelChanges}
                           />
                           <BaseButton
-                            title="Save"
+                            title="Saveee"
                             variant="primary"
-                            onClick={async () => await update(item._id)}
+                            onClick={async () => {await update(item)
+                               setIsUpdateModalOpen(false)
+                            }}
                           />
                         </div>
                       </div>
@@ -396,8 +412,6 @@ export default function ShippingInfo({
             })
           : null}
 
-        <BaseDialog
-          trigger={
             <div
               className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
               onClick={resetState}
@@ -409,10 +423,14 @@ export default function ShippingInfo({
                 <p className="text-[#828282]">Add New Address</p>
               </div>
             </div>
-          }
+
+
+        <BaseDialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
           className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
         >
-          <div className="flex flex-col gap-y-5">
+          <div className="flex flex-col gap-y-5">   
             <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
               <div className="flex flex-col gap-y-3">
                 <Label className="text-lg font-medium">
@@ -596,7 +614,9 @@ export default function ShippingInfo({
               <BaseButton
                 title="Save"
                 variant="primary"
-                onClick={async () => await update()}
+                onClick={async () => {await update()
+                  setIsModalOpen(false)
+                }}
               />
             </div>
           </div>

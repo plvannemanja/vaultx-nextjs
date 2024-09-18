@@ -21,6 +21,9 @@ export default function ContactInfo({
     name: '',
   });
   const [selectedContact, setSelectedContact] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
 
   const nftContext = useCreateNFT();
 
@@ -50,6 +53,8 @@ export default function ContactInfo({
       contactInfo: '',
       name: '',
     });
+    setIsModalOpen(false);
+    setIsUpdateModalOpen(false);
   };
 
   const isSelected = useMemo(
@@ -95,7 +100,7 @@ export default function ContactInfo({
           ? data.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
+                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
                 onClick={() => {
                   setSelectedContact(item);
 
@@ -108,20 +113,33 @@ export default function ContactInfo({
               >
                 <span>{item.name ? item.name : `#${index + 1}`}</span>
                 <div>
-                  <p className="text-[#A6A6A6] py-1">
-                    {item.contactInfo.length > 150
+                  <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
+                    {item?.contactInfo?.length > 150
                       ? `${item.contactInfo.slice(0, 150)}...`
                       : item.contactInfo}
                     ...
                   </p>
                 </div>
+
+                <span 
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
+                      onClick={() => {
+                        setIsUpdateModalOpen(true);
+                        setNewContact({
+                          ...newContact,
+                          id: item._id,
+                          name: item.name,
+                          contactInfo: item.contactInfo,
+                        });
+                      }}
+                      >
+                      Edit
+                      </span>
+
                 <div className="flex justify-end">
                   <BaseDialog
-                    trigger={
-                      <span className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-gray-400 text-sm">
-                        Edit
-                      </span>
-                    }
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
                     className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                   >
                     <div className="flex flex-col gap-y-5">
@@ -173,19 +191,22 @@ export default function ContactInfo({
                         <BaseButton
                           title="Save"
                           variant="primary"
-                          onClick={async () => await update(item._id)}
+                          onClick={async () => {await update(item._id)
+                            setIsUpdateModalOpen(false)
+                          }}
                         />
                       </div>
                     </div>
                   </BaseDialog>
                 </div>
               </div>
+
             ))
           : null}
 
-        <BaseDialog
-          trigger={
-            <div className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md">
+            <div className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md" 
+            onClick={() => setIsModalOpen(true)}
+            >
               <div className="flex flex-col gap-y-6 items-center">
                 <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
                   <Image
@@ -199,7 +220,10 @@ export default function ContactInfo({
                 <p className="text-[#828282]">Add New Information</p>
               </div>
             </div>
-          }
+
+        <BaseDialog
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)} 
           className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
         >
           <div className="flex flex-col gap-y-5">
@@ -239,7 +263,9 @@ export default function ContactInfo({
               <BaseButton
                 title="Save"
                 variant="primary"
-                onClick={async () => await update()}
+                onClick={async () => {await update()
+                  setIsModalOpen(false)
+                }}
               />
             </div>
           </div>
