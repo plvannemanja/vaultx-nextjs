@@ -8,10 +8,10 @@ import BaseButton from '../../ui/BaseButton';
 import Image from 'next/image';
 import { collectionServices } from '@/services/supplier';
 import { z } from 'zod';
-import { protocolFee } from '@/lib/helper';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { BaseDialog } from '../../ui/BaseDialog';
 import CancelModal from './CancelModal';
+import { useGlobalContext } from '../../Context/GlobalContext';
 
 // 1GB file size
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
@@ -22,7 +22,7 @@ const basicDetailsSchema = z.object({
   productDescription: z.string(),
   price: z.number().refine((value) => value % 1 !== 0 || value >= 0, {
     message: "Price must be a decimal number or zero",
-  }),     curation: z.string(),
+  }), curation: z.string(),
 });
 
 export default function BasicDetails({
@@ -34,7 +34,7 @@ export default function BasicDetails({
 }) {
   const { basicDetail, setBasicDetail } = useCreateNFT();
 
-  const [fee, setFee] = useState<number>(0);
+  const { fee } = useGlobalContext();
   const fileInputRef = useRef(null);
   const attachmentRef = useRef(null);
 
@@ -117,13 +117,13 @@ export default function BasicDetails({
   //   ) {
   //     const newAttachments = [...attachments];
   //     newAttachments[index] = attachment;
-  
+
   //     setAttachments(newAttachments);
   //     setBasicDetail({
   //       ...basicDetail,
   //       attachments: newAttachments,
   //     });
-  
+
   //     // Add a new attachment box only after a file is selected
   //     if (newAttachments.length === index + 1) {
   //       const nextAttachments = [...newAttachments, null];
@@ -135,7 +135,7 @@ export default function BasicDetails({
   //     }
   //   }
   // };
-  
+
 
   const handleAttachment = (file: any, index: number) => {
     const attachment = file.target.files[0];
@@ -165,8 +165,8 @@ export default function BasicDetails({
       (attachmentRef.current as any).click();
     }
     const newAttachments = [...attachments, null];
-    console.log("attachment",newAttachments);
-    console.log("attachment",newAttachments);
+    console.log("attachment", newAttachments);
+    console.log("attachment", newAttachments);
 
     setAttachments(newAttachments);
     setBasicDetail({
@@ -198,10 +198,6 @@ export default function BasicDetails({
     }
   };
 
-  const fetchProtocolFee = async () => {
-    let fee = await protocolFee();
-    setFee(Number(fee) / 100);
-  };
   useEffect(() => {
     if (curations.length === 0) {
       fetchUserCollections();
@@ -270,7 +266,7 @@ export default function BasicDetails({
                   });
                 }}
                 className={"rounded-[14px]"}
-                
+
               />
             )}
           </div>
@@ -480,7 +476,7 @@ export default function BasicDetails({
           <CancelModal />
         </BaseDialog>
 
-        <BaseButton title="Next" variant="primary" onClick={create} className="w-[49%]"  displayIcon={true} iconPath={'/icons/arrow_ico.svg'}/>
+        <BaseButton title="Next" variant="primary" onClick={create} className="w-[49%]" displayIcon={true} iconPath={'/icons/arrow_ico.svg'} />
       </div>
     </div >
   );

@@ -12,8 +12,6 @@ import {
 import { EyeIcon } from 'lucide-react';
 import { CreateSellService } from '@/services/createSellService';
 import { useToast } from '@/hooks/use-toast';
-import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
-import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
 import { NFTDetailProvider, useNFTDetail } from '@/app/components/Context/NFTDetailContext';
 import ActivityList from '@/app/components/Modules/nft/ActivityList';
 import BidList from '@/app/components/Modules/nft/BidList';

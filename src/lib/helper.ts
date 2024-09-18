@@ -7,11 +7,13 @@ import {
   readContract,
   sendTransaction,
   waitForReceipt,
+  ZERO_ADDRESS,
 } from 'thirdweb';
 import { address, chain, contract, explorer } from './contract';
 import { Account } from 'thirdweb/wallets';
 import { client } from './client';
 import { IBuyerInfo, INFTVoucher, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
+import { formatEther, parseEther } from 'viem';
 
 export const createCollection = async (
   name: string,
@@ -238,4 +240,14 @@ export const getExplorerURL = (type: 'address' | 'transaction', value: string) =
   if (type === 'transaction')
     return `${explorer}tx/${value}`;
   return "";
+}
+
+export const getTokenAmount = async (usdAmount: string) => {
+  const tokenAmount = await readContract({
+    contract,
+    method: "function getTokenAmount(uint256 usdAmount, address token) view returns (uint256)",
+    params: [parseEther(usdAmount), ZERO_ADDRESS]
+  })
+
+  return formatEther(tokenAmount);
 }

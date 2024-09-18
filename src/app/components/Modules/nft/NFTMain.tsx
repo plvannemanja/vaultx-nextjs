@@ -32,12 +32,6 @@ const style = {
   boxShadow: 24,
 };
 
-function Web3Modal() {
-  const { type } = useNFTDetail();
-  return (
-    <></>
-  );
-}
 export default function NFTMain() {
   const { nftId, mainImage, NFTDetail: data, likes, setLikes, liked, setLiked, type } = useNFTDetail();
   const [modal, setModal] = useState(false);
@@ -365,17 +359,13 @@ export default function NFTMain() {
                 <BaseDialog
                   trigger={
                     <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white">
-                      Check Matic Quotes
+                      Check Eth Quotes
                     </span>
                   }
                   className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                 >
                   <Quotes
-                    nft={data}
-                    fee={10}
-                    contractInfo={{
-                      address: '44932KJKL'
-                    }}
+                    gasFee={0.0001}
                   />
                 </BaseDialog>
               </div>
