@@ -1,10 +1,10 @@
 import React from 'react';
-import Image from 'next/image';
+
 export default function Curation() {
   return (
-    <div className="flex flex-col gap-y-4 py-4 text-white max-w-[35rem] text-center items-center">
+    <div className="flex flex-col gap-y-4 py-4 text-white max-w-[35rem] text-center items-center bg-dark px-6 rounded-md">
       <div>
-        <Image src="/icons/ex-icon.svg" alt="error" className="w-20 h-20" />
+        <img src="/icons/ex-icon.svg" alt="error" className="w-20 h-20" />
       </div>
       <h1 className="text-white text-2xl font-medium">
         Interested in creating your own curation?

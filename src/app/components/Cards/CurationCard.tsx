@@ -1,5 +1,7 @@
+'use client';
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
 
 interface ICurationCard {
   name: string;
@@ -7,11 +9,21 @@ interface ICurationCard {
   nftCount: number;
   totalVolume: number;
   image: string;
+  id: string;
 }
 
 export default function CurationCard({ data }: { data: ICurationCard }) {
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/dashboard/curation/${data.id}`);
+  };
+
   return (
-    <Card className="bg-dark text-white border-none max-w-[25rem] rounded-none">
+    <Card
+      className="bg-dark text-white border-none max-w-[100%] rounded-none"
+      onClick={handleCardClick}
+    >
       <CardContent className="aspect-square p-3">
         <div className="w-full overflow-hidden">
           <img

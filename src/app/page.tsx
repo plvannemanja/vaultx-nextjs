@@ -104,6 +104,8 @@ export default function Home() {
         process.env.NEXT_PUBLIC_APP_BACKEND_URL ||
         'https://tapi.vault-x.io/api/v1';
       const { data } = await axios.get(`${server_uri}/homepage/get-sections`);
+
+      console.log('this is data', data);
       const images = await getMedia();
       const curationsList: any[] = [];
 

@@ -10,12 +10,14 @@ import {
 import React from 'react';
 
 interface IBaseDialogProps {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   children: React.ReactNode;
   title?: string;
   description?: string;
   className?: string;
   footer?: React.ReactNode;
+  isOpen?: boolean;
+  onClose?: (value: boolean) => void; // Function to close the dialog
 }
 
 export function BaseDialog({
@@ -25,13 +27,19 @@ export function BaseDialog({
   description,
   className,
   footer,
+  isOpen,
+  onClose,
 }: IBaseDialogProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className={`max-w-5xl ${className}`}>
         <DialogHeader>
-          {title && <DialogTitle>{title}</DialogTitle>}
+          {title ? (
+            <DialogTitle>{title}</DialogTitle>
+          ) : (
+            <DialogTitle className="hidden"></DialogTitle>
+          )}
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         {children}

@@ -54,6 +54,7 @@ export default function Page() {
       });
 
       const collections = response.data.curations;
+      console.log('this is test data', { collections });
       let detailedInfo = await Promise.all(
         collections
           .filter((item: any) => !item?.active && !item?.owner?.active)
@@ -61,6 +62,8 @@ export default function Page() {
             const info = await collectionServices.getCollectionInfo(
               collection._id,
             );
+
+            console.log('info', info);
 
             const extra = {
               nftCount: info.data.collection.nftCount,
@@ -72,6 +75,7 @@ export default function Page() {
               ...extra,
               name: collection.name,
               image: collection.bannerImage,
+              id: collection._id,
             };
           }),
       );
@@ -99,21 +103,34 @@ export default function Page() {
           alt="hero"
           width={100}
           height={100}
-          className="w-full rounded-xl object-fill"
+          className="w-full rounded-xl object-fill mb-[19px]"
           onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
       <CurationSearch setState={handleState} />
 
-      <div className="flex gap-4 lg:justify-between flex-wrap my-4 justify-center md:justify-start">
+      {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
+      <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
         {collections.map((collection: any, index: number) => {
           return (
-            <div className="w-[23rem]" key={index}>
+            <div className="col-span-4" key={index}>
               <CurationCard key={index} data={collection} />
             </div>
           );
         })}
+
+        {/* <div className="col-span-1">
+
+          </div> */}
       </div>
+      {/* {collections.map((collection: any, index: number) => {
+          return (
+            <div className="w-[100%]" key={index}>
+              <CurationCard key={index} data={collection} />
+            </div>
+          );
+        })} */}
     </div>
+    // </div>
   );
 }

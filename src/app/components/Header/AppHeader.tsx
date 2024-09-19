@@ -20,9 +20,10 @@ import { client, wallets } from '@/lib/client';
 import { authenticationServices } from '@/services/supplier';
 import { Address } from 'thirdweb';
 import { checksumAddress } from 'viem';
+import { useGlobalContext } from '../Context/GlobalContext';
 
 export default function AppHeader() {
-  const [user, setUser] = useState<any>(null);
+  const { user, setUser } = useGlobalContext();
   const activeAccount = useActiveAccount();
   const { connect } = useConnectModal();
 

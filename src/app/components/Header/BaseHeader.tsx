@@ -28,6 +28,7 @@ import Menu from './Menu';
 import { useRouter } from 'next/navigation';
 import { WalletAutoConnect } from '../theme-provider';
 import { checksumAddress } from 'viem';
+import { useGlobalContext } from '../Context/GlobalContext';
 
 const socials = [
   {
@@ -53,7 +54,7 @@ const socials = [
 ];
 
 export function BaseHeader() {
-  const [user, setUser] = useState<any>(null);
+  const { user, setUser } = useGlobalContext();
   const detailsModal = useWalletDetailsModal();
   const { connect } = useConnectModal();
   const activeAccount = useActiveAccount();
@@ -172,7 +173,7 @@ export function BaseHeader() {
           </Link>
           <Link
             className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
-            href="/dashboard?tab=curation"
+            href="/dashboard/curation"
           >
             Curation
           </Link>

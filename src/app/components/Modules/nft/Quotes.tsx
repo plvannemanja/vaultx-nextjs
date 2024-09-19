@@ -1,31 +1,58 @@
 'use client';
 
-import React, { useState } from 'react';
-import { trimString } from '@/utils/helpers';
+import React, { useEffect, useState } from 'react';
+import { roundToDecimals, trimString } from '@/utils/helpers';
+import { useActiveWalletChain } from 'thirdweb/react';
+import { contract } from '@/lib/contract';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { getTokenAmount } from '@/lib/helper';
+import { useGlobalContext } from '../../Context/GlobalContext';
 
-interface IQuotes {
-  price: number;
-}
-
+const ORACLE_DELTA = 30;
 export default function Quotes({
-  nft,
-  fee,
-  contractInfo,
+  gasFee,
+  onClose,
 }: {
-  nft: IQuotes;
-  fee: number;
-  contractInfo: { address: string };
+  gasFee: number;
+  onClose: () => void;
 }) {
-  const [quoteDetail, setQuoteDetail] = useState<any>({
-    usdAmount: 0,
-    maticAmount: 0,
-  });
-  const [quoteCount, setQuoteCount] = useState(30);
-  const [quotes, setQuotes] = useState(false);
+  const { NFTDetail } = useNFTDetail();
+  const { fee } = useGlobalContext();
+  const activeChain = useActiveWalletChain();
+  // State variables
+  const [tokenAmount, setTokenAmount] = useState<string | null>(null);
+  const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
+  const [seconds, setSeconds] = useState(ORACLE_DELTA); // Countdown timer in seconds
+  const [timerKey, setTimerKey] = useState(0); // Key to reset timer
 
-  const checkQuotes = async () => {};
+  // Fetch data function
+  const getQuote = async () => {
+    const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
+    setTokenAmount(tokenAmount as string);
+    const expectedAmount = (Number(tokenAmount) * 100) / (100 - fee) + gasFee;
+    setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
+  };
 
-  const resetQuote = async () => {};
+  useEffect(() => {
+    getQuote();
+
+    const countdown = () => {
+      setSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+      setTimeout(countdown, 1000); // Repeat every 1 second
+    };
+
+    // Start the recursive timeouts
+    const timeoutId = setTimeout(countdown, 1000);
+
+    // Cleanup the timeout on unmount
+    return () => clearTimeout(timeoutId);
+  }, [timerKey]);
+
+  // Manual reset function
+  const handleReset = () => {
+    setSeconds(ORACLE_DELTA);
+    setTimerKey((timerKey) => timerKey + 1);
+  };
 
   return (
     <div className="p-3 text-white">
@@ -38,44 +65,44 @@ export default function Quotes({
       </p>
       <div className="mt-4 flex justify-between items-center my-3">
         <span className="text-sm">Sale Price (USD)</span>
-        <span>${quoteDetail.usdAmount}</span>
+        <span>${NFTDetail.price}</span>
       </div>
       <div className="p-4 rounded-md border-2 border-dashed border-[#3A3A3A]">
         <div className="flex mb-3 gap-x-4">
-          <img src="/icons/matic.png" className="w-10" />
+          <img src="/icons/ether.svg" className="w-10" />
           <div className="">
             <p>
-              Matic{' '}
+              Eth{' '}
               <span
                 className="text-sm"
                 style={{
                   color: 'rgba(255, 255, 255, 0.53)',
                 }}
               >
-                Polygon Network
+                {activeChain?.name}
               </span>
             </p>
-            <p>{trimString(contractInfo.address)}</p>
+            <p>{trimString(contract.address)}</p>
           </div>
         </div>
         <hr />
         <div className="flex flex-col gap-y-4 mt-3">
           <div className="flex justify-between">
             <span>Cryptocurrency Price</span>
-            <span>{quoteDetail.maticAmount} Matic</span>
+            <span>{tokenAmount} Eth</span>
           </div>
           <div className="flex justify-between">
             <span>Estimated Gas fee</span>
-            <span>{quoteDetail.gasFee} Matic</span>
+            <span>{gasFee} Eth</span>
           </div>
           <div className="flex items-center justify-center">
             <button
               className="text-white px-4 py-2 rounded-xl bg-[#535353]"
-              disabled={quoteCount > 0}
-              onClick={resetQuote}
+              disabled={seconds > 0}
+              onClick={handleReset}
             >
-              {quoteCount ? (
-                <span>New Quotes in 0:{quoteCount}</span>
+              {seconds ? (
+                <span>New Quotes in 0:{seconds}</span>
               ) : (
                 <span>New Quotes</span>
               )}
@@ -85,16 +112,16 @@ export default function Quotes({
       </div>
       <div className="flex justify-between my-3">
         <span className="text-sm">Marketplace fee</span>
-        <span>{quoteDetail.fee}%</span>
+        <span>{fee}%</span>
       </div>
       <hr />
       <div className="flex justify-between my-3">
         <span className="text-sm">The expected payment is</span>
-        <span>{quoteDetail.expectedAmount} MATIC</span>
+        <span>{expectedAmount} ETH</span>
       </div>
       <button
         className="bg-[#DEE8E8] w-full my-3 py-2 text-center rounded-md text-black font-medium"
-        onClick={() => setQuotes(false)}
+        onClick={onClose}
       >
         Close
       </button>

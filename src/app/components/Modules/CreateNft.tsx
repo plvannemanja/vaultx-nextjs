@@ -9,12 +9,14 @@ import TriggerModal from '../ui/TriggerModal';
 import { CreateNftServices } from '@/services/createNftService';
 import { useActiveAccount } from 'thirdweb/react';
 import { useCreateNFT } from '../Context/CreateNFTContext';
-import { IListAsset, listAsset } from '@/lib/helper';
+import { getVoucherSignature, IListAsset, listAsset } from '@/lib/helper';
 import { parseEther, zeroAddress } from 'viem';
 import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
 import MintLoader from './create/MintLoader';
 import RestrictiveModal from '../Modals/RestrictiveModal';
+import ConnectedCard from '../Cards/ConnectedCard';
+import { INFTVoucher } from '@/types';
 
 export enum StepType {
   basic,
@@ -108,11 +110,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         description: 'Failed to create NFT',
         variant: 'destructive',
       });
-      if (nftId) {
-        await nftService.removeFromDb({
-          nftId: nftId
-        });
-      }
       return null;
     }
   };
@@ -176,8 +173,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   };
 
   const createNFT = async () => {
+    let nftId = null;
     try {
-      const nftId = await createBasicDetails();
+      nftId = await createBasicDetails();
 
       if (!nftId) {
         throw new Error('Failed to create NFT');
@@ -229,11 +227,14 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       }
 
       await handleMint(uri, nftId);
+      toast({
+        title: 'NFT minted',
+        description: 'Success to create NFT',
+      });
       setMintLoaderStep(2);
-
       setTimeout(() => {
-        setModal(false)
-      }, 2000)
+        setModal(false);
+      }, 2000);
     } catch (error) {
       setModal(false);
       toast({
@@ -241,23 +242,25 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         description: 'Failed to create NFT, please try again',
         variant: 'destructive',
       });
-
-      await nftService.removeFromDb({
-        nftId: nftId
-      });
+      if (nftId) {
+        await nftService.removeFromDb({
+          nftId: nftId,
+        });
+      }
     }
   };
 
   // Add your logic here
   const handleMint = async (uri: string, nftId: string) => {
     try {
-      // check free mint
-      if (advancedOptions.freeMint || !activeAccount) return;
+      if (!activeAccount) {
+        throw new Error('You should login a wallet.');
+      }
 
       let price = parseEther(String(basicDetail.price));
       let curationPayload = JSON.parse(basicDetail.curation);
       let nftPayload: IListAsset = {
-        collectionId: curationPayload?.tokenId,
+        curationId: curationPayload?.tokenId,
         tokenURI: uri,
         price,
         royaltyWallet: '',
@@ -302,19 +305,46 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           },
         ];
       }
+      // check free mint
+      if (advancedOptions.freeMint) {
+        let paymentWallets: Address[] = [];
+        let paymentPercentages: bigint[] = [];
+        nftPayload.paymentSplits.forEach((split) => {
+          paymentWallets.push(split.paymentWallet as Address);
+          paymentPercentages.push(split.paymentPercentage);
+        });
+        const NFTVoucher: INFTVoucher = {
+          curationId: BigInt(nftPayload.curationId),
+          tokenURI: nftPayload.tokenURI,
+          price: nftPayload.price,
+          royaltyWallet: nftPayload.royaltyWallet,
+          royaltyPercentage: nftPayload.royaltyPercentage,
+          paymentWallets,
+          paymentPercentages,
+        };
 
-      let { tokenId, transactionHash } = await listAsset(nftPayload);
-      await nftService.mintAndSale({
-        nftId,
-        mintHash: transactionHash,
-        tokenId: Number(tokenId),
-      });
-      // TODO success modal
-      toast({
-        title: 'NFT minted',
-        description: 'Success to create NFT',
-        variant: 'destructive',
-      });
+        const signature = await getVoucherSignature(NFTVoucher, activeAccount);
+
+        const voucherString = JSON.stringify(
+          { ...NFTVoucher, signature },
+          (key, value) => (typeof value === 'bigint' ? Number(value) : value),
+        );
+
+        // update voucher
+        await nftService.createVoucher({
+          nftId,
+          voucher: voucherString,
+        });
+
+        return;
+      } else {
+        let { tokenId, transactionHash } = await listAsset(nftPayload);
+        await nftService.mintAndSale({
+          nftId,
+          mintHash: transactionHash,
+          tokenId: Number(tokenId),
+        });
+      }
     } catch (error) {
       throw error;
     }
@@ -339,13 +369,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <RestrictiveModal
-      open={modal}
-      onClose={() => setModal(false)}
-      >
-        <MintLoader progress={mintLoaderStep} />
+      <RestrictiveModal open={modal} onClose={() => setModal(false)}>
+        <MintLoader progress={mintLoaderStep} nftId={nftId} />
       </RestrictiveModal>
-
 
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
@@ -420,7 +446,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={basicDetails.error ? true : false}
           close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(basicDetails.error)} />
+          <ErrorModal
+            data={JSON.parse(basicDetails.error)}
+            close={() => setBasicDetails({ ...basicDetails, error: null })}
+          />
         </TriggerModal>
       )}
 
@@ -429,7 +458,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={advanceDetails.error ? true : false}
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(advanceDetails.error)} />
+          <ErrorModal
+            data={JSON.parse(advanceDetails.error)}
+            close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+          />
         </TriggerModal>
       )}
 
@@ -438,16 +470,24 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={sellerInfo.error ? true : false}
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
         >
-          <ErrorModal data={JSON.parse(sellerInfo.error)} />
+          <ErrorModal
+            data={JSON.parse(sellerInfo.error)}
+            close={() => setSellerInfo({ ...sellerInfo, error: null })}
+          />
         </TriggerModal>
       )}
+      <div className="flex mb-[30px]">
+        <ConnectedCard />
+      </div>
 
       {step === 1 && (
         <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
       )}
+
       {step === 2 && (
         <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
       )}
+
       {step === 3 && (
         <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
       )}

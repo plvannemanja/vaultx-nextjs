@@ -1,5 +1,5 @@
 import { getContract } from 'thirdweb';
-import { sepolia, base } from 'thirdweb/chains';
+import { baseSepolia, base } from 'thirdweb/chains';
 import { client } from './client';
 
 // get a contract
@@ -9,7 +9,10 @@ const addr = isDev
   ? process.env.NEXT_PUBLIC_APP_SEPOLIA_ADDRESS
   : process.env.NEXT_PUBLIC_APP_CONTRACT_ADDRESS;
 
-export const chain = isDev ? sepolia : base;
+export const explorer = isDev
+  ? 'https://sepolia.basescan.org/'
+  : 'https://basescan.org/';
+export const chain = isDev ? baseSepolia : base;
 export const address = addr;
 
 export const contract = getContract({
