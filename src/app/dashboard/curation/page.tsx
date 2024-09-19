@@ -5,10 +5,15 @@ import { useEffect, useState } from 'react';
 import CurationSearch from '@/app/components/Filters/CurationSearch';
 import { collectionServices, getMedia } from '@/services/supplier';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
+import { SkeletonCard } from '@/app/components/Skelton/Skelton';
+
 
 export default function Page() {
+
   const { toast } = useToast();
   const [collections, setCollection] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     filter: {
       price: 1,
@@ -55,7 +60,6 @@ export default function Page() {
 
 
       const collections = response.data.curations;
-      console.log("this is test data",{ collections });
       let detailedInfo = await Promise.all(
         collections
           .filter((item: any) => !item?.active && !item?.owner?.active)
@@ -82,6 +86,8 @@ export default function Page() {
       );
 
       setCollection(detailedInfo);
+      setLoading(false);
+
     };
 
     const fetchMedia = async () => {
@@ -108,10 +114,13 @@ export default function Page() {
           onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
+      {loading ? <SkeletonCard/> : 
+      <>
+     
+      
+      
       <CurationSearch setState={handleState} />
-
-      {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
-        <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
+     {loading ? <SkeletonCard/> : <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
         {collections.map((collection: any, index: number) => {
           return (
             <div className="col-span-4" key={index}>
@@ -124,7 +133,11 @@ export default function Page() {
 
           </div> */}
 
-        </div>
+        </div>} 
+        </>
+        }
+      {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
+        
         {/* {collections.map((collection: any, index: number) => {
           return (
             <div className="w-[100%]" key={index}>

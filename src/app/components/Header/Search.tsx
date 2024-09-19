@@ -209,7 +209,7 @@ export function Search() {
       <div className="min-w-[500px] h-[52px] px-6 py-4 bg-neutral-800 rounded-xl justify-start items-center gap-7 inline-flex text-white">
         <input
           ref={inputRef}
-          className="flex-1 w-full bg-neutral-800 text-opacity-50 rounded-lg px-4 py-2 leading-snug focus:outline-none focus:border-bg-neutral-800"
+          className="flex-1 w-full bg-neutral-800 text-opacity-50 rounded-lg px-4 py-2 leading-snug azeret-mono-font focus:outline-none focus:border-bg-neutral-800"
           type="text"
           placeholder="Search artwork, collection..."
           onChange={(e) => setSearchText(e.target.value)}

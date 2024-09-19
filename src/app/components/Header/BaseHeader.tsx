@@ -128,7 +128,7 @@ export function BaseHeader() {
                         <Menu user={user} />
                       ) : (
                         <div
-                          className="max-w-[200px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+                          className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
                           onClick={handleConnect}
                         >
                           <div className="text-neutral-900 text-sm md:text-base font-semibold leading-normal">
@@ -165,26 +165,26 @@ export function BaseHeader() {
       <div className="hidden xl:block">
         <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300 gap-1.5"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] gap-1.5"
             href="/dashboard/appreciate"
           >
             Appreciation
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
             href="/dashboard/curation"
           >
             Curation
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
             href="https://artistvaultx.wpcomstaging.com/"
             target="_blank"
           >
             Magazine
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-yellow-300"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
             href="https://www.monsterx.io"
             target="_blank"
           >
@@ -199,7 +199,7 @@ export function BaseHeader() {
           <Menu user={user} />
         ) : (
           <div
-            className="max-w-[200px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+            className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
             onClick={handleConnect}
           >
             <div className="text-neutral-900 text-sm md:text-base font-semibold leading-normal">
