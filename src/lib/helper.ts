@@ -14,6 +14,7 @@ import { Account } from 'thirdweb/wallets';
 import { client } from './client';
 import { IBuyerInfo, INFTVoucher, IRoyaltyDetails, ITokenDetail, PaymentSplitType } from '@/types';
 import { formatEther, parseEther } from 'viem';
+import { bigint } from 'zod';
 
 export const createCollection = async (
   name: string,
@@ -158,7 +159,7 @@ export const tokenDetail = async (tokenId: bigint) => {
   return tokenDetail;
 }
 
-export const purchaseAsset = async (tokenId: bigint, account: Account) => {
+export const purchaseAsset = async (tokenId: bigint, amount: bigint, account: Account) => {
   const detail = await tokenDetail(tokenId);
 
   // get 
@@ -166,7 +167,7 @@ export const purchaseAsset = async (tokenId: bigint, account: Account) => {
     contract,
     method: "function purchaseAsset(uint256 tokenId) payable",
     params: [tokenId],
-    value: BigInt(10),
+    value: amount,
   });
 
   const { transactionHash } = await sendTransaction({
@@ -234,6 +235,17 @@ export const getVoucherSignature = async (NFTVoucher: Omit<INFTVoucher, 'signatu
   return signature;
 }
 
+export const purchaseAssetBeforeMint = async (voucher: Omit<INFTVoucher, 'signature'> & { signature: `0x${string}`; }, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function purchaseAssetBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable",
+    params: [voucher]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+}
 export const getExplorerURL = (type: 'address' | 'transaction', value: string) => {
   if (type === 'address')
     return `${explorer}address/${value}`;
@@ -242,14 +254,17 @@ export const getExplorerURL = (type: 'address' | 'transaction', value: string) =
   return "";
 }
 
-export const getTokenAmount = async (usdAmount: string) => {
+export const getTokenAmount = async (usdAmount: string, unit: 'Ether' | 'Wei' = 'Ether') => {
   const tokenAmount = await readContract({
     contract,
     method: "function getTokenAmount(uint256 usdAmount, address token) view returns (uint256)",
     params: [parseEther(usdAmount), ZERO_ADDRESS]
   })
 
-  return formatEther(tokenAmount);
+  if (unit === 'Ether')
+    return formatEther(tokenAmount);
+
+  return tokenAmount;
 }
 
 export const unlistAsset = async (tokenId: number, account: Account) => {
@@ -335,4 +350,37 @@ export const isApprovedForAll = async (owner: Address, operator: Address) => {
     params: [owner, operator]
   });
   return data;
+}
+
+export const releaseEscrow = async (tokenId: number, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function releaseEscrow(uint256 tokenId) payable",
+    params: [BigInt(tokenId)]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+
+  const escrowReleasedEvent = prepareEvent({
+    signature: "event EscrowReleased(uint256 indexed tokenId)"
+  });
+  const events = await parseEventLogs({
+    logs: receipt.logs,
+    events: [escrowReleasedEvent]
+  });
+
+  return events
+    ? {
+      ...events[0].args,
+      transactionHash,
+    }
+    : null;
 }

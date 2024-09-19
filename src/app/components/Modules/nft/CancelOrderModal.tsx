@@ -42,7 +42,7 @@ export default function CancelOrderModal() {
   };
 
   return (
-    <div className="w-[38rem]">
+    <>
       <style jsx>{`
         .upload__file__with__name {
           display: flex;
@@ -73,18 +73,6 @@ export default function CancelOrderModal() {
           transition: 0.3s all;
         }
       `}</style>
-
-      {step === 2 && (
-        <div className="flex w-full justify-center flex-col gap-y-4 text-center">
-          <img src="/icons/success.svg" className="w-16 mx-auto" />
-          <p className="text-lg font-medium">Application Success</p>
-          <p className="text-gray-500">
-            Your Request to release escrow request has been successfully
-            received. We will carefully review it and contact you as soon as
-            possible. Thank you for your patience.
-          </p>
-        </div>
-      )}
 
       {step === 1 && (
         <div className="flex flex-col gap-y-4">
@@ -195,6 +183,17 @@ export default function CancelOrderModal() {
           </div>
         </div>
       )}
-    </div>
+      {step === 2 && (
+        <div className="flex w-full justify-center flex-col gap-y-4 text-center">
+          <img src="/icons/success.svg" className="w-16 mx-auto" />
+          <p className="text-lg font-medium">Application Success</p>
+          <p className="text-gray-500">
+            Your Request to release escrow request has been successfully
+            received. We will carefully review it and contact you as soon as
+            possible. Thank you for your patience.
+          </p>
+        </div>
+      )}
+    </>
   );
 }

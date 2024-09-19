@@ -124,6 +124,7 @@ export type NFTItemType = {
   };
   mintHash: string;
   tokenId: number;
+  voucher: string;
 };
 
 export type CurationType = {

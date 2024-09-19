@@ -11,17 +11,22 @@ import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { getTokenAmount, purchaseAsset } from '@/lib/helper';
-import { useActiveAccount } from 'thirdweb/react';
+import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { useGlobalContext } from '../../Context/GlobalContext';
-import { roundToDecimals } from '@/utils/helpers';
+import { roundToDecimals, trimString } from '@/utils/helpers';
+import BasicLoadingModal from './BasicLoadingModal';
+import { nftServices } from '@/services/supplier';
+import moment from 'moment';
+import { INFTVoucher } from '@/types';
 
-export default function BuyModal() {
+export default function BuyModal({ onClose, fetchNftData }: { onClose: () => void; fetchNftData: () => void; }) {
   const { NFTDetail, nftId: id } = useNFTDetail();
   const { fee } = useGlobalContext();
   const [tokenAmount, setTokenAmount] = useState<string | null>(null);
   const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
 
   const activeAccount = useActiveAccount();
+  const activeChain = useActiveWalletChain();
 
   const [formData, setFormData] = useState({
     username: null,
@@ -29,7 +34,7 @@ export default function BuyModal() {
     description: null,
     accepted: false,
   });
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [sellerInfo, setSellerInfo] = useState<any>({
     country: null,
     state: null,
@@ -64,10 +69,11 @@ export default function BuyModal() {
     });
   };
 
-  const purchase = async () => {
+  const buyNFT = async () => {
     try {
-      // Blockchain logic to purchase
-      const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
+      setStep(4);
+      const tokenAmount = await getTokenAmount(NFTDetail.price.toString(), 'Wei');
+      const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), tokenAmount as bigint, activeAccount);
 
       const data = {
         nftId: id,
@@ -89,13 +95,36 @@ export default function BuyModal() {
 
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      setStep(4);
+      await fetchNftData();
+      setStep(5);
     } catch (error) {
       console.log(error);
-      // TODO error modal
+      onClose();
     }
   };
 
+  const buyFreeMint = async () => {
+    try {
+      setStep(4);
+      const voucher: INFTVoucher = JSON.parse(NFTDetail.voucher, (key, value) => {
+        // Check if the value is a number and can be safely converted to BigInt
+        if (typeof value === 'number' && Number.isSafeInteger(value)) {
+          return BigInt(value);
+        }
+        return value;
+      });
+
+      console.log(voucher);
+      setStep(5);
+    } catch (error) {
+      onClose();
+    }
+  }
+
+  const purchase = async () => {
+    if (NFTDetail.minted) await buyNFT;
+    else await buyFreeMint();
+  }
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;
     if (name === 'country') {
@@ -137,16 +166,17 @@ export default function BuyModal() {
 
   const checkAmount = async () => {
     const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
-    setTokenAmount(tokenAmount);
+    setTokenAmount(tokenAmount as string);
     const expectedAmount = Number(tokenAmount) * 100 / (100 - fee);
     setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
   };
 
   useEffect(() => {
-    debugger;
-    setStep(1);
     checkAmount();
   }, []);
+  useEffect(() => {
+    console.log(step);
+  }, [step]);
 
   return (
     <>
@@ -400,7 +430,7 @@ export default function BuyModal() {
               variant="secondary"
               onClick={cancelChanges}
             />
-            <BaseButton title="Submit" variant="primary" onClick={setStep(2)} />
+            <BaseButton title="Submit" variant="primary" onClick={() => { setStep(2) }} />
           </div>
         </div>
       )}
@@ -474,7 +504,7 @@ export default function BuyModal() {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => setStep(2)}>
+              <button className="w-full h-full" onClick={() => { setStep(2) }}>
                 Cancel
               </button>
             </div>
@@ -486,8 +516,17 @@ export default function BuyModal() {
           </div>
         </div>
       )}
-
-      {step === 4 && (
+      {
+        step === 4 && (
+          <div className="flex flex-col gap-y-4 items-center text-center">
+            <img src="/icons/refresh.svg" className="w-20 mx-auto" />
+            <p className="text-lg font-medium">
+              Please wait while we purchasing NFT
+            </p>
+          </div>
+        )
+      }
+      {step === 5 && (
         <div className="flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-2 justify-center text-center">
             <img src="/icons/success.svg" className="w-16 mx-auto" />
@@ -501,34 +540,35 @@ export default function BuyModal() {
             <div className="flex justify-between">
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">hhgkjhkjh#$34224</p>
+                <p className="text-neon">{trimString(NFTDetail.owner.wallet)}</p>
               </div>
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">hhgkjhkjh#$34224</p>
+                <p className="text-neon">{trimString(activeAccount.address)}</p>
               </div>
             </div>
             <div className="flex justify-between">
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">Payment Method</p>
-                <p className="text-neon">Polygon</p>
+                <p className="text-neon">{activeChain.name}</p>
               </div>
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">Payment Time</p>
-                <p className="text-neon">11/19/2023, 11:49:57 PM</p>
+                <p className="text-neon">
+                  {moment().format('DD MMM, YY')}
+                </p>
               </div>
             </div>
           </div>
 
           <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-            <button className="w-full h-full" onClick={() => setStep(5)}>
+            <button className="w-full h-full" onClick={() => onClose()}>
               close
             </button>
           </div>
         </div>
       )}
-
-      {step === 5 && (
+      {step === 6 && (
         <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />

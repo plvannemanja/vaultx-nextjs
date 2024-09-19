@@ -40,6 +40,8 @@ interface IModalStatus {
   quote: boolean;
   remove: boolean;
   resell: boolean;
+  buy: boolean;
+  release: boolean;
 }
 
 export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; }) {
@@ -50,6 +52,8 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
     quote: false,
     remove: false,
     resell: false,
+    buy: false,
+    release: false,
   });
   const activeAccount = useActiveAccount();
 
@@ -279,8 +283,13 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         />
                       }
                       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      isOpen={modalStatus.buy}
+                      onClose={(val) => { setModalStatus({ ...modalStatus, buy: val }) }}
                     >
-                      <BuyModal />
+                      <BuyModal
+                        onClose={() => { setModalStatus({ ...modalStatus, buy: false }) }}
+                        fetchNftData={fetchNftData}
+                      />
                     </BaseDialog>
 
                     <BaseDialog
@@ -309,8 +318,13 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                           onClick={() => { }}
                         />
                       }
+                      isOpen={modalStatus.release}
+                      onClose={(val) => { setModalStatus({ ...modalStatus, release: val }) }}
                     >
-                      <EscrowModal />
+                      <EscrowModal
+                        onClose={() => { setModalStatus({ ...modalStatus, release: false }) }}
+                        fetchNftData={fetchNftData}
+                      />
                     </BaseDialog>
                     <BaseDialog
                       className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"

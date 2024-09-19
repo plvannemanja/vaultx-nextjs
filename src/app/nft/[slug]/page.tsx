@@ -73,7 +73,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
 
   const handleNFTType = async (nft: any, userData: any) => {
     if (
-      nft?.mintedBy?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()
+      nft?.owner?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()
     ) {
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
@@ -106,7 +106,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
         nft?.saleId?.saleStatus === 'CancellationRequested' ||
         nft?.saleId?.saleStatus === 'Ordered'
       ) {
-        if (nft?.saleId?.saleWinner === JSON.parse(user)?._id)
+        if (nft?.saleId?.saleWinner === userData?._id)
           setType('release');
         else setType('NotForSale');
       } else if (nft?.saleId?.saleStatus === 'Active') setType('buy');
@@ -116,7 +116,6 @@ function PageDetail({ params }: { params: { slug: string } }) {
 
   const fetchNftData = async () => {
     try {
-      debugger;
       // set NFT ID
       setNftId(params.slug);
 

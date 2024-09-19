@@ -6,6 +6,8 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 
 interface IGlobalContext {
   fee: number,
+  user: any,
+  setUser: (data: any) => void;
 }
 
 interface GlobalProviderProps {
@@ -19,7 +21,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({
   children,
 }) => {
   const [fee, setFee] = useState<number>(0);
-
+  const [user, setUser] = useState<any>(null);
   const fetchProtocolFee = async () => {
     let fee = await protocolFee();
     setFee(Number(fee) / 100);
@@ -32,7 +34,9 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({
   return (
     <globalContext.Provider
       value={{
-        fee
+        fee,
+        user,
+        setUser,
       }} >
       {children}
     </globalContext.Provider >
