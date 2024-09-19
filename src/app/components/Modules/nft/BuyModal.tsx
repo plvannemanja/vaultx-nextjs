@@ -41,7 +41,7 @@ export default function BuyModal({
     description: null,
     accepted: false,
   });
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(1);
   const [sellerInfo, setSellerInfo] = useState<any>({
     country: null,
     state: null,
@@ -170,7 +170,7 @@ export default function BuyModal({
   };
 
   const purchase = async () => {
-    if (NFTDetail.minted) await buyNFT;
+    if (NFTDetail.minted) await buyNFT();
     else await buyFreeMint();
   };
   const handleUpdateSeller = (e: any) => {
