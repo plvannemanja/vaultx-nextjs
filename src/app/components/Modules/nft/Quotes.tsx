@@ -28,7 +28,7 @@ export default function Quotes({
   // Fetch data function
   const getQuote = async () => {
     const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
-    setTokenAmount(tokenAmount);
+    setTokenAmount(tokenAmount as string);
     const expectedAmount = (Number(tokenAmount) * 100) / (100 - fee) + gasFee;
     setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
   };

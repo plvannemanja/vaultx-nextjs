@@ -614,7 +614,7 @@ export default function ShippingInfo({
                 title="Save"
                 variant="primary"
                 onClick={async () => {
-                  await update();
+                  await update('');
                   setIsModalOpen(false);
                 }}
               />

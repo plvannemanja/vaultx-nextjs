@@ -136,16 +136,6 @@ export default function PutSaleModal({
     try {
       setStep(3);
       let splitPayments = [];
-      splitPayments =
-        nft?.walletAddresses?.length > 0
-          ? nft?.paymentPercentage
-            ? nft?.walletAddresses?.map((item) => ({
-                paymentWallet: item.address,
-                paymentPercentage: item.percentage,
-              }))
-            : []
-          : [];
-
       // blockchain logic
       // const result = await listNf(
       //   nft?.uri,

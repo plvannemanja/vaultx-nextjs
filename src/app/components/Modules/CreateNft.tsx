@@ -310,7 +310,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         let paymentWallets: Address[] = [];
         let paymentPercentages: bigint[] = [];
         nftPayload.paymentSplits.forEach((split) => {
-          paymentWallets.push(split.paymentWallet);
+          paymentWallets.push(split.paymentWallet as Address);
           paymentPercentages.push(split.paymentPercentage);
         });
         const NFTVoucher: INFTVoucher = {

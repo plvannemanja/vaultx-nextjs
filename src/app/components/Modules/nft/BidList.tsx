@@ -17,9 +17,11 @@ import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { IBid } from '@/types';
 import { trimString } from '@/utils/helpers';
 import moment from 'moment';
+import { useGlobalContext } from '../../Context/GlobalContext';
 
 export default function BidList() {
   const { nftId } = useNFTDetail();
+  const { user } = useGlobalContext();
   const { toast } = useToast();
   const [bids, setBids] = useState<IBid[]>([]);
   const createSellService = new CreateSellService();

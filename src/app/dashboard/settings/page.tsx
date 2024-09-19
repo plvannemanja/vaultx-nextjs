@@ -320,7 +320,11 @@ export default function Page() {
 
           <ShippingInfo />
           <ContactInfo />
-          <PropertiesInfo />
+          <PropertiesInfo
+            close={() => {}}
+            onTemplateAdd={() => {}}
+            onTemplateEdit={() => {}}
+          />
 
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton

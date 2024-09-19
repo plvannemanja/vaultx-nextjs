@@ -17,6 +17,7 @@ export default function PropertiesTemplate({ select }) {
   const [data, setData] = useState([]);
   const [isModalOpenTemplate, setIsModalOpenTemplate] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState({
+    _id: '',
     name: 'Basic Template',
     attributes: defaultAttributes,
   });
