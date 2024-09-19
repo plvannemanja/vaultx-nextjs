@@ -27,6 +27,7 @@ export const createCollection = async (
   uri: string,
   account: Account,
 ) => {
+  debugger;
   const transaction = await prepareContractCall({
     contract,
     method: 'function createCurationByCurator(string name, string uri)',
@@ -128,9 +129,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -201,9 +202,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -254,6 +255,7 @@ export const getVoucherSignature = async (
 
 export const purchaseAssetBeforeMint = async (
   voucher: Omit<INFTVoucher, 'signature'> & { signature: `0x${string}` },
+  amount: bigint,
   account: Account,
 ) => {
   const transaction = await prepareContractCall({
@@ -261,11 +263,34 @@ export const purchaseAssetBeforeMint = async (
     method:
       'function purchaseAssetBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable',
     params: [voucher],
+    value: amount
   });
   const { transactionHash } = await sendTransaction({
     transaction,
     account,
   });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+
+  const TransferEvent = prepareEvent({
+    signature: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [TransferEvent],
+  });
+
+  return events
+    ? {
+      ...events[0].args,
+      transactionHash,
+    }
+    : null;
 };
 export const getExplorerURL = (
   type: 'address' | 'transaction',
@@ -310,7 +335,6 @@ export const resaleAsset = async (
   price: bigint,
   account: Account,
 ) => {
-  debugger;
   // check if approved for all
   const isApproved = await isApprovedForAll(
     account.address as Address,
@@ -420,8 +444,8 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };

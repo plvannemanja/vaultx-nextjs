@@ -150,6 +150,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
       if (activeAccount) {
         try {
+          debugger;
           const result = await createCollection(
             metaData.name,
             metaUri,
