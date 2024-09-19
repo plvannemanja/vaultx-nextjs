@@ -15,7 +15,13 @@ import { parseEther } from 'viem';
 import { resaleAsset } from '@/lib/helper';
 import { useActiveAccount } from 'thirdweb/react';
 
-export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
+export default function PutSaleModal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
   const { nftId, NFTDetail: nft } = useNFTDetail();
   const { fee } = useGlobalContext();
   const activeAccount = useActiveAccount();
@@ -34,7 +40,7 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
     email: null,
     description: null,
     accepted: true,
-    price: nft.price
+    price: nft.price,
   });
   const [sellerInfo, setSellerInfo] = useState({
     country: '',
@@ -99,7 +105,11 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
 
     try {
       const price = parseEther(formData.price.toString());
-      const transactionHash = await resaleAsset(nft.tokenId, price, activeAccount);
+      const transactionHash = await resaleAsset(
+        nft.tokenId,
+        price,
+        activeAccount,
+      );
       const data = {
         nftId: nftId,
         name: nft.saleId.sellerShippingId.name,
@@ -130,9 +140,9 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
         nft?.walletAddresses?.length > 0
           ? nft?.paymentPercentage
             ? nft?.walletAddresses?.map((item) => ({
-              paymentWallet: item.address,
-              paymentPercentage: item.percentage,
-            }))
+                paymentWallet: item.address,
+                paymentPercentage: item.percentage,
+              }))
             : []
           : [];
 
@@ -158,7 +168,6 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
     try {
       if (nft?.minted) await resellNft();
       else await handleMint();
-
     } catch (error) {
       console.log(error);
     }
@@ -174,9 +183,7 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
           <div className="flex flex-col gap-y-2">
             <div className="flex justify-between items-center border border-gray-400 rounded-md p-3 my-1">
               <span>Price</span>
-              <div className="flex items-center gap-x-2">
-                {nft.price}$
-              </div>
+              <div className="flex items-center gap-x-2">{nft.price}$</div>
             </div>
             <div className="flex justify-between items-center">
               <span>Royalties</span>
@@ -189,22 +196,27 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
             <hr />
             <div className="flex justify-between items-center">
               <span>You will get</span>
-              <span>
-                {Number(nft.price).toFixed(2)} $
-              </span>
+              <span>{Number(nft.price).toFixed(2)} $</span>
             </div>
           </div>
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { onClose() }}>
+              <button
+                className="w-full h-full"
+                onClick={() => {
+                  onClose();
+                }}
+              >
                 Discard
               </button>
             </div>
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
               <button
                 className="w-full h-full"
-                onClick={async () => { setStep(2) }}
+                onClick={async () => {
+                  setStep(2);
+                }}
               >
                 Next
               </button>
@@ -228,8 +240,8 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
                 onChange={(e) => {
                   setFormData({
                     ...formData,
-                    price: (e.target as any).value as number
-                  })
+                    price: (e.target as any).value as number,
+                  });
                 }}
               />
             </div>
@@ -259,7 +271,10 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
                 <Input
                   value={formData.email ? formData.email : ''}
                   onChange={(e) =>
-                    setFormData({ ...formData, email: (e.target as HTMLInputElement).value })
+                    setFormData({
+                      ...formData,
+                      email: (e.target as HTMLInputElement).value,
+                    })
                   }
                   className="w-full border-none bg-[#161616]"
                   type="text"
@@ -445,9 +460,8 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
                 setFormData({
                   ...formData,
                   accepted: (e.target as any).checked,
-                })
-              }
-              }
+                });
+              }}
             />
             <label
               htmlFor="terms"
@@ -459,7 +473,12 @@ export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () =>
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { onClose() }}>
+              <button
+                className="w-full h-full"
+                onClick={() => {
+                  onClose();
+                }}
+              >
                 Discard
               </button>
             </div>

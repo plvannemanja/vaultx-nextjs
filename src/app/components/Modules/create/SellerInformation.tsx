@@ -17,7 +17,7 @@ export default function SellerInformation({
   nextStep: (next?: boolean) => void;
 }) {
   const { sellerInfo, setSellerInfo } = useCreateNFT();
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false);
 
   const handleShip = (data: any) => {
     setSellerInfo({
@@ -82,7 +82,7 @@ export default function SellerInformation({
               value={sellerInfo.length}
               type="number"
               placeholder="--"
-              className='bg-[#161616] border border-none h-[52px]'
+              className="bg-[#161616] border border-none h-[52px]"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -97,7 +97,7 @@ export default function SellerInformation({
               value={sellerInfo.width}
               type="number"
               placeholder="--"
-              className='bg-[#161616] border border-none h-[52px]'
+              className="bg-[#161616] border border-none h-[52px]"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -112,7 +112,7 @@ export default function SellerInformation({
               value={sellerInfo.height}
               type="number"
               placeholder="--"
-              className='bg-[#161616] border border-none h-[52px]'
+              className="bg-[#161616] border border-none h-[52px]"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -127,7 +127,7 @@ export default function SellerInformation({
               value={sellerInfo.weight}
               type="number"
               placeholder="--"
-              className='bg-[#161616] border border-none h-[52px]'
+              className="bg-[#161616] border border-none h-[52px]"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,

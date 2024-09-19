@@ -233,8 +233,8 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       });
       setMintLoaderStep(2);
       setTimeout(() => {
-        setModal(false)
-      }, 2000)
+        setModal(false);
+      }, 2000);
     } catch (error) {
       setModal(false);
       toast({
@@ -244,7 +244,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       });
       if (nftId) {
         await nftService.removeFromDb({
-          nftId: nftId
+          nftId: nftId,
         });
       }
     }
@@ -254,7 +254,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const handleMint = async (uri: string, nftId: string) => {
     try {
       if (!activeAccount) {
-        throw new Error("You should login a wallet.");
+        throw new Error('You should login a wallet.');
       }
 
       let price = parseEther(String(basicDetail.price));
@@ -309,7 +309,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       if (advancedOptions.freeMint) {
         let paymentWallets: Address[] = [];
         let paymentPercentages: bigint[] = [];
-        nftPayload.paymentSplits.forEach(split => {
+        nftPayload.paymentSplits.forEach((split) => {
           paymentWallets.push(split.paymentWallet);
           paymentPercentages.push(split.paymentPercentage);
         });
@@ -325,8 +325,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
         const signature = await getVoucherSignature(NFTVoucher, activeAccount);
 
-        const voucherString = JSON.stringify({ ...NFTVoucher, signature }, (key, value) =>
-          typeof value === 'bigint' ? Number(value) : value
+        const voucherString = JSON.stringify(
+          { ...NFTVoucher, signature },
+          (key, value) => (typeof value === 'bigint' ? Number(value) : value),
         );
 
         // update voucher
@@ -368,13 +369,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <RestrictiveModal
-        open={modal}
-        onClose={() => setModal(false)}
-      >
+      <RestrictiveModal open={modal} onClose={() => setModal(false)}>
         <MintLoader progress={mintLoaderStep} nftId={nftId} />
       </RestrictiveModal>
-
 
       <p className="text-xl font-medium">Create New NFT</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
@@ -449,7 +446,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={basicDetails.error ? true : false}
           close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(basicDetails.error)}  close={() => setBasicDetails({ ...basicDetails, error: null })}/>
+          <ErrorModal
+            data={JSON.parse(basicDetails.error)}
+            close={() => setBasicDetails({ ...basicDetails, error: null })}
+          />
         </TriggerModal>
       )}
 
@@ -458,7 +458,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={advanceDetails.error ? true : false}
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
-          <ErrorModal data={JSON.parse(advanceDetails.error)} close={() => setAdvanceDetails({ ...advanceDetails, error: null })}/>
+          <ErrorModal
+            data={JSON.parse(advanceDetails.error)}
+            close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+          />
         </TriggerModal>
       )}
 
@@ -467,7 +470,10 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           isOpen={sellerInfo.error ? true : false}
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
         >
-          <ErrorModal data={JSON.parse(sellerInfo.error)} close={() => setSellerInfo({ ...sellerInfo, error: null })} />
+          <ErrorModal
+            data={JSON.parse(sellerInfo.error)}
+            close={() => setSellerInfo({ ...sellerInfo, error: null })}
+          />
         </TriggerModal>
       )}
       <div className="flex mb-[30px]">
@@ -477,7 +483,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       {step === 1 && (
         <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
       )}
-
 
       {step === 2 && (
         <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />

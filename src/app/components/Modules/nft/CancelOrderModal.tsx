@@ -11,7 +11,6 @@ import { useNFTDetail } from '../../Context/NFTDetailContext';
 const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
 const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
-
 export default function CancelOrderModal() {
   const { nftId: id } = useNFTDetail();
   const [step, setStep] = useState(1);
@@ -168,7 +167,7 @@ export default function CancelOrderModal() {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Cancel
               </button>
             </div>

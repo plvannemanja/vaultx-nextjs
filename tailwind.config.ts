@@ -77,8 +77,8 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       backgroundImage: {
-        'template-gradient': 'linear-gradient(101deg, rgba(255, 255, 255, 0.05) -0.78%, rgba(255, 255, 255, 0.01) 100%)',
-      
+        'template-gradient':
+          'linear-gradient(101deg, rgba(255, 255, 255, 0.05) -0.78%, rgba(255, 255, 255, 0.01) 100%)',
       },
     },
   },

@@ -83,9 +83,12 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
       certificates: [],
       propertyTemplateId: null,
       attributes: null,
-      royalties: [{
-        address: null,
-        percentage: null,}],
+      royalties: [
+        {
+          address: null,
+          percentage: null,
+        },
+      ],
     });
 
   const setPartialAdvancedDetails = (
@@ -137,7 +140,7 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
         },
       }}
     >
-      <ConnectedCard/>
+      <ConnectedCard />
       {children}
     </CreateNFTContext.Provider>
   );

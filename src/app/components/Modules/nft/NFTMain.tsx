@@ -1,13 +1,13 @@
 'use client';
 
-import Image from "next/image";
-import { useNFTDetail } from "../../Context/NFTDetailContext";
-import { useEffect, useState } from "react";
+import Image from 'next/image';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { useEffect, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import SlickCarousel from '@/app/components/Carousels/SlickCarousel';
-import { EyeIcon } from "lucide-react";
-import NftServices from "@/services/nftService";
+import { EyeIcon } from 'lucide-react';
+import NftServices from '@/services/nftService';
 import BaseButton from '@/app/components/ui/BaseButton';
 import { BaseDialog } from '@/app/components/ui/BaseDialog';
 import BuyModal from '@/app/components/Modules/nft/BuyModal';
@@ -18,10 +18,10 @@ import EscrowModal from '@/app/components/Modules/nft/EscrowModal';
 import EscrowRequestModal from '@/app/components/Modules/nft/EscrowRequestModal';
 import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
 import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
-import BasicLoadingModal from "./BasicLoadingModal";
-import { unlistAsset } from "@/lib/helper";
-import { useActiveAccount } from "thirdweb/react";
-import { CreateSellService } from "@/services/createSellService";
+import BasicLoadingModal from './BasicLoadingModal';
+import { unlistAsset } from '@/lib/helper';
+import { useActiveAccount } from 'thirdweb/react';
+import { CreateSellService } from '@/services/createSellService';
 
 const style = {
   borderRadius: '10px',
@@ -44,8 +44,21 @@ interface IModalStatus {
   release: boolean;
 }
 
-export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; }) {
-  const { nftId, mainImage, NFTDetail: data, likes, setLikes, liked, setLiked, type } = useNFTDetail();
+export default function NFTMain({
+  fetchNftData,
+}: {
+  fetchNftData: () => void;
+}) {
+  const {
+    nftId,
+    mainImage,
+    NFTDetail: data,
+    likes,
+    setLikes,
+    liked,
+    setLiked,
+    type,
+  } = useNFTDetail();
   const [modal, setModal] = useState(false);
   const [views, setViews] = useState(0);
   const [modalStatus, setModalStatus] = useState<IModalStatus>({
@@ -102,7 +115,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
       setModalStatus({ ...modalStatus, remove: false });
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     handleView();
@@ -159,9 +172,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
           />
 
           <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
-            <span className="font-medium">
-              {likes ? likes : liked ? 1 : 0}
-            </span>
+            <span className="font-medium">{likes ? likes : liked ? 1 : 0}</span>
             <div>
               <input
                 title="like"
@@ -279,15 +290,19 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Buy Now"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                       isOpen={modalStatus.buy}
-                      onClose={(val) => { setModalStatus({ ...modalStatus, buy: val }) }}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, buy: val });
+                      }}
                     >
                       <BuyModal
-                        onClose={() => { setModalStatus({ ...modalStatus, buy: false }) }}
+                        onClose={() => {
+                          setModalStatus({ ...modalStatus, buy: false });
+                        }}
                         fetchNftData={fetchNftData}
                       />
                     </BaseDialog>
@@ -297,12 +312,12 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Bid"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                     >
-                      <BidModal title={data.name} update={() => { }} />
+                      <BidModal title={data.name} update={() => {}} />
                     </BaseDialog>
                   </div>
                 ) : null}
@@ -315,14 +330,18 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Release Escrow"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.release}
-                      onClose={(val) => { setModalStatus({ ...modalStatus, release: val }) }}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, release: val });
+                      }}
                     >
                       <EscrowModal
-                        onClose={() => { setModalStatus({ ...modalStatus, release: false }) }}
+                        onClose={() => {
+                          setModalStatus({ ...modalStatus, release: false });
+                        }}
                         fetchNftData={fetchNftData}
                       />
                     </BaseDialog>
@@ -332,7 +351,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Cancel Order"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                     >
@@ -349,14 +368,18 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Put On Sale"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.resell}
-                      onClose={(val) => { setModalStatus({ ...modalStatus, resell: val }) }}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, resell: val });
+                      }}
                     >
                       <PutSaleModal
-                        onClose={() => { setModalStatus({ ...modalStatus, resell: false }) }}
+                        onClose={() => {
+                          setModalStatus({ ...modalStatus, resell: false });
+                        }}
                         fetchNftData={fetchNftData}
                       />
                     </BaseDialog>
@@ -371,11 +394,15 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Remove From Sale"
                           variant="primary"
-                          onClick={() => { handleRemove() }}
+                          onClick={() => {
+                            handleRemove();
+                          }}
                         />
                       }
                       isOpen={modalStatus.remove}
-                      onClose={(val) => { setModalStatus({ ...modalStatus, remove: val }) }}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, remove: val });
+                      }}
                     >
                       <BasicLoadingModal message="Please wait while we put a request for cancellation." />
                     </BaseDialog>
@@ -387,7 +414,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                     <BaseButton
                       title="Cancel Requested"
                       variant="primary"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 ) : null}
@@ -399,7 +426,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                         <BaseButton
                           title="Escrow Release Request"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
@@ -414,7 +441,7 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
                     <BaseButton
                       title="In Escrow"
                       variant="primary"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 ) : null}
@@ -422,19 +449,26 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
               <div>
                 <BaseDialog
                   trigger={
-                    <span className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white"
-                      onClick={() => { setModalStatus({ ...modalStatus, quote: true }) }}
+                    <span
+                      className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white"
+                      onClick={() => {
+                        setModalStatus({ ...modalStatus, quote: true });
+                      }}
                     >
                       Check Eth Quotes
                     </span>
                   }
                   className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                   isOpen={modalStatus.quote}
-                  onClose={(val) => { setModalStatus({ ...modalStatus, quote: val }) }}
+                  onClose={(val) => {
+                    setModalStatus({ ...modalStatus, quote: val });
+                  }}
                 >
                   <Quotes
                     gasFee={0.0001}
-                    onClose={() => { setModalStatus({ ...modalStatus, quote: false }) }}
+                    onClose={() => {
+                      setModalStatus({ ...modalStatus, quote: false });
+                    }}
                   />
                 </BaseDialog>
               </div>
@@ -470,5 +504,5 @@ export default function NFTMain({ fetchNftData }: { fetchNftData: () => void; })
         </div>
       </div>
     </>
-  )
+  );
 }

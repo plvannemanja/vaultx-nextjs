@@ -3,7 +3,6 @@
 import { INFTActivity, NFTItemType } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
 
-
 interface INFTDetailContext {
   NFTDetail: null | NFTItemType;
   setNFTDetail: (data: null | NFTItemType) => void;
@@ -24,7 +23,9 @@ interface NFTDetailProviderProps {
 }
 
 // create a NFT detail context
-const NFTDetailContext = createContext<INFTDetailContext | undefined>(undefined);
+const NFTDetailContext = createContext<INFTDetailContext | undefined>(
+  undefined,
+);
 
 //context component
 export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
@@ -52,11 +53,12 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
         setLiked,
         type,
         setType,
-      }} >
+      }}
+    >
       {children}
-    </NFTDetailContext.Provider >
-  )
-}
+    </NFTDetailContext.Provider>
+  );
+};
 
 // hook
 export const useNFTDetail = () => {
@@ -66,4 +68,4 @@ export const useNFTDetail = () => {
       'NFT Detail context must be used within NFT Detail Provider',
     );
   return context;
-}
+};

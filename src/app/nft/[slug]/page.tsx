@@ -12,7 +12,10 @@ import {
 import { EyeIcon } from 'lucide-react';
 import { CreateSellService } from '@/services/createSellService';
 import { useToast } from '@/hooks/use-toast';
-import { NFTDetailProvider, useNFTDetail } from '@/app/components/Context/NFTDetailContext';
+import {
+  NFTDetailProvider,
+  useNFTDetail,
+} from '@/app/components/Context/NFTDetailContext';
 import ActivityList from '@/app/components/Modules/nft/ActivityList';
 import BidList from '@/app/components/Modules/nft/BidList';
 import NFTDescription from '@/app/components/Modules/nft/NFTDescription';
@@ -24,9 +27,16 @@ function PageDetail({ params }: { params: { slug: string } }) {
   const createSellService = new CreateSellService();
   const { toast } = useToast();
 
-  const { NFTDetail: data, setNFTDetail: setData, setNftId, setLikes, setLiked, type, setType } = useNFTDetail();
+  const {
+    NFTDetail: data,
+    setNFTDetail: setData,
+    setNftId,
+    setLikes,
+    setLiked,
+    type,
+    setType,
+  } = useNFTDetail();
   const [user, setUser] = useState(null);
-
 
   const getArtitsLikes = async () => {
     try {
@@ -72,9 +82,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
   };
 
   const handleNFTType = async (nft: any, userData: any) => {
-    if (
-      nft?.owner?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()
-    ) {
+    if (nft?.owner?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()) {
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||
@@ -106,8 +114,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
         nft?.saleId?.saleStatus === 'CancellationRequested' ||
         nft?.saleId?.saleStatus === 'Ordered'
       ) {
-        if (nft?.saleId?.saleWinner === userData?._id)
-          setType('release');
+        if (nft?.saleId?.saleWinner === userData?._id) setType('release');
         else setType('NotForSale');
       } else if (nft?.saleId?.saleStatus === 'Active') setType('buy');
       else setType('bid');
@@ -203,11 +210,10 @@ function PageDetail({ params }: { params: { slug: string } }) {
   );
 }
 
-
 export default function Page({ params }: { params: { slug: string } }) {
   return (
     <NFTDetailProvider>
       <PageDetail params={params} />
     </NFTDetailProvider>
-  )
+  );
 }

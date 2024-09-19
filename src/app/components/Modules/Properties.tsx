@@ -6,7 +6,11 @@ import { Label } from '@/components/ui/label';
 import BaseButton from '../ui/BaseButton';
 import { useToast } from '@/hooks/use-toast';
 
-export default function PropertiesInfo({ close, onTemplateAdd, onTemplateEdit }) {
+export default function PropertiesInfo({
+  close,
+  onTemplateAdd,
+  onTemplateEdit,
+}) {
   const { toast } = useToast();
   const [data, setData] = useState([]);
   const [editingTemplate, setEditingTemplate] = useState(null);
@@ -117,7 +121,9 @@ export default function PropertiesInfo({ close, onTemplateAdd, onTemplateEdit })
     >
       <div className="flex flex-col gap-y-5">
         <div className="flex flex-col gap-y-4">
-          <Label className="text-lg font-medium">Properties Template Name</Label>
+          <Label className="text-lg font-medium">
+            Properties Template Name
+          </Label>
           <Input
             value={property.name}
             onChange={(e) => setProperty({ ...property, name: e.target.value })}
@@ -151,7 +157,7 @@ export default function PropertiesInfo({ close, onTemplateAdd, onTemplateEdit })
                   className="absolute top-2 right-2 cursor-pointer"
                   onClick={() => removeProp(index)}
                 >
-                  <img src='/icons/trash.svg' className='w-4 h-4'/>
+                  <img src="/icons/trash.svg" className="w-4 h-4" />
                 </div>
               </div>
             ))}
@@ -166,7 +172,11 @@ export default function PropertiesInfo({ close, onTemplateAdd, onTemplateEdit })
         </div>
 
         <div className="flex gap-x-4 justify-center my-3">
-          <BaseButton title="Cancel" variant="secondary" onClick={handleCancel} />
+          <BaseButton
+            title="Cancel"
+            variant="secondary"
+            onClick={handleCancel}
+          />
           <BaseButton title="Save" variant="primary" onClick={handleSave} />
         </div>
       </div>

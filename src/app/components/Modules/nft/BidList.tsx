@@ -10,10 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useToast } from "@/hooks/use-toast";
-import { CreateSellService } from "@/services/createSellService";
-import { useState } from "react";
-import { useNFTDetail } from "../../Context/NFTDetailContext";
+import { useToast } from '@/hooks/use-toast';
+import { CreateSellService } from '@/services/createSellService';
+import { useState } from 'react';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { IBid } from '@/types';
 import { trimString } from '@/utils/helpers';
 import moment from 'moment';
@@ -66,8 +66,7 @@ export default function BidList() {
     }
   };
 
-  if (bids.length === 0)
-    return null;
+  if (bids.length === 0) return null;
 
   return (
     <div className="w-full flex flex-col gap-y-5 mt-5">
@@ -86,61 +85,54 @@ export default function BidList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              bids.map((item: any, index: number) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium w-[14rem]">
-                      <div className="flex gap-x-2 items-center">
-                        {item.bidValue}
+            {bids.map((item: any, index: number) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell className="font-medium w-[14rem]">
+                    <div className="flex gap-x-2 items-center">
+                      {item.bidValue}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    ${(2 * item?.bidValue).toLocaleString('en-US')}
+                  </TableCell>
+                  <TableCell>
+                    {item?.createdAt
+                      ? new Date(item?.createdAt).toLocaleString().slice(0, 10)
+                      : '-/-'}
+                  </TableCell>
+                  <TableCell>
+                    {item.bidder?.username
+                      ? item.bidder?.username
+                      : trimString(item.bidder?.wallet)}
+                  </TableCell>
+                  <TableCell>
+                    {moment(item.createdAt).format('DD MMM, YY')}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {item?.bidder?._id === user?._id ? (
+                      <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-neon">
+                        <button
+                          className="w-full h-full"
+                          onClick={async () => await cancelBid()}
+                        >
+                          Cancel Bid
+                        </button>
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      ${(2 * item?.bidValue).toLocaleString('en-US')}
-                    </TableCell>
-                    <TableCell>
-                      {item?.createdAt
-                        ? new Date(item?.createdAt)
-                          .toLocaleString()
-                          .slice(0, 10)
-                        : '-/-'}
-                    </TableCell>
-                    <TableCell>
-                      {item.bidder?.username
-                        ? item.bidder?.username
-                        : trimString(item.bidder?.wallet)}
-                    </TableCell>
-                    <TableCell>
-                      {moment(item.createdAt).format('DD MMM, YY')}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {item?.bidder?._id === user?._id ? (
-                        <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-neon">
-                          <button
-                            className="w-full h-full"
-                            onClick={async () => await cancelBid()}
-                          >
-                            Cancel Bid
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
-                          <button
-                            className="w-full h-full"
-                            onClick={() => { }}
-                          >
-                            Bidded
-                          </button>
-                        </div>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                    ) : (
+                      <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
+                        <button className="w-full h-full" onClick={() => {}}>
+                          Bidded
+                        </button>
+                      </div>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
     </div>
   );
-
 }

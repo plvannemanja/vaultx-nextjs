@@ -31,14 +31,15 @@ export function BaseDialog({
   onClose,
 }: IBaseDialogProps) {
   return (
-    <Dialog
-      open={isOpen} onOpenChange={onClose}
-    >
-
+    <Dialog open={isOpen} onOpenChange={onClose}>
       {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className={`max-w-5xl ${className}`}>
         <DialogHeader>
-          {title ? <DialogTitle>{title}</DialogTitle> : <DialogTitle className='hidden'></DialogTitle>}
+          {title ? (
+            <DialogTitle>{title}</DialogTitle>
+          ) : (
+            <DialogTitle className="hidden"></DialogTitle>
+          )}
           {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         {children}

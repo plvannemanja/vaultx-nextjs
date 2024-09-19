@@ -13,7 +13,6 @@ export default function CurationLoader({
         <img src="/icons/refresh.svg" className="w-20 h-20 mx-auto" />
       )}
 
-
       {!status.error && !status.loading ? (
         <img src="/icons/success.svg" className="w-28 h-28 mx-auto" />
       ) : null}

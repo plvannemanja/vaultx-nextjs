@@ -37,8 +37,7 @@ export default function ActivityList() {
     getAllNftActivity();
   }, [nftId]);
 
-  if (activityList.length === 0)
-    return null;
+  if (activityList.length === 0) return null;
 
   return (
     <div className="w-full flex flex-col gap-y-5 mt-5">
@@ -58,75 +57,61 @@ export default function ActivityList() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              activityList.map((item: any, index: number) => {
-                return (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium w-[14rem]">
-                      <div className="flex gap-x-2 items-center">
-                        {item.state}
-                        {
-                          item.actionHash && (
-                            <a
-                              target="_blank"
-                              href={getExplorerURL('transaction', item?.actionHash)}
-                            >
-                              <ArrowTopRightOnSquareIcon
-                                width={20}
-                                height={20}
-                              />
-                            </a>
-                          )
-                        }
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {item.price ? item.price : '-/-'}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-x-2 items-center text-neon">
-                        {item.from ? trimString(item.from.wallet) : '-/-'}
-                        {item.from && (
-                          <a
-                            target="_blank"
-                            href={getExplorerURL('address', item.from?.wallet)}
-                          >
-                            <ArrowTopRightOnSquareIcon
-                              width={20}
-                              height={20}
-                            />
-                          </a>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-x-2 items-center text-neon">
-                        {item.to ? trimString(item.to.wallet) : '-/-'}
-                        {item.to && (
-                          <a
-                            target="_blank"
-                            href={getExplorerURL('address', item.to?.wallet)}
-                          >
-                            <ArrowTopRightOnSquareIcon
-                              width={20}
-                              height={20}
-                            />
-                          </a>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {moment(item.createdAt).format('DD MMM, YY')}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {moment(item.createdAt).format('hh:mm A')}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            {activityList.map((item: any, index: number) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell className="font-medium w-[14rem]">
+                    <div className="flex gap-x-2 items-center">
+                      {item.state}
+                      {item.actionHash && (
+                        <a
+                          target="_blank"
+                          href={getExplorerURL('transaction', item?.actionHash)}
+                        >
+                          <ArrowTopRightOnSquareIcon width={20} height={20} />
+                        </a>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>{item.price ? item.price : '-/-'}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-x-2 items-center text-neon">
+                      {item.from ? trimString(item.from.wallet) : '-/-'}
+                      {item.from && (
+                        <a
+                          target="_blank"
+                          href={getExplorerURL('address', item.from?.wallet)}
+                        >
+                          <ArrowTopRightOnSquareIcon width={20} height={20} />
+                        </a>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-x-2 items-center text-neon">
+                      {item.to ? trimString(item.to.wallet) : '-/-'}
+                      {item.to && (
+                        <a
+                          target="_blank"
+                          href={getExplorerURL('address', item.to?.wallet)}
+                        >
+                          <ArrowTopRightOnSquareIcon width={20} height={20} />
+                        </a>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {moment(item.createdAt).format('DD MMM, YY')}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {moment(item.createdAt).format('hh:mm A')}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
     </div>
-  )
+  );
 }

@@ -35,23 +35,23 @@ export default function Page() {
   };
 
   const validateProfile = (data: any) => {
-    const err = []
+    const err = [];
 
-    if (data?.website && !checkUrl(data.website, "website")) {
+    if (data?.website && !checkUrl(data.website, 'website')) {
       err.push('Website');
     }
-    if (data?.twitter && !checkUrl(data.twitter, "twitter")) {
+    if (data?.twitter && !checkUrl(data.twitter, 'twitter')) {
       err.push('Twitter');
     }
-    if (data?.facebook && !checkUrl(data.facebook, "facebook")) {
+    if (data?.facebook && !checkUrl(data.facebook, 'facebook')) {
       err.push('Facebook');
     }
-    if (data?.instagram && !checkUrl(data.instagram, "instagram")) {
+    if (data?.instagram && !checkUrl(data.instagram, 'instagram')) {
       err.push('Instagram');
     }
 
     return err;
-  }
+  };
 
   const update = async () => {
     toast({
@@ -69,28 +69,28 @@ export default function Page() {
     try {
       const err = validateProfile(json);
       if (err.length > 0) {
-        let str = ''
+        let str = '';
         for (let i = 0; i < err.length; i++) {
-          str = str + err[i] + ', '
+          str = str + err[i] + ', ';
         }
         toast({
           variant: 'destructive',
           title: 'Error',
           description: `${str} is not a valid URL`,
-        })
+        });
         return;
       }
 
       const formDataForm = new FormData();
-      formDataForm.append("userImage", formData.avatar);
-      formDataForm.append("bannerImage", formData.cover);
-      formDataForm.append("username", formData.username);
-      formDataForm.append("email", formData.email);
-      formDataForm.append("bio", formData.bio);
-      formDataForm.append("facebook", formData.facebook);
-      formDataForm.append("twitter", formData.twitter);
-      formDataForm.append("instagram", formData.instagram);
-      formDataForm.append("website", formData.website);
+      formDataForm.append('userImage', formData.avatar);
+      formDataForm.append('bannerImage', formData.cover);
+      formDataForm.append('username', formData.username);
+      formDataForm.append('email', formData.email);
+      formDataForm.append('bio', formData.bio);
+      formDataForm.append('facebook', formData.facebook);
+      formDataForm.append('twitter', formData.twitter);
+      formDataForm.append('instagram', formData.instagram);
+      formDataForm.append('website', formData.website);
 
       const response = await userServices.updateProfile(formDataForm as any);
 
@@ -160,7 +160,11 @@ export default function Page() {
             <div className="flex gap-x-4 items-center my-5">
               {formData.avatar ? (
                 <img
-                  src={typeof formData.avatar === 'string' ? formData.avatar : URL.createObjectURL(formData.avatar)}
+                  src={
+                    typeof formData.avatar === 'string'
+                      ? formData.avatar
+                      : URL.createObjectURL(formData.avatar)
+                  }
                   alt="cover"
                   className="w-28 h-28 object-cover rounded-full"
                 />
@@ -181,7 +185,11 @@ export default function Page() {
             <div className="flex gap-x-4 items-center my-5">
               {formData.cover ? (
                 <img
-                  src={typeof formData.cover === 'string' ? formData.cover : URL.createObjectURL(formData.cover)}
+                  src={
+                    typeof formData.cover === 'string'
+                      ? formData.cover
+                      : URL.createObjectURL(formData.cover)
+                  }
                   alt="cover"
                   className="w-28 h-28 object-cover rounded-full"
                 />
@@ -250,7 +258,10 @@ export default function Page() {
                 <Input
                   value={formData.website ? formData.website : ''}
                   onChange={(e) =>
-                    setFormData({ ...formData, website: (e.target as any).value })
+                    setFormData({
+                      ...formData,
+                      website: (e.target as any).value,
+                    })
                   }
                   className="w-full border-none bg-[#161616]"
                   type="text"
@@ -262,7 +273,10 @@ export default function Page() {
                 <Input
                   value={formData.twitter ? formData.twitter : ''}
                   onChange={(e) =>
-                    setFormData({ ...formData, twitter: (e.target as any).value })
+                    setFormData({
+                      ...formData,
+                      twitter: (e.target as any).value,
+                    })
                   }
                   className="w-full border-none bg-[#161616]"
                   type="text"

@@ -4,7 +4,13 @@ import React, { useState } from 'react';
 import BaseButton from '../../ui/BaseButton';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
-export default function MintLoader({ progress, nftId } : { progress: number, nftId: string }) {
+export default function MintLoader({
+  progress,
+  nftId,
+}: {
+  progress: number;
+  nftId: string;
+}) {
   const [step, setStep] = useState(progress ? progress : 1);
 
   return (
@@ -113,10 +119,13 @@ export default function MintLoader({ progress, nftId } : { progress: number, nft
 
           <div className="p-4 border border-gray-300 rounded-md flex justify-between items-center w-full">
             <p>{`${window.location.href}nft/${nftId}`.slice(0, 30)}</p>
-            <DocumentDuplicateIcon className="w-6 h-6 fill-[#ddf247]"
-            onClick={() => {
-              navigator.clipboard.writeText(`${window.location.href}nft/${nftId}`);
-            }}
+            <DocumentDuplicateIcon
+              className="w-6 h-6 fill-[#ddf247]"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `${window.location.href}nft/${nftId}`,
+                );
+              }}
             />
           </div>
         </div>

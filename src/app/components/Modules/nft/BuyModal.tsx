@@ -19,7 +19,13 @@ import { nftServices } from '@/services/supplier';
 import moment from 'moment';
 import { INFTVoucher } from '@/types';
 
-export default function BuyModal({ onClose, fetchNftData }: { onClose: () => void; fetchNftData: () => void; }) {
+export default function BuyModal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
   const { NFTDetail, nftId: id } = useNFTDetail();
   const { fee } = useGlobalContext();
   const [tokenAmount, setTokenAmount] = useState<string | null>(null);
@@ -72,8 +78,15 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
   const buyNFT = async () => {
     try {
       setStep(4);
-      const tokenAmount = await getTokenAmount(NFTDetail.price.toString(), 'Wei');
-      const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), tokenAmount as bigint, activeAccount);
+      const tokenAmount = await getTokenAmount(
+        NFTDetail.price.toString(),
+        'Wei',
+      );
+      const { transactionHash, tokenId } = await purchaseAsset(
+        BigInt(NFTDetail?.tokenId),
+        tokenAmount as bigint,
+        activeAccount,
+      );
 
       const data = {
         nftId: id,
@@ -106,25 +119,28 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
   const buyFreeMint = async () => {
     try {
       setStep(4);
-      const voucher: INFTVoucher = JSON.parse(NFTDetail.voucher, (key, value) => {
-        // Check if the value is a number and can be safely converted to BigInt
-        if (typeof value === 'number' && Number.isSafeInteger(value)) {
-          return BigInt(value);
-        }
-        return value;
-      });
+      const voucher: INFTVoucher = JSON.parse(
+        NFTDetail.voucher,
+        (key, value) => {
+          // Check if the value is a number and can be safely converted to BigInt
+          if (typeof value === 'number' && Number.isSafeInteger(value)) {
+            return BigInt(value);
+          }
+          return value;
+        },
+      );
 
       console.log(voucher);
       setStep(5);
     } catch (error) {
       onClose();
     }
-  }
+  };
 
   const purchase = async () => {
     if (NFTDetail.minted) await buyNFT;
     else await buyFreeMint();
-  }
+  };
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;
     if (name === 'country') {
@@ -167,7 +183,7 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
   const checkAmount = async () => {
     const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
     setTokenAmount(tokenAmount as string);
-    const expectedAmount = Number(tokenAmount) * 100 / (100 - fee);
+    const expectedAmount = (Number(tokenAmount) * 100) / (100 - fee);
     setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
   };
 
@@ -430,7 +446,13 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
               variant="secondary"
               onClick={cancelChanges}
             />
-            <BaseButton title="Submit" variant="primary" onClick={() => { setStep(2) }} />
+            <BaseButton
+              title="Submit"
+              variant="primary"
+              onClick={() => {
+                setStep(2);
+              }}
+            />
           </div>
         </div>
       )}
@@ -504,7 +526,12 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { setStep(2) }}>
+              <button
+                className="w-full h-full"
+                onClick={() => {
+                  setStep(2);
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -516,16 +543,14 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
           </div>
         </div>
       )}
-      {
-        step === 4 && (
-          <div className="flex flex-col gap-y-4 items-center text-center">
-            <img src="/icons/refresh.svg" className="w-20 mx-auto" />
-            <p className="text-lg font-medium">
-              Please wait while we purchasing NFT
-            </p>
-          </div>
-        )
-      }
+      {step === 4 && (
+        <div className="flex flex-col gap-y-4 items-center text-center">
+          <img src="/icons/refresh.svg" className="w-20 mx-auto" />
+          <p className="text-lg font-medium">
+            Please wait while we purchasing NFT
+          </p>
+        </div>
+      )}
       {step === 5 && (
         <div className="flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-2 justify-center text-center">
@@ -540,7 +565,9 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
             <div className="flex justify-between">
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">{trimString(NFTDetail.owner.wallet)}</p>
+                <p className="text-neon">
+                  {trimString(NFTDetail.owner.wallet)}
+                </p>
               </div>
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">From</p>
@@ -554,9 +581,7 @@ export default function BuyModal({ onClose, fetchNftData }: { onClose: () => voi
               </div>
               <div className="w-[48%] p-4 rounded-md border border-gray-400">
                 <p className="text-sm text-gray-500">Payment Time</p>
-                <p className="text-neon">
-                  {moment().format('DD MMM, YY')}
-                </p>
+                <p className="text-neon">{moment().format('DD MMM, YY')}</p>
               </div>
             </div>
           </div>

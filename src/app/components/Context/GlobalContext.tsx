@@ -1,12 +1,17 @@
 'use client';
 
 import { protocolFee } from '@/lib/helper';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface IGlobalContext {
-  fee: number,
-  user: any,
+  fee: number;
+  user: any;
   setUser: (data: any) => void;
 }
 
@@ -17,9 +22,7 @@ interface GlobalProviderProps {
 const globalContext = createContext<IGlobalContext | undefined>(undefined);
 
 //context component
-export const GlobalProvider: React.FC<GlobalProviderProps> = ({
-  children,
-}) => {
+export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [fee, setFee] = useState<number>(0);
   const [user, setUser] = useState<any>(null);
   const fetchProtocolFee = async () => {
@@ -37,18 +40,17 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({
         fee,
         user,
         setUser,
-      }} >
+      }}
+    >
       {children}
-    </globalContext.Provider >
-  )
-}
+    </globalContext.Provider>
+  );
+};
 
 // hook
 export const useGlobalContext = () => {
   const context = useContext(globalContext);
   if (context === undefined)
-    throw new Error(
-      'Global context must be used within Global Provider',
-    );
+    throw new Error('Global context must be used within Global Provider');
   return context;
-}
+};

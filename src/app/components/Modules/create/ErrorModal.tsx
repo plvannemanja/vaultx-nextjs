@@ -1,7 +1,13 @@
 import React from 'react';
 import BaseButton from '../../ui/BaseButton';
 
-export default function ErrorModal({ data,close }: { data: Array<any> ,close:any}) {
+export default function ErrorModal({
+  data,
+  close,
+}: {
+  data: Array<any>;
+  close: any;
+}) {
   return (
     <div className="flex flex-col gap-y-6 items-center content-center w-[100%] p-10">
       <div className="flex gap-x-3 items-center">
@@ -21,10 +27,13 @@ export default function ErrorModal({ data,close }: { data: Array<any> ,close:any
             </div>
           );
         })}
-
       </div>
-      <BaseButton title="I Agree" variant="primary" onClick={close} className="max-w-[210px]" />
-
+      <BaseButton
+        title="I Agree"
+        variant="primary"
+        onClick={close}
+        className="max-w-[210px]"
+      />
     </div>
   );
 }

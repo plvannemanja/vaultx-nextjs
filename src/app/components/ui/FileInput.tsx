@@ -11,7 +11,7 @@ interface IFileInputProps {
   maxSizeInBytes?: number;
   acceptedFormats?: string[];
   editMode?: any;
-  titleStyles?:any
+  titleStyles?: any;
 }
 
 export default function FileInput({
@@ -22,7 +22,7 @@ export default function FileInput({
   maxSizeInBytes = 10 * 1024 * 1024,
   acceptedFormats = ['.png', 'jpeg'],
   editMode,
-  titleStyles
+  titleStyles,
 }: IFileInputProps) {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState<any>(null);
@@ -41,7 +41,7 @@ export default function FileInput({
   };
 
   const handleButtonClick = (e) => {
-    console.log(fileInputRef, fileInputRef.current)
+    console.log(fileInputRef, fileInputRef.current);
     if (fileInputRef.current) {
       (fileInputRef.current as any).click();
     }
@@ -69,17 +69,16 @@ export default function FileInput({
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <div className="file-upload bg-[#161616] w-full rounded-xl justify-start items-center gap-[30px] inline-flex"  >
-        <BaseButton 
-        title='Upload'
-        variant='secondary'
-        onClick={handleButtonClick}
-        displayIcon
-        iconPath={"/icons/uploadBlack.svg"}
-        className={"w-[30%]"}
-        iconStyles={"stroke-black"}
-        />
-        {' '}
+      <div className="file-upload bg-[#161616] w-full rounded-xl justify-start items-center gap-[30px] inline-flex">
+        <BaseButton
+          title="Upload"
+          variant="secondary"
+          onClick={handleButtonClick}
+          displayIcon
+          iconPath={'/icons/uploadBlack.svg'}
+          className={'w-[30%]'}
+          iconStyles={'stroke-black'}
+        />{' '}
         {editMode ? 'File Selected' : fileName ? fileName : 'No files selected'}
       </div>
       {subtitle && (

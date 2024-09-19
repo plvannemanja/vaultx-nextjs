@@ -46,9 +46,9 @@ export class CreateNftServices {
     const token = getCookie('token');
     return await axios.post(`${server_uri}/nft/add-voucher`, data, {
       headers: {
-        authorization: "Bearer " + token,
+        authorization: 'Bearer ' + token,
       },
-    })
+    });
   }
 
   /**

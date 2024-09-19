@@ -8,7 +8,13 @@ import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { CreateSellService } from '@/services/createSellService';
 import { useGlobalContext } from '../../Context/GlobalContext';
 
-export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => void; fetchNftData: () => void; }) {
+export default function EscrowModal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
   const [step, setStep] = useState(1);
   const { user } = useGlobalContext();
   const { NFTDetail } = useNFTDetail();
@@ -17,12 +23,15 @@ export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => 
   const release = async () => {
     try {
       setStep(2);
-      const { transactionHash, tokenId } = await releaseEscrow(NFTDetail.tokenId, activeAccount);
+      const { transactionHash, tokenId } = await releaseEscrow(
+        NFTDetail.tokenId,
+        activeAccount,
+      );
       // add events
       let states = [];
       const escrowState = {
         nftId: NFTDetail._id,
-        state: "Escrow Payment Received",
+        state: 'Escrow Payment Received',
         from: user._id,
         toWallet: NFTDetail?.owner.wallet,
         to: NFTDetail?.owner,
@@ -35,7 +44,7 @@ export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => 
         nftId: NFTDetail._id,
         releaseHash: transactionHash,
         states,
-      }
+      };
       await saleService.release(data);
       fetchNftData();
       setStep(3);
@@ -43,7 +52,7 @@ export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => 
       console.log(error);
       onClose();
     }
-  }
+  };
   return (
     <>
       {step === 1 ? (
@@ -71,7 +80,12 @@ export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => 
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { onClose() }}>
+              <button
+                className="w-full h-full"
+                onClick={() => {
+                  onClose();
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -84,7 +98,7 @@ export default function EscrowModal({ onClose, fetchNftData }: { onClose: () => 
         </div>
       ) : null}
       {step === 2 && (
-        <BasicLoadingModal message='Please wait while we releasing NFT' />
+        <BasicLoadingModal message="Please wait while we releasing NFT" />
       )}
       {step === 3 ? (
         <div className="w-[34rem] flex flex-col gap-y-4">

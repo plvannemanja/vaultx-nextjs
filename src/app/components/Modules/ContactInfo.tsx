@@ -24,7 +24,6 @@ export default function ContactInfo({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-
   const nftContext = useCreateNFT();
 
   const update = async (id?: string) => {
@@ -121,20 +120,20 @@ export default function ContactInfo({
                   </p>
                 </div>
 
-                <span 
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                      onClick={() => {
-                        setIsUpdateModalOpen(true);
-                        setNewContact({
-                          ...newContact,
-                          id: item._id,
-                          name: item.name,
-                          contactInfo: item.contactInfo,
-                        });
-                      }}
-                      >
-                      Edit
-                      </span>
+                <span
+                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
+                  onClick={() => {
+                    setIsUpdateModalOpen(true);
+                    setNewContact({
+                      ...newContact,
+                      id: item._id,
+                      name: item.name,
+                      contactInfo: item.contactInfo,
+                    });
+                  }}
+                >
+                  Edit
+                </span>
 
                 <div className="flex justify-end">
                   <BaseDialog
@@ -191,8 +190,9 @@ export default function ContactInfo({
                         <BaseButton
                           title="Save"
                           variant="primary"
-                          onClick={async () => {await update(item._id)
-                            setIsUpdateModalOpen(false)
+                          onClick={async () => {
+                            await update(item._id);
+                            setIsUpdateModalOpen(false);
                           }}
                         />
                       </div>
@@ -200,30 +200,30 @@ export default function ContactInfo({
                   </BaseDialog>
                 </div>
               </div>
-
             ))
           : null}
 
-            <div className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md" 
-            onClick={() => setIsModalOpen(true)}
-            >
-              <div className="flex flex-col gap-y-6 items-center">
-                <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                  <Image
-                    src="/icons/plus.svg"
-                    className="w-5 h-5"
-                    alt=""
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <p className="text-[#828282]">Add New Information</p>
-              </div>
+        <div
+          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <div className="flex flex-col gap-y-6 items-center">
+            <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
+              <Image
+                src="/icons/plus.svg"
+                className="w-5 h-5"
+                alt=""
+                width={100}
+                height={100}
+              />
             </div>
+            <p className="text-[#828282]">Add New Information</p>
+          </div>
+        </div>
 
         <BaseDialog
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)} 
+          onClose={() => setIsModalOpen(false)}
           className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
         >
           <div className="flex flex-col gap-y-5">
@@ -263,8 +263,9 @@ export default function ContactInfo({
               <BaseButton
                 title="Save"
                 variant="primary"
-                onClick={async () => {await update()
-                  setIsModalOpen(false)
+                onClick={async () => {
+                  await update();
+                  setIsModalOpen(false);
                 }}
               />
             </div>

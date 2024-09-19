@@ -22,9 +22,7 @@ export default function RootLayout({
       <body className={manrope.className}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <ThirdwebProvider>
-            <GlobalProvider>
-              {children}
-            </GlobalProvider>
+            <GlobalProvider>{children}</GlobalProvider>
           </ThirdwebProvider>
         </ThemeProvider>
       </body>

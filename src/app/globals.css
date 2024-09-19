@@ -78,8 +78,8 @@
 }
 
 /* font classes start */
-.azeret-mono-font{
-  font-family: "Azeret Mono", monospace;
+.azeret-mono-font {
+  font-family: 'Azeret Mono', monospace;
   font-optical-sizing: auto;
   font-style: normal;
 }

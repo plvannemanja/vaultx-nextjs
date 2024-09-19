@@ -21,8 +21,9 @@ const basicDetailsSchema = z.object({
   productName: z.string(),
   productDescription: z.string(),
   price: z.number().refine((value) => value % 1 !== 0 || value >= 0, {
-    message: "Price must be a decimal number or zero",
-  }), curation: z.string(),
+    message: 'Price must be a decimal number or zero',
+  }),
+  curation: z.string(),
 });
 
 export default function BasicDetails({
@@ -136,7 +137,6 @@ export default function BasicDetails({
   //   }
   // };
 
-
   const handleAttachment = (file: any, index: number) => {
     const attachment = file.target.files[0];
     const fileExtension = attachment.name.split('.').pop().toLowerCase();
@@ -165,8 +165,8 @@ export default function BasicDetails({
       (attachmentRef.current as any).click();
     }
     const newAttachments = [...attachments, null];
-    console.log("attachment", newAttachments);
-    console.log("attachment", newAttachments);
+    console.log('attachment', newAttachments);
+    console.log('attachment', newAttachments);
 
     setAttachments(newAttachments);
     setBasicDetail({
@@ -207,11 +207,7 @@ export default function BasicDetails({
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
-
-
-
         <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[42%] bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
-
           {basicDetail.file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {basicDetail.imageSrc && (
@@ -224,26 +220,41 @@ export default function BasicDetails({
               {basicDetail.file ? basicDetail.file.name : 'No files selected'}
             </div>
           ) : (
-            <div className='flex flex-col justify-center items-center gap-y-[23px] '>
-              <img src="/icons/upload.svg" alt="upload" className="w-[66px] h-[66px]" />
-              <div className='gap-y-[2px]'>
-                <p className="text-center text-white text-lg font-extrabold font-['Manrope']">Upload original RWA File</p>
+            <div className="flex flex-col justify-center items-center gap-y-[23px] ">
+              <img
+                src="/icons/upload.svg"
+                alt="upload"
+                className="w-[66px] h-[66px]"
+              />
+              <div className="gap-y-[2px]">
+                <p className="text-center text-white text-lg font-extrabold font-['Manrope']">
+                  Upload original RWA File
+                </p>
                 <div>
-                  <p className="mt-2 text-gray-400 mb-[4px]">Drag or choose your file to IPFS upload</p>
-                  <p className="opacity-30 text-center text-white text-xs font-normal font-['Azeret Mono'] leading-tight">PNG, GIF, WEBP, MP4 or MP3. Max 50mb.</p>
+                  <p className="mt-2 text-gray-400 mb-[4px]">
+                    Drag or choose your file to IPFS upload
+                  </p>
+                  <p className="opacity-30 text-center text-white text-xs font-normal font-['Azeret Mono'] leading-tight">
+                    PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
+                  </p>
                 </div>
               </div>
             </div>
           )}
           <div className="flex flex-col gap-y-2">
-
             <button
               className="py-3 w-[20rem] h-[50px] text-black font-semibold bg-[#dee8e8]  p-2.5 rounded-[14px] justify-center items-center gap-2.5"
               onClick={handleButtonClick}
             >
               <span className="flex gap-x-[10px] items-center justify-center">
-                <p className="text-[#161616] text-sm font-extrabold font-['Manrope'] capitalize">Browse file</p>
-                <img src="/icons/arrow_ico.svg" alt="" className='w-[18px] h-[18px] ' />
+                <p className="text-[#161616] text-sm font-extrabold font-['Manrope'] capitalize">
+                  Browse file
+                </p>
+                <img
+                  src="/icons/arrow_ico.svg"
+                  alt=""
+                  className="w-[18px] h-[18px] "
+                />
               </span>{' '}
             </button>
             <input
@@ -251,7 +262,7 @@ export default function BasicDetails({
               type="file"
               ref={fileInputRef}
               onChange={handleLogoChange}
-              title='file'
+              title="file"
             />
             {file && (
               <BaseButton
@@ -265,14 +276,11 @@ export default function BasicDetails({
                     imageSrc: null,
                   });
                 }}
-                className={"rounded-[14px]"}
-
+                className={'rounded-[14px]'}
               />
             )}
           </div>
         </div>
-
-
 
         <div className="flex flex-col gap-y-5 lg:w-[55%]">
           <div className="flex flex-col gap-y-2">
@@ -286,12 +294,10 @@ export default function BasicDetails({
                 })
               }
               className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl font-['Azeret Mono'] text-[11px]"
               type="text"
               placeholder="Enter Product Name"
             />
-
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -309,7 +315,6 @@ export default function BasicDetails({
                 })
               }
               className="w-full border-none bg-[#232323] rounded-[20px] placeholder-[#fff] h-[180px] resize-none py-[15px] px-[26px]"
-
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               placeholder="Please describe your product"
             />
@@ -339,12 +344,14 @@ export default function BasicDetails({
             <div className="flex flex-col gap-y-3">
               <div className="flex justify-between">
                 <Label className="font-bold text-[14px]">Marketplace Fee</Label>
-                <Label className='font-bold'>${fee}%</Label>
+                <Label className="font-bold">${fee}%</Label>
               </div>
-              <hr className='border-t-[#ffffff] opacity-[0.3]' />
+              <hr className="border-t-[#ffffff] opacity-[0.3]" />
               <div className="flex justify-between">
-                <Label className="font-bold text-[11px]">You will receive</Label>
-                <Label className=''>${leftAmount}</Label>
+                <Label className="font-bold text-[11px]">
+                  You will receive
+                </Label>
+                <Label className="">${leftAmount}</Label>
               </div>
             </div>
           </div>
@@ -361,7 +368,6 @@ export default function BasicDetails({
               }
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-
               type="text"
               placeholder="Enter Artist Name"
             />
@@ -373,7 +379,6 @@ export default function BasicDetails({
               aria-label="Select curation"
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl appearance-none text-[11px]"
               className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-
               name="curation"
               onChange={(e) =>
                 setBasicDetail({
@@ -382,15 +387,16 @@ export default function BasicDetails({
                 })
               }
               value={basicDetail.curation}
-
             >
-              <option value="" className='text-[11px]'>You must choose Curation*</option>
+              <option value="" className="text-[11px]">
+                You must choose Curation*
+              </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any) => (
-                  <option key={item.isoCode} value={JSON.stringify(item)}>
-                    {item.name}
-                  </option>
-                ))
+                    <option key={item.isoCode} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
                 : null}
             </select>
           </div>
@@ -427,12 +433,13 @@ export default function BasicDetails({
                         className="flex gap-x-2 justify-center items-center cursor-pointer"
                         onClick={() => removeAttachment(index)}
                       >
-                        <span className="text-neon font-bold text-[13px]">Change</span>
+                        <span className="text-neon font-bold text-[13px]">
+                          Change
+                        </span>
                         <img
                           src="/icons/trash.svg"
                           alt="attachment"
                           className="w-5 h-5"
-
                         />
                       </div>
                     ) : (
@@ -440,26 +447,22 @@ export default function BasicDetails({
                         className="flex gap-x-2 justify-center items-center cursor-pointer"
                         onClick={() => addAttachment()}
                       >
-                        <span className="text-neon  font-bold text-[13px]">Upload</span>
+                        <span className="text-neon  font-bold text-[13px]">
+                          Upload
+                        </span>
                         <img
                           src="/icons/upload.svg"
                           alt="attachment"
                           className="w-5 h-5"
                         />
                       </div>
-                    )
-                    }
+                    )}
                   </div>
                 );
               })}
             </div>
           </div>
-
-
-
         </div>
-
-
       </div>
       <div className="flex w-full gap-x-4 justify-center  items-center my-5">
         <BaseDialog
@@ -476,8 +479,15 @@ export default function BasicDetails({
           <CancelModal />
         </BaseDialog>
 
-        <BaseButton title="Next" variant="primary" onClick={create} className="w-[49%]" displayIcon={true} iconPath={'/icons/arrow_ico.svg'} />
+        <BaseButton
+          title="Next"
+          variant="primary"
+          onClick={create}
+          className="w-[49%]"
+          displayIcon={true}
+          iconPath={'/icons/arrow_ico.svg'}
+        />
       </div>
-    </div >
+    </div>
   );
 }

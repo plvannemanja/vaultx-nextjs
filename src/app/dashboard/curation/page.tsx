@@ -53,9 +53,8 @@ export default function Page() {
         searchInput: '',
       });
 
-
       const collections = response.data.curations;
-      console.log("this is test data",{ collections });
+      console.log('this is test data', { collections });
       let detailedInfo = await Promise.all(
         collections
           .filter((item: any) => !item?.active && !item?.owner?.active)
@@ -64,7 +63,7 @@ export default function Page() {
               collection._id,
             );
 
-            console.log("info",info);
+            console.log('info', info);
 
             const extra = {
               nftCount: info.data.collection.nftCount,
@@ -111,7 +110,7 @@ export default function Page() {
       <CurationSearch setState={handleState} />
 
       {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
-        <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
+      <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
         {collections.map((collection: any, index: number) => {
           return (
             <div className="col-span-4" key={index}>
@@ -119,20 +118,19 @@ export default function Page() {
             </div>
           );
         })}
-        
-          {/* <div className="col-span-1">
+
+        {/* <div className="col-span-1">
 
           </div> */}
-
-        </div>
-        {/* {collections.map((collection: any, index: number) => {
+      </div>
+      {/* {collections.map((collection: any, index: number) => {
           return (
             <div className="w-[100%]" key={index}>
               <CurationCard key={index} data={collection} />
             </div>
           );
         })} */}
-      </div>
+    </div>
     // </div>
   );
 }

@@ -38,17 +38,38 @@ type ShippingAddressType = {
     city: string;
     state: string;
     postalCode: string;
-  }
+  };
   phoneNumber: number;
   contactInformation: string;
   concent: string;
   termAccepted: boolean;
   nftId: NFTItemType;
-}
+};
 
-type ActivityStatusType = "Listed" | "Minted" | "Bid Placed" | "Listed for Sale" | "Added Funds in Escrow" | "Purchased" | "End Sale" | "In Escrow" | "Bid Accepted" | "Transferred" | "Unlisted" | "Cancel Bid" | "Dispute Registered" | "Order Canceled";
+type ActivityStatusType =
+  | 'Listed'
+  | 'Minted'
+  | 'Bid Placed'
+  | 'Listed for Sale'
+  | 'Added Funds in Escrow'
+  | 'Purchased'
+  | 'End Sale'
+  | 'In Escrow'
+  | 'Bid Accepted'
+  | 'Transferred'
+  | 'Unlisted'
+  | 'Cancel Bid'
+  | 'Dispute Registered'
+  | 'Order Canceled';
 
-type SaleStatusType = "NotForSale" | "Active" | "Ordered" | "Dispute" | "CancellationRequested" | "Sold" | "Cancelled";
+type SaleStatusType =
+  | 'NotForSale'
+  | 'Active'
+  | 'Ordered'
+  | 'Dispute'
+  | 'CancellationRequested'
+  | 'Sold'
+  | 'Cancelled';
 
 type DisputeType = {
   _id: string;
@@ -58,33 +79,36 @@ type DisputeType = {
   sale: SaleType;
   reason: string;
   resolved: boolean;
-}
+};
 
 type SaleType = {
   _id: string;
   saleStatus: SaleStatusType;
-  saleStartOn: Date,
-  saleStartTxnHash: string,
-  ItemPurchasedOn: Date,
-  ItemPUrchasedTxnHash: String,
-  saleEndedOn: Date,
-  saleEndTxnHash: string,
-  saleCancelledOn: Date,
-  saleCancelTxnHash: string,
-  requestEscrowReleaseTxnHash: string,
+  saleStartOn: Date;
+  saleStartTxnHash: string;
+  ItemPurchasedOn: Date;
+  ItemPUrchasedTxnHash: String;
+  saleEndedOn: Date;
+  saleEndTxnHash: string;
+  saleCancelledOn: Date;
+  saleCancelTxnHash: string;
+  requestEscrowReleaseTxnHash: string;
   nftId: NFTItemType;
   sellerId?: UserType;
   active: boolean;
   released: boolean;
   saleWinner?: UserType;
   itemDelivered: boolean;
-  sellerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string },
-  buyerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string },
+  sellerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string };
+  buyerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string };
   cancelRequest: string;
-  cancleAttachment: string[],
+  cancleAttachment: string[];
   requestEscrowRelease: boolean;
-  requestEscrowId?: Omit<DisputeType, 'nft' | 'sale'> & { nft: string; sale: string };
-}
+  requestEscrowId?: Omit<DisputeType, 'nft' | 'sale'> & {
+    nft: string;
+    sale: string;
+  };
+};
 
 export type NFTItemType = {
   shippingInformation: Partial<ShippingInformationType>;
@@ -212,7 +236,7 @@ export interface IAdvancedDetailFormData {
   certificates: any[];
   propertyTemplateId: string | null;
   attributes: any[] | null;
-  royalties: any[]
+  royalties: any[];
 }
 
 export interface ISellerInfo {
@@ -226,7 +250,6 @@ export interface ISellerInfo {
   length: string | null;
   weight: string | null;
 }
-
 
 export interface IBuyerInfo {
   buyer: Address;
