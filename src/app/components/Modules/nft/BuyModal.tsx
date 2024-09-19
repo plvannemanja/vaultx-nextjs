@@ -197,7 +197,7 @@ export default function BuyModal({
   return (
     <>
       {step === 1 && (
-        <div className="flex flex-col gap-y-5 w-full">
+        <div className="flex flex-col gap-y-5 w-full ">
           <div className="mt-5 flex gap-x-3">
             <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
               <Label className="text-lg font-medium">Buyer Information</Label>

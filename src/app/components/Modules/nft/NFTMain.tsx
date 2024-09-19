@@ -168,11 +168,13 @@ export default function NFTMain({
             width={100}
             quality={100}
             alt="hero"
-            className="cursor-zoom-in rounded-xl object-cover aspect-square w-full"
+            className="cursor-zoom-in rounded-xl object-cover aspect-square w-full max-h-[620px]"
           />
+          
 
           <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
-            <span className="font-medium">{likes ? likes : liked ? 1 : 0}</span>
+            <span className="font-bold tex-[14px] text-[#fff]">{likes ? likes : liked ? 1 : 0}</span>
+            
             <div>
               <input
                 title="like"
