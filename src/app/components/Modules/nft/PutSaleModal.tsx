@@ -10,9 +10,15 @@ import { City, Country, State } from 'country-state-city';
 import { useToast } from '@/hooks/use-toast';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { useGlobalContext } from '../../Context/GlobalContext';
+import { parseEther } from 'viem';
+import { resaleAsset } from '@/lib/helper';
+import { useActiveAccount } from 'thirdweb/react';
 
-export default function PutSaleModal() {
+export default function PutSaleModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
   const { nftId, NFTDetail: nft } = useNFTDetail();
+  const { fee } = useGlobalContext();
+  const activeAccount = useActiveAccount();
   const [countryCode, setCountryCode] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -22,12 +28,13 @@ export default function PutSaleModal() {
   const { toast } = useToast();
   const salesService = new CreateSellService();
 
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     username: null,
     email: null,
     description: null,
-    accepted: false,
+    accepted: true,
+    price: nft.price
   });
   const [sellerInfo, setSellerInfo] = useState({
     country: '',
@@ -81,6 +88,7 @@ export default function PutSaleModal() {
   };
 
   const resellNft = async () => {
+    debugger;
     if (!formData.accepted) {
       toast({
         title: 'Please agree to the terms and conditions',
@@ -90,37 +98,33 @@ export default function PutSaleModal() {
     }
 
     try {
-      // blockchain logic
-
-      //
+      const price = parseEther(formData.price.toString());
+      const transactionHash = await resaleAsset(nft.tokenId, price, activeAccount);
       const data = {
         nftId: nftId,
-        name: formData.username,
-        email: formData.email,
-        country: selectedCountry,
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          city: sellerInfo.city,
-          state: JSON.parse(sellerInfo.state).name,
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-        contactInformation: formData.description,
-        concent: formData.accepted,
-        saleHash: '',
-        price: nft.price,
+        name: nft.saleId.sellerShippingId.name,
+        email: nft.saleId.sellerShippingId.email,
+        country: nft.saleId.sellerShippingId.country,
+        address: nft.saleId.sellerShippingId.address,
+        phoneNumber: nft.saleId.sellerShippingId.phoneNumber,
+        contactInformation: nft.saleId.sellerShippingId.contactInformation,
+        concent: nft.saleId.sellerShippingId.concent,
+        saleHash: transactionHash,
+        price: formData.price,
       };
 
       await salesService.resellItem(data);
-      setStep(3);
+      await fetchNftData();
+      onClose();
     } catch (error) {
+      onClose();
       console.log(error);
     }
   };
 
   const handleMint = async () => {
     try {
+      setStep(3);
       let splitPayments = [];
       splitPayments =
         nft?.walletAddresses?.length > 0
@@ -149,18 +153,18 @@ export default function PutSaleModal() {
   };
 
   const submit = async () => {
+    //TODO validate Form Data
+    setStep(3);
     try {
       if (nft?.minted) await resellNft();
       else await handleMint();
 
-      // blockchain logic
-      setStep(3);
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <div className="w-[38rem]">
+    <>
       {step === 1 && (
         <div className="flex flex-col gap-y-4">
           <p className="text-lg font-medium">List item for sale</p>
@@ -171,37 +175,36 @@ export default function PutSaleModal() {
             <div className="flex justify-between items-center border border-gray-400 rounded-md p-3 my-1">
               <span>Price</span>
               <div className="flex items-center gap-x-2">
-                100
-                <img src="/icons/ether.svg" className="w-5 inline" />
+                {nft.price}$
               </div>
             </div>
             <div className="flex justify-between items-center">
               <span>Royalties</span>
-              <span>5%</span>
+              <span>{nft.royalty}%</span>
             </div>
             <div className="flex justify-between items-center">
               <span>Marketplace fee</span>
-              <span>2.5%</span>
+              <span>{fee}%</span>
             </div>
             <hr />
             <div className="flex justify-between items-center">
               <span>You will get</span>
               <span>
-                {Number(nft.price - 0.075 * nft.price).toFixed(2)} MATIC
+                {Number(nft.price).toFixed(2)} $
               </span>
             </div>
           </div>
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => { onClose() }}>
                 Discard
               </button>
             </div>
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
               <button
                 className="w-full h-full"
-                onClick={async () => setStep(2)}
+                onClick={async () => { setStep(2) }}
               >
                 Next
               </button>
@@ -210,7 +213,7 @@ export default function PutSaleModal() {
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-5 w-full">
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
             <Label className="text-lg font-medium">
               Give a new price to put this asset for sale.
@@ -221,6 +224,13 @@ export default function PutSaleModal() {
                 type="number"
                 placeholder="Enter The Price"
                 className="w-full rounded bg-[#161616]"
+                value={formData.price.toString()}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    price: (e.target as any).value as number
+                  })
+                }}
               />
             </div>
           </div>
@@ -249,7 +259,7 @@ export default function PutSaleModal() {
                 <Input
                   value={formData.email ? formData.email : ''}
                   onChange={(e) =>
-                    setFormData({ ...formData, email: (e.target as any).value })
+                    setFormData({ ...formData, email: (e.target as HTMLInputElement).value })
                   }
                   className="w-full border-none bg-[#161616]"
                   type="text"
@@ -263,7 +273,7 @@ export default function PutSaleModal() {
                   aria-label="select curation"
                   className="h-10 rounded-md px-2"
                   name="country"
-                  value={sellerInfo.country}
+                  value={JSON.stringify(sellerInfo.country)}
                   onChange={handleUpdateSeller}
                 >
                   <option value="">Select</option>
@@ -430,11 +440,13 @@ export default function PutSaleModal() {
             <Checkbox
               id="terms"
               checked={formData.accepted}
-              onChange={() =>
+              onChange={(e) => {
+                debugger;
                 setFormData({
                   ...formData,
-                  accepted: true,
+                  accepted: (e.target as any).checked,
                 })
+              }
               }
             />
             <label
@@ -447,7 +459,7 @@ export default function PutSaleModal() {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => { onClose() }}>
                 Discard
               </button>
             </div>
@@ -470,6 +482,6 @@ export default function PutSaleModal() {
           </p>
         </div>
       )}
-    </div>
+    </>
   );
 }

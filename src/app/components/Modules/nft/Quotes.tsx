@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { trimString } from '@/utils/helpers';
+import { roundToDecimals, trimString } from '@/utils/helpers';
 import { useActiveWalletChain } from 'thirdweb/react';
 import { contract } from '@/lib/contract';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
@@ -11,8 +11,10 @@ import { useGlobalContext } from '../../Context/GlobalContext';
 const ORACLE_DELTA = 30;
 export default function Quotes({
   gasFee,
+  onClose,
 }: {
   gasFee: number;
+  onClose: () => void;
 }) {
   const { NFTDetail } = useNFTDetail();
   const { fee } = useGlobalContext();
@@ -27,8 +29,8 @@ export default function Quotes({
   const getQuote = async () => {
     const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
     setTokenAmount(tokenAmount);
-    const expectedAmount = Number(tokenAmount) * (100 - fee) - gasFee;
-    setExpectedAmount(expectedAmount ?? null);
+    const expectedAmount = Number(tokenAmount) * 100 / (100 - fee) + gasFee;
+    setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
   };
 
   useEffect(() => {
@@ -119,6 +121,7 @@ export default function Quotes({
       </div>
       <button
         className="bg-[#DEE8E8] w-full my-3 py-2 text-center rounded-md text-black font-medium"
+        onClick={onClose}
       >
         Close
       </button>

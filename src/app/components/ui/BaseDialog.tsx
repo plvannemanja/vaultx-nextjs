@@ -17,7 +17,7 @@ interface IBaseDialogProps {
   className?: string;
   footer?: React.ReactNode;
   isOpen?: boolean;
-  onClose?: () => void; // Function to close the dialog
+  onClose?: (value: boolean) => void; // Function to close the dialog
 }
 
 export function BaseDialog({

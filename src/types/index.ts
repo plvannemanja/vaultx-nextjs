@@ -27,6 +27,65 @@ type YoutubeType = {
   url: string;
 };
 
+type ShippingAddressType = {
+  _id: string;
+  name: string;
+  email: string;
+  country: string;
+  address: {
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+  }
+  phoneNumber: number;
+  contactInformation: string;
+  concent: string;
+  termAccepted: boolean;
+  nftId: NFTItemType;
+}
+
+type ActivityStatusType = "Listed" | "Minted" | "Bid Placed" | "Listed for Sale" | "Added Funds in Escrow" | "Purchased" | "End Sale" | "In Escrow" | "Bid Accepted" | "Transferred" | "Unlisted" | "Cancel Bid" | "Dispute Registered" | "Order Canceled";
+
+type SaleStatusType = "NotForSale" | "Active" | "Ordered" | "Dispute" | "CancellationRequested" | "Sold" | "Cancelled";
+
+type DisputeType = {
+  _id: string;
+  buyer: UserType;
+  seller: UserType;
+  nft: NFTItemType;
+  sale: SaleType;
+  reason: string;
+  resolved: boolean;
+}
+
+type SaleType = {
+  _id: string;
+  saleStatus: SaleStatusType;
+  saleStartOn: Date,
+  saleStartTxnHash: string,
+  ItemPurchasedOn: Date,
+  ItemPUrchasedTxnHash: String,
+  saleEndedOn: Date,
+  saleEndTxnHash: string,
+  saleCancelledOn: Date,
+  saleCancelTxnHash: string,
+  requestEscrowReleaseTxnHash: string,
+  nftId: NFTItemType;
+  sellerId?: UserType;
+  active: boolean;
+  released: boolean;
+  saleWinner?: UserType;
+  itemDelivered: boolean;
+  sellerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string },
+  buyerShippingId: Omit<ShippingAddressType, 'nftId'> & { nftId: string },
+  cancelRequest: string;
+  cancleAttachment: string[],
+  requestEscrowRelease: boolean;
+  requestEscrowId?: Omit<DisputeType, 'nft' | 'sale'> & { nft: string; sale: string };
+}
+
 export type NFTItemType = {
   shippingInformation: Partial<ShippingInformationType>;
   _id: string;
@@ -45,11 +104,7 @@ export type NFTItemType = {
   certificates: Array<string>;
   freeMinting: boolean;
   onSale: boolean;
-  saleId: {
-    sellerShippingId: {
-      country: string;
-    };
-  };
+  saleId: Omit<SaleType, 'nftId'> & { nftId: string };
   views: number;
   followers: number;
   minted: boolean;
@@ -213,7 +268,7 @@ export interface INFTVoucher {
 export interface INFTActivity {
   _id: string;
   nftId: NFTItemType;
-  state: "Listed" | "Minted" | "Bid Placed" | "Listed for Sale" | "Added Funds in Escrow" | "Purchased" | "End Sale" | "In Escrow" | "Bid Accepted" | "Transferred" | "Unlisted" | "Cancel Bid" | "Dispute Registered" | "Order Canceled";
+  state: ActivityStatusType;
   createdAt: Date;
   updatedAt: Date;
   actionHash?: `0x${string}`;

@@ -251,3 +251,88 @@ export const getTokenAmount = async (usdAmount: string) => {
 
   return formatEther(tokenAmount);
 }
+
+export const unlistAsset = async (tokenId: number, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function unlistAsset(uint256 tokenId)",
+    params: [BigInt(tokenId)]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+  return transactionHash;
+}
+
+export const resaleAsset = async (tokenId: number, price: bigint, account: Account) => {
+  debugger;
+  // check if approved for all
+  const isApproved = await isApprovedForAll(account.address as Address, contract.address as Address);
+  if (!isApproved)
+    await setApprovedForAll(contract.address as Address, true, account);
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function reSaleAsset(uint256 tokenId, uint256 price)",
+    params: [BigInt(tokenId), price]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+  return transactionHash;
+}
+
+export const setApproveToken = async (tokenId: number, address: Address, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function approve(address to, uint256 tokenId)",
+    params: [address, BigInt(tokenId)]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+
+  return transactionHash;
+}
+
+export const setApprovedForAll = async (operator: Address, approved: boolean, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function setApprovalForAll(address operator, bool approved)",
+    params: [operator, approved]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+  });
+  return transactionHash;
+}
+
+export const isApprovedForAll = async (owner: Address, operator: Address) => {
+  const data = await readContract({
+    contract,
+    method: "function isApprovedForAll(address owner, address operator) view returns (bool)",
+    params: [owner, operator]
+  });
+  return data;
+}

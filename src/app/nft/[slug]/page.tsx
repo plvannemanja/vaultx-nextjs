@@ -116,6 +116,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
 
   const fetchNftData = async () => {
     try {
+      debugger;
       // set NFT ID
       setNftId(params.slug);
 
@@ -145,7 +146,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
     <div className="flex flex-col gap-y-4 py-20 w-full px-10 lg:px-20">
       {data && (
         <>
-          <NFTMain />
+          <NFTMain fetchNftData={fetchNftData} />
           <NFTDescription />
           <BidList />
           <ActivityList />

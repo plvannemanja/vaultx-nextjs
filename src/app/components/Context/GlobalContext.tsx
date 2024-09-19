@@ -1,5 +1,6 @@
 'use client';
 
+import { protocolFee } from '@/lib/helper';
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
 
@@ -25,7 +26,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({
   };
 
   useEffect(() => {
-
+    fetchProtocolFee();
   }, []);
 
   return (

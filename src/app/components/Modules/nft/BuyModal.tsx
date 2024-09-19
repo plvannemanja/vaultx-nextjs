@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { City, Country, State } from 'country-state-city';
@@ -10,11 +10,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { purchaseAsset } from '@/lib/helper';
+import { getTokenAmount, purchaseAsset } from '@/lib/helper';
 import { useActiveAccount } from 'thirdweb/react';
+import { useGlobalContext } from '../../Context/GlobalContext';
+import { roundToDecimals } from '@/utils/helpers';
 
-export default function BuyModal({ id, price }: { id: string; price: number }) {
-  const { NFTDetail } = useNFTDetail();
+export default function BuyModal() {
+  const { NFTDetail, nftId: id } = useNFTDetail();
+  const { fee } = useGlobalContext();
+  const [tokenAmount, setTokenAmount] = useState<string | null>(null);
+  const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
+
   const activeAccount = useActiveAccount();
 
   const [formData, setFormData] = useState({
@@ -23,7 +29,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
     description: null,
     accepted: false,
   });
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [sellerInfo, setSellerInfo] = useState<any>({
     country: null,
     state: null,
@@ -58,7 +64,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
     });
   };
 
-  const update = async () => {
+  const purchase = async () => {
     try {
       // Blockchain logic to purchase
       const { transactionHash, tokenId } = await purchaseAsset(BigInt(NFTDetail?.tokenId), activeAccount);
@@ -83,7 +89,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
 
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      //TODO success modal
+      setStep(4);
     } catch (error) {
       console.log(error);
       // TODO error modal
@@ -128,6 +134,19 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
       [name]: value,
     });
   };
+
+  const checkAmount = async () => {
+    const tokenAmount = await getTokenAmount(NFTDetail.price.toString());
+    setTokenAmount(tokenAmount);
+    const expectedAmount = Number(tokenAmount) * 100 / (100 - fee);
+    setExpectedAmount(roundToDecimals(expectedAmount ?? null, 5));
+  };
+
+  useEffect(() => {
+    debugger;
+    setStep(1);
+    checkAmount();
+  }, []);
 
   return (
     <>
@@ -364,7 +383,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
             <hr />
             <div className="flex items-center justify-between">
               <span className="text-lg font-medium">Price</span>
-              <span className="text-lg font-medium">${price}</span>
+              <span className="text-lg font-medium">${NFTDetail?.price}</span>
             </div>
             <hr />
             <p>
@@ -381,7 +400,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
               variant="secondary"
               onClick={cancelChanges}
             />
-            <BaseButton title="Submit" variant="primary" onClick={update} />
+            <BaseButton title="Submit" variant="primary" onClick={setStep(2)} />
           </div>
         </div>
       )}
@@ -439,17 +458,17 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
           <div className="flex flex-col gap-y-2 mt-5">
             <div className="flex justify-between items-center">
               <span>Price</span>
-              <span>{price} MATIC</span>
+              <span>{tokenAmount} ETH</span>
             </div>
             <hr />
             <div className="flex justify-between items-center">
               <span>VaultX Fee</span>
-              <span>5 %</span>
+              <span>{fee} %</span>
             </div>
             <hr />
             <div className="flex justify-between items-center">
               <span>You will pay</span>
-              <span>{Number(price + 0.05 * price).toFixed(2)} MATIC</span>
+              <span>{expectedAmount} ETH</span>
             </div>
           </div>
 
@@ -460,7 +479,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
               </button>
             </div>
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
-              <button className="w-full h-full" onClick={() => setStep(4)}>
+              <button className="w-full h-full" onClick={purchase}>
                 Checkout
               </button>
             </div>
@@ -503,7 +522,7 @@ export default function BuyModal({ id, price }: { id: string; price: number }) {
 
           <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
             <button className="w-full h-full" onClick={() => setStep(5)}>
-              Next
+              close
             </button>
           </div>
         </div>
