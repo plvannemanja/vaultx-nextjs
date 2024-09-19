@@ -94,7 +94,6 @@ export default function PutSaleModal({
   };
 
   const resellNft = async () => {
-    debugger;
     if (!formData.accepted) {
       toast({
         title: 'Please agree to the terms and conditions',
@@ -446,7 +445,6 @@ export default function PutSaleModal({
               id="terms"
               checked={formData.accepted}
               onChange={(e) => {
-                debugger;
                 setFormData({
                   ...formData,
                   accepted: (e.target as any).checked,

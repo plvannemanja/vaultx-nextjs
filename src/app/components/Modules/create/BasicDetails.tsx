@@ -58,7 +58,7 @@ export default function BasicDetails({
   };
 
   const leftAmount = useMemo(() => {
-    if (!z.isValid(basicDetail.price)) return 0;
+    if (isNaN(basicDetail.price)) return 0;
     return Number(basicDetail.price) - (Number(basicDetail.price) * fee) / 100;
   }, [basicDetail.price]);
 
@@ -336,7 +336,7 @@ export default function BasicDetails({
               }}
               className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
               type="text" // Change to 'text' to allow decimals
-              placeholder="0.0000000004"
+              placeholder=""
             />
           </div>
 
@@ -393,10 +393,10 @@ export default function BasicDetails({
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any) => (
-                    <option key={item.isoCode} value={JSON.stringify(item)}>
-                      {item.name}
-                    </option>
-                  ))
+                  <option key={item.isoCode} value={JSON.stringify(item)}>
+                    {item.name}
+                  </option>
+                ))
                 : null}
             </select>
           </div>

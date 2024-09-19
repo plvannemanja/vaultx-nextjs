@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { getTokenAmount, purchaseAsset } from '@/lib/helper';
+import { getTokenAmount, purchaseAsset, purchaseAssetBeforeMint } from '@/lib/helper';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { roundToDecimals, trimString } from '@/utils/helpers';
@@ -18,6 +18,7 @@ import BasicLoadingModal from './BasicLoadingModal';
 import { nftServices } from '@/services/supplier';
 import moment from 'moment';
 import { INFTVoucher } from '@/types';
+import { CreateNftServices } from '@/services/createNftService';
 
 export default function BuyModal({
   onClose,
@@ -82,7 +83,7 @@ export default function BuyModal({
         NFTDetail.price.toString(),
         'Wei',
       );
-      const { transactionHash, tokenId } = await purchaseAsset(
+      const { transactionHash } = await purchaseAsset(
         BigInt(NFTDetail?.tokenId),
         tokenAmount as bigint,
         activeAccount,
@@ -130,7 +131,38 @@ export default function BuyModal({
         },
       );
 
-      console.log(voucher);
+      const tokenAmount = await getTokenAmount(
+        NFTDetail.price.toString(),
+        'Wei',
+      );
+
+      const { tokenId, transactionHash } = await purchaseAssetBeforeMint(voucher as Omit<INFTVoucher, 'signature'> & { signature: `0x${string}` }, tokenAmount as bigint, activeAccount);
+      const data = {
+        nftId: id,
+        name: formData.username,
+        email: formData.email,
+        country: sellerInfo.country ? sellerInfo.country.name : '',
+        address: {
+          line1: sellerInfo.line1,
+          line2: sellerInfo.line2,
+          city: sellerInfo.city ? sellerInfo.city.name : '',
+          state: sellerInfo.state ? sellerInfo.state.name : '',
+          postalCode: sellerInfo.postalCode,
+        },
+        phoneNumber: sellerInfo.phoneNumber,
+        contactInformation: formData.description,
+        concent: formData.accepted,
+        buyHash: transactionHash,
+      }
+      const createNftService = new CreateNftServices();
+      await createNftService.mintAndSale({
+        nftId: NFTDetail?._id,
+        mintHash: transactionHash,
+        tokenId: Number(tokenId),
+      })
+      const saleService = new CreateSellService();
+      await saleService.buyItem(data)
+      await fetchNftData();
       setStep(5);
     } catch (error) {
       onClose();
@@ -138,7 +170,7 @@ export default function BuyModal({
   };
 
   const purchase = async () => {
-    if (NFTDetail.minted) await buyNFT;
+    if (NFTDetail.minted) await buyNFT();
     else await buyFreeMint();
   };
   const handleUpdateSeller = (e: any) => {
@@ -197,7 +229,7 @@ export default function BuyModal({
   return (
     <>
       {step === 1 && (
-        <div className="flex flex-col gap-y-5 w-full">
+        <div className="flex flex-col gap-y-5 w-full ">
           <div className="mt-5 flex gap-x-3">
             <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
               <Label className="text-lg font-medium">Buyer Information</Label>
