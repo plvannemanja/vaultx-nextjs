@@ -294,8 +294,9 @@ export default function NFTMain({
                           variant="primary"
                           onClick={() => {}}
                         />
+                                              
                       }
-                      className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
                       isOpen={modalStatus.buy}
                       onClose={(val) => {
                         setModalStatus({ ...modalStatus, buy: val });
@@ -306,6 +307,7 @@ export default function NFTMain({
                           setModalStatus({ ...modalStatus, buy: false });
                         }}
                         fetchNftData={fetchNftData}
+
                       />
                     </BaseDialog>
 
