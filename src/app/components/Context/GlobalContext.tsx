@@ -1,5 +1,6 @@
 'use client';
 
+import { chain } from '@/lib/contract';
 import { protocolFee } from '@/lib/helper';
 import {
   createContext,
@@ -8,6 +9,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useActiveWalletChain, useSwitchActiveWalletChain } from 'thirdweb/react';
 
 interface IGlobalContext {
   fee: number;
@@ -30,10 +32,18 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     setFee(Number(fee) / 100);
   };
 
+  const activeChain = useActiveWalletChain();
+  const switchChain = useSwitchActiveWalletChain();
+
   useEffect(() => {
     fetchProtocolFee();
   }, []);
 
+  useEffect(() => {
+    if (activeChain && activeChain.id !== chain.id) {
+      switchChain(chain);
+    }
+  }, [activeChain]);
   return (
     <globalContext.Provider
       value={{

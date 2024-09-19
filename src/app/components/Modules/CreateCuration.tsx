@@ -96,6 +96,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       title: 'Processing Transaction',
       description: 'Please wait...',
     });
+    setStatus({ error: false, loading: true, active: true });
     try {
       const result = createCurationSchema.safeParse(formData);
       if (
