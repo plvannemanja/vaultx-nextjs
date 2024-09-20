@@ -64,18 +64,21 @@ export default function BasicDetails({
 
   const create = async () => {
     const result = basicDetailsSchema.safeParse(basicDetail);
-    if (!result.success && !basicDetail.file) {
-      handler(null, result.error.message);
+    if (!result.success || !basicDetail.file) {
+      let message = JSON.parse(result.error.message);
+      if (!basicDetail.file) {
+        message.push({
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'null',
+          path: ['Logo Image'],
+          message: 'Expected string, received null',
+        });
+      }
+      handler(null, JSON.stringify(message));
       console.log(result.error.message);
       return;
     }
-
-    setBasicDetail({
-      ...basicDetail,
-      file: file,
-      imageSrc: imageSrc,
-      attachments: attachments,
-    });
 
     handler({}, null);
     nextStep(true);
@@ -330,7 +333,7 @@ export default function BasicDetails({
                 if (!isNaN(Number(value)) && Number(value) >= 0) {
                   setBasicDetail({
                     ...basicDetail,
-                    price: value, // Keep the value as string to allow decimals
+                    price: Number(value), // Keep the value as string to allow decimals
                   });
                 }
               }}
@@ -366,7 +369,6 @@ export default function BasicDetails({
                   artistName: (e.target as any).value,
                 })
               }
-              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
               type="text"
               placeholder="Enter Artist Name"
@@ -377,7 +379,6 @@ export default function BasicDetails({
             <Label className="font-medium text-[11px]">Curation*</Label>
             <select
               aria-label="Select curation"
-              // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl appearance-none text-[11px]"
               className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
               name="curation"
               onChange={(e) =>
@@ -386,17 +387,17 @@ export default function BasicDetails({
                   curation: (e.target as any).value,
                 })
               }
-              value={basicDetail.curation}
+              value={basicDetail.curation ?? ''}
             >
               <option value="" className="text-[11px]">
                 You must choose Curation*
               </option>
               {basicDetail.curations.length > 0
-                ? basicDetail?.curations?.map((item: any) => (
-                  <option key={item.isoCode} value={JSON.stringify(item)}>
-                    {item.name}
-                  </option>
-                ))
+                ? basicDetail?.curations?.map((item: any, index: number) => (
+                    <option key={index} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
                 : null}
             </select>
           </div>

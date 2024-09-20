@@ -8,9 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SkeletonCard } from '@/app/components/Skelton/Skelton';
 
-
 export default function Page() {
-
   const { toast } = useToast();
   const [collections, setCollection] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +56,6 @@ export default function Page() {
         searchInput: '',
       });
 
-
       const collections = response.data.curations;
       let detailedInfo = await Promise.all(
         collections
@@ -68,7 +65,7 @@ export default function Page() {
               collection._id,
             );
 
-            console.log("info", info);
+            console.log('info', info);
 
             const extra = {
               nftCount: info.data.collection.nftCount,
@@ -87,7 +84,6 @@ export default function Page() {
 
       setCollection(detailedInfo);
       setLoading(false);
-
     };
 
     const fetchMedia = async () => {
@@ -114,28 +110,30 @@ export default function Page() {
           onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
-      {loading ? <SkeletonCard /> :
+      {loading ? (
+        <SkeletonCard />
+      ) : (
         <>
-
-
-
           <CurationSearch setState={handleState} />
-          {loading ? <SkeletonCard /> : <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
-            {collections.map((collection: any, index: number) => {
-              return (
-                <div className="col-span-4" key={index}>
-                  <CurationCard key={index} data={collection} />
-                </div>
-              );
-            })}
+          {loading ? (
+            <SkeletonCard />
+          ) : (
+            <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
+              {collections.map((collection: any, index: number) => {
+                return (
+                  <div className="col-span-4" key={index}>
+                    <CurationCard key={index} data={collection} />
+                  </div>
+                );
+              })}
 
-            {/* <div className="col-span-1">
+              {/* <div className="col-span-1">
 
           </div> */}
-
-          </div>}
+            </div>
+          )}
         </>
-      }
+      )}
       {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
 
       {/* {collections.map((collection: any, index: number) => {

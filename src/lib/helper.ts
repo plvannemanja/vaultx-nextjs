@@ -129,9 +129,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 
@@ -202,9 +202,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 
@@ -263,7 +263,7 @@ export const purchaseAssetBeforeMint = async (
     method:
       'function purchaseAssetBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable',
     params: [voucher],
-    value: amount
+    value: amount,
   });
   const { transactionHash } = await sendTransaction({
     transaction,
@@ -277,7 +277,8 @@ export const purchaseAssetBeforeMint = async (
   });
 
   const TransferEvent = prepareEvent({
-    signature: "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)"
+    signature:
+      'event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)',
   });
 
   const events = parseEventLogs({
@@ -287,9 +288,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 export const getExplorerURL = (
@@ -444,8 +445,8 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };

@@ -6,14 +6,8 @@ import { Label } from '@/components/ui/label';
 import BaseButton from '../ui/BaseButton';
 import { useToast } from '@/hooks/use-toast';
 
-export default function PropertiesInfo({
-  close,
-  onTemplateAdd,
-  onTemplateEdit,
-}) {
+export default function PropertiesInfo({ close, onTemplateAdd }) {
   const { toast } = useToast();
-  const [data, setData] = useState([]);
-  const [editingTemplate, setEditingTemplate] = useState(null);
   const [property, setProperty] = useState({
     id: null,
     name: '',
@@ -24,17 +18,6 @@ export default function PropertiesInfo({
       { type: 'Weight', value: '5kg' },
     ],
   });
-
-  useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = async () => {
-    const response = await getProperties();
-    if (response.length > 0) {
-      setData(response);
-    }
-  };
 
   const handleSave = async () => {
     try {
@@ -51,11 +34,7 @@ export default function PropertiesInfo({
           duration: 2000,
         });
 
-        if (property.id) {
-          onTemplateEdit(response);
-        } else {
-          onTemplateAdd(response);
-        }
+        onTemplateAdd();
 
         close();
       }
@@ -68,17 +47,7 @@ export default function PropertiesInfo({
     }
   };
 
-  const handleEdit = (template) => {
-    setEditingTemplate(template);
-    setProperty({
-      id: template._id,
-      name: template.name,
-      attributes: template.attributes,
-    });
-  };
-
   const handleCancel = () => {
-    setEditingTemplate(null);
     setProperty({
       id: null,
       name: '',

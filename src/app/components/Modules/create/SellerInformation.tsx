@@ -19,25 +19,7 @@ export default function SellerInformation({
   const { sellerInfo, setSellerInfo } = useCreateNFT();
   const [modal, setModal] = useState(false);
 
-  const handleShip = (data: any) => {
-    setSellerInfo({
-      ...sellerInfo,
-      shipping: data,
-    });
-  };
-
-  const handleContact = (data: any) => {
-    setSellerInfo({
-      ...sellerInfo,
-      contact: data,
-    });
-  };
-
   const cancelChanges = () => {
-    setSellerInfo({
-      shipping: null,
-      contact: null,
-    });
     nextStep(false);
   };
 
@@ -62,15 +44,15 @@ export default function SellerInformation({
       return;
     } else {
       setModal(true);
-      handler(sellerInfo, null);
+      handler(null, null);
       nextStep(true);
     }
   };
 
   return (
     <div className="flex flex-col gap-y-4">
-      <ShippingInfo handler={handleShip} />
-      <ContactInfo handler={handleContact} />
+      <ShippingInfo />
+      <ContactInfo />
 
       <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
         <p>Shipment Information</p>

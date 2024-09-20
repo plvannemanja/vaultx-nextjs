@@ -9,9 +9,10 @@ import BaseButton from '../../ui/BaseButton';
 import FileInput from '../../ui/FileInput';
 import PropertiesTemplate from './PropertiesTemplate';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
-import { PaymentSplitType } from '@/types';
 import { BaseDialog } from '../../ui/BaseDialog';
 import PropertiesInfo from '../Properties';
+import { isAddress } from 'thirdweb';
+import { isValidNumber } from '@/utils/helpers';
 
 const category = ['Fine Art', 'Abstract Art', 'Pop Art', 'Test Category'];
 
@@ -31,21 +32,16 @@ export default function AdvanceDetails({
     setAdvancedDetails,
   } = useCreateNFT();
 
-  // const [splits, setSplits] = useState<any>({
-  //   address: '',
-  //   percentage: 0,
-  //   data: [],
-  // });
+  const [unlockableFiles, setUnlockableFiles] = useState(
+    advancedDetails.certificates,
+  );
 
-  const [royalties, setRoyalties] = useState<
-    Array<{ address: string; percentage: string }>
-  >([{ address: '', percentage: '' }]);
-
-  const [splits, setSplits] = useState<PaymentSplitType[]>([
-    { paymentWallet: '', paymentPercentage: BigInt(0) },
-  ]);
-  // const [splits, setSplits] = useState([{ paymentWallet: '', paymentPercentage: '' }]);
-  const [unlockableFiles, setUnlockableFiles] = useState<any>([]);
+  useEffect(() => {
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: unlockableFiles,
+    });
+  }, [unlockableFiles]);
 
   const [formData, setFormData] = useState<any>({
     royaltyAddress: null,
@@ -55,7 +51,6 @@ export default function AdvanceDetails({
     address: null,
     percentage: null,
   });
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
 
   const handleFileChange = (file: any, index: number) => {
     const newFiles = unlockableFiles.map((item: any, i: number) => {
@@ -83,45 +78,17 @@ export default function AdvanceDetails({
       certificates: newFiles,
     });
   };
-  const addRoyalty = () => {
-    const newRoyalties = [...royalties, { address: '', percentage: '' }];
-    setRoyalties(newRoyalties);
-    updateAdvancedDetailsRoyalties(newRoyalties);
-  };
 
-  const removeRoyalty = (index: number) => {
-    if (royalties.length > 1) {
-      const newRoyalties = royalties.filter((_, i) => i !== index);
-      setRoyalties(newRoyalties);
-      updateAdvancedDetailsRoyalties(newRoyalties);
-    }
-  };
-
-  const updateRoyalty = (
-    index: number,
-    field: 'address' | 'percentage',
-    value: string | number,
-  ) => {
-    const newRoyalties = royalties.map((royalty, i) => {
-      if (i === index) {
-        return {
-          ...royalty,
-          [field]: field === 'percentage' ? Number(value) : value,
-        };
-      }
-      return royalty;
-    });
-    setRoyalties(newRoyalties);
-    updateAdvancedDetailsRoyalties(newRoyalties);
-  };
   const addSplit = () => {
-    setSplits([...splits, { paymentWallet: '', paymentPercentage: BigInt(0) }]);
+    setPaymentSplits([
+      ...paymentSplits,
+      { paymentWallet: '', paymentPercentage: BigInt(0) },
+    ]);
   };
 
   const removeSplit = (index: number) => {
-    if (splits.length > 1) {
-      const newSplits = splits.filter((_, i) => i !== index);
-      setSplits(newSplits);
+    if (paymentSplits.length > 1) {
+      const newSplits = paymentSplits.filter((_, i) => i !== index);
       setPaymentSplits(newSplits);
     }
   };
@@ -131,7 +98,7 @@ export default function AdvanceDetails({
     field: 'paymentWallet' | 'paymentPercentage',
     value: string | bigint,
   ) => {
-    const newSplits = splits.map((split, i) => {
+    const newSplits = paymentSplits.map((split, i) => {
       if (i === index) {
         return {
           ...split,
@@ -140,28 +107,7 @@ export default function AdvanceDetails({
       }
       return split;
     });
-    setSplits(newSplits);
     setPaymentSplits(newSplits);
-  };
-  // useEffect(() => {
-  //   // Initialize royalties from advancedDetails if available
-  //   if (advancedDetails.royaltyAddress && advancedDetails.royalty) {
-  //     setRoyalties([{
-  //       address: advancedDetails.royaltyAddress,
-  //       percentage: advancedDetails.royalty.toString()
-  //     }]);
-  //   }
-  // }, []);
-  const updateAdvancedDetailsRoyalties = (
-    newRoyalties: Array<{ address: string; percentage: number | string }>,
-  ) => {
-    setAdvancedDetails({
-      ...advancedDetails,
-      royalties: newRoyalties.map((royalty) => ({
-        address: royalty.address,
-        percentage: Number(royalty.percentage),
-      })),
-    });
   };
 
   const toggleSwitch = (e: any) => {
@@ -206,7 +152,7 @@ export default function AdvanceDetails({
       err.push({ path: ['Properties'] });
     }
 
-    if (options.royalties && !advancedDetails.royalties) {
+    if (options.royalties && !isAddress(advancedDetails.royaltyAddress)) {
       err.push({ path: ['Royalties'] });
     }
 
@@ -218,9 +164,16 @@ export default function AdvanceDetails({
       err.push({ path: ['Unlockable Content'] });
     }
 
-    if (options.split && !paymentSplits.length) {
-      err.push({ path: ['Split Payments'] });
+    if (options.split) {
+      if (!paymentSplits.length) err.push({ path: ['Split Payments'] });
+      paymentSplits.forEach((split) => {
+        if (!isAddress(split.paymentWallet))
+          err.push({ path: ['Split Payments'] });
+      });
     }
+
+    if (!advancedDetails.propertyTemplateId)
+      err.push({ path: ['Property Template'] });
 
     if (err.length > 0) {
       handler(null, JSON.stringify(err));
@@ -231,6 +184,16 @@ export default function AdvanceDetails({
     nextStep(true);
   };
 
+  useEffect(() => {
+    if (options.split && paymentSplits.length === 0) {
+      setPaymentSplits([
+        {
+          paymentWallet: '',
+          paymentPercentage: BigInt(0),
+        },
+      ]);
+    }
+  }, [options.split]);
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-3 grid grid-cols-1 lg:grid-cols-3 flex-wrap">
@@ -308,62 +271,55 @@ export default function AdvanceDetails({
           <div className="flex flex-col gap-y-3">
             <p className="text-[20px] font-medium">Royalties</p>
 
-            {royalties.map((royalty, index) => (
-              <div key={index} className="grid grid-cols-12 gap-x-2">
-                <div className="col-span-4">
+            <div className="grid grid-cols-12 gap-x-2">
+              <div className="col-span-4">
+                <Input
+                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  onChange={(e) =>
+                    setAdvancedDetails({
+                      ...advancedDetails,
+                      royaltyAddress: e.target.value,
+                    })
+                  }
+                  placeholder="Address"
+                  type="text"
+                  value={advancedDetails.royaltyAddress ?? ''}
+                />
+              </div>
+              <div className="col-span-1 flex">
+                <div className="relative">
                   <Input
-                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                    onChange={(e) =>
-                      updateRoyalty(index, 'address', e.target.value)
+                    className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+                    onChange={(e) => {
+                      let val = Number(e.target.value);
+                      setAdvancedDetails({
+                        ...advancedDetails,
+                        royalty: isValidNumber(val) ? val : 0,
+                      });
+                    }}
+                    placeholder="0"
+                    min={0}
+                    max={100}
+                    type="number"
+                    value={
+                      isValidNumber(advancedDetails.royalty)
+                        ? advancedDetails.royalty.toString()
+                        : ''
                     }
-                    placeholder="Address"
-                    type="text"
-                    value={royalty.address}
                   />
-                </div>
-                <div className="col-span-1 flex">
-                  <div className="relative">
-                    <Input
-                      className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
-                      onChange={(e) =>
-                        updateRoyalty(index, 'percentage', e.target.value)
-                      }
-                      placeholder="0"
-                      min={0}
-                      max={100}
-                      type="number"
-                      value={royalty.percentage}
-                    />
-                    <p className="absolute top-4 right-2 text-[#979797]">%</p>
-                  </div>
-                </div>
-                <div className="col-span-2 flex">
-                  {royalties.length > 1 && (
-                    <button
-                      className="h-[52px] mx-4"
-                      onClick={() => removeRoyalty(index)}
-                    >
-                      <img
-                        src="/icons/trash.svg"
-                        alt=""
-                        className="cursor-pointer w-6 h-6"
-                      />
-                    </button>
-                  )}
-                  {index === royalties.length - 1 && (
-                    <div
-                      className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                      onClick={addRoyalty}
-                    >
-                      <img src="/icons/add-new.svg" className="w-6 h-6" />
-                      <p className="text-center text-sm text-[#DDF247]">
-                        Add New
-                      </p>
-                    </div>
-                  )}
+                  <p className="absolute top-4 right-2 text-[#979797]">%</p>
                 </div>
               </div>
-            ))}
+              <div className="col-span-2 flex">
+                <div
+                  className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
+                  onClick={() => {}}
+                >
+                  <img src="/icons/add-new.svg" className="w-6 h-6" />
+                  <p className="text-center text-sm text-[#DDF247]">Add New</p>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -460,7 +416,7 @@ export default function AdvanceDetails({
         {options.split && (
           <div className="flex flex-col gap-y-3">
             <p className="text-lg font-medium">Split Payments (%)</p>
-            {splits.map((split, index) => (
+            {paymentSplits.map((split, index) => (
               <div key={index} className="grid grid-cols-12 gap-x-2">
                 <div className="col-span-4">
                   <Input
@@ -491,7 +447,7 @@ export default function AdvanceDetails({
                   </div>
                 </div>
                 <div className="col-span-2 flex">
-                  {splits.length > 1 && (
+                  {paymentSplits.length > 1 && (
                     <button
                       className="h-[52px] mx-4"
                       onClick={() => removeSplit(index)}
@@ -503,7 +459,7 @@ export default function AdvanceDetails({
                       />
                     </button>
                   )}
-                  {index === splits.length - 1 && (
+                  {index === paymentSplits.length - 1 && (
                     <div
                       className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
                       onClick={addSplit}
@@ -520,12 +476,7 @@ export default function AdvanceDetails({
           </div>
         )}
 
-        <PropertiesTemplate
-          select={(e: any) => {
-            setSelectedProperty(e);
-            console.log(e);
-          }}
-        />
+        <PropertiesTemplate />
 
         <div className="flex gap-x-4 justify-center my-5">
           <BaseButton

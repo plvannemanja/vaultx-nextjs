@@ -9,7 +9,10 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useActiveWalletChain, useSwitchActiveWalletChain } from 'thirdweb/react';
+import {
+  useActiveWalletChain,
+  useSwitchActiveWalletChain,
+} from 'thirdweb/react';
 
 interface IGlobalContext {
   fee: number;

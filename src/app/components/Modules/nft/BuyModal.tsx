@@ -10,7 +10,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { getTokenAmount, purchaseAsset, purchaseAssetBeforeMint } from '@/lib/helper';
+import {
+  getTokenAmount,
+  purchaseAsset,
+  purchaseAssetBeforeMint,
+} from '@/lib/helper';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { roundToDecimals, trimString } from '@/utils/helpers';
@@ -19,6 +23,13 @@ import { nftServices } from '@/services/supplier';
 import moment from 'moment';
 import { INFTVoucher } from '@/types';
 import { CreateNftServices } from '@/services/createNftService';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import ConnectedCard from '../../Cards/ConnectedCard';
 
 export default function BuyModal({
   onClose,
@@ -54,6 +65,12 @@ export default function BuyModal({
   const [countryCode, setCountryCode] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+
+  const address = activeAccount?.address
+    ? activeAccount?.address.slice(0, 6) +
+      '...' +
+      activeAccount?.address.slice(-4)
+    : 'Connect Wallet';
 
   const countries = Country.getAllCountries();
 
@@ -136,7 +153,13 @@ export default function BuyModal({
         'Wei',
       );
 
-      const { tokenId, transactionHash } = await purchaseAssetBeforeMint(voucher as Omit<INFTVoucher, 'signature'> & { signature: `0x${string}` }, tokenAmount as bigint, activeAccount);
+      const { tokenId, transactionHash } = await purchaseAssetBeforeMint(
+        voucher as Omit<INFTVoucher, 'signature'> & {
+          signature: `0x${string}`;
+        },
+        tokenAmount as bigint,
+        activeAccount,
+      );
       const data = {
         nftId: id,
         name: formData.username,
@@ -153,15 +176,15 @@ export default function BuyModal({
         contactInformation: formData.description,
         concent: formData.accepted,
         buyHash: transactionHash,
-      }
+      };
       const createNftService = new CreateNftServices();
       await createNftService.mintAndSale({
         nftId: NFTDetail?._id,
         mintHash: transactionHash,
         tokenId: Number(tokenId),
-      })
+      });
       const saleService = new CreateSellService();
-      await saleService.buyItem(data)
+      await saleService.buyItem(data);
       await fetchNftData();
       setStep(5);
     } catch (error) {
@@ -229,214 +252,315 @@ export default function BuyModal({
   return (
     <>
       {step === 1 && (
-        <div className="flex flex-col gap-y-5 w-full ">
-          <div className="mt-5 flex gap-x-3">
-            <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-              <Label className="text-lg font-medium">Buyer Information</Label>
-              <hr className="bg-white" />
-              <div className="flex justify-between">
-                <div className="flex flex-col gap-y-2 w-[32%]">
-                  <Label className="text-lg font-medium">Name*</Label>
-                  <Input
-                    value={formData.username ? formData.username : ''}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        username: (e.target as any).value,
-                      })
-                    }
-                    className="w-full border-none bg-[#161616]"
-                    type="text"
-                    placeholder="Enter your username"
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2 w-[32%]">
-                  <Label className="text-lg font-medium">Email*</Label>
-                  <Input
-                    value={formData.email ? formData.email : ''}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        email: (e.target as any).value,
-                      })
-                    }
-                    className="w-full border-none bg-[#161616]"
-                    type="text"
-                    placeholder="Enter your email"
-                  />
-                </div>
+        <div className="flex flex-col gap-y-6 w-full">
+          <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Buyer Information</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="flex justify-between">
+                      <div className="flex flex-col gap-y-2 w-[32%]">
+                        <h2 className="font-bold text-[#ffffff] text-[14px]">
+                          Name*
+                        </h2>
 
-                <div className="flex flex-col gap-y-2 w-[32%]">
-                  <Label className="text-lg font-medium">Country*</Label>
-                  <select
-                    aria-label="select curation"
-                    className="h-10 rounded-md px-2"
-                    name="country"
-                    value={JSON.stringify(sellerInfo.country)}
-                    onChange={handleUpdateSeller}
-                  >
-                    <option value="">Select</option>
-                    {countries.map((item: any) => (
-                      <option key={item.isoCode} value={JSON.stringify(item)}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
+                        <Input
+                          value={formData.username ? formData.username : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              username: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your username"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-2 w-[32%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          Email*
+                        </h2>
+
+                        <Input
+                          value={formData.email ? formData.email : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              email: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your email"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-y-2 w-[32%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          Country*
+                        </h2>
+
+                        <select
+                          aria-label="select curation"
+                          className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                          name="country"
+                          value={JSON.stringify(sellerInfo.country)}
+                          onChange={handleUpdateSeller}
+                        >
+                          <option value="">Select</option>
+                          {countries.map((item: any) => (
+                            <option
+                              key={item.isoCode}
+                              value={JSON.stringify(item)}
+                            >
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-            <div className="flex flex-col gap-y-3">
-              <Label className="text-lg font-medium">Shipping Address</Label>
-              <hr />
-              <div className="flex flex-wrap justify-between">
-                <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                  <Label className="text-lg font-medium">Address 1*</Label>
-                  <Input
-                    value={sellerInfo.address1 ? sellerInfo.address1 : ''}
-                    onChange={(e) =>
-                      setSellerInfo({ ...sellerInfo, address1: e.target.value })
-                    }
-                    className="w-full border-none bg-[#161616]"
-                    type="text"
-                    placeholder="Enter address"
-                  />
-                </div>
-                <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                  <Label className="text-lg font-medium">Address 2*</Label>
-                  <Input
-                    value={sellerInfo.address2 ? sellerInfo.address2 : ''}
-                    onChange={(e) =>
-                      setSellerInfo({ ...sellerInfo, address2: e.target.value })
-                    }
-                    className="w-full border-none bg-[#161616]"
-                    type="text"
-                    placeholder="Enter address"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap justify-between">
-                <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                  <Label className="text-lg font-medium">State*</Label>
-                  <select
-                    aria-label="select curation"
-                    className="h-10 rounded-md px-2"
-                    name="state"
-                    value={
-                      sellerInfo.state ? JSON.stringify(sellerInfo.state) : ''
-                    }
-                    onChange={handleUpdateSeller}
-                  >
-                    <option value="">Select</option>
-                    {states.map((item: any) => (
-                      <option key={item.isoCode} value={JSON.stringify(item)}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                  <Label className="text-lg font-medium">City*</Label>
-                  <select
-                    aria-label="select curation"
-                    className="h-10 rounded-md px-2"
-                    name="city"
-                    value={
-                      sellerInfo.city ? JSON.stringify(sellerInfo.city) : ''
-                    }
-                    onChange={handleUpdateSeller}
-                  >
-                    <option value="">Select</option>
-                    {cities.map((item: any) => (
-                      <option key={item.isoCode} value={JSON.stringify(item)}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                  <Label className="text-lg font-medium">Postal Code*</Label>
-                  <Input
-                    value={sellerInfo.postalCode ? sellerInfo.postalCode : ''}
-                    onChange={(e) =>
-                      setSellerInfo({
-                        ...sellerInfo,
-                        postalCode: e.target.value,
-                      })
-                    }
-                    className="w-full border-none bg-[#161616]"
-                    type="text"
-                    placeholder="Enter postcode"
-                  />
-                </div>
-              </div>
-            </div>
+          <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Shipping Address*</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="flex flex-wrap mb-4 justify-between ">
+                      <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          Address 1*
+                        </h2>
 
-            <div className="flex flex-col gap-y-3">
-              <PhoneInput
-                enableLongNumbers={true}
-                containerClass="phone-container"
-                buttonClass="phone-dropdown"
-                inputClass="phone-control"
-                country={'us'}
-                value={sellerInfo.phoneNumber ? sellerInfo.phoneNumber : ''}
-                inputStyle={{
-                  width: '100%',
-                  height: '2.5rem',
-                  borderRadius: '0.375rem',
-                  padding: '0.5rem',
-                  marginTop: '0.5rem',
-                }}
-                onChange={(e) =>
-                  setSellerInfo({ ...sellerInfo, phoneNumber: e })
-                }
-              />
-            </div>
+                        <Input
+                          value={sellerInfo.address1 ? sellerInfo.address1 : ''}
+                          onChange={(e) =>
+                            setSellerInfo({
+                              ...sellerInfo,
+                              address1: e.target.value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter address"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          Address 2*
+                        </h2>
+
+                        <Input
+                          value={sellerInfo.address2 ? sellerInfo.address2 : ''}
+                          onChange={(e) =>
+                            setSellerInfo({
+                              ...sellerInfo,
+                              address2: e.target.value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter address"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap mb-4 justify-between">
+                      <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          State*
+                        </h2>
+
+                        <select
+                          aria-label="select curation"
+                          className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                          name="state"
+                          value={
+                            sellerInfo.state
+                              ? JSON.stringify(sellerInfo.state)
+                              : ''
+                          }
+                          onChange={handleUpdateSeller}
+                        >
+                          <option value="">Select</option>
+                          {states.map((item: any) => (
+                            <option
+                              key={item.isoCode}
+                              value={JSON.stringify(item)}
+                            >
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          City*
+                        </h2>
+
+                        <select
+                          aria-label="select curation"
+                          className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                          name="city"
+                          value={
+                            sellerInfo.city
+                              ? JSON.stringify(sellerInfo.city)
+                              : ''
+                          }
+                          onChange={handleUpdateSeller}
+                        >
+                          <option value="">Select</option>
+                          {cities.map((item: any) => (
+                            <option
+                              key={item.isoCode}
+                              value={JSON.stringify(item)}
+                            >
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                        <h2 className="font-bold text-[#fff] text-[14px]">
+                          Postal Code*
+                        </h2>
+
+                        <Input
+                          value={
+                            sellerInfo.postalCode ? sellerInfo.postalCode : ''
+                          }
+                          onChange={(e) =>
+                            setSellerInfo({
+                              ...sellerInfo,
+                              postalCode: e.target.value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter postcode"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col mb-4 gap-y-3">
+                      <PhoneInput
+                        enableLongNumbers={true}
+                        containerClass="phone-container"
+                        buttonClass="phone-dropdown"
+                        inputClass="phone-control"
+                        country={'us'}
+                        value={
+                          sellerInfo.phoneNumber ? sellerInfo.phoneNumber : ''
+                        }
+                        inputStyle={{
+                          width: '100%',
+                          height: '2.5rem',
+                          borderRadius: '0.375rem',
+                          padding: '0.5rem',
+                          marginTop: '0.5rem',
+                          color: '#fff',
+                          backgroundColor: '#161616',
+                        }}
+                        onChange={(e) =>
+                          setSellerInfo({ ...sellerInfo, phoneNumber: e })
+                        }
+                      />
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
-            <div className="flex flex-col gap-y-3">
-              <Label className="text-lg font-medium">
-                Contact Information For Seller
-              </Label>
-              <hr />
-              <Textarea
-                value={formData.description ? formData.description : ''}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    description: (e.target as any).value,
-                  })
-                }
-                className="w-full border-none bg-[#161616] p-4 rounded"
-                placeholder="Please describe your product"
-              />
-            </div>
+          <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Contact Information For Seller</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <Textarea
+                      value={formData.description ? formData.description : ''}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: (e.target as any).value,
+                        })
+                      }
+                      className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
+                      placeholder="Please describe your product"
+                    />
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
-            <p>Consent for collection and usage of personal information</p>
-            <p className="text-gray-500">
-              Please read the following and check the appropriate boxes to
-              indicate your consent:
-            </p>
-            <hr />
-            <Textarea
-              onClick={(e) =>
-                setFormData({
-                  ...formData,
-                  description: (e.target as any).value,
-                })
-              }
-              className="p-4 rounded-md"
-              rows={4}
-              placeholder="faucibus id malesuada aliquam. Tempus morbi turpis nulla viverra tellus mauris cum. Est consectetur commodo turpis habitasse sed. Nibh tincidunt quis nunc placerat arcu sagittis. In vitae fames nunc consectetur. Magna faucibus sit risus sed tortor malesuada purus. Donec fringilla orci lobortis quis id blandit rhoncus. "
-            />
+          <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <div className="flex w-full justify-between">
+                      <span>
+                        Consent for collection and usage of personal information
+                      </span>
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
+                      />
+                    </div>
+                    <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
+                      Please read the following and check the appropriate boxes
+                      to indicate your consent:
+                    </p>
+                  </DisclosureButton>
+
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <Textarea
+                      value={formData.description ? formData.description : ''}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: (e.target as any).value,
+                        })
+                      }
+                      className="w-full border-none bg-[#161616] rounded-md h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4"
+                      placeholder="Please describe your product"
+                    />
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="flex items-center space-x-2 p-4">
+          <div className="flex items-center space-x-2 p-4 ">
             <input
               id="terms"
               type="checkbox"
@@ -450,33 +574,43 @@ export default function BuyModal({
             />
             <label
               htmlFor="terms"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
             >
               I agree to all terms, privacy policy and fees
             </label>
           </div>
 
-          <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
-            <p>Order Summary</p>
+          <div className="bg-dark p-5 gap-y-4 rounded-lg flex flex-col ">
+            <p className="text-[20px] font-extrabold text-[#fff] ">
+              Order Summary
+            </p>
             <hr />
             <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">Price</span>
-              <span className="text-lg font-medium">${NFTDetail?.price}</span>
+              <span className="text-lg text-[#FFFFFF] azeret-mono-font">
+                Price
+              </span>
+              <span className="text-lg font-medium text-[#DDF247]">
+                ${NFTDetail?.price}
+              </span>
             </div>
             <hr />
-            <p>
-              You will pay the purchase amount in cryptocurrency based on the
-              real-time CoinMarketCap exchange rate at the current moment. If
-              the bidding is not successful, all cryptocurrency used in the
+
+            <p className="text-[16px] azeret-mono-font text-[#fff] az ">
+              Payment You will pay the purchase amount in cryptocurrency based
+              on the real-time CoinMarketCap exchange rate at the current
+              moment.
+              <br />
+              If the bidding is not successful, all cryptocurrency used in the
               purchase price, excluding gas fees, will be refunded.
             </p>
           </div>
 
-          <div className="flex gap-x-4 justify-center my-3 px-4">
+          <div className="flex w-full gap-x-4 justify-center my-3 px-4">
             <BaseButton
               title="Discard"
               variant="secondary"
               onClick={cancelChanges}
+              className="w-full"
             />
             <BaseButton
               title="Submit"
@@ -484,6 +618,8 @@ export default function BuyModal({
               onClick={() => {
                 setStep(2);
               }}
+              className="w-full"
+              displayIcon
             />
           </div>
         </div>
@@ -493,13 +629,16 @@ export default function BuyModal({
         <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className="text-lg font-medium">Caution</p>
+            <p className="text-[30px] text-[#fff] font-extrabold">Caution</p>
           </div>
 
-          <p>
+          <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
             Do not disclose buyer shipping information to third parties!
             <br />
             <br />
+          </p>
+
+          <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
             To maintain the confidentiality of buyer information and ensure
             smooth transactions, please pay close attention to the following
             points:
@@ -509,8 +648,10 @@ export default function BuyModal({
             information should remain confidential to sellers. Be cautious to
             prevent any external disclosures.
             <br />
+            <br />
             2. Tips for Safe Transactions: Handle buyer shipping information
             securely to sustain safe and transparent transactions.
+            <br />
             <br />
             3. Protection of Personal Information: As a seller, it is imperative
             to treat buyer personal information with utmost care. Avoid
@@ -521,7 +662,7 @@ export default function BuyModal({
             <br />
             <br />
             <br />
-            Thank You
+            <span className="text-[#fff] font-extrabold">Thank You</span>
           </p>
 
           <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
@@ -533,24 +674,29 @@ export default function BuyModal({
       )}
 
       {step === 3 && (
-        <div className="flex flex-col gap-y-4 w-full">
-          <p className="text-lg font-medium">Checkout</p>
-          <p>You are about to purchase Dhruv from fjas3</p>
+        <div className="flex flex-col gap-y-6 w-full text-[#fff]">
+          <p className="text-[30px] font-extrabold">Checkout</p>
+          <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
+            You are about to purchase Dhruv from ${address}
+          </p>
+
+          <ConnectedCard />
 
           {/* Wallet Connection - Blockchain */}
 
-          <div className="flex flex-col gap-y-2 mt-5">
-            <div className="flex justify-between items-center">
-              <span>Price</span>
+          <div className="flex flex-col gap-y-6 mt-5">
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
+              <span className="text-[16px] azeret-mono-font text-[#FFFFFF]">
+                Price
+              </span>
               <span>{tokenAmount} ETH</span>
             </div>
-            <hr />
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
               <span>VaultX Fee</span>
               <span>{fee} %</span>
             </div>
             <hr />
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
               <span>You will pay</span>
               <span>{expectedAmount} ETH</span>
             </div>
@@ -583,56 +729,76 @@ export default function BuyModal({
           </p>
         </div>
       )}
+
       {step === 5 && (
         <div className="flex flex-col gap-y-4">
-          <div className="flex flex-col gap-y-2 justify-center text-center">
-            <img src="/icons/success.svg" className="w-16 mx-auto" />
-            <p className="text-lg font-medium">Payment Success</p>
-            <p className="text-gray-500">
-              Your payment is completed successfully
+          <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
+            <img
+              src="/icons/success.svg"
+              className="w-[115px] h-[115px] mx-auto"
+            />
+            <p className="text-[30px] text-[#fff] font-extrabold ">
+              Payment Success
+            </p>
+            <p className=" azeret-mono-font text-[#FFFFFF87]">
+              Your payment is completed successfully.
             </p>
           </div>
 
-          <div className="flex flex-col gap-y-3">
+          <div className="flex flex-col gap-y-3 mb-[20px]">
             <div className="flex justify-between">
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">
+              <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                <p className=" azeret-mono-font text-[#FFFFFF87]">From</p>
+                <p className="text-neon azeret-mono-font">
                   {trimString(NFTDetail.owner.wallet)}
                 </p>
               </div>
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">{trimString(activeAccount.address)}</p>
+              <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                <p className=" azeret-mono-font text-[#FFFFFF87]">From</p>
+                <p className="text-neon azeret-mono-font">
+                  {trimString(activeAccount.address)}
+                </p>
               </div>
             </div>
             <div className="flex justify-between">
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">Payment Method</p>
-                <p className="text-neon">{activeChain.name}</p>
+              <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                <p className=" azeret-mono-font text-[#FFFFFF87]">
+                  Payment Method
+                </p>
+                <p className="text-neon azeret-mono-font">{activeChain.name}</p>
               </div>
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">Payment Time</p>
-                <p className="text-neon">{moment().format('DD MMM, YY')}</p>
+              <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                <p className=" azeret-mono-font text-[#FFFFFF87]">
+                  Payment Time
+                </p>
+                <p className="text-neon azeret-mono-font">
+                  {moment().format('DD MMM, YY')}
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-            <button className="w-full h-full" onClick={() => onClose()}>
+          <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
+            <button
+              className="w-full h-full bg-[#DEE8E8]"
+              onClick={() => onClose()}
+            >
               close
             </button>
           </div>
         </div>
       )}
+
       {step === 6 && (
         <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className="text-lg font-medium">Bid Information</p>
+            <p className="text-[30px] text-[#fff] font-extrabold">
+              Bid Information
+            </p>
           </div>
 
-          <p>
+          <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
             Bid Success
             <br />
             If a seller accepts your bid, this bid will be converted to the
@@ -651,7 +817,7 @@ export default function BuyModal({
             If you have any questions regarding Bid, please contact us.
             <br />
             <br />
-            Thank You
+            <span className="text-[#fff] font-extrabold"> Thank You</span>
           </p>
         </div>
       )}

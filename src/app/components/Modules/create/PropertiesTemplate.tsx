@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { getProperties, upsertProperty } from '@/services/supplier';
+import {
+  deleteProperty,
+  getProperties,
+  upsertProperty,
+} from '@/services/supplier';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import PropertiesInfo from '../Properties';
+import { useToast } from '@/hooks/use-toast';
 
 const defaultAttributes = [
   { type: 'Type', value: 'Write it here' },
@@ -12,54 +17,99 @@ const defaultAttributes = [
   { type: 'Authentication', value: 'Write it here' },
 ];
 
-export default function PropertiesTemplate({ select }) {
+export default function PropertiesTemplate() {
+  const { toast } = useToast();
   const { advancedDetails, setAdvancedDetails } = useCreateNFT();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(advancedDetails.attributes);
   const [isModalOpenTemplate, setIsModalOpenTemplate] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState({
-    _id: '',
-    name: 'Basic Template',
-    attributes: defaultAttributes,
-  });
   const [editableProperties, setEditableProperties] =
     useState(defaultAttributes);
 
   useEffect(() => {
+    setAdvancedDetails({
+      ...advancedDetails,
+      attributes: data,
+    });
+  }, [data]);
+
+  useEffect(() => {
     fetchProperties();
+    if (advancedDetails.propertyTemplateId) {
+    }
   }, []);
+
+  const updateTemplate = (updatedProperties) => {
+    let updateData = data.map((item) => {
+      if (item._id !== advancedDetails.propertyTemplateId) return item;
+      return {
+        ...item,
+        attributes: updatedProperties,
+      };
+    });
+    setData(updateData);
+  };
 
   const fetchProperties = async () => {
     const response = await getProperties();
-    if (response.length > 0) {
-      setData(response);
-    }
+    setData(response);
   };
 
   const handleTemplateSelect = (template) => {
-    setSelectedTemplate(template);
     setEditableProperties(template.attributes);
     setAdvancedDetails({
       ...advancedDetails,
       propertyTemplateId: template._id || null,
-      attributes: template.attributes,
     });
-    if (select) {
-      select(template);
+  };
+
+  const handleTemplateEdit = async (editedTemplate) => {
+    try {
+      const response = await upsertProperty({
+        id: editedTemplate._id,
+        name: editedTemplate.name,
+        attributes: editedTemplate.attributes,
+      });
+
+      if (response) {
+        toast({
+          title: 'Properties Template',
+          description: 'Edited successfully',
+          duration: 2000,
+        });
+
+        await fetchProperties();
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save template',
+        duration: 2000,
+      });
     }
   };
 
-  const handleTemplateAdd = (newTemplate) => {
-    setData([...data, newTemplate]);
-  };
+  const handleTemplateDelete = async (editedTemplate) => {
+    try {
+      const response = await deleteProperty({
+        id: editedTemplate._id,
+      });
 
-  const handleTemplateEdit = (editedTemplate) => {
-    setData(
-      data.map((template) =>
-        template._id === editedTemplate._id ? editedTemplate : template,
-      ),
-    );
-    if (selectedTemplate && selectedTemplate._id === editedTemplate._id) {
-      handleTemplateSelect(editedTemplate);
+      if (response) {
+        toast({
+          title: 'Properties Template',
+          description: 'Deleted successfully',
+          duration: 2000,
+        });
+
+        debugger;
+        await fetchProperties();
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete template',
+        duration: 2000,
+      });
     }
   };
 
@@ -68,28 +118,19 @@ export default function PropertiesTemplate({ select }) {
       i === index ? { ...prop, [field]: value } : prop,
     );
     setEditableProperties(updatedProperties);
-    setAdvancedDetails({
-      ...advancedDetails,
-      attributes: updatedProperties,
-    });
+    updateTemplate(updatedProperties);
   };
 
   const handleAddProperty = () => {
     const newProperty = { type: 'New Property', value: 'Enter value' };
     setEditableProperties([...editableProperties, newProperty]);
-    setAdvancedDetails({
-      ...advancedDetails,
-      attributes: [...editableProperties, newProperty],
-    });
+    updateTemplate([...editableProperties, newProperty]);
   };
 
   const handleRemoveProperty = (index) => {
     const updatedProperties = editableProperties.filter((_, i) => i !== index);
     setEditableProperties(updatedProperties);
-    setAdvancedDetails({
-      ...advancedDetails,
-      attributes: updatedProperties,
-    });
+    updateTemplate(updatedProperties);
   };
 
   return (
@@ -111,7 +152,7 @@ export default function PropertiesTemplate({ select }) {
               })
             }
             className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-              selectedTemplate.name === 'Basic Template'
+              !advancedDetails.propertyTemplateId
                 ? 'border-neon'
                 : 'border-none'
             }`}
@@ -124,7 +165,7 @@ export default function PropertiesTemplate({ select }) {
               key={index}
               onClick={() => handleTemplateSelect(item)}
               className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-                selectedTemplate._id === item._id
+                advancedDetails.propertyTemplateId === item._id
                   ? 'border-neon'
                   : 'border-none'
               }`}
@@ -134,11 +175,17 @@ export default function PropertiesTemplate({ select }) {
                 className="absolute bottom-2 right-2 text-[#DDF247] border border-[#ffffff20] px-[10px] rounded py-1 text-[14px]"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsModalOpenTemplate(true);
+                  handleTemplateEdit(item);
                 }}
               >
                 Edit
               </button>
+              <div
+                className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
+                onClick={() => handleTemplateDelete(item)}
+              >
+                <img src="/icons/trash.svg" className="w-4 h-4" />
+              </div>
             </div>
           ))}
 
@@ -204,8 +251,7 @@ export default function PropertiesTemplate({ select }) {
       {isModalOpenTemplate && (
         <PropertiesInfo
           close={() => setIsModalOpenTemplate(false)}
-          onTemplateAdd={handleTemplateAdd}
-          onTemplateEdit={handleTemplateEdit}
+          onTemplateAdd={fetchProperties}
         />
       )}
     </div>

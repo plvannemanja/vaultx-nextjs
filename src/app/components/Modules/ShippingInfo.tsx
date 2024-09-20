@@ -1,6 +1,10 @@
 'use client';
 
-import { getSellerInfo, upsertSellerInfo } from '@/services/supplier';
+import {
+  deleteSellerInfo,
+  getSellerInfo,
+  upsertSellerInfo,
+} from '@/services/supplier';
 import { useEffect, useMemo, useState } from 'react';
 import { BaseDialog } from '../ui/BaseDialog';
 import { Input } from '@/components/ui/input';
@@ -9,12 +13,11 @@ import BaseButton from '../ui/BaseButton';
 import PhoneInput from 'react-phone-input-2';
 import { City, Country, State } from 'country-state-city';
 import { useCreateNFT } from '../Context/CreateNFTContext';
+import { useToast } from '@/hooks/use-toast';
 
-export default function ShippingInfo({
-  handler,
-}: {
-  handler?: (data: any) => void;
-}) {
+export default function ShippingInfo() {
+  const nftContext = useCreateNFT();
+  const { toast } = useToast();
   const [data, setData] = useState<null | any[]>(null);
   const [sellerInfo, setSellerInfo] = useState({
     id: null,
@@ -34,10 +37,11 @@ export default function ShippingInfo({
   const [cities, setCities] = useState([]);
   const [countryCode, setCountryCode] = useState('');
   const countries = Country.getAllCountries();
-  const [selectedShipping, setSelectedShipping] = useState<any>(null);
+  const [selectedShipping, setSelectedShipping] = useState<any>(
+    nftContext.sellerInfo.shipping,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const nftContext = useCreateNFT();
 
   const update = async (id) => {
     let response = null;
@@ -67,7 +71,7 @@ export default function ShippingInfo({
       });
     } else {
       response = await upsertSellerInfo({
-        id: sellerInfo.id,
+        id: '',
         type: sellerInfo.type,
         name: sellerInfo.name,
         email: sellerInfo.email,
@@ -92,9 +96,7 @@ export default function ShippingInfo({
     console.log('response:', response);
 
     if (response) {
-      if (data) {
-        setData([...data]);
-      }
+      await fetchSellers();
     }
   };
 
@@ -135,6 +137,29 @@ export default function ShippingInfo({
       ...sellerInfo,
       [name]: value,
     });
+  };
+
+  const handleDeleteSeller = async (item: any) => {
+    try {
+      const response = await deleteSellerInfo({
+        id: item._id,
+      });
+
+      if (response) {
+        toast({
+          title: 'Properties Template',
+          description: 'Delete shipping information successfully',
+          duration: 2000,
+        });
+      }
+      await fetchSellers();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete shipping information',
+        duration: 2000,
+      });
+    }
   };
 
   const cancelChanges = () => {
@@ -260,24 +285,21 @@ export default function ShippingInfo({
   );
 
   useEffect(() => {
-    if (handler) {
-      handler(selectedShipping);
-    }
+    nftContext.setSellerInfo({
+      ...nftContext.sellerInfo,
+      shippingId: selectedShipping?._id,
+      shipping: selectedShipping,
+    });
   }, [selectedShipping]);
 
   useEffect(() => {
-    const fetchSellers = async () => {
-      const response = await getSellerInfo();
-
-      if (response.length > 0) {
-        setData(response);
-      }
-    };
-
     fetchSellers();
   }, []);
-  console.log('shipping Data', data);
+  const fetchSellers = async () => {
+    const response = await getSellerInfo();
 
+    setData(response);
+  };
   return (
     <div className="flex flex-col gap-y-5">
       <p className="text-lg font-medium">Shipping Information</p>
@@ -289,12 +311,6 @@ export default function ShippingInfo({
                   key={index}
                   onClick={() => {
                     setSelectedShipping(item);
-
-                    nftContext.setSellerInfo({
-                      ...nftContext.sellerInfo,
-                      shippingId: item._id,
-                      shipping: item,
-                    });
                   }}
                   className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
                 >
@@ -303,9 +319,7 @@ export default function ShippingInfo({
                       <span>{item.name}</span>
                       <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
                     </div>
-                    <div className="text-[#A6A6A6]">
-                      {sellerInfo.type ? sellerInfo.type : item.shippingAddr}
-                    </div>
+                    <div className="text-[#A6A6A6]">{item.shippingAddr}</div>
                   </div>
                   <div>
                     {item.address && item.country ? (
@@ -325,9 +339,15 @@ export default function ShippingInfo({
                         preserveState(item);
                         setIsUpdateModalOpen(true);
                       }}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
                     >
                       Edit
+                    </span>
+                    <span
+                      onClick={() => handleDeleteSeller(item)}
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
+                    >
+                      <img src="/icons/trash.svg" className="w-4 h-4" />
                     </span>
                   </div>
 
@@ -337,18 +357,13 @@ export default function ShippingInfo({
                       onClose={() => setIsUpdateModalOpen(false)}
                       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
                     >
-                      <div className="flex flex-col gap-y-5 w-full">
-                        <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
+                      <div className="flex flex-col gap-y-5">
+                        <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
                           <div className="flex flex-col gap-y-3">
                             <Label className="text-lg font-medium">
                               Shipping Address Name
                             </Label>
                             <Input
-                              value={
-                                sellerInfo.type
-                                  ? sellerInfo.type
-                                  : item.shippingAddr
-                              }
                               onChange={(e) =>
                                 setSellerInfo({
                                   ...sellerInfo,
@@ -357,11 +372,187 @@ export default function ShippingInfo({
                               }
                               className="w-full border-none bg-[#161616]"
                               type="text"
+                              value={sellerInfo.type}
                               placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)"
                             />
                           </div>
 
-                          {/* ... Rest of the content ... */}
+                          <div className="flex flex-col gap-y-3">
+                            <Label className="text-lg font-medium">
+                              Seller Information
+                            </Label>
+                            <hr />
+                            <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  Name*
+                                </Label>
+                                <Input
+                                  onChange={(e) =>
+                                    setSellerInfo({
+                                      ...sellerInfo,
+                                      name: e.target.value,
+                                    })
+                                  }
+                                  className="w-full border-none bg-[#161616]"
+                                  type="text"
+                                  value={sellerInfo.name ?? ''}
+                                  placeholder="Enter name"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  E-mail*
+                                </Label>
+                                <Input
+                                  onChange={(e) =>
+                                    setSellerInfo({
+                                      ...sellerInfo,
+                                      email: e.target.value,
+                                    })
+                                  }
+                                  className="w-full border-none bg-[#161616]"
+                                  type="text"
+                                  value={sellerInfo.email ?? ''}
+                                  placeholder="Enter email"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  Country*
+                                </Label>
+                                <select
+                                  aria-label="select curation"
+                                  className="h-10 rounded-md px-2"
+                                  name="country"
+                                  value={JSON.stringify(sellerInfo.country)}
+                                  onChange={handleUpdateSeller}
+                                >
+                                  <option value="">Select</option>
+                                  {countries.map((item: any) => (
+                                    <option
+                                      key={item.isoCode}
+                                      value={JSON.stringify(item)}
+                                    >
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
+                          <div className="flex flex-col gap-y-3">
+                            <Label className="text-lg font-medium">
+                              Shipping Address
+                            </Label>
+                            <hr />
+                            <div className="flex flex-wrap justify-between">
+                              <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                                <Label className="text-lg font-medium">
+                                  Address 1*
+                                </Label>
+                                <Input
+                                  onChange={(e) =>
+                                    setSellerInfo({
+                                      ...sellerInfo,
+                                      address1: e.target.value,
+                                    })
+                                  }
+                                  className="w-full border-none bg-[#161616]"
+                                  type="text"
+                                  value={sellerInfo.address1 ?? ''}
+                                  placeholder="Enter Address 1"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                                <Label className="text-lg font-medium">
+                                  Address 2*
+                                </Label>
+                                <Input
+                                  onChange={(e) =>
+                                    setSellerInfo({
+                                      ...sellerInfo,
+                                      address2: e.target.value,
+                                    })
+                                  }
+                                  value={sellerInfo.address2 ?? ''}
+                                  className="w-full border-none bg-[#161616]"
+                                  type="text"
+                                  placeholder="Enter Address 2"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-wrap justify-between">
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  State*
+                                </Label>
+                                <select
+                                  aria-label="select curation"
+                                  className="h-10 rounded-md px-2"
+                                  name="state"
+                                  value={JSON.stringify(sellerInfo.state)}
+                                  onChange={handleUpdateSeller}
+                                >
+                                  <option value="">Select</option>
+                                  {states.map((item: any) => (
+                                    <option
+                                      key={item.isoCode}
+                                      value={JSON.stringify(item)}
+                                    >
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  City*
+                                </Label>
+                                <select
+                                  aria-label="select curation"
+                                  className="h-10 rounded-md px-2"
+                                  name="city"
+                                  value={
+                                    sellerInfo.city
+                                      ? JSON.stringify(sellerInfo.city)
+                                      : ''
+                                  }
+                                  onChange={handleUpdateSeller}
+                                >
+                                  <option value="">Select</option>
+                                  {cities.map((item: any) => (
+                                    <option
+                                      key={item.isoCode}
+                                      value={JSON.stringify(item)}
+                                    >
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                <Label className="text-lg font-medium">
+                                  Postal Code*
+                                </Label>
+                                <Input
+                                  onChange={(e) =>
+                                    setSellerInfo({
+                                      ...sellerInfo,
+                                      postalCode: e.target.value,
+                                    })
+                                  }
+                                  value={sellerInfo.postalCode ?? ''}
+                                  className="w-full border-none bg-[#161616]"
+                                  type="text"
+                                  placeholder="Enter Zip Code"
+                                />
+                              </div>
+                            </div>
+                          </div>
 
                           <div className="flex flex-col gap-y-3 mt-6">
                             <PhoneInput
@@ -370,11 +561,7 @@ export default function ShippingInfo({
                               buttonClass="phone-dropdown"
                               inputClass="phone-control"
                               country={'us'}
-                              value={
-                                sellerInfo.phoneNumber
-                                  ? sellerInfo.phoneNumber
-                                  : item.phoneNumber
-                              }
+                              value={sellerInfo.phoneNumber}
                               inputStyle={{
                                 width: '100%',
                                 height: '2.5rem',
@@ -396,10 +583,10 @@ export default function ShippingInfo({
                             onClick={cancelChanges}
                           />
                           <BaseButton
-                            title="Saveee"
+                            title="Save"
                             variant="primary"
                             onClick={async () => {
-                              await update(item);
+                              await update(item._id);
                               setIsUpdateModalOpen(false);
                             }}
                           />
