@@ -26,8 +26,8 @@ export default function ShippingInfo() {
     email: '',
     shippingAddr: '',
     country: '',
-    address1: '',
-    address2: '',
+    line1: '',
+    line2: '',
     state: '',
     city: '',
     postalCode: '',
@@ -46,57 +46,65 @@ export default function ShippingInfo() {
   const update = async (id) => {
     let response = null;
 
-    if (id) {
-      response = await upsertSellerInfo({
-        id,
-        type: sellerInfo.type,
-        name: sellerInfo.name,
-        email: sellerInfo.email,
-        country: (sellerInfo.country as any).name
-          ? (sellerInfo.country as any).name
-          : sellerInfo.country,
-        shippingAddr: sellerInfo.shippingAddr,
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          state: (sellerInfo.state as any).name
-            ? (sellerInfo.state as any).name
-            : sellerInfo.state,
-          city: (sellerInfo.city as any).name
-            ? (sellerInfo.city as any).name
-            : sellerInfo.city,
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-      });
-    } else {
-      response = await upsertSellerInfo({
-        id: '',
-        type: sellerInfo.type,
-        name: sellerInfo.name,
-        email: sellerInfo.email,
-        country: (sellerInfo.country as any).name
-          ? (sellerInfo.country as any).name
-          : sellerInfo.country,
-        shippingAddr: sellerInfo.shippingAddr,
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          state: (sellerInfo.state as any).name
-            ? (sellerInfo.state as any).name
-            : sellerInfo.state,
-          city: (sellerInfo.city as any).name
-            ? (sellerInfo.city as any).name
-            : sellerInfo.city,
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-      });
-    }
-    console.log('response:', response);
+    try {
+      if (id) {
+        response = await upsertSellerInfo({
+          id,
+          type: sellerInfo.type,
+          name: sellerInfo.name,
+          email: sellerInfo.email,
+          country: (sellerInfo.country as any).name
+            ? (sellerInfo.country as any).name
+            : sellerInfo.country,
+          shippingAddr: sellerInfo.shippingAddr,
+          address: {
+            line1: sellerInfo.line1,
+            line2: sellerInfo.line2,
+            state: (sellerInfo.state as any).name
+              ? (sellerInfo.state as any).name
+              : sellerInfo.state,
+            city: (sellerInfo.city as any).name
+              ? (sellerInfo.city as any).name
+              : sellerInfo.city,
+            postalCode: sellerInfo.postalCode,
+          },
+          phoneNumber: sellerInfo.phoneNumber,
+        });
+      } else {
+        response = await upsertSellerInfo({
+          id: '',
+          type: sellerInfo.type,
+          name: sellerInfo.name,
+          email: sellerInfo.email,
+          country: (sellerInfo.country as any).name
+            ? (sellerInfo.country as any).name
+            : sellerInfo.country,
+          shippingAddr: sellerInfo.shippingAddr,
+          address: {
+            line1: sellerInfo.line1,
+            line2: sellerInfo.line2,
+            state: (sellerInfo.state as any).name
+              ? (sellerInfo.state as any).name
+              : sellerInfo.state,
+            city: (sellerInfo.city as any).name
+              ? (sellerInfo.city as any).name
+              : sellerInfo.city,
+            postalCode: sellerInfo.postalCode,
+          },
+          phoneNumber: sellerInfo.phoneNumber,
+        });
+      }
+      console.log('response:', response);
 
-    if (response) {
-      await fetchSellers();
+      if (response) {
+        await fetchSellers();
+      }
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update shipping information',
+        duration: 2000,
+      });
     }
   };
 
@@ -170,8 +178,8 @@ export default function ShippingInfo() {
       email: '',
       shippingAddr: '',
       country: '',
-      address1: '',
-      address2: '',
+      line1: '',
+      line2: '',
       state: '',
       city: '',
       postalCode: '',
@@ -185,6 +193,20 @@ export default function ShippingInfo() {
     setStates([]);
     setCities([]);
     setCountryCode('');
+    setSellerInfo({
+      id: null,
+      type: '',
+      name: '',
+      email: '',
+      shippingAddr: '',
+      country: '',
+      line1: '',
+      line2: '',
+      state: '',
+      city: '',
+      postalCode: '',
+      phoneNumber: '',
+    });
     setIsModalOpen(true);
     console.log('sellerInfo', sellerInfo);
   };
@@ -221,9 +243,12 @@ export default function ShippingInfo() {
       email: value.email,
       shippingAddr: value.shippingAddr,
       phoneNumber: value.phoneNumber,
+      line1: value.address?.line1,
+      line2: value.address?.line2,
       city: cityJSON ? cityJSON : value.address.city,
       country: countryJSON ? countryJSON : value.country,
       state: stateJSON ? stateJSON : value.address.state,
+      postalCode: value.address?.postalCode,
     });
     setStates(states as any);
     setCities(cities as any);
@@ -458,12 +483,12 @@ export default function ShippingInfo() {
                                   onChange={(e) =>
                                     setSellerInfo({
                                       ...sellerInfo,
-                                      address1: e.target.value,
+                                      line1: e.target.value,
                                     })
                                   }
                                   className="w-full border-none bg-[#161616]"
                                   type="text"
-                                  value={sellerInfo.address1 ?? ''}
+                                  value={sellerInfo.line1 ?? ''}
                                   placeholder="Enter Address 1"
                                 />
                               </div>
@@ -475,10 +500,10 @@ export default function ShippingInfo() {
                                   onChange={(e) =>
                                     setSellerInfo({
                                       ...sellerInfo,
-                                      address2: e.target.value,
+                                      line2: e.target.value,
                                     })
                                   }
-                                  value={sellerInfo.address2 ?? ''}
+                                  value={sellerInfo.line2 ?? ''}
                                   className="w-full border-none bg-[#161616]"
                                   type="text"
                                   placeholder="Enter Address 2"
@@ -692,7 +717,7 @@ export default function ShippingInfo() {
                       onChange={(e) =>
                         setSellerInfo({
                           ...sellerInfo,
-                          address1: e.target.value,
+                          line1: e.target.value,
                         })
                       }
                       className="w-full border-none bg-[#161616]"
@@ -706,7 +731,7 @@ export default function ShippingInfo() {
                       onChange={(e) =>
                         setSellerInfo({
                           ...sellerInfo,
-                          address2: e.target.value,
+                          line2: e.target.value,
                         })
                       }
                       className="w-full border-none bg-[#161616]"
