@@ -9,7 +9,13 @@ import {
   waitForReceipt,
   ZERO_ADDRESS,
 } from 'thirdweb';
-import { address, chain, contract, explorer } from './contract';
+import {
+  address,
+  chain,
+  contract,
+  explorer,
+  maxBlocksWaitTime,
+} from './contract';
 import { Account } from 'thirdweb/wallets';
 import { client } from './client';
 import {
@@ -27,7 +33,6 @@ export const createCollection = async (
   uri: string,
   account: Account,
 ) => {
-  debugger;
   const transaction = await prepareContractCall({
     contract,
     method: 'function createCurationByCurator(string name, string uri)',
@@ -42,6 +47,7 @@ export const createCollection = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   // get event log
@@ -117,6 +123,7 @@ export const listAsset = async ({
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   const ListedEvent = prepareEvent({
@@ -129,9 +136,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -189,6 +196,7 @@ export const purchaseAsset = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   const AssetPurchasedEvent = prepareEvent({
@@ -202,9 +210,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -274,6 +282,7 @@ export const purchaseAssetBeforeMint = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   const TransferEvent = prepareEvent({
@@ -288,9 +297,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 export const getExplorerURL = (
@@ -357,6 +366,7 @@ export const resaleAsset = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
   return transactionHash;
 };
@@ -380,6 +390,7 @@ export const setApproveToken = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   return transactionHash;
@@ -404,6 +415,7 @@ export const setApprovedForAll = async (
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
   return transactionHash;
 };
@@ -433,6 +445,7 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
     client,
     chain,
     transactionHash,
+    maxBlocksWaitTime,
   });
 
   const escrowReleasedEvent = prepareEvent({
@@ -445,8 +458,8 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };

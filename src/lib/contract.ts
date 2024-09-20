@@ -20,3 +20,5 @@ export const contract = getContract({
   chain,
   address: addr,
 });
+
+export const maxBlocksWaitTime = 300;

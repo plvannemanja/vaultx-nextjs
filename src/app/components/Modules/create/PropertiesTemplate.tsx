@@ -101,7 +101,6 @@ export default function PropertiesTemplate() {
           duration: 2000,
         });
 
-        debugger;
         await fetchProperties();
       }
     } catch (error) {
@@ -151,11 +150,10 @@ export default function PropertiesTemplate() {
                 attributes: defaultAttributes,
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-              !advancedDetails.propertyTemplateId
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${!advancedDetails.propertyTemplateId
                 ? 'border-neon'
                 : 'border-none'
-            }`}
+              }`}
           >
             <p>Basic Template</p>
           </div>
@@ -164,11 +162,10 @@ export default function PropertiesTemplate() {
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-                advancedDetails.propertyTemplateId === item._id
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === item._id
                   ? 'border-neon'
                   : 'border-none'
-              }`}
+                }`}
             >
               <p>{item.name}</p>
               <button
