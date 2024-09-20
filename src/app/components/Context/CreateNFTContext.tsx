@@ -8,8 +8,6 @@ import {
   PaymentSplitType,
 } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
-import ConnectedCard from '../Cards/ConnectedCard';
-import { string } from 'zod';
 
 interface NFTContextType {
   basicDetail: IBasicDetailFormData;
@@ -134,7 +132,6 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
         },
       }}
     >
-      <ConnectedCard />
       {children}
     </CreateNFTContext.Provider>
   );

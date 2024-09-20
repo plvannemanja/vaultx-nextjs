@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BasicDetails from './create/BasicDetails';
 import AdvanceDetails from './create/AdvanceDetails';
 import SellerInformation from './create/SellerInformation';
@@ -28,7 +28,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const nftContext = useCreateNFT();
   const { toast } = useToast();
 
-  const [step, setStep] = useState(2);
+  const [modal, setModal] = useState(false);
+  const [mintLoaderStep, setMintLoaderStep] = useState(1);
+  const [step, setStep] = useState(1);
   const [nftId, setNftId] = useState(null);
   const [basicDetails, setBasicDetails] = useState<any>({
     error: null,
@@ -173,6 +175,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const createNFT = async () => {
     let nftId = null;
     try {
+      setModal(true);
       nftId = await createBasicDetails();
 
       if (!nftId) {
@@ -232,6 +235,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       setMintLoaderStep(2);
       setTimeout(() => {
         setModal(false);
+        window && window.location.reload();
       }, 2000);
     } catch (error) {
       setModal(false);
@@ -347,9 +351,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       throw error;
     }
   };
-
-  const [modal, setModal] = useState(false);
-  const [mintLoaderStep, setMintLoaderStep] = useState(1);
 
   const nextStep = async (next?: boolean) => {
     if (next && step == 3) {
@@ -474,12 +475,14 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           />
         </TriggerModal>
       )}
-      <div className="flex mb-[30px]">
-        <ConnectedCard />
-      </div>
 
       {step === 1 && (
-        <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
+        <>
+          <div className="flex mb-[30px]">
+            <ConnectedCard />
+          </div>
+          <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
+        </>
       )}
 
       {step === 2 && (

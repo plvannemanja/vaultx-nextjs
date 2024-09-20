@@ -169,6 +169,9 @@ export default function AdvanceDetails({
       })
     }
 
+    if (!advancedDetails.propertyTemplateId)
+      err.push({ path: ['Property Template'] });
+
     if (err.length > 0) {
       handler(null, JSON.stringify(err));
       return;
