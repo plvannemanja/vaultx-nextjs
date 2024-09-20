@@ -194,6 +194,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           setStatus({ error: true, loading: true, active: true });
         }
       }
+      setTimeout(() => {
+        window && window.location.reload();
+      }, 2000);
     } catch (error) {
       setStatus({ error: true, loading: true, active: true });
     }
