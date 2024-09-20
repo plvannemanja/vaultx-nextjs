@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { deleteProperty, getProperties, upsertProperty } from '@/services/supplier';
+import {
+  deleteProperty,
+  getProperties,
+  upsertProperty,
+} from '@/services/supplier';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import PropertiesInfo from '../Properties';
 import { useToast } from '@/hooks/use-toast';
@@ -31,21 +35,19 @@ export default function PropertiesTemplate() {
   useEffect(() => {
     fetchProperties();
     if (advancedDetails.propertyTemplateId) {
-
     }
   }, []);
 
   const updateTemplate = (updatedProperties) => {
-    let updateData = data.map(item => {
-      if (item._id !== advancedDetails.propertyTemplateId)
-        return item;
+    let updateData = data.map((item) => {
+      if (item._id !== advancedDetails.propertyTemplateId) return item;
       return {
         ...item,
-        attributes: updatedProperties
+        attributes: updatedProperties,
       };
     });
     setData(updateData);
-  }
+  };
 
   const fetchProperties = async () => {
     const response = await getProperties();
@@ -149,10 +151,11 @@ export default function PropertiesTemplate() {
                 attributes: defaultAttributes,
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${!advancedDetails.propertyTemplateId
-              ? 'border-neon'
-              : 'border-none'
-              }`}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              !advancedDetails.propertyTemplateId
+                ? 'border-neon'
+                : 'border-none'
+            }`}
           >
             <p>Basic Template</p>
           </div>
@@ -161,10 +164,11 @@ export default function PropertiesTemplate() {
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === item._id
-                ? 'border-neon'
-                : 'border-none'
-                }`}
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+                advancedDetails.propertyTemplateId === item._id
+                  ? 'border-neon'
+                  : 'border-none'
+              }`}
             >
               <p>{item.name}</p>
               <button

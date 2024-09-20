@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Modal, Box } from '@mui/material'
+import { Modal, Box } from '@mui/material';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { Dialog } from '@headlessui/react';
 
@@ -50,11 +50,15 @@ export default function RestrictiveModal({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <div className='relative'>
-          {
-            closeButton &&
-            <XMarkIcon className='absolute w-10 top-[1rem] right-[1rem] fill-white cursor-pointer' onClick={() => { onClose() }} />
-          }
+        <div className="relative">
+          {closeButton && (
+            <XMarkIcon
+              className="absolute w-10 top-[1rem] right-[1rem] fill-white cursor-pointer"
+              onClick={() => {
+                onClose();
+              }}
+            />
+          )}
           {children}
         </div>
       </Box>

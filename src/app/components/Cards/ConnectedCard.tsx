@@ -6,8 +6,8 @@ export default function ConnectedCard() {
   const activeChain = useActiveWalletChain();
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-    '...' +
-    activeAccount?.address.slice(-4)
+      '...' +
+      activeAccount?.address.slice(-4)
     : 'Connect Wallet';
   return (
     <>

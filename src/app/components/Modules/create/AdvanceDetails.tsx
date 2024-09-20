@@ -32,8 +32,9 @@ export default function AdvanceDetails({
     setAdvancedDetails,
   } = useCreateNFT();
 
-  const [unlockableFiles, setUnlockableFiles] = useState(advancedDetails.certificates);
-
+  const [unlockableFiles, setUnlockableFiles] = useState(
+    advancedDetails.certificates,
+  );
 
   useEffect(() => {
     setAdvancedDetails({
@@ -79,7 +80,10 @@ export default function AdvanceDetails({
   };
 
   const addSplit = () => {
-    setPaymentSplits([...paymentSplits, { paymentWallet: '', paymentPercentage: BigInt(0) }]);
+    setPaymentSplits([
+      ...paymentSplits,
+      { paymentWallet: '', paymentPercentage: BigInt(0) },
+    ]);
   };
 
   const removeSplit = (index: number) => {
@@ -161,12 +165,11 @@ export default function AdvanceDetails({
     }
 
     if (options.split) {
-      if (!paymentSplits.length)
-        err.push({ path: ['Split Payments'] });
+      if (!paymentSplits.length) err.push({ path: ['Split Payments'] });
       paymentSplits.forEach((split) => {
         if (!isAddress(split.paymentWallet))
           err.push({ path: ['Split Payments'] });
-      })
+      });
     }
 
     if (!advancedDetails.propertyTemplateId)
@@ -183,10 +186,12 @@ export default function AdvanceDetails({
 
   useEffect(() => {
     if (options.split && paymentSplits.length === 0) {
-      setPaymentSplits([{
-        paymentWallet: "",
-        paymentPercentage: BigInt(0),
-      }]);
+      setPaymentSplits([
+        {
+          paymentWallet: '',
+          paymentPercentage: BigInt(0),
+        },
+      ]);
     }
   }, [options.split]);
   return (
@@ -273,12 +278,12 @@ export default function AdvanceDetails({
                   onChange={(e) =>
                     setAdvancedDetails({
                       ...advancedDetails,
-                      royaltyAddress: e.target.value
+                      royaltyAddress: e.target.value,
                     })
                   }
                   placeholder="Address"
                   type="text"
-                  value={advancedDetails.royaltyAddress ?? ""}
+                  value={advancedDetails.royaltyAddress ?? ''}
                 />
               </div>
               <div className="col-span-1 flex">
@@ -286,18 +291,21 @@ export default function AdvanceDetails({
                   <Input
                     className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
                     onChange={(e) => {
-                      let val = Number(e.target.value)
+                      let val = Number(e.target.value);
                       setAdvancedDetails({
                         ...advancedDetails,
-                        royalty: isValidNumber(val) ? val : 0
-                      })
-                    }
-                    }
+                        royalty: isValidNumber(val) ? val : 0,
+                      });
+                    }}
                     placeholder="0"
                     min={0}
                     max={100}
                     type="number"
-                    value={isValidNumber(advancedDetails.royalty) ? advancedDetails.royalty.toString() : ""}
+                    value={
+                      isValidNumber(advancedDetails.royalty)
+                        ? advancedDetails.royalty.toString()
+                        : ''
+                    }
                   />
                   <p className="absolute top-4 right-2 text-[#979797]">%</p>
                 </div>
@@ -305,12 +313,10 @@ export default function AdvanceDetails({
               <div className="col-span-2 flex">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
-                  <p className="text-center text-sm text-[#DDF247]">
-                    Add New
-                  </p>
+                  <p className="text-center text-sm text-[#DDF247]">Add New</p>
                 </div>
               </div>
             </div>
@@ -470,8 +476,7 @@ export default function AdvanceDetails({
           </div>
         )}
 
-        <PropertiesTemplate
-        />
+        <PropertiesTemplate />
 
         <div className="flex gap-x-4 justify-center my-5">
           <BaseButton

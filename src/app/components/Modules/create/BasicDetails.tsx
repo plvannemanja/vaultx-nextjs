@@ -68,14 +68,12 @@ export default function BasicDetails({
       let message = JSON.parse(result.error.message);
       if (!basicDetail.file) {
         message.push({
-          "code": "invalid_type",
-          "expected": "string",
-          "received": "null",
-          "path": [
-            "Logo Image"
-          ],
-          "message": "Expected string, received null"
-        })
+          code: 'invalid_type',
+          expected: 'string',
+          received: 'null',
+          path: ['Logo Image'],
+          message: 'Expected string, received null',
+        });
       }
       handler(null, JSON.stringify(message));
       console.log(result.error.message);
@@ -389,17 +387,17 @@ export default function BasicDetails({
                   curation: (e.target as any).value,
                 })
               }
-              value={basicDetail.curation ?? ""}
+              value={basicDetail.curation ?? ''}
             >
               <option value="" className="text-[11px]">
                 You must choose Curation*
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any, index: number) => (
-                  <option key={index} value={JSON.stringify(item)}>
-                    {item.name}
-                  </option>
-                ))
+                    <option key={index} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
                 : null}
             </select>
           </div>

@@ -1,6 +1,10 @@
 'use client';
 
-import { deleteContactInfo, getContactsInfo, upsertContactInfo } from '@/services/supplier';
+import {
+  deleteContactInfo,
+  getContactsInfo,
+  upsertContactInfo,
+} from '@/services/supplier';
 import { useEffect, useMemo, useState } from 'react';
 import { BaseDialog } from '../ui/BaseDialog';
 import { Input } from '@/components/ui/input';
@@ -19,10 +23,11 @@ export default function ContactInfo() {
     name: '',
   });
   const nftContext = useCreateNFT();
-  const [selectedContact, setSelectedContact] = useState(nftContext.sellerInfo.contact);
+  const [selectedContact, setSelectedContact] = useState(
+    nftContext.sellerInfo.contact,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
 
   const update = async (id?: string) => {
     let response = null;
@@ -94,7 +99,6 @@ export default function ContactInfo() {
           description: 'Delete contact information successfully',
           duration: 2000,
         });
-
       }
       await fetchContacts();
     } catch (error) {
@@ -104,7 +108,7 @@ export default function ContactInfo() {
         duration: 2000,
       });
     }
-  }
+  };
 
   return (
     <div className="flex flex-col gap-y-5">
@@ -112,112 +116,112 @@ export default function ContactInfo() {
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data.map((item: any, index: number) => (
-            <div
-              key={index}
-              className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
-              onClick={() => {
-                setSelectedContact(item);
-              }}
-            >
-              <span>{item.name ? item.name : `#${index + 1}`}</span>
-              <div>
-                <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
-                  {item?.contactInfo?.length > 150
-                    ? `${item.contactInfo.slice(0, 150)}...`
-                    : item.contactInfo}
-                  ...
-                </p>
-              </div>
-
-              <span
-                className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
+              <div
+                key={index}
+                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
                 onClick={() => {
-                  setIsUpdateModalOpen(true);
-                  setNewContact({
-                    ...newContact,
-                    id: item._id,
-                    name: item.name,
-                    contactInfo: item.contactInfo,
-                  });
+                  setSelectedContact(item);
                 }}
               >
-                Edit
-              </span>
-              <span
-                className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                onClick={() => {
-                  handleDeleteContact(item);
-                }}
-              >
-                <img src="/icons/trash.svg" className="w-4 h-4" />
-              </span>
+                <span>{item.name ? item.name : `#${index + 1}`}</span>
+                <div>
+                  <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
+                    {item?.contactInfo?.length > 150
+                      ? `${item.contactInfo.slice(0, 150)}...`
+                      : item.contactInfo}
+                    ...
+                  </p>
+                </div>
 
-              <div className="flex justify-end">
-                <BaseDialog
-                  isOpen={isUpdateModalOpen}
-                  onClose={() => setIsUpdateModalOpen(false)}
-                  className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                <span
+                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
+                  onClick={() => {
+                    setIsUpdateModalOpen(true);
+                    setNewContact({
+                      ...newContact,
+                      id: item._id,
+                      name: item.name,
+                      contactInfo: item.contactInfo,
+                    });
+                  }}
                 >
-                  <div className="flex flex-col gap-y-5">
-                    <div className="flex flex-col gap-y-4">
-                      <Label className="text-lg font-medium">
-                        Contact Information Name
-                      </Label>
-                      <Input
-                        value={newContact.name ? newContact.name : item.name}
-                        onChange={(e) =>
-                          setNewContact({
-                            ...newContact,
-                            name: e.target.value,
-                          })
-                        }
-                        className="w-full border-none bg-[#161616]"
-                        type="text"
-                        placeholder="Enter contact name"
-                      />
-                    </div>
+                  Edit
+                </span>
+                <span
+                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
+                  onClick={() => {
+                    handleDeleteContact(item);
+                  }}
+                >
+                  <img src="/icons/trash.svg" className="w-4 h-4" />
+                </span>
 
-                    <div className="flex flex-col gap-y-4">
-                      <Label className="text-lg font-medium">
-                        Contact Information For Seller
-                      </Label>
-                      <Textarea
-                        value={
-                          newContact.contactInfo
-                            ? newContact.contactInfo
-                            : item.contactInfo
-                        }
-                        onChange={(e) =>
-                          setNewContact({
-                            ...newContact,
-                            contactInfo: e.target.value,
-                          })
-                        }
-                        className="w-full border-none bg-[#161616]"
-                        placeholder="Please describe your product"
-                      />
-                    </div>
+                <div className="flex justify-end">
+                  <BaseDialog
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                  >
+                    <div className="flex flex-col gap-y-5">
+                      <div className="flex flex-col gap-y-4">
+                        <Label className="text-lg font-medium">
+                          Contact Information Name
+                        </Label>
+                        <Input
+                          value={newContact.name ? newContact.name : item.name}
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              name: e.target.value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616]"
+                          type="text"
+                          placeholder="Enter contact name"
+                        />
+                      </div>
 
-                    <div className="flex gap-x-4 justify-center my-3">
-                      <BaseButton
-                        title="Cancel"
-                        variant="secondary"
-                        onClick={cancelChanges}
-                      />
-                      <BaseButton
-                        title="Save"
-                        variant="primary"
-                        onClick={async () => {
-                          await update(item._id);
-                          setIsUpdateModalOpen(false);
-                        }}
-                      />
+                      <div className="flex flex-col gap-y-4">
+                        <Label className="text-lg font-medium">
+                          Contact Information For Seller
+                        </Label>
+                        <Textarea
+                          value={
+                            newContact.contactInfo
+                              ? newContact.contactInfo
+                              : item.contactInfo
+                          }
+                          onChange={(e) =>
+                            setNewContact({
+                              ...newContact,
+                              contactInfo: e.target.value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616]"
+                          placeholder="Please describe your product"
+                        />
+                      </div>
+
+                      <div className="flex gap-x-4 justify-center my-3">
+                        <BaseButton
+                          title="Cancel"
+                          variant="secondary"
+                          onClick={cancelChanges}
+                        />
+                        <BaseButton
+                          title="Save"
+                          variant="primary"
+                          onClick={async () => {
+                            await update(item._id);
+                            setIsUpdateModalOpen(false);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </BaseDialog>
+                  </BaseDialog>
+                </div>
               </div>
-            </div>
-          ))
+            ))
           : null}
 
         <div
