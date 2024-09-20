@@ -31,11 +31,9 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const [step, setStep] = useState(1);
   const [nftId, setNftId] = useState(null);
   const [basicDetails, setBasicDetails] = useState<any>({
-    data: null,
     error: null,
   });
   const [advanceDetails, setAdvanceDetails] = useState<any>({
-    data: null,
     error: null,
   });
   const [sellerInfo, setSellerInfo] = useState<any>({
@@ -487,7 +485,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       {step === 2 && (
         <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
       )}
-      
+
       {step === 3 && (
         <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
       )}

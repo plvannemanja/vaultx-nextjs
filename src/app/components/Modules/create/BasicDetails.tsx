@@ -64,18 +64,11 @@ export default function BasicDetails({
 
   const create = async () => {
     const result = basicDetailsSchema.safeParse(basicDetail);
-    if (!result.success && !basicDetail.file) {
+    if (!result.success || !basicDetail.file) {
       handler(null, result.error.message);
       console.log(result.error.message);
       return;
     }
-
-    setBasicDetail({
-      ...basicDetail,
-      file: file,
-      imageSrc: imageSrc,
-      attachments: attachments,
-    });
 
     handler({}, null);
     nextStep(true);
@@ -330,7 +323,7 @@ export default function BasicDetails({
                 if (!isNaN(Number(value)) && Number(value) >= 0) {
                   setBasicDetail({
                     ...basicDetail,
-                    price: value, // Keep the value as string to allow decimals
+                    price: Number(value), // Keep the value as string to allow decimals
                   });
                 }
               }}
