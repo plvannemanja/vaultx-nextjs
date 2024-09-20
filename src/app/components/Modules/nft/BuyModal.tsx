@@ -21,6 +21,8 @@ import { INFTVoucher } from '@/types';
 import { CreateNftServices } from '@/services/createNftService';
 import { Disclosure ,DisclosureButton, DisclosurePanel  } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/20/solid'
+import ConnectedCard from '../../Cards/ConnectedCard';
+
 
 export default function BuyModal({
   onClose,
@@ -56,17 +58,12 @@ export default function BuyModal({
   const [countryCode, setCountryCode] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [sectionsOpen, setSectionsOpen] = useState({
-    buyerInfo: true,
-    shippingAddress: true,
-    contactInfo: true,
-    consent: true,
-    orderSummary: true
-  });
-  
-  const toggleSection = (section: string) => {
-    setSectionsOpen(prev => ({...prev, [section]: !prev[section]}));
-  };
+
+  const address = activeAccount?.address
+    ? activeAccount?.address.slice(0, 6) +
+      '...' +
+      activeAccount?.address.slice(-4)
+    : 'Connect Wallet';
 
   const countries = Country.getAllCountries();
 
@@ -559,6 +556,7 @@ export default function BuyModal({
               title="Discard"
               variant="secondary"
               onClick={cancelChanges}
+              className="w-full"
             />
             <BaseButton
               title="Submit"
@@ -566,6 +564,10 @@ export default function BuyModal({
               onClick={() => {
                 setStep(2);
               }}
+              className="w-full"
+              displayIcon
+
+
             />
           </div>
         </div>
@@ -575,13 +577,18 @@ export default function BuyModal({
         <div className="flex flex-col gap-y-4 w-full">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className="text-lg font-medium">Caution</p>
+            <p className="text-[30px] text-[#fff] font-extrabold">Caution</p>
           </div>
 
-          <p>
+          <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
             Do not disclose buyer shipping information to third parties!
             <br />
-            <br />
+            <br/>
+            </p>
+
+
+            <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
+
             To maintain the confidentiality of buyer information and ensure
             smooth transactions, please pay close attention to the following
             points:
@@ -591,8 +598,10 @@ export default function BuyModal({
             information should remain confidential to sellers. Be cautious to
             prevent any external disclosures.
             <br />
+            <br />
             2. Tips for Safe Transactions: Handle buyer shipping information
             securely to sustain safe and transparent transactions.
+            <br />
             <br />
             3. Protection of Personal Information: As a seller, it is imperative
             to treat buyer personal information with utmost care. Avoid
@@ -603,7 +612,7 @@ export default function BuyModal({
             <br />
             <br />
             <br />
-            Thank You
+            <span className="text-[#fff] font-extrabold">Thank You</span>
           </p>
 
           <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
@@ -615,24 +624,25 @@ export default function BuyModal({
       )}
 
       {step === 3 && (
-        <div className="flex flex-col gap-y-4 w-full">
-          <p className="text-lg font-medium">Checkout</p>
-          <p>You are about to purchase Dhruv from fjas3</p>
+        <div className="flex flex-col gap-y-6 w-full text-[#fff]">
+          <p className="text-[30px] font-extrabold">Checkout</p>
+          <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">You are about to purchase Dhruv from ${address}</p>
+          
+          <ConnectedCard/>
 
           {/* Wallet Connection - Blockchain */}
 
-          <div className="flex flex-col gap-y-2 mt-5">
-            <div className="flex justify-between items-center">
-              <span>Price</span>
+          <div className="flex flex-col gap-y-6 mt-5">
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
+              <span className="text-[16px] azeret-mono-font text-[#FFFFFF]">Price</span>
               <span>{tokenAmount} ETH</span>
             </div>
-            <hr />
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
               <span>VaultX Fee</span>
               <span>{fee} %</span>
             </div>
-            <hr />
-            <div className="flex justify-between items-center">
+            <hr/>
+            <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
               <span>You will pay</span>
               <span>{expectedAmount} ETH</span>
             </div>
@@ -665,77 +675,83 @@ export default function BuyModal({
           </p>
         </div>
       )}
+     
       {step === 5 && (
-        <div className="flex flex-col gap-y-4">
-          <div className="flex flex-col gap-y-2 justify-center text-center">
-            <img src="/icons/success.svg" className="w-16 mx-auto" />
-            <p className="text-lg font-medium">Payment Success</p>
-            <p className="text-gray-500">
-              Your payment is completed successfully
-            </p>
-          </div>
+         <div className="flex flex-col gap-y-4">
+         <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
+           <img src="/icons/success.svg" className="w-[115px] h-[115px] mx-auto" />
+           <p className="text-[30px] text-[#fff] font-extrabold ">Payment Success</p>
+           <p className=" azeret-mono-font text-[#FFFFFF87]">
+             Your payment is completed successfully.
+           </p>
+         </div>
 
-          <div className="flex flex-col gap-y-3">
-            <div className="flex justify-between">
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">
-                  {trimString(NFTDetail.owner.wallet)}
-                </p>
-              </div>
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">From</p>
-                <p className="text-neon">{trimString(activeAccount.address)}</p>
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">Payment Method</p>
-                <p className="text-neon">{activeChain.name}</p>
-              </div>
-              <div className="w-[48%] p-4 rounded-md border border-gray-400">
-                <p className="text-sm text-gray-500">Payment Time</p>
-                <p className="text-neon">{moment().format('DD MMM, YY')}</p>
-              </div>
-            </div>
-          </div>
+         <div className="flex flex-col gap-y-3 mb-[20px]">
+           <div className="flex justify-between">
+             <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+             <p className=" azeret-mono-font text-[#FFFFFF87]">
+             From</p>
+               <p className="text-neon azeret-mono-font">
+                 {trimString(NFTDetail.owner.wallet)}
+               </p>
+             </div>
+             <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+             <p className=" azeret-mono-font text-[#FFFFFF87]">
+             From</p>
+               <p className="text-neon azeret-mono-font">{trimString(activeAccount.address)}</p>
+             </div>
+           </div>
+           <div className="flex justify-between">
+             <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+             <p className=" azeret-mono-font text-[#FFFFFF87]">
+             Payment Method</p>
+               <p className="text-neon azeret-mono-font">{activeChain.name}</p>
+             </div>
+             <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+             <p className=" azeret-mono-font text-[#FFFFFF87]">
+             Payment Time</p>
+               <p className="text-neon azeret-mono-font">{moment().format('DD MMM, YY')}</p>
+             </div>
+           </div>
+         </div>
 
-          <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-            <button className="w-full h-full" onClick={() => onClose()}>
-              close
-            </button>
-          </div>
-        </div>
+         <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
+           <button className="w-full h-full bg-[#DEE8E8]" onClick={() => onClose()}>
+             close
+           </button>
+         </div>
+       </div>
       )}
+     
       {step === 6 && (
-        <div className="flex flex-col gap-y-4 w-full">
-          <div className="flex gap-x-3 items-center">
-            <img src="/icons/info.svg" className="w-12" />
-            <p className="text-lg font-medium">Bid Information</p>
-          </div>
+         <div className="flex flex-col gap-y-4 w-full">
+         <div className="flex gap-x-3 items-center">
+           <img src="/icons/info.svg" className="w-12" />
+           <p className="text-[30px] text-[#fff] font-extrabold">Bid Information</p>
+         </div>
 
-          <p>
-            Bid Success
-            <br />
-            If a seller accepts your bid, this bid will be converted to the
-            BuyNow stage.
-            <br />
-            <br />
-            Bid Cancellation
-            <br />
-            If the seller does not accept the bid request within the period set
-            by the buyer in the place bid, the bid will be canceled.
-            Alternatively, if the buyer who applied for a bid cancels the bid
-            application, the transaction will be cancelled.
-            <br />
-            <br />
-            <br />
-            If you have any questions regarding Bid, please contact us.
-            <br />
-            <br />
-            Thank You
-          </p>
-        </div>
+         <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
+           Bid Success
+           <br />
+           If a seller accepts your bid, this bid will be converted to the
+           BuyNow stage.
+           <br />
+           <br />
+           Bid Cancellation
+           <br />
+           If the seller does not accept the bid request within the period set
+           by the buyer in the place bid, the bid will be canceled.
+           Alternatively, if the buyer who applied for a bid cancels the bid
+           application, the transaction will be cancelled.
+           <br />
+           <br />
+           <br />
+           If you have any questions regarding Bid, please contact us.
+           <br />
+           <br />
+          <span className="text-[#fff] font-extrabold"> Thank You</span>
+         </p>
+       </div>
       )}
     </>
   );

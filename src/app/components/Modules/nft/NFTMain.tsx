@@ -326,6 +326,7 @@ export default function NFTMain({
                   </div>
                 ) : null}
 
+
                 {type === 'release' ? (
                   <div className="flex flex-col gap-y-2 items-center">
                     <BaseDialog

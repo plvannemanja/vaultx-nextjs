@@ -32,7 +32,7 @@ export function BaseDialog({
 }: IBaseDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      {!isOpen && <DialogTrigger  asChild>{trigger}</DialogTrigger>}
       <DialogContent className={`max-w-5xl ${className}`}>
         <DialogHeader>
           {title ? (
