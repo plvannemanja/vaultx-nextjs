@@ -59,3 +59,7 @@ export const checkUrl = (url, type) => {
 export function roundToDecimals(num: number, decimal: number): number {
   return Math.round(num * 10 ** decimal) / 10 ** decimal;
 }
+
+export function isValidNumber(value: any): boolean {
+  return !isNaN(Number(value)) && Number(value) > 0;
+}

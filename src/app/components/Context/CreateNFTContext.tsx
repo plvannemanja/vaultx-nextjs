@@ -82,13 +82,7 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
       unlockableContent: null,
       certificates: [],
       propertyTemplateId: null,
-      attributes: null,
-      royalties: [
-        {
-          address: null,
-          percentage: null,
-        },
-      ],
+      attributes: [],
     });
 
   const setPartialAdvancedDetails = (

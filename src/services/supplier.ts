@@ -486,6 +486,21 @@ export const upsertProperty = async (payload: any) => {
   return property;
 };
 
+export const deleteProperty = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
 // authentication api calls
 export const authenticationServices = {
   connectWallet: ({ wallet }: ConnectWalletParams) =>

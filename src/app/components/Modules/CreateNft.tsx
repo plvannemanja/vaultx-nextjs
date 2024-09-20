@@ -28,7 +28,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   const nftContext = useCreateNFT();
   const { toast } = useToast();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [nftId, setNftId] = useState(null);
   const [basicDetails, setBasicDetails] = useState<any>({
     error: null,

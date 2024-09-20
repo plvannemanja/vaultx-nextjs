@@ -235,8 +235,7 @@ export interface IAdvancedDetailFormData {
   unlockableContent: string | null;
   certificates: any[];
   propertyTemplateId: string | null;
-  attributes: any[] | null;
-  royalties: any[];
+  attributes: any[];
 }
 
 export interface ISellerInfo {
