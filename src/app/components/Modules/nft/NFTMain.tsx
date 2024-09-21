@@ -42,6 +42,7 @@ interface IModalStatus {
   resell: boolean;
   buy: boolean;
   release: boolean;
+  cancel: boolean;
 }
 
 export default function NFTMain({
@@ -67,6 +68,7 @@ export default function NFTMain({
     resell: false,
     buy: false,
     release: false,
+    cancel: false,
   });
   const activeAccount = useActiveAccount();
 
@@ -293,7 +295,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Buy Now"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -315,12 +317,12 @@ export default function NFTMain({
                         <BaseButton
                           title="Bid"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                     >
-                      <BidModal title={data.name} update={() => {}} />
+                      <BidModal title={data.name} update={() => { }} />
                     </BaseDialog>
                   </div>
                 ) : null}
@@ -333,7 +335,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Release Escrow"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       isOpen={modalStatus.release}
@@ -354,11 +356,19 @@ export default function NFTMain({
                         <BaseButton
                           title="Cancel Order"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
+                      isOpen={modalStatus.cancel}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, cancel: val });
+                      }}
                     >
-                      <CancelOrderModal />
+                      <CancelOrderModal
+                        onClose={() => {
+                          setModalStatus({ ...modalStatus, cancel: false });
+                        }}
+                      />
                     </BaseDialog>
                   </div>
                 ) : null}
@@ -371,7 +381,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Put On Sale"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       isOpen={modalStatus.resell}
@@ -417,7 +427,7 @@ export default function NFTMain({
                     <BaseButton
                       title="Cancel Requested"
                       variant="primary"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                   </div>
                 ) : null}
@@ -429,7 +439,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Escrow Release Request"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
@@ -444,7 +454,7 @@ export default function NFTMain({
                     <BaseButton
                       title="In Escrow"
                       variant="primary"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                   </div>
                 ) : null}
