@@ -20,6 +20,12 @@ import ActivityList from '@/app/components/Modules/nft/ActivityList';
 import BidList from '@/app/components/Modules/nft/BidList';
 import NFTDescription from '@/app/components/Modules/nft/NFTDescription';
 import NFTMain from '@/app/components/Modules/nft/NFTMain';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+import { ChevronUpIcon } from '@heroicons/react/20/solid';
 
 function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
@@ -156,54 +162,72 @@ function PageDetail({ params }: { params: { slug: string } }) {
           <NFTDescription />
           <BidList />
           <ActivityList />
-          <div className="flex flex-col gap-y-2 bg-dark rounded-md py-4">
-            <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex gap-x-2 items-center">
-                <InformationCircleIcon width={20} height={20} />
-                <Label className="font-medium">Details</Label>
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
-                <img
-                  src="/icons/ether.svg"
-                  alt="matic"
-                  className="w-[1.2rem] h-8 fill-white"
-                />
-                <Label className="font-medium">Erc721</Label>
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
-                <img
-                  src="/icons/ether.svg"
-                  alt="matic"
-                  className="w-[1.2rem] h-8 fill-neon"
-                />
-                <Label className="font-medium">View on Polygon Scan</Label>
-                <a href={data?.minted ? '?a=' : ''}>
-                  <ArrowTopRightOnSquareIcon
-                    width={20}
-                    height={20}
-                    className="fill-neon"
-                  />
-                </a>
-              </div>
-            </div>
-            <div className="w-full flex flex-col gap-y-5">
-              <div className="w-full px-6 py-2 flex gap-x-2 items-center text-neon">
-                <EyeIcon width={20} height={20} />
-                <Label className="font-medium">Open Original On IPFS</Label>
-                <a target="_blank" href={data.uri}>
-                  <ArrowTopRightOnSquareIcon
-                    width={20}
-                    height={20}
-                    className="fill-neon"
-                  />
-                </a>
-              </div>
-            </div>
+          <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#fff] ">
+                    <div className="flex w-full justify-between">
+                      <span className="text-white flex items-center gap-2 content-center">
+                        <InformationCircleIcon width={20} height={20} />
+                        Details
+                      </span>
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
+                        />
+                    </div>
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                  <div className="w-full flex flex-col gap-y-5">
+                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                      <img
+                        src="/icons/ether.svg"
+                        alt="matic"
+                        className="w-[1.2rem] h-8 fill-white"
+                      />
+                      <Label className="font-extrabold text-[14px]">Erc721</Label>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div className="w-full flex flex-col gap-y-5">
+                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                      <img
+                        src="/icons/ether.svg"
+                        alt="matic"
+                        className="w-[1.2rem] h-8 fill-white"
+                      />
+                      <Label className="font-medium">View on Polygon Scan</Label>
+                      <a href={data?.minted ? '?a=' : ''}>
+                        <ArrowTopRightOnSquareIcon
+                          width={20}
+                          height={20}
+                          className="fill-[#fff]"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div className="w-full flex flex-col gap-y-5">
+                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                      <EyeIcon width={20} height={20} />
+                      <Label className="font-medium">Open Original On IPFS</Label>
+                      <a target="_blank" href={data.uri}>
+                        <ArrowTopRightOnSquareIcon
+                          width={20}
+                          height={20}
+                          className="fill-[#fff]"
+                        />
+                      </a>
+                    </div>
+                  </div>  
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
+          
         </>
       )}
     </div>
