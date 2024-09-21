@@ -9,10 +9,6 @@ import {
 } from 'thirdweb/react';
 import { Search } from './Search';
 import WalletIcon from '@/components/Icon/WalletIcon';
-import { Address } from 'thirdweb';
-import { authenticationServices, userServices } from '@/services/supplier';
-import { createCookie } from '@/lib/cookie';
-import { useEffect, useState } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -27,7 +23,6 @@ import { Label } from '@/components/ui/label';
 import Menu from './Menu';
 import { useRouter } from 'next/navigation';
 import { WalletAutoConnect } from '../theme-provider';
-import { checksumAddress } from 'viem';
 import { useGlobalContext } from '../Context/GlobalContext';
 
 const socials = [
@@ -54,7 +49,7 @@ const socials = [
 ];
 
 export function BaseHeader() {
-  const { user, setUser } = useGlobalContext();
+  const { user } = useGlobalContext();
   const detailsModal = useWalletDetailsModal();
   const { connect } = useConnectModal();
   const activeAccount = useActiveAccount();
@@ -67,29 +62,6 @@ export function BaseHeader() {
   function handleConnect() {
     connect({ client, wallets });
   }
-
-  const login = async (address: Address) => {
-    try {
-      const { data } = await authenticationServices.connectWallet({
-        wallet: address,
-      });
-      const connectedUser = data.user;
-      const connectedToken = data.token;
-      console.log('data', data, connectedUser, connectedToken);
-      createCookie('user', JSON.stringify(connectedUser));
-      createCookie('token', connectedToken);
-      setUser(connectedUser);
-    } catch (error) {
-      console.log({ error });
-    }
-  };
-
-  useEffect(() => {
-    if (activeAccount?.address) {
-      const address = checksumAddress(activeAccount.address) as Address;
-      login(address);
-    }
-  }, [activeAccount]);
 
   return (
     <header className="container h-[52px] my-4 gap-1 justify-between items-center inline-flex px-4">
