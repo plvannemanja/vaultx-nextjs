@@ -170,7 +170,7 @@ export default function NFTMain({
             width={100}
             quality={100}
             alt="hero"
-            className="cursor-zoom-in rounded-xl object-cover aspect-square w-full max-h-[620px]"
+            className="cursor-zoom-in rounded-xl object-cover aspect-square w-full max-h-[620px] lg:min-h-[683px]"
           />
 
           <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
@@ -238,7 +238,7 @@ export default function NFTMain({
 
         <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
           <div className="w-full flex flex-col gap-y-6">
-            <p className="text-lg font-medium">{data.name}</p>
+            <p className="text-[32px] font-extrabold leading-[43.2px]">{data.name}</p>
             <div className="flex justify-between">
               <div className="flex gap-2 items-center">
                 {data?.owner?.avatar?.url ? (
@@ -249,8 +249,8 @@ export default function NFTMain({
                   />
                 ) : null}
                 <div className="flex flex-col gap-y-1 text-sm">
-                  <p className="text-gray-400">Owned by:</p>
-                  <p className="font-medium">{data?.owner?.username}</p>
+                  <p className="text-[12px] text-gray-400 azeret-mono-font">Owned by:</p>
+                  <p className="text-[12px] azeret-mono-font text-[#fff]">{data?.owner?.username}</p>
                 </div>
               </div>
 
@@ -263,23 +263,23 @@ export default function NFTMain({
                   />
                 ) : null}
                 <div className="flex flex-col gap-y-1 text-sm">
-                  <p className="text-gray-400">Created by:</p>
-                  <p className="font-medium">{data?.mintedBy?.username}</p>
+                  <p className="text-[12px] text-gray-400 azeret-mono-font">Created by:</p>
+                  <p className="text-[12px] azeret-mono-font text-[#fff]">{data?.mintedBy?.username}</p>
                 </div>
               </div>
             </div>
             <div className="flex gap-x-3">
-              <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
+              <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F] px-3 py-2 rounded-xl">
                 <EyeIcon width={20} height={20} />
                 {views ? views : 1} view
               </div>
-              <div className="flex gap-x-2 items-center border-2 border-gray-400 px-3 py-2 rounded-xl">
+              <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F]  px-3 py-2 rounded-xl">
                 {data.category ? data.category.name : 'N/A'}
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-lg">
-            <p className="text-sm text-gray-400">
+          <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
+            <p className="text-sm text-gray-400 azeret-mono-font">
               {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
             </p>
             <div className="flex justify-between">
@@ -487,32 +487,40 @@ export default function NFTMain({
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-lg">
+          <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
             <p className="text-lg font-medium">Overview</p>
             <hr />
-            <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-              <span className="font-medium">Artist</span>
-              <span className="text-gray-400">{data.name}</span>
-            </div>
-            <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-              <span className="font-medium">Shipping Country</span>
-              <span className="text-gray-400">
-                {data.saleId ? data.saleId.sellerShippingId.country : ''}
-              </span>
-            </div>
-            <div className="flex px-4 py-2 rounded-md justify-between items-center border-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-              <span className="font-medium">Royalties</span>
-              <span className="text-gray-400">{data.royalty}%</span>
-            </div>
-            <div className="flex px-4 py-2 flex-col rounded-md border-2 gap-y-2 border-gray-500 bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-              <p className="font-medium">Size</p>
-              <div className="mt-2 flex flex-col gap-y-2">
-                <p>Length: {data?.shippingInformation?.lengths}cm</p>
-                <p>Height: {data?.shippingInformation?.height}cm</p>
-                <p>Width: {data?.shippingInformation?.width}cm</p>
-                <p>Weight: {data?.shippingInformation?.weight}cm</p>
+            <div className="grid grid-cols-12 w-full gap-5 justify-between ">
+              <div className="flex flex-col col-span-8 gap-y-[10px]">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                  <span className="font-medium">Artist</span>
+                  <span className="text-gray-400 azeret-mono-font">{data.name}</span>
+                </div>
+                <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                <span className="font-medium">Shipping Country</span>
+                  <span className="text-gray-400 azeret-mono-font">
+                    {data.saleId ? data.saleId.sellerShippingId.country : ''}
+                  </span>
+                </div>
+                <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                <span className="font-medium">Royalties</span>
+                  <span className="text-gray-400 azeret-mono-font">{data.royalty}%</span>
+                </div>
+              </div>
+              <div className="flex flex-col col-span-4 gap-y-3">
+                <div className="flex flex-col px-4 py-4 rounded-md justify-between border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                  <p className="font-medium">Size</p>
+                      <div className="mt-2 flex flex-col gap-y-3 ">
+                        <p className=""><span className="w-[58px] inline-block">Length</span><span className="text-center w-[20px] inline-block">:</span>{data?.shippingInformation?.lengths}cm</p>
+                        <p><span className="w-[58px] inline-block">Height</span><span className="text-center w-[20px] inline-block ">:</span> {data?.shippingInformation?.height}cm</p>
+                        <p> <span className="w-[58px] inline-block">Width</span><span className="text-center w-[20px] inline-block ">:</span>{data?.shippingInformation?.width}cm</p>
+                        <p><span className="w-[58px] inline-block">Weight</span> <span className="text-center w-[20px] inline-block ">:</span>{data?.shippingInformation?.weight}cm</p>
+                      </div>
+                </div>
               </div>
             </div>
+           
+            
           </div>
         </div>
       </div>
