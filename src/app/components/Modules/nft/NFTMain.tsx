@@ -69,6 +69,7 @@ export default function NFTMain({
     release: false,
   });
   const activeAccount = useActiveAccount();
+  const [step, setStep] = useState(1); // Step state in the parent
 
   const nftService = new NftServices();
   const createSellService = new CreateSellService();
@@ -366,8 +367,10 @@ export default function NFTMain({
                 {type === 'resell' ? (
                   <div className="flex flex-col gap-x-2 items-center">
                     <BaseDialog
-                      className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
-                      trigger={
+                      className={`bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden 
+                        ${step === 2 ? 'w-[50rem]' : 'w-[38rem]'} 
+                        lg:max-w-[100%]`}
+                        trigger={
                         <BaseButton
                           title="Put On Sale"
                           variant="primary"
@@ -384,6 +387,8 @@ export default function NFTMain({
                           setModalStatus({ ...modalStatus, resell: false });
                         }}
                         fetchNftData={fetchNftData}
+                        parentStep={step} // Pass step value here
+                        parentSetStep={setStep}
                       />
                     </BaseDialog>
                   </div>

@@ -19,9 +19,13 @@ import ConnectedCard from '../../Cards/ConnectedCard';
 export default function PutSaleModal({
   onClose,
   fetchNftData,
+  parentStep,
+  parentSetStep, // Function to update step from parent
 }: {
   onClose: () => void;
   fetchNftData: () => void;
+  parentStep: number; // Accept step as a prop
+  parentSetStep: (value: number) => void;
 }) {
   const { nftId, NFTDetail: nft } = useNFTDetail();
   const { fee } = useGlobalContext();
@@ -135,6 +139,7 @@ export default function PutSaleModal({
   const handleMint = async () => {
     try {
       setStep(3);
+      parentSetStep(3)
       let splitPayments = [];
       // blockchain logic
       // const result = await listNf(
@@ -222,6 +227,7 @@ export default function PutSaleModal({
                 className="w-full h-full"
                 onClick={async () => {
                   setStep(2);
+                  parentSetStep(2)
                 }}
               >
                 Next
@@ -231,7 +237,7 @@ export default function PutSaleModal({
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col gap-y-5 w-full">
+        <div className="flex flex-col gap-y-5 w-full lg:min-w-[700px]">
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
             <Label className="text-lg font-medium">
               Give a new price to put this asset for sale.
@@ -482,6 +488,7 @@ export default function PutSaleModal({
                 className="w-full h-full"
                 onClick={() => {
                   onClose();
+                  parentSetStep(1)
                 }}
               >
                 Discard
