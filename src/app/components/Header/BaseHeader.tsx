@@ -98,7 +98,7 @@ export function BaseHeader() {
                     <Label className="text-sm text-white">How to work</Label>
                     <div className="flex mt-4 gap-3.5 self-stretch text-sm max-md:flex-wrap">
                       {activeAccount ? (
-                        <Menu user={user} />
+                        <Menu />
                       ) : (
                         <div
                           className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
@@ -169,7 +169,7 @@ export function BaseHeader() {
       <Search />
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
         {activeAccount ? (
-          <Menu user={user} />
+          <Menu />
         ) : (
           <div
             className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"

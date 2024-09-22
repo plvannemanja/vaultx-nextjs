@@ -45,7 +45,7 @@ export default function AppHeader() {
       </div>
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
         {activeAccount ? (
-          <Menu user={user} />
+          <Menu />
         ) : (
           <div
             className="max-w-[200px] h-12 px-5 py-3 bg-yellow-300 rounded-xl border border-yellow-300 justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
