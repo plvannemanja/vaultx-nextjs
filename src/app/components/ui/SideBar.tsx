@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 const marketPlaceLinks = [
   {
@@ -56,9 +58,9 @@ const accountLinks = [
 ];
 
 export default function SideBar({ className }: { className?: string }) {
+  const pathname = usePathname();
   const [hovered, setHovered] = useState<string | null>(null);
   const [tab, setTab] = useState('appreciate');
-
   const changeTab = (tab: string) => {
     setTab(tab);
     const url = new URL(window.location.href);
@@ -88,7 +90,10 @@ export default function SideBar({ className }: { className?: string }) {
           return (
             <div
               key={index}
-              className="flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative"
+              className={cn(
+                "flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative",
+                pathname === `/dashboard/${link.value}` ? 'text-[#ddf247]' : ""
+              )}
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => {
@@ -126,11 +131,15 @@ export default function SideBar({ className }: { className?: string }) {
           return (
             <div
               key={index}
-              className="flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative"
+              className={cn(
+                "flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative",
+                pathname === `/dashboard/${link.value}` && 'text-[#ddf247]'
+              )}
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
               onClick={() => {
-                window.location.href = `/dashboard/${link.value}`;
+                if (pathname !== `/dashboard/${link.value}`)
+                  window.location.href = `/dashboard/${link.value}`;
               }}
             >
               <Image
