@@ -145,7 +145,7 @@ export default function PutSaleModal({
   const handleMint = async () => {
     try {
       setStep(3);
-      parentSetStep(3)
+      parentSetStep(3);
       let splitPayments = [];
       // blockchain logic
       // const result = await listNf(
@@ -245,7 +245,7 @@ export default function PutSaleModal({
                 className="w-full h-full"
                 onClick={async () => {
                   setStep(2);
-                  parentSetStep(2)
+                  parentSetStep(2);
                 }}
               >
                 Next
@@ -256,386 +256,387 @@ export default function PutSaleModal({
       )}
       {step === 2 && (
         <>
-        
-
-        <div className="flex flex-col gap-y-5 w-full lg:min-w-[700px]">
-          <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <span>Give a new price to put this asset for sale.</span>
-                    <ChevronUpIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
-                    />
-                  </DisclosureButton>
-                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                    
-                  <div className="flex justify-between">
-                <Input
-                  type="number"
-                  placeholder="Enter The Price"
-                  className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                  value={formData.price.toString()}
-                  onChange={(e) => {
-                    setFormData({
-                      ...formData,
-                      price: (e.target as any).value as number,
-                    });
-                  }}
-                />
-              </div>
-
-                    </DisclosurePanel>
-                </>
-              )}
-              </Disclosure>
-          </div>
+          <div className="flex flex-col gap-y-5 w-full lg:min-w-[700px]">
             <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-          <Disclosure as="div" defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                  <span>Buyer Information</span>
-                  <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
-                  />
-                </DisclosureButton>
-                <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                <div className="flex justify-between">
-              <div className="flex flex-col gap-y-2 w-[32%]">
-                <Label className="text-lg font-medium">Name*</Label>
-                <Input
-                  value={formData.username ? formData.username : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      username: (e.target as any).value,
-                    })
-                  }
-                  className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                  type="text"
-                  placeholder="Enter your username"
-                />
-              </div>
-              <div className="flex flex-col gap-y-2 w-[32%]">
-                <Label className="text-lg font-medium">Email*</Label>
-                <Input
-                  value={formData.email ? formData.email : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      email: (e.target as HTMLInputElement).value,
-                    })
-                  }
-                  className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                  type="text"
-                  placeholder="Enter your email"
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-2 w-[32%]">
-                <Label className="text-lg font-medium">Country*</Label>
-                <select
-                  aria-label="select curation"
-                  className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                  name="country"
-                  value={JSON.stringify(sellerInfo.country)}
-                  onChange={handleUpdateSeller}
-                >
-                  <option value="">Select</option>
-                  {countries.map((item: any) => (
-                    <option key={item.isoCode} value={JSON.stringify(item)}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-
-                  </DisclosurePanel>
-              </>
-            )}
-            </Disclosure>
-          </div>
-
-          <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-          <Disclosure as="div" defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                  <span>Shipping Address*</span>
-                  <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
-                  />
-                </DisclosureButton>
-                <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <div className="flex flex-wrap mb-4 justify-between ">
-                    <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                      <h2 className="font-bold text-[#fff] text-[14px]">
-                        Address 1*
-                      </h2>
-
-                      <Input
-                        value={sellerInfo.address1 ? sellerInfo.address1 : ''}
-                       
-                        className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                        type="text"
-                        placeholder="Enter address"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                      <h2 className="font-bold text-[#fff] text-[14px]">
-                        Address 2*
-                      </h2>
-
-                      <Input
-                        value={sellerInfo.address2 ? sellerInfo.address2 : ''}
-                        onChange={(e) =>
-                          setSellerInfo({
-                            ...sellerInfo,
-                            address2: e.target.value,
-                          })
-                        }
-                        className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                        type="text"
-                        placeholder="Enter address"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap mb-4 justify-between">
-                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                      <h2 className="font-bold text-[#fff] text-[14px]">
-                        State*
-                      </h2>
-
-                      <select
-                        aria-label="select curation"
-                        className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                        name="state"
-                        value={
-                          sellerInfo.state
-                            ? JSON.stringify(sellerInfo.state)
-                            : ''
-                        }
-                        onChange={handleUpdateSeller}
-                      >
-                        <option value="">Select</option>
-                        {states.map((item: any) => (
-                          <option
-                            key={item.isoCode}
-                            value={JSON.stringify(item)}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                      <h2 className="font-bold text-[#fff] text-[14px]">
-                        City*
-                      </h2>
-
-                      <select
-                        aria-label="select curation"
-                        className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                        name="city"
-                        value={
-                          sellerInfo.city
-                            ? JSON.stringify(sellerInfo.city)
-                            : ''
-                        }
-                        onChange={handleUpdateSeller}
-                      >
-                        <option value="">Select</option>
-                        {cities.map((item: any) => (
-                          <option
-                            key={item.isoCode}
-                            value={JSON.stringify(item)}
-                          >
-                            {item.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                      <h2 className="font-bold text-[#fff] text-[14px]">
-                        Postal Code*
-                      </h2>
-
-                      <Input
-                        value={
-                          sellerInfo.postalCode ? sellerInfo.postalCode : ''
-                        }
-                        onChange={(e) =>
-                          setSellerInfo({
-                            ...sellerInfo,
-                            postalCode: e.target.value,
-                          })
-                        }
-                        className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                        type="text"
-                        placeholder="Enter postcode"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col mb-4 gap-y-3">
-                    <PhoneInput
-                      enableLongNumbers={true}
-                      containerClass="phone-container"
-                      buttonClass="phone-dropdown"
-                      inputClass="phone-control"
-                      country={'us'}
-                      value={
-                        sellerInfo.phoneNumber ? sellerInfo.phoneNumber : ''
-                      }
-                      inputStyle={{
-                        width: '100%',
-                        height: '2.5rem',
-                        borderRadius: '0.375rem',
-                        padding: '0.5rem',
-                        marginTop: '0.5rem',
-                        color: '#fff',
-                        backgroundColor: '#161616',
-                      }}
-                      onChange={(e) =>
-                        setSellerInfo({ ...sellerInfo, phoneNumber: e })
-                      }
-                    />
-                  </div>
-                </DisclosurePanel>
-              </>
-            )}
-          </Disclosure>
-        </div>
-        <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <span>Contact Information For Seller</span>
-                    <ChevronUpIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
-                    />
-                  </DisclosureButton>
-                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                    <Textarea
-                      value={formData.description ? formData.description : ''}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          description: (e.target as any).value,
-                        })
-                      }
-                      className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
-                      placeholder="Please describe your product"
-                    />
-                  </DisclosurePanel>
-                </>
-              )}
-            </Disclosure>
-          </div>
-
-
-          <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <div className="flex w-full justify-between">
-                      <span>
-                        Consent for collection and usage of personal information
-                      </span>
+              <Disclosure as="div" defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                      <span>Give a new price to put this asset for sale.</span>
                       <ChevronUpIcon
                         className={`${
                           open ? 'rotate-180 transform' : ''
                         } h-5 w-5 text-white`}
                       />
-                    </div>
-                    <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
-                      Please read the following and check the appropriate boxes
-                      to indicate your consent:
-                    </p>
-                  </DisclosureButton>
-
-                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                    <Textarea
-                      value={formData.description ? formData.description : ''}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          description: (e.target as any).value,
-                        })
-                      }
-                      className="w-full border-none bg-[#161616] rounded-md h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4"
-                      placeholder="VaultX utilizes an agreed-upon shipping method between sellers and buyers for secure delivery tailored to the characteristics of each artwork. Buyers will review the message you have written in this field and will contact you. Please leave a friendly message to make it convenient for buyers to reach out to you."
+                    </DisclosureButton>
+                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <div className="flex justify-between">
+                        <Input
+                          type="number"
+                          placeholder="Enter The Price"
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          value={formData.price.toString()}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              price: (e.target as any).value as number,
+                            });
+                          }}
+                        />
+                      </div>
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+            <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+              <Disclosure as="div" defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                      <span>Buyer Information</span>
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
                       />
-                  </DisclosurePanel>
-                </>
-              )}
-            </Disclosure>
-          </div>
+                    </DisclosureButton>
+                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <div className="flex justify-between">
+                        <div className="flex flex-col gap-y-2 w-[32%]">
+                          <Label className="text-lg font-medium">Name*</Label>
+                          <Input
+                            value={formData.username ? formData.username : ''}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                username: (e.target as any).value,
+                              })
+                            }
+                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                            type="text"
+                            placeholder="Enter your username"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-y-2 w-[32%]">
+                          <Label className="text-lg font-medium">Email*</Label>
+                          <Input
+                            value={formData.email ? formData.email : ''}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                email: (e.target as HTMLInputElement).value,
+                              })
+                            }
+                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                            type="text"
+                            placeholder="Enter your email"
+                          />
+                        </div>
 
-
-
-          <div className="flex items-center space-x-2 p-4 ">
-            <input
-              id="terms"
-              type="checkbox"
-              checked={formData.accepted}
-              onChange={() =>
-                setFormData({
-                  ...formData,
-                  accepted: !formData.accepted,
-                })
-              }
-            />
-            <label
-              htmlFor="terms"
-              className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
-            >
-              I agree to all terms, privacy policy and fees
-            </label>
-          </div>
-
-          <div className="flex justify-between">
-            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button
-                className="w-full h-full"
-                onClick={() => {
-                  onClose();
-                  parentSetStep(1)
-                }}
-              >
-                Discard
-              </button>
+                        <div className="flex flex-col gap-y-2 w-[32%]">
+                          <Label className="text-lg font-medium">
+                            Country*
+                          </Label>
+                          <select
+                            aria-label="select curation"
+                            className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                            name="country"
+                            value={JSON.stringify(sellerInfo.country)}
+                            onChange={handleUpdateSeller}
+                          >
+                            <option value="">Select</option>
+                            {countries.map((item: any) => (
+                              <option
+                                key={item.isoCode}
+                                value={JSON.stringify(item)}
+                              >
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
             </div>
-            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
-              <button
-                className="w-full h-full"
-                onClick={async () => await submit()}
+
+            <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+              <Disclosure as="div" defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                      <span>Shipping Address*</span>
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
+                      />
+                    </DisclosureButton>
+                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <div className="flex flex-wrap mb-4 justify-between ">
+                        <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                          <h2 className="font-bold text-[#fff] text-[14px]">
+                            Address 1*
+                          </h2>
+
+                          <Input
+                            value={
+                              sellerInfo.address1 ? sellerInfo.address1 : ''
+                            }
+                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                            type="text"
+                            placeholder="Enter address"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                          <h2 className="font-bold text-[#fff] text-[14px]">
+                            Address 2*
+                          </h2>
+
+                          <Input
+                            value={
+                              sellerInfo.address2 ? sellerInfo.address2 : ''
+                            }
+                            onChange={(e) =>
+                              setSellerInfo({
+                                ...sellerInfo,
+                                address2: e.target.value,
+                              })
+                            }
+                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                            type="text"
+                            placeholder="Enter address"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap mb-4 justify-between">
+                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                          <h2 className="font-bold text-[#fff] text-[14px]">
+                            State*
+                          </h2>
+
+                          <select
+                            aria-label="select curation"
+                            className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                            name="state"
+                            value={
+                              sellerInfo.state
+                                ? JSON.stringify(sellerInfo.state)
+                                : ''
+                            }
+                            onChange={handleUpdateSeller}
+                          >
+                            <option value="">Select</option>
+                            {states.map((item: any) => (
+                              <option
+                                key={item.isoCode}
+                                value={JSON.stringify(item)}
+                              >
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                          <h2 className="font-bold text-[#fff] text-[14px]">
+                            City*
+                          </h2>
+
+                          <select
+                            aria-label="select curation"
+                            className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
+                            name="city"
+                            value={
+                              sellerInfo.city
+                                ? JSON.stringify(sellerInfo.city)
+                                : ''
+                            }
+                            onChange={handleUpdateSeller}
+                          >
+                            <option value="">Select</option>
+                            {cities.map((item: any) => (
+                              <option
+                                key={item.isoCode}
+                                value={JSON.stringify(item)}
+                              >
+                                {item.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                          <h2 className="font-bold text-[#fff] text-[14px]">
+                            Postal Code*
+                          </h2>
+
+                          <Input
+                            value={
+                              sellerInfo.postalCode ? sellerInfo.postalCode : ''
+                            }
+                            onChange={(e) =>
+                              setSellerInfo({
+                                ...sellerInfo,
+                                postalCode: e.target.value,
+                              })
+                            }
+                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                            type="text"
+                            placeholder="Enter postcode"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-col mb-4 gap-y-3">
+                        <PhoneInput
+                          enableLongNumbers={true}
+                          containerClass="phone-container"
+                          buttonClass="phone-dropdown"
+                          inputClass="phone-control"
+                          country={'us'}
+                          value={
+                            sellerInfo.phoneNumber ? sellerInfo.phoneNumber : ''
+                          }
+                          inputStyle={{
+                            width: '100%',
+                            height: '2.5rem',
+                            borderRadius: '0.375rem',
+                            padding: '0.5rem',
+                            marginTop: '0.5rem',
+                            color: '#fff',
+                            backgroundColor: '#161616',
+                          }}
+                          onChange={(e) =>
+                            setSellerInfo({ ...sellerInfo, phoneNumber: e })
+                          }
+                        />
+                      </div>
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+            <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+              <Disclosure as="div" defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                      <span>Contact Information For Seller</span>
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
+                      />
+                    </DisclosureButton>
+                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <Textarea
+                        value={formData.description ? formData.description : ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            description: (e.target as any).value,
+                          })
+                        }
+                        className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
+                        placeholder="Please describe your product"
+                      />
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+
+            <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+              <Disclosure as="div" defaultOpen={true}>
+                {({ open }) => (
+                  <>
+                    <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                      <div className="flex w-full justify-between">
+                        <span>
+                          Consent for collection and usage of personal
+                          information
+                        </span>
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
+                        />
+                      </div>
+                      <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
+                        Please read the following and check the appropriate
+                        boxes to indicate your consent:
+                      </p>
+                    </DisclosureButton>
+
+                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <Textarea
+                        value={formData.description ? formData.description : ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            description: (e.target as any).value,
+                          })
+                        }
+                        className="w-full border-none bg-[#161616] rounded-md h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4"
+                        placeholder="VaultX utilizes an agreed-upon shipping method between sellers and buyers for secure delivery tailored to the characteristics of each artwork. Buyers will review the message you have written in this field and will contact you. Please leave a friendly message to make it convenient for buyers to reach out to you."
+                      />
+                    </DisclosurePanel>
+                  </>
+                )}
+              </Disclosure>
+            </div>
+
+            <div className="flex items-center space-x-2 p-4 ">
+              <input
+                id="terms"
+                type="checkbox"
+                checked={formData.accepted}
+                onChange={() =>
+                  setFormData({
+                    ...formData,
+                    accepted: !formData.accepted,
+                  })
+                }
+              />
+              <label
+                htmlFor="terms"
+                className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
               >
-                Next
-              </button>
+                I agree to all terms, privacy policy and fees
+              </label>
+            </div>
+
+            <div className="flex justify-between">
+              <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+                <button
+                  className="w-full h-full"
+                  onClick={() => {
+                    onClose();
+                    parentSetStep(1);
+                  }}
+                >
+                  Discard
+                </button>
+              </div>
+              <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+                <button
+                  className="w-full h-full"
+                  onClick={async () => await submit()}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </>
       )}
       {step === 3 && (
         <div className="flex flex-col gap-y-9 items-center text-center">
           <img src="/icons/refresh.svg" className="w-20 mx-auto" />
           <p className="text-[30px] font-medium leading-[40px]">
-            Please wait while we put<br/> it on sale
+            Please wait while we put
+            <br /> it on sale
           </p>
         </div>
       )}
