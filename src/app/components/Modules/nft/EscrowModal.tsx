@@ -56,18 +56,18 @@ export default function EscrowModal({
   return (
     <>
       {step === 1 ? (
-        <div className="w-[34rem] flex flex-col gap-y-4">
+        <div className="w-[34rem] flex flex-col gap-y-7">
           <div className="flex gap-x-3 items-center">
             <img src="/icons/info.svg" className="w-12" />
-            <p className="text-lg font-medium">Escrow Release Confirmation</p>
+            <p className="text-[30px] font-extrabold">Escrow Release Confirmation</p>
           </div>
 
-          <p>
-            <span className="text-lg font-medium">
+          
+          <p className="text-[24px] azeret-mono-font text-[#fff] font-extrabold">
               Did you receive the physical artwork without any issues?
-            </span>
-            <br />
-            <br />
+              </p>
+              <p className="text-[16px] azeret-mono-font text-[#FFFFFF53] mb-6">
+              
             When escrow is released, you will receive the NFT created by the
             artist in your wallet, and the purchase price you paid will be
             delivered to the artist.
@@ -106,6 +106,16 @@ export default function EscrowModal({
             <img src="/icons/success.svg" className="w-16 mx-auto" />
             <p className="text-lg font-medium">Escrow Release Success</p>
           </div>
+          <div className="py-3 w-[100%] rounded-lg text-black font-semibold bg-light">
+              <button
+                className="w-full h-full bg-[#DEE8E8]"
+                onClick={() => {
+                  onClose();
+                }}
+              >
+                Close
+              </button>
+            </div>
         </div>
       ) : null}
     </>
