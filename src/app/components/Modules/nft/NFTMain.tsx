@@ -364,29 +364,7 @@ export default function NFTMain({
                     </BaseDialog>
                   </div>
                 ) : null}
-                 <BaseDialog
-                      className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
-                      trigger={
-                        <BaseButton
-                          title="Release Escrow"
-                          variant="primary"
-                          className={'rounded-[14px]'}
-
-                          onClick={() => {}}
-                        />
-                      }
-                      isOpen={modalStatus.release}
-                      onClose={(val) => {
-                        setModalStatus({ ...modalStatus, release: val });
-                      }}
-                    >
-                      <EscrowModal
-                        onClose={() => {
-                          setModalStatus({ ...modalStatus, release: false });
-                        }}
-                        fetchNftData={fetchNftData}
-                      />
-                    </BaseDialog>
+               
 
                 {type === 'release' ? (
                   <div className="flex flex-col gap-y-2 items-center">
