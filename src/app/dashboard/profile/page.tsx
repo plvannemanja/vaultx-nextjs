@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { trimString } from '@/utils/helpers';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '@/app/components/Modules/profile/Tabs';
 import { userServices } from '@/services/supplier';
 import { FavoriteService } from '@/services/FavoriteService';
@@ -87,11 +87,11 @@ export default function Page() {
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
-  const handleLike = async () => {
+  const handleLike = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setLiked(!liked);
-      if (!liked === true) setLikes(likes + 1);
-      else if (!liked === false) setLikes(likes - 1);
+      setLiked(event.target.checked);
+      if (event.target.checked === true) setLikes(likes + 1);
+      else if (event.target.checked === false) setLikes(likes - 1);
       setNow(true);
     } catch (error) {
       console.log(error);
@@ -187,12 +187,13 @@ export default function Page() {
           </div>
           <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
             <span className="font-medium">{likes}</span>
-            <div onClick={() => handleLike()}>
+            <div>
               <input
                 title="like"
                 type="checkbox"
                 className="sr-only"
                 checked={liked}
+                onChange={handleLike}
               />
               <div className="checkmark">
                 {liked ? (

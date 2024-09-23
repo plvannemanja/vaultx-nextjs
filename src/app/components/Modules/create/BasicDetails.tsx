@@ -42,7 +42,6 @@ export default function BasicDetails({
   const [file, setFile] = useState<any>(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [curations, setCurations] = useState([]);
-  const [attachments, setAttachments] = useState([null]);
 
   const cancelChanges = () => {
     setBasicDetail({
@@ -111,35 +110,6 @@ export default function BasicDetails({
     }
   };
 
-  // const handleAttachment = (file: any, index: number) => {
-  //   const attachment = file.target.files[0];
-  //   const fileExtension = attachment?.name.split('.').pop().toLowerCase();
-  //   if (
-  //     attachment &&
-  //     attachment.size < maxFileSize &&
-  //     acceptedFormats.includes(`.${fileExtension}`)
-  //   ) {
-  //     const newAttachments = [...attachments];
-  //     newAttachments[index] = attachment;
-
-  //     setAttachments(newAttachments);
-  //     setBasicDetail({
-  //       ...basicDetail,
-  //       attachments: newAttachments,
-  //     });
-
-  //     // Add a new attachment box only after a file is selected
-  //     if (newAttachments.length === index + 1) {
-  //       const nextAttachments = [...newAttachments, null];
-  //       setAttachments(nextAttachments);
-  //       setBasicDetail({
-  //         ...basicDetail,
-  //         attachments: nextAttachments,
-  //       });
-  //     }
-  //   }
-  // };
-
   const handleAttachment = (file: any, index: number) => {
     const attachment = file.target.files[0];
     const fileExtension = attachment.name.split('.').pop().toLowerCase();
@@ -147,31 +117,22 @@ export default function BasicDetails({
       attachment.size < maxFileSize &&
       acceptedFormats.includes(`.${fileExtension}`)
     ) {
-      const newAttachments = [...attachments];
+      const newAttachments = [...basicDetail?.attachments];
       newAttachments[index] = attachment;
 
-      setAttachments(newAttachments);
       setBasicDetail({
         ...basicDetail,
         attachments: newAttachments,
       });
     }
   };
-  // const addAttachment = () => {
-  //   if (attachmentRef.current) {
-  //     (attachmentRef.current as any).click();
-  //   }
-  // };
 
   const addAttachment = () => {
     if (attachmentRef.current) {
       (attachmentRef.current as any).click();
     }
-    const newAttachments = [...attachments, null];
-    console.log('attachment', newAttachments);
-    console.log('attachment', newAttachments);
+    const newAttachments = [...basicDetail?.attachments, null];
 
-    setAttachments(newAttachments);
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,
@@ -179,9 +140,10 @@ export default function BasicDetails({
   };
 
   const removeAttachment = (index: number) => {
-    const newAttachments = attachments.filter((_, i) => i !== index);
+    const newAttachments = basicDetail?.attachments.filter(
+      (_, i) => i !== index,
+    );
 
-    setAttachments(newAttachments);
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,

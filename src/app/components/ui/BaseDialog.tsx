@@ -18,6 +18,7 @@ interface IBaseDialogProps {
   footer?: React.ReactNode;
   isOpen?: boolean;
   onClose?: (value: boolean) => void; // Function to close the dialog
+  modal?: boolean;
 }
 
 export function BaseDialog({
@@ -29,11 +30,19 @@ export function BaseDialog({
   footer,
   isOpen,
   onClose,
+  modal,
 }: IBaseDialogProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose} modal={modal}>
       {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={`max-w-5xl ${className}`}>
+      <DialogContent
+        className={`max-w-5xl ${className}`}
+        onInteractOutside={(e: Event) => {
+          if (modal) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DialogHeader>
           {title ? (
             <DialogTitle>{title}</DialogTitle>

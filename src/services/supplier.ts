@@ -60,9 +60,7 @@ interface ContactUsParams {
   contactNumber: string;
 }
 
-interface UpdateProfileParams {
-  details: Record<string, unknown>;
-}
+type UpdateProfileParams = Partial<Omit<UserType, '_id'>>;
 
 interface GetArtistsParams {
   data: Record<string, unknown>;
@@ -580,7 +578,7 @@ export const userServices = {
       contactNumber,
     });
   },
-  updateProfile: (details: UpdateProfileParams) => {
+  updateProfile: (details: UpdateProfileParams | FormData) => {
     return axios.post(`${server_uri}/user/updateUserDetails`, details, {
       headers: {
         authorization: 'Bearer ' + getCookie('token'),
