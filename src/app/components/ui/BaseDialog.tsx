@@ -35,7 +35,8 @@ export function BaseDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onClose} modal={modal}>
       {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={`max-w-5xl ${className}`}
+      <DialogContent
+        className={`max-w-5xl ${className}`}
         onInteractOutside={(e: Event) => {
           if (modal) {
             e.preventDefault();

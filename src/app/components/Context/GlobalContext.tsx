@@ -46,8 +46,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const activeAccount = useActiveAccount();
 
   const fetchUser = async () => {
-    if (!activeAccount)
-      return;
+    if (!activeAccount) return;
 
     try {
       const address = checksumAddress(activeAccount?.address) as Address;

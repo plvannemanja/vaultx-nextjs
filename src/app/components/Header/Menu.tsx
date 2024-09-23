@@ -25,10 +25,14 @@ import { WalletId } from 'thirdweb/wallets';
 import { useEffect, useState } from 'react';
 import { chain } from '@/lib/contract';
 import { useGlobalContext } from '../Context/GlobalContext';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { debug } from 'console';
 import { useRouter } from 'next/navigation';
-
 
 interface WalletDetailProps {
   walletId: WalletId;
@@ -130,9 +134,14 @@ export default function Menu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="my-1" onSelect={(event: Event) => {
-          router.push('/dashboard/profile');
-        }}>My Profile</DropdownMenuItem>
+        <DropdownMenuItem
+          className="my-1"
+          onSelect={(event: Event) => {
+            router.push('/dashboard/profile');
+          }}
+        >
+          My Profile
+        </DropdownMenuItem>
         <DropdownMenuItem className="my-1">My Favorite</DropdownMenuItem>
         <DropdownMenuItem className="my-1">My Order</DropdownMenuItem>
         <DropdownMenuItem className="my-1">
@@ -168,12 +177,18 @@ export default function Menu() {
                 <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
                   <TooltipProvider>
                     <Tooltip open={copyHover || copied}>
-                      <TooltipTrigger >
+                      <TooltipTrigger>
                         <Copy
                           size={20}
-                          onMouseEnter={() => { setCopyHover(true) }}
-                          onMouseLeave={() => { setCopyHover(false) }}
-                          onClick={() => { copyText() }}
+                          onMouseEnter={() => {
+                            setCopyHover(true);
+                          }}
+                          onMouseLeave={() => {
+                            setCopyHover(false);
+                          }}
+                          onClick={() => {
+                            copyText();
+                          }}
                         ></Copy>
                       </TooltipTrigger>
                       <TooltipContent>
@@ -198,7 +213,7 @@ export default function Menu() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="justify-start items-center gap-[17px] flex">
                 <div className="w-5 h-5 relative">
-                  <TokenIcon symbol='base' className='text-white'></TokenIcon>
+                  <TokenIcon symbol="base" className="text-white"></TokenIcon>
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">
                   {` ${activeChain.nativeCurrency?.symbol}`}
@@ -207,9 +222,9 @@ export default function Menu() {
               <div className="text-center text-neutral-400 text-base font-semibold capitalize">
                 {data
                   ? Number(
-                    Number(data?.value) /
-                    Math.pow(10, Number(data?.decimals)),
-                  ).toFixed(2)
+                      Number(data?.value) /
+                        Math.pow(10, Number(data?.decimals)),
+                    ).toFixed(2)
                   : 0}
               </div>
             </div>

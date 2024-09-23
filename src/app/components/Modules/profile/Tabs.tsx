@@ -27,6 +27,21 @@ import { CreateSellService } from '@/services/createSellService';
 import Link from 'next/link';
 import ArtistsCard from '../../Cards/ArtistsCard';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popOver';
+import { Button } from '@/components/ui/button';
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useDebounce } from 'use-debounce';
 
 const profileFilters = [
   {
@@ -42,7 +57,7 @@ const profileFilters = [
   {
     label: 'Recently Minted',
     value: -1,
-    param: 'createdAt',
+    param: 'mintingTime',
   },
   {
     label: 'Recently Listed',
@@ -58,6 +73,11 @@ const profileFilters = [
     label: 'Highest Last Sale',
     value: -1,
     param: 'price',
+  },
+  {
+    label: 'NFC Minted',
+    value: -1,
+    param: 'createdAt',
   },
 ];
 
@@ -76,6 +96,28 @@ const earnFilters = [
   },
 ];
 
+const curationFilters = [
+  {
+    label: 'Number of Artworks',
+    value: -1,
+    param: 'artworks',
+  },
+  {
+    label: 'Number of Artists',
+    value: -1,
+    param: 'artists',
+  },
+  {
+    label: 'Highest Volume',
+    value: -1,
+    param: 'volume',
+  },
+  {
+    label: 'New Curation',
+    value: -1,
+    param: 'createdAt',
+  },
+];
 enum ProfileTabs {
   All = 'all',
   Own = 'owned',
@@ -94,18 +136,21 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const { toast } = useToast();
 
   const [favType, setFavType] = useState<string>('nft');
+  const [categoryActive, setCategoryActive] = useState(false);
   const [filters, setFilters] = useState<any>({
     searchInput: '',
     earnFilter: {
       label: earnFilters[0].label,
       value: earnFilters[0].value,
-      active: false,
     },
     filter: {
       value: profileFilters[0].value,
       label: profileFilters[0].label,
       param: profileFilters[0].param,
-      active: false,
+    },
+    curationFilter: {
+      label: curationFilters[0].label,
+      value: curationFilters[0].value,
     },
   });
 
@@ -127,6 +172,22 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
     return false;
   }, [tab]);
+
+  const categoryTab = useMemo(() => {
+    if (tab == ProfileTabs.Earn) return 'earnFilter';
+    else if (tab == ProfileTabs.Curation) return 'curationFilter';
+
+    return 'filter';
+  }, [tab]);
+
+  const categoryList = useMemo(() => {
+    if (tab == ProfileTabs.Earn) return earnFilters;
+    else if (tab == ProfileTabs.Curation) return curationFilters;
+
+    return profileFilters;
+  }, [tab]);
+
+  const [debouncedFilter] = useDebounce(filters, 1000);
 
   const fetchUser = async () => {
     try {
@@ -356,7 +417,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     }
   };
 
-  useEffect(() => {
+  const fetchData = () => {
     toast({
       title: 'Loading...',
     });
@@ -392,7 +453,11 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     if (tab === ProfileTabs.Earn) {
       fetchEarnings();
     }
-  }, [tab]);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [tab, debouncedFilter]);
+
   return (
     <div className="flex flex-col gap-y-4">
       {/* Filters logic */}
@@ -426,124 +491,84 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           <input
             placeholder="Search by name or trait..."
             className="py-2 w-full bg-transparent border-none outline-none focus:outline-none"
+            value={filters.searchInput}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFilters({
+                ...filters,
+                searchInput: e.target.value,
+              });
+            }}
           />
         </div>
 
-        <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-dark text-white">
-          <p className="text-sm w-[70%]">
-            {isEarn ? filters.earnFilter.label : filters.filter.label}
-          </p>
-
-          {isEarn ? (
-            <>
-              {filters.earnFilter.active ? (
-                <ChevronUpIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      earnFilter: {
-                        ...filters.earnFilter,
-                        active: !filters.earnFilter.active,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      earnFilter: {
-                        ...filters.earnFilter,
-                        active: !filters.earnFilter.active,
-                      },
-                    });
-                  }}
-                />
-              )}
-
-              {filters.earnFilter.active && (
-                <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                  {earnFilters.map((item, index) => (
-                    <span
-                      key={index}
-                      onClick={() => {
-                        setFilters({
-                          ...filters,
-                          earnFilter: {
-                            label: item.label,
-                            value: item.value,
-                            active: false,
-                          },
-                        });
-                      }}
-                      className="text-sm cursor-pointer"
-                    >
-                      {item.label}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {filters.filter.active ? (
-                <ChevronUpIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      filter: {
-                        ...filters.filter,
-                        active: !filters.filter.active,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      filter: {
-                        ...filters.filter,
-                        active: !filters.filter.active,
-                      },
-                    });
-                  }}
-                />
-              )}
-
-              {filters.filter.active && (
-                <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                  {profileFilters.map((item, index) => (
-                    <span
-                      key={index}
-                      onClick={() => {
-                        setFilters({
-                          ...filters,
-                          filter: {
-                            label: item.label,
-                            value: item.value,
-                            active: false,
-                          },
-                        });
-                      }}
-                      className="text-sm cursor-pointer"
-                    >
-                      {item.label}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+        <div className="relative flex rounded min-w-[18rem] justify-between items-center p-0 bg-dark text-white">
+          <Popover
+            open={categoryActive}
+            onOpenChange={(val) => {
+              setCategoryActive(val);
+            }}
+          >
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                className="w-full bg-dark justify-between"
+              >
+                {filters[categoryTab]?.label}
+                <ChevronUpIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0">
+              <Command className="w-full">
+                <CommandList>
+                  <CommandGroup>
+                    {categoryList &&
+                      categoryList.map((item, index) => (
+                        <CommandItem
+                          key={index}
+                          value={item.label}
+                          onSelect={() => {
+                            setCategoryActive(false);
+                            if (isEarn) {
+                              setFilters({
+                                ...filters,
+                                earnFilter: {
+                                  label: item.label,
+                                  value: item.value,
+                                  param: item.param,
+                                },
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                [categoryTab]: {
+                                  label: item.label,
+                                  value: item.value,
+                                  param: item.param,
+                                },
+                              });
+                            }
+                          }}
+                          className="text-sm cursor-pointer"
+                        >
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4',
+                              filters[categoryTab]?.label === item.label
+                                ? 'opacity-100'
+                                : 'opacity-0',
+                            )}
+                          />
+                          {item.label}
+                        </CommandItem>
+                      ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-
       {/* User section */}
       {tab === ProfileTabs.All && data[ProfileTabs.All] ? (
         <div className="flex gap-5 my-4">

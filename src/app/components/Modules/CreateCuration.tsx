@@ -43,7 +43,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   });
   const [status, setStatus] = useState({
     error: false,
-    loading: true,
+    loading: false,
     active: true,
   });
 
@@ -96,14 +96,34 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
     try {
       const result = createCurationSchema.safeParse(formData);
       if (
-        !result.success &&
-        !formData.logo &&
-        !formData.bannerImage &&
+        !result.success ||
+        !formData.logo ||
+        !formData.bannerImage ||
         !formData.descriptionImage
       ) {
+        let data = [];
+        if (!result.success) data = JSON.parse(result.error.message);
+
+        if (!formData.logo) {
+          data.push({
+            path: ['Logo'],
+          });
+        }
+
+        if (!formData.bannerImage) {
+          data.push({
+            path: ['Banner image'],
+          });
+        }
+
+        if (!formData.descriptionImage) {
+          data.push({
+            path: ['Description image'],
+          });
+        }
         setErrors({
           active: true,
-          data: JSON.parse(result.error.message),
+          data,
         });
         return null;
       }
@@ -145,10 +165,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       metaData = removeEmptyStrings(metaData);
       const metaUri = await uploadMetaData(metaData);
 
-      debugger;
       // check cancel
-      if (!status.loading)
-        return null;
+      if (!status.loading) return null;
       if (activeAccount) {
         try {
           const result = await createCollection(
@@ -268,10 +286,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       {status.active && (
         <BaseDialog
           isOpen={status.loading && !status.error}
-          onClose={(val) =>
-            setStatus({ ...status, loading: val })
-          }
-          className='bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden'
+          onClose={(val) => setStatus({ ...status, loading: val })}
+          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
           modal={status.loading}
         >
           <CurationLoader status={status} edit={editMode ? true : false} />
@@ -282,7 +298,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         <BaseDialog
           isOpen={errors.active}
           onClose={(val) => setErrors({ active: val, data: [] })}
-          className='bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden'
+          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
         >
           <ErrorModal
             data={errors.data}

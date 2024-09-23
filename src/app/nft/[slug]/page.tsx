@@ -172,62 +172,67 @@ function PageDetail({ params }: { params: { slug: string } }) {
                         <InformationCircleIcon width={20} height={20} />
                         Details
                       </span>
-                        <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
-                        />
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
+                      />
                     </div>
                   </DisclosureButton>
                   <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <img
-                        src="/icons/ether.svg"
-                        alt="matic"
-                        className="w-[1.2rem] h-8 fill-white"
-                      />
-                      <Label className="font-extrabold text-[14px]">Erc721</Label>
-                    </div>
-                  </div>
-                  <hr/>
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <img
-                        src="/icons/ether.svg"
-                        alt="matic"
-                        className="w-[1.2rem] h-8 fill-white"
-                      />
-                      <Label className="font-medium">View on Polygon Scan</Label>
-                      <a href={data?.minted ? '?a=' : ''}>
-                        <ArrowTopRightOnSquareIcon
-                          width={20}
-                          height={20}
-                          className="fill-[#fff]"
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <img
+                          src="/icons/ether.svg"
+                          alt="matic"
+                          className="w-[1.2rem] h-8 fill-white"
                         />
-                      </a>
+                        <Label className="font-extrabold text-[14px]">
+                          Erc721
+                        </Label>
+                      </div>
                     </div>
-                  </div>
-                  <hr/>
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <EyeIcon width={20} height={20} />
-                      <Label className="font-medium">Open Original On IPFS</Label>
-                      <a target="_blank" href={data.uri}>
-                        <ArrowTopRightOnSquareIcon
-                          width={20}
-                          height={20}
-                          className="fill-[#fff]"
+                    <hr />
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <img
+                          src="/icons/ether.svg"
+                          alt="matic"
+                          className="w-[1.2rem] h-8 fill-white"
                         />
-                      </a>
+                        <Label className="font-medium">
+                          View on Polygon Scan
+                        </Label>
+                        <a href={data?.minted ? '?a=' : ''}>
+                          <ArrowTopRightOnSquareIcon
+                            width={20}
+                            height={20}
+                            className="fill-[#fff]"
+                          />
+                        </a>
+                      </div>
                     </div>
-                  </div>  
+                    <hr />
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <EyeIcon width={20} height={20} />
+                        <Label className="font-medium">
+                          Open Original On IPFS
+                        </Label>
+                        <a target="_blank" href={data.uri}>
+                          <ArrowTopRightOnSquareIcon
+                            width={20}
+                            height={20}
+                            className="fill-[#fff]"
+                          />
+                        </a>
+                      </div>
+                    </div>
                   </DisclosurePanel>
                 </>
               )}
             </Disclosure>
           </div>
-          
         </>
       )}
     </div>

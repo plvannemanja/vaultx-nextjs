@@ -99,18 +99,18 @@ export default function Page() {
       <div className="flex gap-4 flex-wrap my-4 justify-center md:justify-between">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-            return (
-              <div
-                className="w-[17rem]"
-                key={index}
-                onClick={() => {
-                  router.push(`/nft/${nft._id}`);
-                }}
-              >
-                <NftCard data={nft} />
-              </div>
-            );
-          })
+              return (
+                <div
+                  className="w-[17rem]"
+                  key={index}
+                  onClick={() => {
+                    router.push(`/nft/${nft._id}`);
+                  }}
+                >
+                  <NftCard data={nft} />
+                </div>
+              );
+            })
           : null}
       </div>
     </div>

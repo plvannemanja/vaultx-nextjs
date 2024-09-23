@@ -30,64 +30,65 @@ export default function NFTDescription() {
         })}
       </div>
       <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <div className="flex w-full justify-between">
-                      <span>
-                      Properties
-                      </span>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
-                      />
-                    </div>
-                  </DisclosureButton>
-                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <div className="flex gap-4 flex-wrap">
-                    {data.attributes.map((attr, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400"
-                        >
-                          <p className="text-lg font-medium text-center">{attr.type}</p>
-                          <p className="font-medium text-center">{attr.value}</p>
-                        </div>
-                      );
-                    })}
-                    {data.attributes.length === 0 && <p>No properties available</p>}
-                  </div>
-                  
-                  </DisclosurePanel>
-                </>
-              )}
-            </Disclosure>
+        <Disclosure as="div" defaultOpen={true}>
+          {({ open }) => (
+            <>
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                <div className="flex w-full justify-between">
+                  <span>Properties</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
+                  />
+                </div>
+              </DisclosureButton>
+              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                <div className="flex gap-4 flex-wrap">
+                  {data.attributes.map((attr, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="w-[18rem] py-4 rounded-lg flex justify-center flex-col gap-y-2 border-2 border-gray-400"
+                      >
+                        <p className="text-lg font-medium text-center">
+                          {attr.type}
+                        </p>
+                        <p className="font-medium text-center">{attr.value}</p>
+                      </div>
+                    );
+                  })}
+                  {data.attributes.length === 0 && (
+                    <p>No properties available</p>
+                  )}
+                </div>
+              </DisclosurePanel>
+            </>
+          )}
+        </Disclosure>
       </div>
       <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <div className="flex w-full justify-between">
-                      <span>
-                      Description
-                      </span>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
-                      />
-                    </div>
-                  </DisclosureButton>
-                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <p className="text-[#ffffff53] text-[16px] azeret-mono-font">{data.description}</p>
-                  </DisclosurePanel>
-                </>
-              )}
-            </Disclosure>
+        <Disclosure as="div" defaultOpen={true}>
+          {({ open }) => (
+            <>
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                <div className="flex w-full justify-between">
+                  <span>Description</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
+                  />
+                </div>
+              </DisclosureButton>
+              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
+                  {data.description}
+                </p>
+              </DisclosurePanel>
+            </>
+          )}
+        </Disclosure>
       </div>
     </>
   );

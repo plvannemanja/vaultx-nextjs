@@ -238,7 +238,9 @@ export default function NFTMain({
 
         <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
           <div className="w-full flex flex-col gap-y-6">
-            <p className="text-[32px] font-extrabold leading-[43.2px]">{data.name}</p>
+            <p className="text-[32px] font-extrabold leading-[43.2px]">
+              {data.name}
+            </p>
             <div className="flex justify-between">
               <div className="flex gap-2 items-center">
                 {data?.owner?.avatar?.url ? (
@@ -249,8 +251,12 @@ export default function NFTMain({
                   />
                 ) : null}
                 <div className="flex flex-col gap-y-1 text-sm">
-                  <p className="text-[12px] text-gray-400 azeret-mono-font">Owned by:</p>
-                  <p className="text-[12px] azeret-mono-font text-[#fff]">{data?.owner?.username}</p>
+                  <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    Owned by:
+                  </p>
+                  <p className="text-[12px] azeret-mono-font text-[#fff]">
+                    {data?.owner?.username}
+                  </p>
                 </div>
               </div>
 
@@ -263,8 +269,12 @@ export default function NFTMain({
                   />
                 ) : null}
                 <div className="flex flex-col gap-y-1 text-sm">
-                  <p className="text-[12px] text-gray-400 azeret-mono-font">Created by:</p>
-                  <p className="text-[12px] azeret-mono-font text-[#fff]">{data?.mintedBy?.username}</p>
+                  <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    Created by:
+                  </p>
+                  <p className="text-[12px] azeret-mono-font text-[#fff]">
+                    {data?.mintedBy?.username}
+                  </p>
                 </div>
               </div>
             </div>
@@ -295,7 +305,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Buy Now"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -317,12 +327,12 @@ export default function NFTMain({
                         <BaseButton
                           title="Bid"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                     >
-                      <BidModal title={data.name} update={() => { }} />
+                      <BidModal title={data.name} update={() => {}} />
                     </BaseDialog>
                   </div>
                 ) : null}
@@ -335,7 +345,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Release Escrow"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.release}
@@ -356,7 +366,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Cancel Order"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.cancel}
@@ -381,7 +391,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Put On Sale"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.resell}
@@ -427,7 +437,7 @@ export default function NFTMain({
                     <BaseButton
                       title="Cancel Requested"
                       variant="primary"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 ) : null}
@@ -439,7 +449,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Escrow Release Request"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
@@ -454,7 +464,7 @@ export default function NFTMain({
                     <BaseButton
                       title="In Escrow"
                       variant="primary"
-                      onClick={() => { }}
+                      onClick={() => {}}
                     />
                   </div>
                 ) : null}
@@ -492,35 +502,62 @@ export default function NFTMain({
             <hr />
             <div className="grid grid-cols-12 w-full gap-5 justify-between ">
               <div className="flex flex-col col-span-8 gap-y-[10px]">
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                   <span className="font-medium">Artist</span>
-                  <span className="text-gray-400 azeret-mono-font">{data.name}</span>
+                  <span className="text-gray-400 azeret-mono-font">
+                    {data.name}
+                  </span>
                 </div>
                 <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                <span className="font-medium">Shipping Country</span>
+                  <span className="font-medium">Shipping Country</span>
                   <span className="text-gray-400 azeret-mono-font">
                     {data.saleId ? data.saleId.sellerShippingId.country : ''}
                   </span>
                 </div>
                 <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                <span className="font-medium">Royalties</span>
-                  <span className="text-gray-400 azeret-mono-font">{data.royalty}%</span>
+                  <span className="font-medium">Royalties</span>
+                  <span className="text-gray-400 azeret-mono-font">
+                    {data.royalty}%
+                  </span>
                 </div>
               </div>
               <div className="flex flex-col col-span-4 gap-y-3">
                 <div className="flex flex-col px-4 py-4 rounded-md justify-between border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                   <p className="font-medium">Size</p>
-                      <div className="mt-2 flex flex-col gap-y-3 ">
-                        <p className=""><span className="w-[58px] inline-block">Length</span><span className="text-center w-[20px] inline-block">:</span>{data?.shippingInformation?.lengths}cm</p>
-                        <p><span className="w-[58px] inline-block">Height</span><span className="text-center w-[20px] inline-block ">:</span> {data?.shippingInformation?.height}cm</p>
-                        <p> <span className="w-[58px] inline-block">Width</span><span className="text-center w-[20px] inline-block ">:</span>{data?.shippingInformation?.width}cm</p>
-                        <p><span className="w-[58px] inline-block">Weight</span> <span className="text-center w-[20px] inline-block ">:</span>{data?.shippingInformation?.weight}cm</p>
-                      </div>
+                  <div className="mt-2 flex flex-col gap-y-3 ">
+                    <p className="">
+                      <span className="w-[58px] inline-block">Length</span>
+                      <span className="text-center w-[20px] inline-block">
+                        :
+                      </span>
+                      {data?.shippingInformation?.lengths}cm
+                    </p>
+                    <p>
+                      <span className="w-[58px] inline-block">Height</span>
+                      <span className="text-center w-[20px] inline-block ">
+                        :
+                      </span>{' '}
+                      {data?.shippingInformation?.height}cm
+                    </p>
+                    <p>
+                      {' '}
+                      <span className="w-[58px] inline-block">Width</span>
+                      <span className="text-center w-[20px] inline-block ">
+                        :
+                      </span>
+                      {data?.shippingInformation?.width}cm
+                    </p>
+                    <p>
+                      <span className="w-[58px] inline-block">Weight</span>{' '}
+                      <span className="text-center w-[20px] inline-block ">
+                        :
+                      </span>
+                      {data?.shippingInformation?.weight}cm
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-           
-            
           </div>
         </div>
       </div>
