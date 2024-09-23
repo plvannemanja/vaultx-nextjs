@@ -14,16 +14,13 @@ import CurationLoader from './create/CurationLoader';
 import AddNew from '../Icons/AddNew';
 import Upload from '../Icons/Upload';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
-import { removeEmptyStrings } from '@/utils/helpers';
+import { acceptedFormats, maxFileSize, removeEmptyStrings } from '@/utils/helpers';
 import { useActiveAccount } from 'thirdweb/react';
 import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
 import ConnectedCard from '../Cards/ConnectedCard';
 import { BaseDialog } from '../ui/BaseDialog';
 import { stat } from 'fs';
-// 1GB file size
-const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
 const createCurationSchema = z.object({
   name: z.string(),

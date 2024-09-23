@@ -12,10 +12,8 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { BaseDialog } from '../../ui/BaseDialog';
 import CancelModal from './CancelModal';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 
-// 1GB file size
-const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
 
 const basicDetailsSchema = z.object({
   productName: z.string(),
