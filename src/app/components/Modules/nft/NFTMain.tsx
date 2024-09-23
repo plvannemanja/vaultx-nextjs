@@ -42,6 +42,7 @@ interface IModalStatus {
   resell: boolean;
   buy: boolean;
   release: boolean;
+  escrowRelease: boolean;
 }
 
 export default function NFTMain({
@@ -67,6 +68,7 @@ export default function NFTMain({
     resell: false,
     buy: false,
     release: false,
+    escrowRelease: false,
   });
   const activeAccount = useActiveAccount();
   const [step, setStep] = useState(1); // Step state in the parent
@@ -433,7 +435,7 @@ export default function NFTMain({
                     </BaseDialog>
                   </div>
                 ) : null}
-                
+
                 {type === 'remove' && (
                   <div className="flex flex-col gap-x-2 items-center">
                     <BaseDialog
@@ -470,8 +472,7 @@ export default function NFTMain({
                   </div>
                 ) : null}
 
-                {type === 'EscrowReleaseRequest' ? (
-                  <div className="flex flex-col gap-x-2 items-center">
+<div className="flex flex-col gap-x-2 items-center">
                     <BaseDialog
                       trigger={
                         <BaseButton
@@ -486,7 +487,30 @@ export default function NFTMain({
                       <EscrowRequestModal />
                     </BaseDialog>
                   </div>
+
+                {type === 'escrowRelease' ? (
+                  <div className="flex flex-col gap-x-2 items-center">
+                    <BaseDialog
+                      trigger={
+                        <BaseButton
+                          title="Escrow Release Request"
+                          variant="primary"
+                          className={'!rounded-[14px]'}
+                          onClick={() => {}}
+                        />
+                      }
+                      onClose={() => {
+                        setModalStatus({ ...modalStatus, escrowRelease: false });
+                      }}
+                      className="bg-[#161616] max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
+                    >
+                      <EscrowRequestModal onClose={() => {
+                        setModalStatus({ ...modalStatus, escrowRelease: false });
+                      }} />
+                    </BaseDialog>
+                  </div>
                 ) : null}
+
 
                 {type === 'inEscrow' ? (
                   <div className="flex flex-col gap-x-2 items-center">

@@ -485,6 +485,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </>
       )}
 
+
       {step === 2 && (
         <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
       )}
