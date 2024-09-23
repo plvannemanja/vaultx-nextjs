@@ -384,7 +384,7 @@ export default function AdvanceDetails({
             {unlockableFiles.map((item: any, index: number) => {
               if (index == 0) {
                 return (
-                  <div className="flex gap-x-4 items-center">
+                  <div className="flex gap-x-4 items-center" key={index}>
                     <FileInput
                       onFileSelect={(file: any) => handleFileChange(file, 0)}
                       maxSizeInBytes={1024 * 1024}
