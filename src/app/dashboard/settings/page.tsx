@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { checkUrl } from '@/utils/helpers';
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import { ChevronUpIcon } from 'lucide-react';
+import PropertiesTemplate from '@/app/components/Modules/create/PropertiesTemplate';
 
 export default function Page() {
   const { toast } = useToast();
@@ -118,7 +119,7 @@ export default function Page() {
     if (response.data) {
       const user = response.data.user;
       setFormData({
-        website: user.Website,
+        website: user.website,
         bio: user.bio,
         email: user.email,
         username: user.username,
@@ -362,10 +363,9 @@ export default function Page() {
             </div>
           </div>
 
-          {/* <ShippingInfo />
-          <ContactInfo /> */}
-          {/* <PropertiesInfo close={() => {}} onTemplateAdd={() => {}} /> */}
-
+          <ShippingInfo />
+          <ContactInfo />
+          <PropertiesTemplate />
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton
               title="Cancel"
