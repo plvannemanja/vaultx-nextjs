@@ -38,6 +38,7 @@ export default function BasicDetails({
   const { fee } = useGlobalContext();
   const fileInputRef = useRef(null);
   const attachmentRef = useRef(null);
+  const [addAttachId, setAddAttachId] = useState(0);
 
   const [file, setFile] = useState<any>(null);
   const [imageSrc, setImageSrc] = useState(null);
@@ -118,7 +119,7 @@ export default function BasicDetails({
       acceptedFormats.includes(`.${fileExtension}`)
     ) {
       const newAttachments = [...basicDetail?.attachments];
-      newAttachments[index] = attachment;
+      newAttachments[addAttachId] = attachment;
 
       setBasicDetail({
         ...basicDetail,
@@ -127,9 +128,13 @@ export default function BasicDetails({
     }
   };
 
-  const addAttachment = () => {
+  const addAttachment = (index) => {
     if (attachmentRef.current) {
       (attachmentRef.current as any).click();
+    }
+    setAddAttachId(index);
+    if (basicDetail?.attachments.length - 1 > index) {
+      return;
     }
     const newAttachments = [...basicDetail?.attachments, null];
 
@@ -356,10 +361,10 @@ export default function BasicDetails({
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any, index: number) => (
-                    <option key={index} value={JSON.stringify(item)}>
-                      {item.name}
-                    </option>
-                  ))
+                  <option key={index} value={JSON.stringify(item)}>
+                    {item.name}
+                  </option>
+                ))
                 : null}
             </select>
           </div>
@@ -375,7 +380,7 @@ export default function BasicDetails({
                       type="file"
                       className="hidden"
                       title="file"
-                      ref={attachmentRef}
+                      ref={index === basicDetail?.attachments.length - 1 ? attachmentRef : null}
                       onChange={(e) => handleAttachment(e, index)}
                     />
                     {!attachment ? (
@@ -394,21 +399,23 @@ export default function BasicDetails({
                     {attachment ? (
                       <div
                         className="flex gap-x-2 justify-center items-center cursor-pointer"
-                        onClick={() => removeAttachment(index)}
                       >
-                        <span className="text-neon font-bold text-[13px]">
+                        <span className="text-neon font-bold text-[13px]"
+                          onClick={() => addAttachment(index)}
+                        >
                           Change
                         </span>
                         <img
                           src="/icons/trash.svg"
                           alt="attachment"
                           className="w-5 h-5"
+                          onClick={() => removeAttachment(index)}
                         />
                       </div>
                     ) : (
                       <div
                         className="flex gap-x-2 justify-center items-center cursor-pointer"
-                        onClick={() => addAttachment()}
+                        onClick={() => addAttachment(index)}
                       >
                         <span className="text-neon  font-bold text-[13px]">
                           Upload
