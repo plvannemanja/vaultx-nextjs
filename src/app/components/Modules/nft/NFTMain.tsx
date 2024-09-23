@@ -352,7 +352,7 @@ export default function NFTMain({
                           title="Buy Now"
                           className={'rounded-[14px]'}
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -374,15 +374,16 @@ export default function NFTMain({
                         <BaseButton
                           title="Bid"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                     >
-                      <BidModal title={data.name} update={() => {}} />
+                      <BidModal title={data.name} update={() => { }} />
                     </BaseDialog>
                   </div>
                 ) : null}
+
 
                 {type === 'release' ? (
                   <div className="flex flex-col gap-y-2 items-center">
@@ -393,7 +394,7 @@ export default function NFTMain({
                           title="Release Escrow"
                           variant="primary"
                           className={'rounded-[14px]'}
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       isOpen={modalStatus.release}
@@ -414,7 +415,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Cancel Order"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       isOpen={modalStatus.cancel}
@@ -442,7 +443,7 @@ export default function NFTMain({
                           title="Put On Sale"
                           variant="primary"
                           className={'rounded-[14px]'}
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       isOpen={modalStatus.resell}
@@ -491,27 +492,11 @@ export default function NFTMain({
                     <BaseButton
                       title="Cancel Requested"
                       variant="primary"
-                      onClick={() => {}}
+                      onClick={() => { }}
                       className={'!rounded-[14px]'}
                     />
                   </div>
                 ) : null}
-
-                <div className="flex flex-col gap-x-2 items-center">
-                  <BaseDialog
-                    trigger={
-                      <BaseButton
-                        title="Escrow Release Request"
-                        variant="primary"
-                        className={'!rounded-[14px]'}
-                        onClick={() => {}}
-                      />
-                    }
-                    className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
-                  >
-                    <EscrowRequestModal onClose={() => {}} />
-                  </BaseDialog>
-                </div>
 
                 {type === 'escrowRelease' ? (
                   <div className="flex flex-col gap-x-2 items-center">
@@ -521,7 +506,7 @@ export default function NFTMain({
                           title="Escrow Release Request"
                           variant="primary"
                           className={'!rounded-[14px]'}
-                          onClick={() => {}}
+                          onClick={() => { }}
                         />
                       }
                       onClose={() => {
@@ -550,7 +535,7 @@ export default function NFTMain({
                       title="In Escrow"
                       className={'!rounded-[14px]'}
                       variant="primary"
-                      onClick={() => {}}
+                      onClick={() => { }}
                     />
                   </div>
                 ) : null}
