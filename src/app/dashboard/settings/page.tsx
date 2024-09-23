@@ -112,7 +112,6 @@ export default function Page() {
     }
   };
 
-
   const fetchUserDetails = async () => {
     const response = await userServices.getSingleUser();
 
@@ -144,7 +143,7 @@ export default function Page() {
 
         <div className="w-full flex flex-col gap-y-5 mt-5">
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <div className='self-stretch justify-between items-center inline-flex'>
+            <div className="self-stretch justify-between items-center inline-flex">
               <Label className="text-lg font-medium">Edit your avatar</Label>
               <ChevronUpIcon className="ml-2 h-4 w-4 opacity-50" />
             </div>
@@ -172,8 +171,10 @@ export default function Page() {
           </div>
 
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <div className='self-stretch justify-between items-center inline-flex'>
-              <Label className="text-lg font-medium">Edit your cover image</Label>
+            <div className="self-stretch justify-between items-center inline-flex">
+              <Label className="text-lg font-medium">
+                Edit your cover image
+              </Label>
               <ChevronUpIcon className="ml-2 h-4 w-4 opacity-50" />
             </div>
             <hr className="border-gray-400 opacity-10" />
@@ -200,7 +201,7 @@ export default function Page() {
           </div>
 
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <div className='self-stretch justify-between items-center inline-flex'>
+            <div className="self-stretch justify-between items-center inline-flex">
               <Label className="text-lg font-medium">Basic Information</Label>
               <ChevronUpIcon className="ml-2 h-4 w-4 opacity-50" />
             </div>
@@ -248,15 +249,11 @@ export default function Page() {
           </div>
 
           <div className="w-full rounded-md px-4 py-3 bg-dark flex flex-col gap-y-2">
-            <div className='self-stretch justify-between items-center inline-flex'>
+            <div className="self-stretch justify-between items-center inline-flex">
               <Label className="text-lg font-medium">Your links</Label>
-              <div
-                className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px]"
-              >
+              <div className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px]">
                 <img src="/icons/add-new.svg" className="w-6 h-6" />
-                <p className="text-center text-sm text-[#DDF247]">
-                  Add New
-                </p>
+                <p className="text-center text-sm text-[#DDF247]">Add New</p>
                 <ChevronUpIcon className="ml-2 h-4 w-4 opacity-50" />
               </div>
             </div>

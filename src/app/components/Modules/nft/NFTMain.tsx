@@ -509,7 +509,7 @@ export default function NFTMain({
                     }
                     className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                   >
-                    <EscrowRequestModal />
+                    <EscrowRequestModal onClose={() => {}} />
                   </BaseDialog>
                 </div>
 

@@ -91,8 +91,8 @@ export default function SideBar({ className }: { className?: string }) {
             <div
               key={index}
               className={cn(
-                "flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative",
-                pathname === `/dashboard/${link.value}` ? 'text-[#ddf247]' : ""
+                'flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative',
+                pathname === `/dashboard/${link.value}` ? 'text-[#ddf247]' : '',
               )}
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
@@ -132,8 +132,8 @@ export default function SideBar({ className }: { className?: string }) {
             <div
               key={index}
               className={cn(
-                "flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative",
-                pathname === `/dashboard/${link.value}` && 'text-[#ddf247]'
+                'flex items-center gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative',
+                pathname === `/dashboard/${link.value}` && 'text-[#ddf247]',
               )}
               onMouseEnter={() => setHovered(link.value)}
               onMouseLeave={() => setHovered(null)}
