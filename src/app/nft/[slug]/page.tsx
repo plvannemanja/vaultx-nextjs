@@ -166,7 +166,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
-                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#fff] ">
+                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left text-lg font-medium text-[#fff] text-[18px] border-b border-[#fff] ">
                     <div className="flex w-full justify-between">
                       <span className="text-white flex items-center gap-2 content-center">
                         <InformationCircleIcon width={20} height={20} />
