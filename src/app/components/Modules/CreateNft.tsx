@@ -126,18 +126,18 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           );
         }
         if (nftContext.advancedOptions.royalties) {
-          if (!nftContext.advancedDetails.royalty) return;
+          if (!nftContext.advancedDetails.royalty) throw new Error('royalty is invalid');
           data.append('royalty', nftContext.advancedDetails.royalty as any);
         }
-        if (nftContext.advancedDetails.category) {
-          if (!nftContext.advancedDetails.category) return;
-          data.append('category', nftContext.advancedDetails.category.category);
+        if (nftContext.advancedOptions.category) {
+          if (!nftContext.advancedDetails.category) throw new Error('category is invalid');
+          data.append('category', nftContext.advancedDetails.category);
         }
-        if (nftContext.advancedDetails.unlockable) {
-          if (!nftContext.advancedDetails.category.unlockable) return;
+        if (nftContext.advancedOptions.unlockable) {
+          if (!nftContext.advancedDetails.unlockable) throw new Error('certificate is invalid');
           data.append(
             'unlockableContent',
-            nftContext.advancedDetails.category.unlockable,
+            nftContext.advancedDetails.unlockable,
           );
           for (
             let i = 0;

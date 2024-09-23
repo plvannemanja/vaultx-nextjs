@@ -13,8 +13,7 @@ import { BaseDialog } from '../../ui/BaseDialog';
 import PropertiesInfo from '../Properties';
 import { isAddress } from 'thirdweb';
 import { isValidNumber } from '@/utils/helpers';
-
-const category = ['Fine Art', 'Abstract Art', 'Pop Art', 'Test Category'];
+import { CategoryService } from '@/services/catergoryService';
 
 export default function AdvanceDetails({
   handler,
@@ -32,7 +31,8 @@ export default function AdvanceDetails({
     setAdvancedDetails,
   } = useCreateNFT();
 
-  const [unlockableFiles, setUnlockableFiles] = useState(
+  const [categories, setCategories] = useState<any[]>([]);
+  const [unlockableFiles, setUnlockableFiles] = useState<any[]>(
     advancedDetails.certificates,
   );
 
@@ -61,10 +61,6 @@ export default function AdvanceDetails({
     });
 
     setUnlockableFiles(newFiles);
-    setAdvancedDetails({
-      ...advancedDetails,
-      certificates: newFiles,
-    });
   };
 
   const removeUnlockable = (index: number) => {
@@ -73,10 +69,6 @@ export default function AdvanceDetails({
     );
 
     setUnlockableFiles(newFiles);
-    setAdvancedDetails({
-      ...advancedDetails,
-      certificates: newFiles,
-    });
   };
 
   const addSplit = () => {
@@ -194,6 +186,23 @@ export default function AdvanceDetails({
       ]);
     }
   }, [options.split]);
+
+  const fetchCategories = async () => {
+    try {
+      const categoryService = new CategoryService();
+      const {
+        data: { categories },
+      } = await categoryService.getAllCategories(0, 0);
+      setCategories(categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-3 grid grid-cols-1 lg:grid-cols-3 flex-wrap">
@@ -313,7 +322,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 flex">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
@@ -342,32 +351,66 @@ export default function AdvanceDetails({
               value={advancedDetails.unlockable}
               placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
             />
-            <div className="flex gap-x-4 items-center">
-              <FileInput
-                onFileSelect={(file: any) => handleFileChange(file, 0)}
-                maxSizeInBytes={1024 * 1024}
-              />
-              <img
-                src="/icons/trash.svg"
-                alt="trash"
-                className="w-6 h-6 cursor-pointer"
-                onClick={() => removeUnlockable(0)}
-              />
-              <div
-                className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                onClick={() => {
-                  setUnlockableFiles([...unlockableFiles, null]);
-                  setAdvancedDetails({
-                    ...advancedDetails,
-                    certificates: [...unlockableFiles, null],
-                  });
-                }}
-              >
-                <img src="/icons/add-new.svg" alt="plus" className="w-4 h-4" />
-                <p className="text-neon">Add</p>
-              </div>
-            </div>
-            {advancedDetails.certificates.map((item: any, index: number) => {
+            {
+              unlockableFiles.length == 0 && (
+                <div className="flex gap-x-4 items-center">
+                  <FileInput
+                    onFileSelect={(file: any) => handleFileChange(file, 0)}
+                    maxSizeInBytes={1024 * 1024}
+                    deSelect={true}
+                  />
+                  <img
+                    src="/icons/trash.svg"
+                    alt="trash"
+                    className="w-6 h-6 cursor-pointer"
+                    onClick={() => removeUnlockable(0)}
+                  />
+                  <div
+                    className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                    onClick={() => {
+                      if (unlockableFiles.length === 0) {
+                        setUnlockableFiles([null, null]);
+                      } else {
+                        setUnlockableFiles([...unlockableFiles, null]);
+                      }
+                    }}
+                  >
+                    <img src="/icons/add-new.svg" alt="plus" className="w-4 h-4" />
+                    <p className="text-neon">Add</p>
+                  </div>
+                </div>
+              )
+            }
+            {unlockableFiles.map((item: any, index: number) => {
+              if (index == 0) {
+                return (
+                  <div className="flex gap-x-4 items-center">
+                    <FileInput
+                      onFileSelect={(file: any) => handleFileChange(file, 0)}
+                      maxSizeInBytes={1024 * 1024}
+                    />
+                    <img
+                      src="/icons/trash.svg"
+                      alt="trash"
+                      className="w-6 h-6 cursor-pointer"
+                      onClick={() => removeUnlockable(0)}
+                    />
+                    <div
+                      className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                      onClick={() => {
+                        if (unlockableFiles.length === 0) {
+                          setUnlockableFiles([null, null]);
+                        } else {
+                          setUnlockableFiles([...unlockableFiles, null]);
+                        }
+                      }}
+                    >
+                      <img src="/icons/add-new.svg" alt="plus" className="w-4 h-4" />
+                      <p className="text-neon">Add</p>
+                    </div>
+                  </div>
+                );
+              }
               return (
                 <div className="flex gap-x-4 items-center" key={index}>
                   <FileInput
@@ -404,9 +447,9 @@ export default function AdvanceDetails({
               value={advancedDetails.category}
             >
               <option value="">Select</option>
-              {category.map((item: any) => (
-                <option key={item} value={item}>
-                  {item}
+              {categories.map((item: any) => (
+                <option key={item._id} value={item._id}>
+                  {item.name}
                 </option>
               ))}
             </select>
