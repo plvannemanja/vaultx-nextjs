@@ -7,6 +7,8 @@ import { useActiveAccount } from 'thirdweb/react';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { CreateSellService } from '@/services/createSellService';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import { contract } from '@/lib/contract';
+import { formatEther, parseEther } from 'viem';
 
 export default function EscrowModal({
   onClose,
@@ -23,23 +25,61 @@ export default function EscrowModal({
   const release = async () => {
     try {
       setStep(2);
-      const { transactionHash } = await releaseEscrow(
+      const { transactionHash, events } = await releaseEscrow(
         NFTDetail.tokenId,
         activeAccount,
       );
       // add events
       let states = [];
-      const escrowState = {
-        nftId: NFTDetail._id,
-        state: 'Release escrow',
-        from: user._id,
-        toWallet: NFTDetail?.owner.wallet,
-        to: NFTDetail?.owner,
-        actionHash: transactionHash,
-        price: NFTDetail.price,
-      };
-      states.push(escrowState);
 
+      events.forEach(event => {
+        if (event.eventName === 'ProtocolFee') {
+          const feeState = {
+            nftId: NFTDetail._id,
+            state: 'Fee',
+            from: NFTDetail?.owner._id,
+            toWallet: contract.address,
+            date: new Date(),
+            actionHash: transactionHash,
+            price: formatEther(event.args.amount),
+          };
+          states.push(feeState);
+        } else if (event.eventName === 'RoyaltyPurchased') {
+          const royaltyState = {
+            nftId: NFTDetail._id,
+            state: 'Royalties',
+            from: NFTDetail?.owner._id,
+            toWallet: event.args.user,
+            date: new Date(),
+            actionHash: transactionHash,
+            price: formatEther(event.args.amount),
+          }
+          states.push(royaltyState);
+        } else if (event.eventName === 'PaymentSplited') {
+          const splitState = {
+            nftId: NFTDetail._id,
+            state: 'Split Payments',
+            from: user._id,
+            toWallet: NFTDetail?.owner.wallet,
+            to: NFTDetail?.owner._id,
+            date: new Date(),
+            actionHash: transactionHash,
+            price: formatEther(event.args.amount),
+          }
+          states.push(splitState);
+        } else if (event.eventName === 'EscrowReleased') {
+          const releaseState = {
+            nftId: NFTDetail._id,
+            state: 'Split Payments',
+            from: NFTDetail?.owner._id,
+            toWallet: event.args.user,
+            date: new Date(),
+            actionHash: transactionHash,
+            price: NFTDetail.price,
+          }
+          states.push(releaseState);
+        }
+      });
       const data = {
         nftId: NFTDetail._id,
         releaseHash: transactionHash,
@@ -47,7 +87,7 @@ export default function EscrowModal({
       };
       await saleService.release(data);
       fetchNftData();
-      setStep(3);
+      // setStep(3);
     } catch (error) {
       console.log(error);
       onClose();
