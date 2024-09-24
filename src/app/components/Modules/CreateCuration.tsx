@@ -125,13 +125,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         return null;
       }
       setStatus({ error: false, loading: true, active: true });
-      const logoUri = formData.logo ? await uploadFile(formData.logo) : '';
-      const bannerUri = formData.bannerImage
-        ? await uploadFile(formData.bannerImage)
-        : '';
-      const desUri = formData.descriptionImage
-        ? await uploadFile(formData.descriptionImage)
-        : '';
+      // const logoUri = formData.logo ? await uploadFile(formData.logo) : '';
+      // const bannerUri = formData.bannerImage
+      //   ? await uploadFile(formData.bannerImage)
+      //   : '';
+      // const desUri = formData.descriptionImage
+      //   ? await uploadFile(formData.descriptionImage)
+      //   : '';
 
       const data = new FormData();
       data.append('name', formData.name);
@@ -146,29 +146,28 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       data.append('instagram', formData.instagram);
       data.append('youtube', JSON.stringify(youtube));
 
-      let metaData = {
-        name: formData.name,
-        symbol: formData.symbol,
-        discription: formData.discription,
-        website: formData.website,
-        twitter: formData.twitter,
-        facebook: formData.facebook,
-        instagram: formData.instagram,
-        youtube: formData.youtube,
-        logo: logoUri,
-        banner: bannerUri,
-        description: desUri,
-      };
-      metaData = removeEmptyStrings(metaData);
-      const metaUri = await uploadMetaData(metaData);
+      // let metaData = {
+      //   name: formData.name,
+      //   symbol: formData.symbol,
+      //   discription: formData.discription,
+      //   website: formData.website,
+      //   twitter: formData.twitter,
+      //   facebook: formData.facebook,
+      //   instagram: formData.instagram,
+      //   youtube: formData.youtube,
+      //   logo: logoUri,
+      //   banner: bannerUri,
+      //   description: desUri,
+      // };
+      // metaData = removeEmptyStrings(metaData);
+      // const metaUri = await uploadMetaData(metaData);
 
       // check cancel
-      if (!status.loading) return null;
       if (activeAccount) {
         try {
           const result = await createCollection(
-            metaData.name,
-            metaUri,
+            // metaData.name,
+            // metaUri,
             activeAccount,
           );
           if (result === null) throw 'collection is not created!';
@@ -182,7 +181,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             setStatus({ error: false, loading: false, active: true });
           }
         } catch (error) {
-          setStatus({ error: false, loading: true, active: true });
+          setStatus({ error: true, loading: true, active: true });
           console.log('error:', error);
           throw error;
         }

@@ -23,7 +23,7 @@ export default function EscrowModal({
   const release = async () => {
     try {
       setStep(2);
-      const { transactionHash, tokenId } = await releaseEscrow(
+      const { transactionHash } = await releaseEscrow(
         NFTDetail.tokenId,
         activeAccount,
       );

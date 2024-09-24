@@ -29,8 +29,8 @@ import { formatEther, parseEther } from 'viem';
 import { bigint } from 'zod';
 
 export const createCollection = async (
-  name: string,
-  uri: string,
+  // name: string,
+  // uri: string,
   account: Account,
 ) => {
   const transaction = await prepareContractCall({
