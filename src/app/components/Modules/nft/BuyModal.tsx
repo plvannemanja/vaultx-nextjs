@@ -43,7 +43,7 @@ export default function BuyModal({
   const { fee } = useGlobalContext();
   const [tokenAmount, setTokenAmount] = useState<string | null>(null);
   const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
-  const [error, setError] = useState("this is test error ");
+  const [error, setError] = useState(null);
 
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
@@ -192,6 +192,7 @@ export default function BuyModal({
       await fetchNftData();
       setStep(5);
     } catch (error) {
+      setError(JSON.stringify(error));
       onClose();
       
     }

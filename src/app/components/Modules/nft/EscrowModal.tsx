@@ -7,6 +7,7 @@ import { useActiveAccount } from 'thirdweb/react';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { CreateSellService } from '@/services/createSellService';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import ErrorModal from '../create/ErrorModal';
 
 export default function EscrowModal({
   onClose,
@@ -20,6 +21,7 @@ export default function EscrowModal({
   const { NFTDetail } = useNFTDetail();
   const activeAccount = useActiveAccount();
   const saleService = new CreateSellService();
+  const [error, setError] = useState(null);
   const release = async () => {
     try {
       setStep(2);
@@ -50,10 +52,20 @@ export default function EscrowModal({
       setStep(3);
     } catch (error) {
       console.log(error);
+      setError(JSON.stringify(error));
       onClose();
     }
   };
   return (
+    <>
+    
+    {error ? (
+      <ErrorModal 
+      title='Error'
+      data={error}
+      close={() =>  onClose()}
+    />
+    ):(
     <>
       {step === 1 ? (
         <div className="w-[34rem] flex flex-col gap-y-7">
@@ -118,6 +130,7 @@ export default function EscrowModal({
             </div>
         </div>
       ) : null}
+    </>)}
     </>
   );
 }

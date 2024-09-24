@@ -22,6 +22,7 @@ import BasicLoadingModal from './BasicLoadingModal';
 import { unlistAsset } from '@/lib/helper';
 import { useActiveAccount } from 'thirdweb/react';
 import { CreateSellService } from '@/services/createSellService';
+import ErrorModal from '../create/ErrorModal';
 
 const style = {
   borderRadius: '10px',
@@ -43,6 +44,7 @@ interface IModalStatus {
   buy: boolean;
   release: boolean;
   escrowRelease: boolean;
+  errorModal:boolean;
 }
 
 export default function NFTMain({
@@ -69,9 +71,12 @@ export default function NFTMain({
     buy: false,
     release: false,
     escrowRelease: false,
+    errorModal:false,
   });
   const activeAccount = useActiveAccount();
   const [step, setStep] = useState(1); // Step state in the parent
+  const [error, setError] = useState(null);
+
 
   const nftService = new NftServices();
   const createSellService = new CreateSellService();
@@ -115,8 +120,9 @@ export default function NFTMain({
       await fetchNftData();
       setModalStatus({ ...modalStatus, remove: false });
     } catch (error) {
-      setModalStatus({ ...modalStatus, remove: false });
-      console.log(error);
+      setModalStatus({ ...modalStatus, errorModal: true });
+      setError(JSON.stringify(error));
+                console.log(error);
     }
   };
 
@@ -124,8 +130,39 @@ export default function NFTMain({
     handleView();
   }, [nftId]);
 
+  useEffect(() => {
+    if (error) {
+      setModalStatus({...modalStatus, errorModal: true });
+    }
+  }, [error]);
+
   return (
+
     <>
+    {error && (
+      <>
+      <BaseDialog
+        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+        isOpen={modalStatus.errorModal}
+        onClose={(val) => {
+          setModalStatus({ ...modalStatus, errorModal: val });
+        }}
+      >
+        <ErrorModal 
+          title='Error'
+          data={error}
+          close={() => {
+            setModalStatus({ ...modalStatus, errorModal: false });
+          }}
+        
+        />
+      </BaseDialog>
+
+      </>
+
+    )}
+    
+      <>
       <Modal
         open={modal}
         onClose={() => setModal(false)}
@@ -290,8 +327,17 @@ export default function NFTMain({
               <p className="text-sm text-gray-400 azeret-mono-font">
                 {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
               </p>
-              
-              <div>
+
+             
+
+            </div>
+           
+            <div className="flex flex-col justify-between w-full">
+              <div className="flex justify-between items-center gap-y-2 w-full mt-3">
+                {type === 'NotForSale' ? null : (
+                  <p className="text-[32px] font-medium">${data.price}</p>
+                )}
+                 <div>
                 <BaseDialog
                   trigger={
                     <span
@@ -317,23 +363,15 @@ export default function NFTMain({
                   />
                 </BaseDialog>
               </div>
-
-            </div>
-           
-            <div className="flex justify-between w-full">
-              <div className="flex justify-between items-center gap-y-2 w-full mt-3">
-                {type === 'NotForSale' ? null : (
-                  <p className="text-[32px] font-medium">${data.price}</p>
-                )}
-                  
-
+                </div>
+                <div className="flex justify-between items-center gap-y-2 w-full mt-3">
                 {type === 'buy' ? (
-                  <div className="flex flex-col gap-y-2 items-center w-full">
+                  <div className="flex  gap-y-2 gap-2 items-center w-full">
                     <BaseDialog
                       trigger={
                         <BaseButton
                           title="Buy Now"
-                          className={'rounded-[14px]'}
+                          className={'!rounded-[14px] w-full'}
                           variant="primary"
                           onClick={() => {}}
                         />
@@ -356,7 +394,8 @@ export default function NFTMain({
                       trigger={
                         <BaseButton
                           title="Place a Bid"
-                          variant="Secondary"
+                          variant="secondaryOutline"
+                          className={'!rounded-[14px] w-full'}
                           onClick={() => {}}
                         />
                       }
@@ -555,5 +594,9 @@ export default function NFTMain({
         </div>
       </div>
     </>
+    
+    
+    </>
+   
   );
 }

@@ -21,6 +21,7 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import ErrorModal from '../create/ErrorModal';
 
 export default function PutSaleModal({
   onClose,
@@ -40,6 +41,8 @@ export default function PutSaleModal({
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [error, setError] = useState(null);
+
 
   const countries = Country.getAllCountries();
   const { toast } = useToast();
@@ -137,6 +140,7 @@ export default function PutSaleModal({
       await fetchNftData();
       onClose();
     } catch (error) {
+      setError(JSON.stringify(error));
       onClose();
       console.log(error);
     }
@@ -159,6 +163,8 @@ export default function PutSaleModal({
 
       setStep(3);
     } catch (error) {
+      setError(JSON.stringify(error));
+      onClose();
       console.log(error);
     }
   };
@@ -174,6 +180,14 @@ export default function PutSaleModal({
     }
   };
   return (
+    <>
+    {error ? (
+      <ErrorModal 
+      title='Error'
+      data={error}
+      close={() =>  onClose()}
+    />
+    ):(
     <>
       {step === 1 && (
         <div className="flex flex-col gap-y-4">
@@ -627,6 +641,7 @@ export default function PutSaleModal({
           </p>
         </div>
       )}
+    </>)}
     </>
   );
 }
