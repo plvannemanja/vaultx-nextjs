@@ -31,7 +31,7 @@ export default function EscrowModal({
       let states = [];
       const escrowState = {
         nftId: NFTDetail._id,
-        state: 'Escrow Payment Received',
+        state: 'Release escrow',
         from: user._id,
         toWallet: NFTDetail?.owner.wallet,
         to: NFTDetail?.owner,
@@ -62,12 +62,12 @@ export default function EscrowModal({
             <p className="text-[30px] font-extrabold">Escrow Release Confirmation</p>
           </div>
 
-          
+
           <p className="text-[24px] azeret-mono-font text-[#fff] font-extrabold">
-              Did you receive the physical artwork without any issues?
-              </p>
-              <p className="text-[16px] azeret-mono-font text-[#FFFFFF53] mb-6">
-              
+            Did you receive the physical artwork without any issues?
+          </p>
+          <p className="text-[16px] azeret-mono-font text-[#FFFFFF53] mb-6">
+
             When escrow is released, you will receive the NFT created by the
             artist in your wallet, and the purchase price you paid will be
             delivered to the artist.
@@ -107,15 +107,15 @@ export default function EscrowModal({
             <p className="text-lg font-medium">Escrow Release Success</p>
           </div>
           <div className="py-3 w-[100%] rounded-lg text-black font-semibold bg-light">
-              <button
-                className="w-full h-full bg-[#DEE8E8]"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                Close
-              </button>
-            </div>
+            <button
+              className="w-full h-full bg-[#DEE8E8]"
+              onClick={() => {
+                onClose();
+              }}
+            >
+              Close
+            </button>
+          </div>
         </div>
       ) : null}
     </>

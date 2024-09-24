@@ -1,4 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { TokenIcon } from '@web3icons/react';
 import Image from 'next/image';
 
 interface INftCardProps {
@@ -37,15 +38,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
           <div className="flex justify-between items-center">
             <span className="text-xs text-dark">Price </span>
             <div className="flex gap-x-2 items-center">
-              <Image
-                src="/icons/matic.png"
-                height={20}
-                width={20}
-                alt="matic"
-                loading="lazy"
-                blurDataURL={'/images/image_placeholder.png'}
-                quality={100}
-              />
+              <TokenIcon symbol="base" className="text-white"></TokenIcon>
               ${data.price}
             </div>
           </div>

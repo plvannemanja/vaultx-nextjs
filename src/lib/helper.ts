@@ -136,9 +136,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -210,9 +210,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -297,9 +297,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 export const getExplorerURL = (
@@ -448,18 +448,31 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
     maxBlocksWaitTime,
   });
 
+  const protocolFeeEvent = prepareEvent({
+    signature: "event ProtocolFee(address user, uint256 amount)"
+  });
+
+  const royaltyEvent = prepareEvent({
+    signature: "event RoyaltyPurchased(address user, uint256 amount)"
+  });
+
+  const paymentSplitEvent = prepareEvent({
+    signature: "event PaymentSplited(address user, uint256 amount)"
+  });
+
   const escrowReleasedEvent = prepareEvent({
     signature: 'event EscrowReleased(uint256 indexed tokenId)',
   });
+
   const events = await parseEventLogs({
     logs: receipt.logs,
-    events: [escrowReleasedEvent],
+    events: [protocolFeeEvent, royaltyEvent, paymentSplitEvent, escrowReleasedEvent],
   });
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };

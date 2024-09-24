@@ -320,26 +320,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-            return {
-              ...item.nftId,
-            };
-          })
+          return {
+            ...item.nftId,
+          };
+        })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-            return {
-              ...item.artistId,
-            };
-          })
+          return {
+            ...item.artistId,
+          };
+        })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-            return {
-              ...item.collectionId,
-            };
-          })
+          return {
+            ...item.collectionId,
+          };
+        })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -695,32 +695,32 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           <div className="flex gap-5 flex-wrap">
             {favType === 'nft' && data[ProfileTabs.Favorite].likedNft
               ? data[ProfileTabs.Favorite].likedNft.map(
-                  (item: any, index: number) => {
-                    return <NftCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <NftCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'curation' && data[ProfileTabs.Favorite].likedCuration
               ? data[ProfileTabs.Favorite].likedCuration.map(
-                  (item: any, index: number) => {
-                    return <CurationCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <CurationCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'artist' && data[ProfileTabs.Favorite]
               ? data[ProfileTabs.Favorite].likedArtist.map(
-                  (item: any, index: number) => {
-                    return (
-                      <ArtistsCard
-                        key={index}
-                        image={item.avatar ? item.avatar.url : ''}
-                        title={item.username}
-                      />
-                    );
-                  },
-                )
+                (item: any, index: number) => {
+                  return (
+                    <ArtistsCard
+                      key={index}
+                      image={item.avatar ? item.avatar.url : ''}
+                      title={item.username}
+                    />
+                  );
+                },
+              )
               : null}
           </div>
         </div>
@@ -761,8 +761,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell>
                         {item?.saleId?.ItemPurchasedOn
                           ? new Date(item?.saleId?.ItemPurchasedOn)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell>
@@ -815,8 +815,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell>
                         {item?.createdAt
                           ? new Date(item?.createdAt)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell>{item?.state}</TableCell>
