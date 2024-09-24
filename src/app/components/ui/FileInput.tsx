@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import BaseButton from './BaseButton';
+import { maxFileSize, acceptedFormats: acceptedFileFormats } from '@/utils/helpers';
 
 interface IFileInputProps {
   title?: string;
@@ -19,8 +20,8 @@ export default function FileInput({
   subtitle,
   onFileSelect,
   deSelect,
-  maxSizeInBytes = 10 * 1024 * 1024,
-  acceptedFormats = ['.png', 'jpeg'],
+  maxSizeInBytes = maxFileSize,
+  acceptedFormats = acceptedFileFormats,
   editMode,
   titleStyles,
 }: IFileInputProps) {
