@@ -436,12 +436,11 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
     method: 'function releaseEscrow(uint256 tokenId) payable',
     params: [BigInt(tokenId)],
   });
-  // const { transactionHash } = await sendTransaction({
-  //   transaction,
-  //   account,
-  // });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account,
+  });
 
-  const transactionHash = "0xb8687806ed5af5c39ea38cbac2fd6f875a513efff0fafb0ab8669205a156bc2b"
   const receipt = await waitForReceipt({
     client,
     chain,

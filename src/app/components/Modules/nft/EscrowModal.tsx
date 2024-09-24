@@ -42,6 +42,7 @@ export default function EscrowModal({
             date: new Date(),
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
+            currency: 'ETH',
           };
           states.push(feeState);
         } else if (event.eventName === 'RoyaltyPurchased') {
@@ -53,6 +54,7 @@ export default function EscrowModal({
             date: new Date(),
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
+            currency: 'ETH',
           }
           states.push(royaltyState);
         } else if (event.eventName === 'PaymentSplited') {
@@ -65,12 +67,13 @@ export default function EscrowModal({
             date: new Date(),
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
+            currency: 'ETH',
           }
           states.push(splitState);
         } else if (event.eventName === 'EscrowReleased') {
           const releaseState = {
             nftId: NFTDetail._id,
-            state: 'Split Payments',
+            state: 'Release escrow',
             from: NFTDetail?.owner._id,
             toWallet: event.args.user,
             date: new Date(),
