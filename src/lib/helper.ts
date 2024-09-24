@@ -35,8 +35,8 @@ export const createCollection = async (
 ) => {
   const transaction = await prepareContractCall({
     contract,
-    method: 'function createCurationByCurator(string name, string uri)',
-    params: [name, uri],
+    method: "function createCuration(address curator, bool option)",
+    params: [account?.address, true],
   });
   const { transactionHash } = await sendTransaction({
     transaction,
@@ -53,7 +53,7 @@ export const createCollection = async (
   // get event log
   const createCollectionEvent = prepareEvent({
     signature:
-      'event CreateCuration(string name, string uri, address curator, uint256 id)',
+      'event CreateCuration(address curator, uint256 id)',
   });
 
   const events = parseEventLogs({
