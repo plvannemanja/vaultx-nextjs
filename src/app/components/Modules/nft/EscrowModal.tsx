@@ -61,9 +61,8 @@ export default function EscrowModal({
           const splitState = {
             nftId: NFTDetail._id,
             state: 'Split Payments',
-            from: user._id,
-            toWallet: NFTDetail?.owner.wallet,
-            to: NFTDetail?.owner._id,
+            from: NFTDetail?.owner._id,
+            toWallet: event.args.user,
             date: new Date(),
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
@@ -74,7 +73,7 @@ export default function EscrowModal({
           const releaseState = {
             nftId: NFTDetail._id,
             state: 'Release escrow',
-            from: NFTDetail?.owner._id,
+            from: user._id,
             toWallet: NFTDetail?.owner.wallet,
             to: NFTDetail?.owner,
             date: new Date(),
