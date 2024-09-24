@@ -30,6 +30,7 @@ import {
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import ConnectedCard from '../../Cards/ConnectedCard';
+import ErrorModal from '../create/ErrorModal';
 
 export default function BuyModal({
   onClose,
@@ -42,6 +43,7 @@ export default function BuyModal({
   const { fee } = useGlobalContext();
   const [tokenAmount, setTokenAmount] = useState<string | null>(null);
   const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
+  const [error, setError] = useState("this is test error ");
 
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
@@ -130,9 +132,11 @@ export default function BuyModal({
       setStep(5);
     } catch (error) {
       console.log(error);
+     setError(JSON.stringify(error));
       onClose();
     }
   };
+  
 
   const buyFreeMint = async () => {
     try {
@@ -189,6 +193,7 @@ export default function BuyModal({
       setStep(5);
     } catch (error) {
       onClose();
+      
     }
   };
 
@@ -251,6 +256,15 @@ export default function BuyModal({
 
   return (
     <>
+    
+     {error ? (
+       <ErrorModal 
+       title='Error'
+       data={error}
+       close={() =>  onClose()}
+     />
+     ):(
+      <>
       {step === 1 && (
         <div className="flex flex-col gap-y-6 w-full">
           <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
@@ -821,6 +835,8 @@ export default function BuyModal({
           </p>
         </div>
       )}
-    </>
+      </>
+      )}  
+          </>
   );
 }

@@ -282,6 +282,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           close={() => setErrors({ active: false, data: [] })}
         >
           <ErrorModal
+          title={'Error in creation found'}
             data={errors.data}
             close={() => {
               setErrors({ active: false, data: [] });

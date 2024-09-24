@@ -290,6 +290,7 @@ export default function NFTMain({
               <p className="text-sm text-gray-400 azeret-mono-font">
                 {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
               </p>
+              
               <div>
                 <BaseDialog
                   trigger={
@@ -324,9 +325,10 @@ export default function NFTMain({
                 {type === 'NotForSale' ? null : (
                   <p className="text-[32px] font-medium">${data.price}</p>
                 )}
+                  
 
                 {type === 'buy' ? (
-                  <div className="flex flex-col gap-y-2 items-center">
+                  <div className="flex flex-col gap-y-2 items-center w-full">
                     <BaseDialog
                       trigger={
                         <BaseButton
@@ -353,8 +355,8 @@ export default function NFTMain({
                     <BaseDialog
                       trigger={
                         <BaseButton
-                          title="Bid"
-                          variant="primary"
+                          title="Place a Bid"
+                          variant="Secondary"
                           onClick={() => {}}
                         />
                       }

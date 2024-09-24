@@ -446,6 +446,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(basicDetails.error)}
             close={() => setBasicDetails({ ...basicDetails, error: null })}
           />
@@ -458,6 +459,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(advanceDetails.error)}
             close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
           />
@@ -470,6 +472,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(sellerInfo.error)}
             close={() => setSellerInfo({ ...sellerInfo, error: null })}
           />
