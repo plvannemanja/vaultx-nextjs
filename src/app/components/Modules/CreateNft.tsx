@@ -128,6 +128,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         if (nftContext.advancedOptions.royalties) {
           if (!nftContext.advancedDetails.royalty) throw new Error('royalty is invalid');
           data.append('royalty', nftContext.advancedDetails.royalty as any);
+          data.append('royaltyAddress', nftContext.advancedDetails.royaltyAddress as any);
         }
         if (nftContext.advancedOptions.category) {
           if (!nftContext.advancedDetails.category) throw new Error('category is invalid');
