@@ -94,7 +94,7 @@ export default function Page() {
       </RestrictiveModal>
 
       {!step.active && (
-        <div className="flex gap-4 px-4 justify-between w-full items-center lg:justify-between">
+        <div className="flex gap-[] px-4 justify-between w-full items-center lg:justify-between">
           <div className="flex flex-col gap-y-10 w-full lg:w-[48%]">
             <div className="flex gap-x-2 items-center">
               <Image
@@ -107,26 +107,26 @@ export default function Page() {
               <span className="text-2xl font-medium text-neon">Create</span>
             </div>
             <div className="flex flex-col flex-wrap items-center justify-between md:flex-row">
-              <div className="flex flex-col gap-y-3 w-full">
+              <div className="flex flex-col gap-y-7 w-full">
                 <div
-                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#DDF247]  hover:text-black text-white"
                   onMouseEnter={() => setHovered('curation')}
                   onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('curation')}
                 >
                   <svg
-                    className="bottom-[2.75rem] right-5 absolute"
+                    className="bottom-[2.75rem] right-5 absolute hover:fill-black"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    color="#fff"
+                    color="#fff hover:fill-black"
                   >
                     <path
                       d="M3 12L21 12M21 12L12.5 3.5M21 12L12.5 20.5"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -161,30 +161,29 @@ export default function Page() {
                 </div>
 
                 <div
-                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('nft')}
                   onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('nft')}
                 >
-                  <svg
-                    className="bottom-[2.75rem] right-5 absolute"
+                <svg
+                    className="bottom-[2.75rem] right-5 absolute hover:fill-black"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    color="#fff"
+                    color="#fff hover:fill-black"
                   >
                     <path
                       d="M3 12L21 12M21 12L12.5 3.5M21 12L12.5 20.5"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     ></path>
                   </svg>
-
                   <div className="flex gap-x-4 w-10/12">
                     <Image
                       alt="add"
@@ -205,31 +204,30 @@ export default function Page() {
 
                         className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'nft' ? 'text-black' : 'text-[#959595]'}`}
                       >
-                        Transform your art into a collectible, with one simple
-                        tap.
+                        Transform your art into a RWA, with one simple tap.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div
-                  className="cursor-pointer w-full flex flex-col gap-y-2 p-5 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
+                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('mint')}
                   onMouseLeave={() => setHovered(false)}
                 >
-                  <svg
-                    className="bottom-[2.75rem] right-5 absolute"
+                 <svg
+                    className="bottom-[2.75rem] right-5 absolute hover:fill-black"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    color="#fff"
+                    color="#fff hover:fill-black"
                   >
                     <path
                       d="M3 12L21 12M21 12L12.5 3.5M21 12L12.5 20.5"
-                      stroke="#fff"
+                      stroke="currentColor"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -243,14 +241,14 @@ export default function Page() {
                       width={100}
                       src={
                         hovered !== 'mint'
-                          ? '/images/mint.png'
-                          : '/icons/mint_black.svg'
+                          ? '/icons/nfc.svg'
+                          : '/icons/nfc-hover.svg'
                       }
                       className="w-8 h-8"
                     />
                     <div className="flex flex-col gap-y-2">
                       <span className="text-xl font-bold">
-                        Mint NFTs Using NFC
+                      NFC-Powered RWA
                       </span>
                       <p
                       
@@ -258,25 +256,29 @@ export default function Page() {
 
                         // className={`w-[80%] text-sm ${hovered === 'mint' ? 'text-black' : 'text-gray-500'}`}
                       >
-                        Bridging the physical and digital worlds: Mint NFTs with
-                        a tap.
+                        Digitize physical assets to blockchain entries in minutes.
                       </p>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
+          <div className="flex min-h-[calc(100vh-80px)] max-h-[calc(100vh-80px)]  md:w-[49%]">
           {banner.image && (
             <div
-              className="w-full md:w-[49%]"
+              className="w-full"
               onClick={() => {
                 window.open(banner.link, '_blank');
               }}
             >
-              <img src={banner.image} className="w-full" />
+              <img src={banner.image} className="w-full max-h-[100%]" />
             </div>
           )}
+
+          </div>
+          
         </div>
       )}
       {step.active && step.type === 'curation' && <CreateCuration />}
