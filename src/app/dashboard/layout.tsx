@@ -15,7 +15,7 @@ export default function DashboardLayout({
       <div className="hidden lg:block w-[17rem]">
         <SideBar />
       </div>
-      <div className="w-full lg:w-[80%] flex flex-col gap-y-2">
+      <div className="w-full lg:w-[100%] flex flex-col gap-y-2 px-[20px]">
         <AppHeader />
         {children}
         <Toaster />
