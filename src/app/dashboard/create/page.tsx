@@ -159,7 +159,6 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-
                 <div
                   className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('nft')}
@@ -209,7 +208,6 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-
                 <div
                   className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-dark hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('mint')}
@@ -261,7 +259,6 @@ export default function Page() {
                     </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
