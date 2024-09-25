@@ -131,22 +131,9 @@ export default function Page() {
               );
             })}
 
-            {/* <div className="col-span-1">
-
-          </div> */}
           </div>
         )}
       </>
-      {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
-
-      {/* {collections.map((collection: any, index: number) => {
-          return (
-            <div className="w-[100%]" key={index}>
-              <CurationCard key={index} data={collection} />
-            </div>
-          );
-        })} */}
     </div>
-    // </div>
   );
 }

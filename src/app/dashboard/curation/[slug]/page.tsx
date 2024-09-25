@@ -21,26 +21,21 @@ import { PencilIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import { useRouter } from 'next/navigation';
-
-interface IData {
-  collection?: any;
-  activity?: any;
-  nft?: any;
-  likes?: any;
-  info?: any;
-  userReacted?: any;
-}
+import { cn } from '@/lib/utils';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
   const favoriteService = new FavoriteService();
   const { user } = useGlobalContext();
 
-  const [data, setData] = useState<null | IData>(null);
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
+  const [curation, setCuration] = useState<any>({})
+  const [curationInfo, setCurationInfo] = useState<any>({})
+  const [nfts, setNfts] = useState([])
   const [now, setNow] = useState(false);
   const [showLess, setShowLess] = useState(false);
+  const [activity, setActivity] = useState([])
   const [tab, setTab] = useState('items');
   const [filters, setFilters] = useState<any>({
     filterString: '',
@@ -98,48 +93,90 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   };
 
+  const setMyLike = async () => {
+    try {
+      await favoriteService.handleLikeCollections({ collectionId: params.slug })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const copyAddr = () => {
     navigator.clipboard.writeText(user?.wallet);
   };
 
+  const fetchActivity = async () => {
+    const {
+      data: { activity },
+    } = await collectionServices.getAllActivitiesCollection({
+      collectionId: params.slug,
+    })
+    setActivity(activity);
+  }
+
+  const fetchNFTs = async () => {
+
+    const {
+      data: { nfts }
+    } = await collectionServices.getCollectionNfts({
+      collectionId: params.slug,
+      ...filters,
+    });
+
+    setNfts(nfts);
+  }
+
+  const fetchLikes = async () => {
+    const {
+      data: { totalLikedCollection },
+    } = await favoriteService.getCollectionTotalLikes({
+      collectionId: params.slug
+    })
+
+    const {
+      data: { favorite },
+    } = await favoriteService.getUserReactionToCollection({
+      collectionId: params.slug
+    })
+    setLikes(totalLikedCollection)
+    setLiked(favorite)
+  }
+  const fetchData = async () => {
+    fetchActivity();
+    fetchNFTs();
+    fetchLikes();
+
+    const curationRes = await collectionServices.getCollectionById(
+      params.slug,
+    );
+    const curationInfoRes = await collectionServices.getCollectionInfo(params.slug);
+    setCuration(curationRes.data.collection);
+    setCurationInfo(curationInfoRes.data.collection);
+
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const collection = await collectionServices.getCollectionById(
-        params.slug,
-      );
-      // const activity = await collectionServices.getAllActivitiesCollection({
-      //     collectionId: params.slug
-      // })
-      // const nft = await collectionServices.getCollectionNfts({
-      //     collectionId: params.slug,
-      //     filter: {},
-      //     filterString: ''
-      // })
-      // const likes = await favoriteService.getCollectionTotalLikes({
-      //     collectionId: params.slug
-      // })
-
-      setData({
-        collection: collection.data.collection,
-      });
-    };
-
     fetchData();
   }, [params.slug]);
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      {data && (
+      {curation && (
         <>
           <div className="relative">
-            <Image
-              src={data.collection.bannerImage}
-              alt="hero"
-              width={100}
-              height={100}
-              quality={100}
-              className="w-full object-cover rounded-xl h-[340px]"
-            />
 
+            <div
+              className={`relative overflow-hidden transition-all duration-500 ease-in-out 
+                }`}
+            >
+              <Image
+                src={curation?.bannerImage}
+                alt="hero"
+                width={100}
+                height={100}
+                quality={100}
+                className={cn("w-full object-cover rounded-xl", showLess ? 'h-[200px]' : 'h-auto h-min-[340px]')}
+              />
+            </div>
             <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
               <div
                 className="flex gap-x-3 items-center p-3 rounded-xl text-white border-2 border-white cursor-pointer"
@@ -220,7 +257,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                   </div>
                 </div>
-                {user?.wallet === data.collection.owner && (
+                {user?.wallet === curation.owner && (
                   <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
                     <div
                       onClick={() =>
@@ -256,70 +293,71 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="w-full md:w-[60%] flex flex-col">
               <div className="text-sm">
                 <span>
-                  {!showLess
-                    ? `${data.collection.description.slice(0, 400)}`
-                    : data.collection.description}{' '}
+                  <Image
+                    alt='double-down'
+                    src="/icons/double-down.svg"
+                    className={cn("", !showLess ? "rotate-180" : "")}
+                  />
                 </span>
                 <span
                   className="text-neon"
                   onClick={() => setShowLess(!showLess)}
                 >
-                  {showLess ? 'less' : 'More...'}
                 </span>
               </div>
               <div className="my-5 flex flex-wrap md:gap-x-3">
-                {data.collection.youtube.length > 0
-                  ? data.collection.youtube.map((item: any, index: number) => {
-                      const imageId = getYouTubeVideoId(item.url);
+                {curation?.youtube.length > 0
+                  ? curation?.youtube.map((item: any, index: number) => {
+                    const imageId = getYouTubeVideoId(item.url);
 
-                      return (
+                    return (
+                      <div
+                        className="flex flex-col gap-y-3 w-[20rem]"
+                        key={index}
+                      >
                         <div
-                          className="flex flex-col gap-y-3 w-[20rem]"
-                          key={index}
+                          className="relative cursor-pointer"
+                          onClick={() => {
+                            window.open(item.url, '_blank');
+                          }}
                         >
-                          <div
-                            className="relative cursor-pointer"
-                            onClick={() => {
-                              window.open(item.url, '_blank');
-                            }}
-                          >
-                            <img
-                              src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
-                              className="w-full aspect-video"
-                            />
-                            <img
-                              src="/icons/play.svg"
-                              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                            />
-                          </div>
-                          <p className="text-center font-medium">
-                            {item.title}
-                          </p>
+                          <img
+                            src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
+                            className="w-full aspect-video"
+                          />
+                          <img
+                            src="/icons/play.svg"
+                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                          />
                         </div>
-                      );
-                    })
+                        <p className="text-center font-medium">
+                          {item.title}
+                        </p>
+                      </div>
+                    );
+                  })
                   : null}
               </div>
             </div>
             <div className="w-full md:w-[38%] h-[250px] py-4 flex flex-col gap-y-4 border-2 border-gray-500 rounded-lg">
               <div className="px-4 flex justify-between items-center">
                 <span className="text-lg font-medium">Items</span>
-                <span>15</span>
+                <span>{curationInfo?.nftCount}</span>
               </div>
               <hr />
               <div className="px-4 flex justify-between items-center">
                 <span className="text-lg font-medium">Artist</span>
-                <span>15</span>
+                <span>{curationInfo?.artistCount}</span>
               </div>
               <hr />
               <div className="px-4 flex justify-between items-center">
                 <span className="text-lg font-medium">Owner</span>
-                <span>15</span>
+                <span>{curationInfo?.ownerCount}</span>
               </div>
               <hr />
               <div className="px-4 flex justify-between items-center">
                 <span className="text-lg font-medium">Volume Ranking</span>
-                <span>15</span>
+                <span>{curationInfo?.totalVolume}</span>
               </div>
             </div>
           </div>
