@@ -128,7 +128,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
         )}
       </div>
 
-      <div className="flex gap-x-2 items-center border border-[#ffffff12] rounded-xl px-2 w-full py-2">
+      <div className="flex gap-x-2 items-center border border-[#ffffff12] rounded-xl px-2 w-full py-2 h-[52px]">
         <svg
           width="20px"
           height="20px"
@@ -160,7 +160,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
             setSearch({ ...search, search: (e.target as any).value })
           }
           placeholder="Search by name..."
-          className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
+          className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font  placeholder:text-[#FFFFFF53] placeholder:"
         />
       </div>
     </div>
