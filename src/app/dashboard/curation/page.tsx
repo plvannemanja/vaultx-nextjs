@@ -57,6 +57,7 @@ export default function Page() {
       });
 
       const collections = response.data.curations;
+      
       let detailedInfo = await Promise.all(
         collections
           .filter((item: any) => !item?.active && !item?.owner?.active)
@@ -81,6 +82,8 @@ export default function Page() {
             };
           }),
       );
+
+      console.log(detailedInfo)
 
       setCollection(detailedInfo);
       setLoading(false);
@@ -115,6 +118,19 @@ export default function Page() {
       ) : (
         <>
           <CurationSearch setState={handleState} />
+          <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
+              {collections.map((collection: any, index: number) => {
+                return (
+                  <div className="col-span-4" key={index}>
+                    <CurationCard key={index} data={collection} />
+                  </div>
+                );
+              })}
+
+              {/* <div className="col-span-1">
+
+          </div> */}
+            </div>
           {loading ? (
             <SkeletonCard />
           ) : (

@@ -94,8 +94,8 @@ export default function Filters({
   }, [search.search, search.price.value, search.category.label]);
 
   return (
-    <div className="flex flex-wrap md:flex-nowrap gap-4">
-      <div className="flex gap-x-2 items-center">
+    <div className="flex flex-wrap md:flex-nowrap gap-6 ">
+      <div className="flex gap-x-2 items-center pl-4">
         <svg
           width="24px"
           height="24px"
@@ -121,7 +121,7 @@ export default function Filters({
           <p className="text-sm w-[70%]">{search.category.label}</p>
           {search.category.active ? (
             <ChevronUpIcon
-              className="h-7 w-7"
+              className="h-7 w-7 text-[#ffffff30]"
               onClick={() => {
                 setSearch({
                   ...search,
@@ -134,8 +134,8 @@ export default function Filters({
             />
           ) : (
             <ChevronDownIcon
-              className="h-7 w-7"
-              onClick={() => {
+            className="h-7 w-7 text-[#ffffff30]"
+            onClick={() => {
                 setSearch({
                   ...search,
                   category: {
@@ -171,9 +171,9 @@ export default function Filters({
             </div>
           )}
           <div className="absolute left-2 top-3">
-          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M1.52148 4.0625C1.52148 3.13079 2.27727 2.375 3.20898 2.375H17.584C18.5157 2.375 19.2715 3.13079 19.2715 4.0625V5.3125C19.2715 6.10731 18.7215 6.7741 17.9815 6.95289L17.4994 15.154C17.4994 15.154 17.4994 15.154 17.4994 15.154C17.4601 15.8226 17.1667 16.4508 16.6794 16.9102C16.1921 17.3695 15.5478 17.6252 14.8782 17.625M16.4761 7L16.0019 15.066C15.9851 15.3525 15.8594 15.6218 15.6505 15.8186C15.4417 16.0155 15.1655 16.1251 14.8784 16.125H5.91482C5.6278 16.1251 5.3513 16.0155 5.14244 15.8186C4.93358 15.6218 4.80786 15.3525 4.79103 15.066L4.31687 7H16.4761ZM17.2649 5.5H3.52806C3.52414 5.49997 3.52022 5.49997 3.51628 5.5H3.20898C3.1057 5.5 3.02148 5.41579 3.02148 5.3125V4.0625C3.02148 3.95921 3.1057 3.875 3.20898 3.875H17.584C17.6873 3.875 17.7715 3.95921 17.7715 4.0625V5.3125C17.7715 5.41579 17.6873 5.5 17.584 5.5H17.2767C17.2728 5.49997 17.2688 5.49997 17.2649 5.5ZM2.81151 6.95289C2.07148 6.7741 1.52148 6.10731 1.52148 5.3125V4.0625M2.81151 6.95289L3.29361 15.154C3.29361 15.154 3.29361 15.154 3.29361 15.154C3.3329 15.8226 3.62624 16.4508 4.11357 16.9102C4.60084 17.3695 5.24521 17.6252 5.91482 17.625C5.91472 17.625 5.91492 17.625 5.91482 17.625H14.8782M7.97982 9.375C7.97982 8.96079 8.3156 8.625 8.72982 8.625H12.0632C12.4774 8.625 12.8132 8.96079 12.8132 9.375C12.8132 9.78921 12.4774 10.125 12.0632 10.125H8.72982C8.3156 10.125 7.97982 9.78921 7.97982 9.375Z" fill="white"/>
-</svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M1.52148 4.0625C1.52148 3.13079 2.27727 2.375 3.20898 2.375H17.584C18.5157 2.375 19.2715 3.13079 19.2715 4.0625V5.3125C19.2715 6.10731 18.7215 6.7741 17.9815 6.95289L17.4994 15.154C17.4994 15.154 17.4994 15.154 17.4994 15.154C17.4601 15.8226 17.1667 16.4508 16.6794 16.9102C16.1921 17.3695 15.5478 17.6252 14.8782 17.625M16.4761 7L16.0019 15.066C15.9851 15.3525 15.8594 15.6218 15.6505 15.8186C15.4417 16.0155 15.1655 16.1251 14.8784 16.125H5.91482C5.6278 16.1251 5.3513 16.0155 5.14244 15.8186C4.93358 15.6218 4.80786 15.3525 4.79103 15.066L4.31687 7H16.4761ZM17.2649 5.5H3.52806C3.52414 5.49997 3.52022 5.49997 3.51628 5.5H3.20898C3.1057 5.5 3.02148 5.41579 3.02148 5.3125V4.0625C3.02148 3.95921 3.1057 3.875 3.20898 3.875H17.584C17.6873 3.875 17.7715 3.95921 17.7715 4.0625V5.3125C17.7715 5.41579 17.6873 5.5 17.584 5.5H17.2767C17.2728 5.49997 17.2688 5.49997 17.2649 5.5ZM2.81151 6.95289C2.07148 6.7741 1.52148 6.10731 1.52148 5.3125V4.0625M2.81151 6.95289L3.29361 15.154C3.29361 15.154 3.29361 15.154 3.29361 15.154C3.3329 15.8226 3.62624 16.4508 4.11357 16.9102C4.60084 17.3695 5.24521 17.6252 5.91482 17.625C5.91472 17.625 5.91492 17.625 5.91482 17.625H14.8782M7.97982 9.375C7.97982 8.96079 8.3156 8.625 8.72982 8.625H12.0632C12.4774 8.625 12.8132 8.96079 12.8132 9.375C12.8132 9.78921 12.4774 10.125 12.0632 10.125H8.72982C8.3156 10.125 7.97982 9.78921 7.97982 9.375Z" fill="white"/>
+            </svg>
           </div>
         </div>
       )}
@@ -182,8 +182,8 @@ export default function Filters({
         <p className="text-sm w-[70%]">{search.price.label}</p>
         {search.price.active ? (
           <ChevronUpIcon
-            className="h-7 w-7"
-            onClick={() => {
+          className="h-7 w-7 text-[#ffffff30]"
+          onClick={() => {
               setSearch({
                 ...search,
                 price: { ...search.price, active: !search.price.active },
@@ -192,8 +192,8 @@ export default function Filters({
           />
         ) : (
           <ChevronDownIcon
-            className="h-7 w-7"
-            onClick={() => {
+          className="h-7 w-7 text-[#ffffff30]"
+          onClick={() => {
               setSearch({
                 ...search,
                 price: { ...search.price, active: !search.price.active },
@@ -260,7 +260,7 @@ export default function Filters({
 
         <input
           placeholder="Search by name..."
-          className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
+          className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font placeholder:text-[#FFFFFF87]"
           onChange={(e) =>
             setSearch({ ...search, search: (e.target as any).value })
           }

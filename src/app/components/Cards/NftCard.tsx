@@ -15,7 +15,7 @@ interface INftCardProps {
 
 export default function NftCard({ data }: { data: INftCardProps }) {
   return (
-    <Card className="bg-transparent text-white border-none max-w-[20rem]">
+    <Card className="bg-transparent text-white border-none max-w-[306px]">
       <CardContent className="aspect-square p-0 rounded-[20px]">
         <div className="w-full overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
           <img
@@ -25,7 +25,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             loading="lazy"
           />
         </div>
-        <div className="flex flex-col gap-y-4 mb-2 p-[20px] bg-[#333333] rounded-b-[20px]">
+        <div className="flex flex-col gap-y-2.5 mb-2 px-[20px] py-[12px] bg-[#333333] rounded-b-[20px]">
           <p className="font-extrabold">
             {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
           </p>
@@ -36,7 +36,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             </span>
           </div>
           <p className="text-xs text-[#fff] font-bold azeret-mono-font italic underline"> <Link className='italic ' href={`/nft/${data.curation.name}`}>Canvas Collection</Link></p>
-          <hr />
+          <hr className={'border-[#ffffff10] my-[5px]'} />
           <div className="flex justify-between items-center">
             <span className="text-xs text-dark  azeret-mono-font">Price </span>
             <div className="flex gap-x-2 items-center">

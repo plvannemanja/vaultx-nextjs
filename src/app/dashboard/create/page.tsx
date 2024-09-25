@@ -146,7 +146,7 @@ export default function Page() {
                       className="w-8 h-8 hover:fill-black"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-[22px] font-extrabold">Create Curation</span>
+                      <span className={`text-[22px] ${hovered === 'curation' ? 'font-bold ': 'font-extrabold'}`}>Create Curation</span>
                       <p
                         className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
 
@@ -196,11 +196,10 @@ export default function Page() {
                       className="w-8 h-8"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-[22px] font-extrabold">
+                    <span className={`text-[22px] ${hovered === 'nft' ? 'font-bold': 'font-extrabold'}`}>
                         Create Artwork NFTs
                       </span>
                       <p
-
                         className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'nft' ? 'text-black' : 'text-[#959595]'}`}
                       >
                         Transform your art into a RWA, with one simple tap.
@@ -245,8 +244,8 @@ export default function Page() {
                       className="w-8 h-8"
                     />
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-xl font-bold">
-                      NFC-Powered RWA
+                    <span className={`text-[22px] ${hovered === 'mint' ? 'font-bold ': 'font-extrabold'}`}>
+                        NFC-Powered RWA
                       </span>
                       <p
                       
