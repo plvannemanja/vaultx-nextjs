@@ -7,6 +7,7 @@ import { collectionServices, getMedia } from '@/services/supplier';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SkeletonCard } from '@/app/components/Skelton/Skelton';
+import { useDebounce } from 'use-debounce';
 
 export default function Page() {
   const { toast } = useToast();
@@ -21,6 +22,8 @@ export default function Page() {
     skip: 0,
     curationFilter: null,
   });
+
+  const [debouncedFilter] = useDebounce(filters, 1000);
   const [hero, setHero] = useState<any>(null);
 
   const handleState = (e: any) => {
@@ -45,46 +48,46 @@ export default function Page() {
     }
   };
 
+
+  const fetchCollection = async () => {
+    setLoading(true);
+    const response = await collectionServices.getAllCollections(filters);
+
+    const collections = response.data.curations;
+    let detailedInfo = await Promise.all(
+      collections
+        .filter((item: any) => item?.active)
+        .map(async (collection: any) => {
+          const info = await collectionServices.getCollectionInfo(
+            collection._id,
+          );
+
+          console.log('info', info);
+
+          const extra = {
+            nftCount: info.data.collection.nftCount,
+            totalVolume: info.data.collection.totalVolume,
+            artistCount: info.data.collection.artistCount,
+          };
+
+          return {
+            ...extra,
+            name: collection.name,
+            image: collection.bannerImage,
+            id: collection._id,
+          };
+        }),
+    );
+
+    setCollection(detailedInfo);
+    setLoading(false);
+  };
+
   useEffect(() => {
     toast({
       title: 'Loading...',
       duration: 2000,
     });
-
-    const fetchCollection = async () => {
-      const response = await collectionServices.getAllCollections({
-        searchInput: '',
-      });
-
-      const collections = response.data.curations;
-      let detailedInfo = await Promise.all(
-        collections
-          .filter((item: any) => item?.active)
-          .map(async (collection: any) => {
-            const info = await collectionServices.getCollectionInfo(
-              collection._id,
-            );
-
-            console.log('info', info);
-
-            const extra = {
-              nftCount: info.data.collection.nftCount,
-              totalVolume: info.data.collection.totalVolume,
-              artistCount: info.data.collection.artistCount,
-            };
-
-            return {
-              ...extra,
-              name: collection.name,
-              image: collection.bannerImage,
-              id: collection._id,
-            };
-          }),
-      );
-
-      setCollection(detailedInfo);
-      setLoading(false);
-    };
 
     const fetchMedia = async () => {
       const response = await getMedia();
@@ -98,6 +101,10 @@ export default function Page() {
     fetchMedia();
   }, []);
 
+  useEffect(() => {
+    fetchCollection();
+  }, [debouncedFilter]);
+
   return (
     <div className="flex flex-col gap-y-4 px-4">
       {hero?.image && hero.link ? (
@@ -110,30 +117,26 @@ export default function Page() {
           onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
-      {loading ? (
-        <SkeletonCard />
-      ) : (
-        <>
-          <CurationSearch setState={handleState} />
-          {loading ? (
-            <SkeletonCard />
-          ) : (
-            <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
-              {collections.map((collection: any, index: number) => {
-                return (
-                  <div className="col-span-4" key={index}>
-                    <CurationCard key={index} data={collection} />
-                  </div>
-                );
-              })}
+      <>
+        <CurationSearch setState={handleState} />
+        {loading ? (
+          <SkeletonCard />
+        ) : (
+          <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
+            {collections.map((collection: any, index: number) => {
+              return (
+                <div className="col-span-4" key={index}>
+                  <CurationCard key={index} data={collection} />
+                </div>
+              );
+            })}
 
-              {/* <div className="col-span-1">
+            {/* <div className="col-span-1">
 
           </div> */}
-            </div>
-          )}
-        </>
-      )}
+          </div>
+        )}
+      </>
       {/* <div className="flex gap-[24px] lg:justify-between flex-wrap my-4 justify-center md:justify-start"> */}
 
       {/* {collections.map((collection: any, index: number) => {

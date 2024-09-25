@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import BaseButton from '../ui/BaseButton';
 import { useToast } from '@/hooks/use-toast';
 
-export default function PropertiesInfo({ close, onTemplateAdd }) {
+export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
   const { toast } = useToast();
   const [property, setProperty] = useState({
     id: null,
@@ -84,7 +84,7 @@ export default function PropertiesInfo({ close, onTemplateAdd }) {
 
   return (
     <BaseDialog
-      isOpen={false}
+      isOpen={isOpen}
       onClose={handleCancel}
       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
     >
