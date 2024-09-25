@@ -2,7 +2,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import BaseButton from './BaseButton';
-import { maxFileSize, acceptedFormats as acceptedFileFormats } from '@/utils/helpers';
+import {
+  maxFileSize,
+  acceptedFormats as acceptedFileFormats,
+} from '@/utils/helpers';
 
 interface IFileInputProps {
   title?: string;

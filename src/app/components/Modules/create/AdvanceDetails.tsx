@@ -322,7 +322,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 flex">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
@@ -351,36 +351,38 @@ export default function AdvanceDetails({
               value={advancedDetails.unlockable}
               placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
             />
-            {
-              unlockableFiles.length == 0 && (
-                <div className="flex gap-x-4 items-center">
-                  <FileInput
-                    onFileSelect={(file: any) => handleFileChange(file, 0)}
-                    maxSizeInBytes={1024 * 1024}
-                    deSelect={true}
-                  />
+            {unlockableFiles.length == 0 && (
+              <div className="flex gap-x-4 items-center">
+                <FileInput
+                  onFileSelect={(file: any) => handleFileChange(file, 0)}
+                  maxSizeInBytes={1024 * 1024}
+                  deSelect={true}
+                />
+                <img
+                  src="/icons/trash.svg"
+                  alt="trash"
+                  className="w-6 h-6 cursor-pointer"
+                  onClick={() => removeUnlockable(0)}
+                />
+                <div
+                  className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                  onClick={() => {
+                    if (unlockableFiles.length === 0) {
+                      setUnlockableFiles([null, null]);
+                    } else {
+                      setUnlockableFiles([...unlockableFiles, null]);
+                    }
+                  }}
+                >
                   <img
-                    src="/icons/trash.svg"
-                    alt="trash"
-                    className="w-6 h-6 cursor-pointer"
-                    onClick={() => removeUnlockable(0)}
+                    src="/icons/add-new.svg"
+                    alt="plus"
+                    className="w-4 h-4"
                   />
-                  <div
-                    className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                    onClick={() => {
-                      if (unlockableFiles.length === 0) {
-                        setUnlockableFiles([null, null]);
-                      } else {
-                        setUnlockableFiles([...unlockableFiles, null]);
-                      }
-                    }}
-                  >
-                    <img src="/icons/add-new.svg" alt="plus" className="w-4 h-4" />
-                    <p className="text-neon">Add</p>
-                  </div>
+                  <p className="text-neon">Add</p>
                 </div>
-              )
-            }
+              </div>
+            )}
             {unlockableFiles.map((item: any, index: number) => {
               if (index == 0) {
                 return (
@@ -405,7 +407,11 @@ export default function AdvanceDetails({
                         }
                       }}
                     >
-                      <img src="/icons/add-new.svg" alt="plus" className="w-4 h-4" />
+                      <img
+                        src="/icons/add-new.svg"
+                        alt="plus"
+                        className="w-4 h-4"
+                      />
                       <p className="text-neon">Add</p>
                     </div>
                   </div>

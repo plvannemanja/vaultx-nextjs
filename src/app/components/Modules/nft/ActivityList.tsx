@@ -12,10 +12,7 @@ import {
 import { trimString } from '@/utils/helpers';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { getAllNftActivitys } from '@/services/supplier';
-import { INFTActivity } from '@/types';
 import { getExplorerURL } from '@/lib/helper';
 import {
   Disclosure,
@@ -25,23 +22,7 @@ import {
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 
 export default function ActivityList() {
-  const { nftId } = useNFTDetail();
-  const [activityList, setActivityList] = useState<INFTActivity[]>([]);
-
-  const getAllNftActivity = async () => {
-    try {
-      const {
-        data: { data },
-      } = await getAllNftActivitys({ nftId });
-      setActivityList(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAllNftActivity();
-  }, [nftId]);
+  const { activityList } = useNFTDetail();
 
   if (activityList.length === 0) return null;
 
@@ -55,8 +36,9 @@ export default function ActivityList() {
                 <div className="flex w-full justify-between">
                   <span>Item activity</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </div>
               </DisclosureButton>
@@ -77,7 +59,9 @@ export default function ActivityList() {
                   </TableHeader>
                   <TableBody>
                     {activityList.map((item: any, index: number) => {
-                      item.fromWallet = item.from ? item.from.wallet : item?.fromWallet;
+                      item.fromWallet = item.from
+                        ? item.from.wallet
+                        : item?.fromWallet;
                       item.toWallet = item.to ? item.to.wallet : item?.toWallet;
 
                       return (
@@ -102,11 +86,17 @@ export default function ActivityList() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            {item.price ? (`${item.price} ${item.currency ?? ""}`) : '-/-'}
+                            {item.price
+                              ? `${item.price} ${item.currency ?? ''}`
+                              : '-/-'}
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-x-2 items-center text-neon">
-                              {item.from && item.from.username ? item.from.username : (item.fromWallet ? trimString(item.fromWallet) : '-/-')}
+                              {item.from && item.from.username
+                                ? item.from.username
+                                : item.fromWallet
+                                  ? trimString(item.fromWallet)
+                                  : '-/-'}
                               {item.fromWallet && (
                                 <a
                                   target="_blank"
@@ -125,7 +115,11 @@ export default function ActivityList() {
                           </TableCell>
                           <TableCell>
                             <div className="flex gap-x-2 items-center text-neon">
-                              {item.to && item.to.username ? item.to.username : (item.toWallet ? trimString(item.toWallet) : '-/-')}
+                              {item.to && item.to.username
+                                ? item.to.username
+                                : item.toWallet
+                                  ? trimString(item.toWallet)
+                                  : '-/-'}
                               {item.toWallet && (
                                 <a
                                   target="_blank"

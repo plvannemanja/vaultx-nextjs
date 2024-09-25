@@ -3,7 +3,7 @@
 import NftServices from '@/services/nftService';
 import { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { userServices } from '@/services/supplier';
+import { getAllNftActivitys, userServices } from '@/services/supplier';
 import { FavoriteService } from '@/services/FavoriteService';
 import {
   ArrowTopRightOnSquareIcon,
@@ -41,6 +41,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
     setLiked,
     type,
     setType,
+    setActivityList,
   } = useNFTDetail();
   const [user, setUser] = useState(null);
 
@@ -127,15 +128,28 @@ function PageDetail({ params }: { params: { slug: string } }) {
     }
   };
 
+  const getAllNftActivity = async () => {
+    try {
+      const {
+        data: { data },
+      } = await getAllNftActivitys({ nftId: params.slug });
+      setActivityList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchNftData = async () => {
     try {
       // set NFT ID
       setNftId(params.slug);
 
-      const response = await nftService.getNftById(params.slug);
+      getArtitsLikes();
+      userReaction();
 
-      await getArtitsLikes();
-      await userReaction();
+      getAllNftActivity();
+
+      const response = await nftService.getNftById(params.slug);
 
       setData(response.data.nft);
       if (response.data.nft) {

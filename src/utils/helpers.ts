@@ -64,7 +64,15 @@ export function isValidNumber(value: any): boolean {
   return !isNaN(Number(value)) && Number(value) > 0;
 }
 
-export const acceptedFormats = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.mp4', '.mp3'];
+export const acceptedFormats = [
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.gif',
+  '.webp',
+  '.mp4',
+  '.mp3',
+];
 
 // 1GB file size
 export const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes

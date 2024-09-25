@@ -126,16 +126,22 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           );
         }
         if (nftContext.advancedOptions.royalties) {
-          if (!nftContext.advancedDetails.royalty) throw new Error('royalty is invalid');
+          if (!nftContext.advancedDetails.royalty)
+            throw new Error('royalty is invalid');
           data.append('royalty', nftContext.advancedDetails.royalty as any);
-          data.append('royaltyAddress', nftContext.advancedDetails.royaltyAddress as any);
+          data.append(
+            'royaltyAddress',
+            nftContext.advancedDetails.royaltyAddress as any,
+          );
         }
         if (nftContext.advancedOptions.category) {
-          if (!nftContext.advancedDetails.category) throw new Error('category is invalid');
+          if (!nftContext.advancedDetails.category)
+            throw new Error('category is invalid');
           data.append('category', nftContext.advancedDetails.category);
         }
         if (nftContext.advancedOptions.unlockable) {
-          if (!nftContext.advancedDetails.unlockable) throw new Error('certificate is invalid');
+          if (!nftContext.advancedDetails.unlockable)
+            throw new Error('certificate is invalid');
           data.append(
             'unlockableContent',
             nftContext.advancedDetails.unlockable,
@@ -447,6 +453,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setBasicDetails({ ...basicDetails, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(basicDetails.error)}
             close={() => setBasicDetails({ ...basicDetails, error: null })}
           />
@@ -459,6 +466,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(advanceDetails.error)}
             close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
           />
@@ -471,6 +479,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           close={() => setSellerInfo({ ...sellerInfo, error: null })}
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={JSON.parse(sellerInfo.error)}
             close={() => setSellerInfo({ ...sellerInfo, error: null })}
           />

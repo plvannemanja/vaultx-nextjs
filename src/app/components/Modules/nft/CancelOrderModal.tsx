@@ -163,7 +163,7 @@ export default function CancelOrderModal({ onClose }: { onClose: () => void }) {
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Cancel
               </button>
             </div>

@@ -220,30 +220,34 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                   </div>
                 </div>
-                {
-                  (user?.wallet === data.collection.owner) && (
-                    <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
-                      <div onClick={() => router.push(`/dashboard/curation/edit/${params.slug}`)}>
-                        <svg
-                          width="27"
-                          height="26"
-                          viewBox="0 0 27 26"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11.9515 5.41667H6.53483C5.33821 5.41667 4.36816 6.38672 4.36816 7.58334V19.5C4.36816 20.6966 5.33821 21.6667 6.53483 21.6667H18.4515C19.6481 21.6667 20.6182 20.6966 20.6182 19.5V14.0833M19.0861 3.8846C19.9322 3.03847 21.3041 3.03847 22.1502 3.8846C22.9964 4.73074 22.9964 6.1026 22.1502 6.94873L12.849 16.25H9.78483L9.78483 13.1859L19.0861 3.8846Z"
-                            stroke="white"
-                            strokeWidth="2.16667"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        <div className="text-white text-base font-medium">Edit</div>
+                {user?.wallet === data.collection.owner && (
+                  <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
+                    <div
+                      onClick={() =>
+                        router.push(`/dashboard/curation/edit/${params.slug}`)
+                      }
+                    >
+                      <svg
+                        width="27"
+                        height="26"
+                        viewBox="0 0 27 26"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.9515 5.41667H6.53483C5.33821 5.41667 4.36816 6.38672 4.36816 7.58334V19.5C4.36816 20.6966 5.33821 21.6667 6.53483 21.6667H18.4515C19.6481 21.6667 20.6182 20.6966 20.6182 19.5V14.0833M19.0861 3.8846C19.9322 3.03847 21.3041 3.03847 22.1502 3.8846C22.9964 4.73074 22.9964 6.1026 22.1502 6.94873L12.849 16.25H9.78483L9.78483 13.1859L19.0861 3.8846Z"
+                          stroke="white"
+                          strokeWidth="2.16667"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <div className="text-white text-base font-medium">
+                        Edit
                       </div>
                     </div>
-                  )
-                }
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -266,34 +270,34 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div className="my-5 flex flex-wrap md:gap-x-3">
                 {data.collection.youtube.length > 0
                   ? data.collection.youtube.map((item: any, index: number) => {
-                    const imageId = getYouTubeVideoId(item.url);
+                      const imageId = getYouTubeVideoId(item.url);
 
-                    return (
-                      <div
-                        className="flex flex-col gap-y-3 w-[20rem]"
-                        key={index}
-                      >
+                      return (
                         <div
-                          className="relative cursor-pointer"
-                          onClick={() => {
-                            window.open(item.url, '_blank');
-                          }}
+                          className="flex flex-col gap-y-3 w-[20rem]"
+                          key={index}
                         >
-                          <img
-                            src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
-                            className="w-full aspect-video"
-                          />
-                          <img
-                            src="/icons/play.svg"
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                          />
+                          <div
+                            className="relative cursor-pointer"
+                            onClick={() => {
+                              window.open(item.url, '_blank');
+                            }}
+                          >
+                            <img
+                              src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
+                              className="w-full aspect-video"
+                            />
+                            <img
+                              src="/icons/play.svg"
+                              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                            />
+                          </div>
+                          <p className="text-center font-medium">
+                            {item.title}
+                          </p>
                         </div>
-                        <p className="text-center font-medium">
-                          {item.title}
-                        </p>
-                      </div>
-                    );
-                  })
+                      );
+                    })
                   : null}
               </div>
             </div>

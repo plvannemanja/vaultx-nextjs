@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 interface IBaseButtonProps {
   title: string;
-  variant: 'primary' | 'secondary';
+  variant: 'primary' | 'secondary' | 'secondaryOutline';
   onClick: any;
   className?: any;
   displayIcon?: boolean;
@@ -20,10 +20,17 @@ export default function BaseButton({
   iconStyles,
 }: IBaseButtonProps) {
   const isPrimary = useMemo(() => variant === 'primary', [variant]);
+  const isSecondaryOutline = useMemo(
+    () => variant === 'secondaryOutline',
+    [variant],
+  );
 
   return (
     <div
-      className={`py-3 w-[20rem] rounded-lg text-black font-semibold  ${isPrimary ? 'bg-neon ' : 'bg-[#dee8e8]'} ${className}`}
+      className={`py-3 w-[20rem] rounded-lg text-black font-semibold 
+         ${isPrimary ? 'bg-neon ' : 'bg-[#dee8e8]'} 
+          ${isSecondaryOutline ? 'bg-[#DDF24733] border-2 border-[#DDF247] !text-[#DDF24799]' : 'bg-[#dee8e8]'} 
+         ${className}`}
     >
       <button
         className="w-full h-full gap-[10px] flex items-center justify-center"

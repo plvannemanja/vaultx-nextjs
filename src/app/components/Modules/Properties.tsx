@@ -84,7 +84,7 @@ export default function PropertiesInfo({ close, onTemplateAdd }) {
 
   return (
     <BaseDialog
-      isOpen={true}
+      isOpen={false}
       onClose={handleCancel}
       className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
     >

@@ -14,7 +14,6 @@ import CancelModal from './CancelModal';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 
-
 const basicDetailsSchema = z.object({
   productName: z.string(),
   productDescription: z.string(),
@@ -359,10 +358,10 @@ export default function BasicDetails({
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any, index: number) => (
-                  <option key={index} value={JSON.stringify(item)}>
-                    {item.name}
-                  </option>
-                ))
+                    <option key={index} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
                 : null}
             </select>
           </div>
@@ -378,7 +377,11 @@ export default function BasicDetails({
                       type="file"
                       className="hidden"
                       title="file"
-                      ref={index === basicDetail?.attachments.length - 1 ? attachmentRef : null}
+                      ref={
+                        index === basicDetail?.attachments.length - 1
+                          ? attachmentRef
+                          : null
+                      }
                       onChange={(e) => handleAttachment(e, index)}
                     />
                     {!attachment ? (
@@ -395,10 +398,9 @@ export default function BasicDetails({
                       />
                     )}
                     {attachment ? (
-                      <div
-                        className="flex gap-x-2 justify-center items-center cursor-pointer"
-                      >
-                        <span className="text-neon font-bold text-[13px]"
+                      <div className="flex gap-x-2 justify-center items-center cursor-pointer">
+                        <span
+                          className="text-neon font-bold text-[13px]"
                           onClick={() => addAttachment(index)}
                         >
                           Change

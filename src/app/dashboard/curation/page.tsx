@@ -59,7 +59,7 @@ export default function Page() {
       const collections = response.data.curations;
       let detailedInfo = await Promise.all(
         collections
-          .filter((item: any) => !item?.active && !item?.owner?.active)
+          .filter((item: any) => item?.active)
           .map(async (collection: any) => {
             const info = await collectionServices.getCollectionInfo(
               collection._id,

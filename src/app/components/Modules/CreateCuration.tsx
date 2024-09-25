@@ -14,7 +14,11 @@ import CurationLoader from './create/CurationLoader';
 import AddNew from '../Icons/AddNew';
 import Upload from '../Icons/Upload';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
-import { acceptedFormats, maxFileSize, removeEmptyStrings } from '@/utils/helpers';
+import {
+  acceptedFormats,
+  maxFileSize,
+  removeEmptyStrings,
+} from '@/utils/helpers';
 import { useActiveAccount } from 'thirdweb/react';
 import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
@@ -297,6 +301,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
         >
           <ErrorModal
+            title={'Error in creation found'}
             data={errors.data}
             close={() => {
               setErrors({ active: false, data: [] });

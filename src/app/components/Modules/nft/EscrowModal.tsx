@@ -9,6 +9,7 @@ import { CreateSellService } from '@/services/createSellService';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { contract } from '@/lib/contract';
 import { formatEther, parseEther } from 'viem';
+import ErrorModal from '../create/ErrorModal';
 
 export default function EscrowModal({
   onClose,
@@ -22,6 +23,7 @@ export default function EscrowModal({
   const { NFTDetail } = useNFTDetail();
   const activeAccount = useActiveAccount();
   const saleService = new CreateSellService();
+  const [error, setError] = useState(null);
   const release = async () => {
     try {
       setStep(2);
@@ -32,7 +34,7 @@ export default function EscrowModal({
       // add events
       let states = [];
 
-      events.forEach(event => {
+      events.forEach((event) => {
         if (event.eventName === 'ProtocolFee') {
           const feeState = {
             nftId: NFTDetail._id,
@@ -55,7 +57,7 @@ export default function EscrowModal({
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
             currency: 'ETH',
-          }
+          };
           states.push(royaltyState);
         } else if (event.eventName === 'PaymentSplited') {
           const splitState = {
@@ -67,7 +69,7 @@ export default function EscrowModal({
             actionHash: transactionHash,
             price: formatEther(event.args.amount),
             currency: 'ETH',
-          }
+          };
           states.push(splitState);
         } else if (event.eventName === 'EscrowReleased') {
           const releaseState = {
@@ -79,7 +81,7 @@ export default function EscrowModal({
             date: new Date(),
             actionHash: transactionHash,
             price: NFTDetail.price,
-          }
+          };
           states.push(releaseState);
         }
       });
@@ -93,74 +95,81 @@ export default function EscrowModal({
       // setStep(3);
     } catch (error) {
       console.log(error);
+      setError(JSON.stringify(error));
       onClose();
     }
   };
   return (
     <>
-      {step === 1 ? (
-        <div className="w-[34rem] flex flex-col gap-y-7">
-          <div className="flex gap-x-3 items-center">
-            <img src="/icons/info.svg" className="w-12" />
-            <p className="text-[30px] font-extrabold">Escrow Release Confirmation</p>
-          </div>
+      {error ? (
+        <ErrorModal title="Error" data={error} close={() => onClose()} />
+      ) : (
+        <>
+          {step === 1 ? (
+            <div className="w-[34rem] flex flex-col gap-y-7">
+              <div className="flex gap-x-3 items-center">
+                <img src="/icons/info.svg" className="w-12" />
+                <p className="text-[30px] font-extrabold">
+                  Escrow Release Confirmation
+                </p>
+              </div>
 
+              <p className="text-[24px] azeret-mono-font text-[#fff] font-extrabold">
+                Did you receive the physical artwork without any issues?
+              </p>
+              <p className="text-[16px] azeret-mono-font text-[#FFFFFF53] mb-6">
+                When escrow is released, you will receive the NFT created by the
+                artist in your wallet, and the purchase price you paid will be
+                delivered to the artist.
+                <br />
+                <br />
+                If you have properly received the physical artwork and there
+                were no problems during the transaction, click the Escrow
+                Release button below to complete the transaction.
+              </p>
 
-          <p className="text-[24px] azeret-mono-font text-[#fff] font-extrabold">
-            Did you receive the physical artwork without any issues?
-          </p>
-          <p className="text-[16px] azeret-mono-font text-[#FFFFFF53] mb-6">
-
-            When escrow is released, you will receive the NFT created by the
-            artist in your wallet, and the purchase price you paid will be
-            delivered to the artist.
-            <br />
-            <br />
-            If you have properly received the physical artwork and there were no
-            problems during the transaction, click the Escrow Release button
-            below to complete the transaction.
-          </p>
-
-          <div className="flex justify-between">
-            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button
-                className="w-full h-full"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                Cancel
-              </button>
+              <div className="flex justify-between">
+                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+                  <button
+                    className="w-full h-full"
+                    onClick={() => {
+                      onClose();
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+                  <button className="w-full h-full" onClick={() => release()}>
+                    Escrow Release
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
-              <button className="w-full h-full" onClick={() => release()}>
-                Escrow Release
-              </button>
+          ) : null}
+          {step === 2 && (
+            <BasicLoadingModal message="Please wait while we releasing NFT" />
+          )}
+          {step === 3 ? (
+            <div className="w-[34rem] flex flex-col gap-y-4">
+              <div className="flex flex-col gap-y-2 justify-center text-center">
+                <img src="/icons/success.svg" className="w-16 mx-auto" />
+                <p className="text-lg font-medium">Escrow Release Success</p>
+              </div>
+              <div className="py-3 w-[100%] rounded-lg text-black font-semibold bg-light">
+                <button
+                  className="w-full h-full bg-[#DEE8E8]"
+                  onClick={() => {
+                    onClose();
+                  }}
+                >
+                  Close
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      ) : null}
-      {step === 2 && (
-        <BasicLoadingModal message="Please wait while we releasing NFT" />
+          ) : null}
+        </>
       )}
-      {step === 3 ? (
-        <div className="w-[34rem] flex flex-col gap-y-4">
-          <div className="flex flex-col gap-y-2 justify-center text-center">
-            <img src="/icons/success.svg" className="w-16 mx-auto" />
-            <p className="text-lg font-medium">Escrow Release Success</p>
-          </div>
-          <div className="py-3 w-[100%] rounded-lg text-black font-semibold bg-light">
-            <button
-              className="w-full h-full bg-[#DEE8E8]"
-              onClick={() => {
-                onClose();
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      ) : null}
     </>
   );
 }
