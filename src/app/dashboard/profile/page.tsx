@@ -156,36 +156,15 @@ export default function Page() {
 
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div
-            className="flex gap-x-3 items-center p-3 rounded-xl text-white border-2 border-white cursor-pointer"
+            className="flex gap-x-3 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"
             onClick={() => copyAddr()}
           >
             {user ? (user?.wallet ? trimString(user?.wallet) : null) : null}
-            <svg
-              width="24px"
-              height="24px"
-              strokeWidth="1.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              color="#fff"
-            >
-              <path
-                d="M19.4 20H9.6C9.26863 20 9 19.7314 9 19.4V9.6C9 9.26863 9.26863 9 9.6 9H19.4C19.7314 9 20 9.26863 20 9.6V19.4C20 19.7314 19.7314 20 19.4 20Z"
-                stroke="#fff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
-              <path
-                d="M15 9V4.6C15 4.26863 14.7314 4 14.4 4H4.6C4.26863 4 4 4.26863 4 4.6V14.4C4 14.7314 4.26863 15 4.6 15H9"
-                stroke="#fff"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              ></path>
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+              <path d="M8.66732 7.58333V16.25C8.66732 17.4466 9.63737 18.4167 10.834 18.4167H17.334M8.66732 7.58333V5.41667C8.66732 4.22005 9.63737 3.25 10.834 3.25H15.8019C16.0892 3.25 16.3648 3.36414 16.568 3.5673L21.35 8.34937C21.5532 8.55253 21.6673 8.82808 21.6673 9.1154V16.25C21.6673 17.4466 20.6973 18.4167 19.5006 18.4167H17.334M8.66732 7.58333H7.22287C5.62738 7.58333 4.33398 8.87673 4.33398 10.4722V20.5833C4.33398 21.78 5.30403 22.75 6.50065 22.75H14.4451C16.0406 22.75 17.334 21.4566 17.334 19.8611V18.4167" stroke="white" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
+          <div className="flex w-[80px] px-[20px] py-[11px] rounded-[61px] gap-x-3 p-3 border items-center border-none bg-[#00000063] cursor-pointer">
             <span className="font-medium">{likes}</span>
             <div onClick={() => handleLike()}>
               <input
@@ -236,22 +215,33 @@ export default function Page() {
         </div>
 
         <div
-          className={`flex flex-col gap-y-2 justify-center items-center absolute w-full ${user ? 'bottom-[-84px]' : 'bottom-[-48px]'} bottom-[-48px]`}
+          className={`flex flex-col gap-y-6 justify-center items-center text-[24px] font-medium absolute w-full ${user ? 'bottom-[-84px]' : 'bottom-[-48px]'} bottom-[-48px]`}
         >
+          <div className="rounded-full w-29 h-29 border-neon border-2 flex items-center justify-center">
+
           <img
             src={
               user?.avatar?.url ? user.avatar.url : '/images/work-default.png'
             }
             alt="like"
-            className="w-28 h-28 rounded-full object-cover border-neon border-2"
+            className="w-28 h-28 rounded-full object-cover "
           />
+          </div>
+          
           {user
             ? user?.username
               ? user?.username
               : trimString(user?.wallet)
             : null}
         </div>
+        
       </div>
+      <div className="text-white mt-[100px] w-full">
+          <div className="w-full bg-[#232323] rounded-[12px] p-[15px] text-[#FFFFFF87] text-[14px]  azeret-mono-font">
+            <p>Tellus est commodo nunc a montes. Tempus dolor convallis cras orci turpis sit aenean. Mi enim vitae proin facilisi. Sed tincidunt ullamcorper sed semper a. Rhoncus eu cras vel venenatis vel. Accumsan elit elementum viverra tellus lectus fermentum sapien. Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin.
+            Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin.</p>
+          </div>
+        </div>
 
       <div className="flex gap-x-3 flex-wrap mt-[6rem]">
         {badges.map((badge, index) => {
@@ -259,10 +249,10 @@ export default function Page() {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`p-3 rounded-2xl border-2 border-gray-500 cursor-pointer ${
+              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${
                 filterbadge === badge.value
                   ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                  : 'hover:bg-[#232323] bg-dark text-white'
+                  : 'hover:bg-[#232323] bg-transparent text-white'
               }`}
             >
               {badge.label}
