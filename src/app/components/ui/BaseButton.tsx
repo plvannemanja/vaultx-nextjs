@@ -20,7 +20,10 @@ export default function BaseButton({
   iconStyles,
 }: IBaseButtonProps) {
   const isPrimary = useMemo(() => variant === 'primary', [variant]);
-  const isSecondaryOutline = useMemo(() => variant === 'secondaryOutline', [variant]);
+  const isSecondaryOutline = useMemo(
+    () => variant === 'secondaryOutline',
+    [variant],
+  );
 
   return (
     <div

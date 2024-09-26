@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { TokenIcon } from '@web3icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
-
 
 interface INftCardProps {
   name: string;
@@ -30,13 +30,20 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
           </p>
           <div className="flex justify-between">
-            <span className="text-xs text-dark  azeret-mono-font">Created by: </span>
+            <span className="text-xs text-dark  azeret-mono-font">
+              Created by:{' '}
+            </span>
             <span className="text-sm azeret-mono-font">
               {data.curation.name ? data.curation.name : data.artist}
             </span>
           </div>
-          <p className="text-xs text-[#fff] font-bold azeret-mono-font italic underline"> <Link className='italic ' href={`/nft/${data.curation.name}`}>Canvas Collection</Link></p>
+     <p className="text-xs text-[#fff] font-bold azeret-mono-font italic underline">            {' '}
+            <Link className="italic " href={`/nft/${data.curation.name}`}>
+              Canvas Collection
+            </Link>
+          </p>
           <hr className={'border-[#ffffff10] my-[5px]'} />
+
           <div className="flex justify-between items-center">
             <span className="text-xs text-dark  azeret-mono-font">Price </span>
             <div className="flex gap-x-2 items-center">

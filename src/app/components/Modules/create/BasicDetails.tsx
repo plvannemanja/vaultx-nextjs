@@ -12,10 +12,7 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { BaseDialog } from '../../ui/BaseDialog';
 import CancelModal from './CancelModal';
 import { useGlobalContext } from '../../Context/GlobalContext';
-
-// 1GB file size
-const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
+import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 
 const basicDetailsSchema = z.object({
   productName: z.string(),
@@ -38,11 +35,11 @@ export default function BasicDetails({
   const { fee } = useGlobalContext();
   const fileInputRef = useRef(null);
   const attachmentRef = useRef(null);
+  const [addAttachId, setAddAttachId] = useState(0);
 
   const [file, setFile] = useState<any>(null);
   const [imageSrc, setImageSrc] = useState(null);
   const [curations, setCurations] = useState([]);
-  const [attachments, setAttachments] = useState([null]);
 
   const cancelChanges = () => {
     setBasicDetail({
@@ -111,35 +108,6 @@ export default function BasicDetails({
     }
   };
 
-  // const handleAttachment = (file: any, index: number) => {
-  //   const attachment = file.target.files[0];
-  //   const fileExtension = attachment?.name.split('.').pop().toLowerCase();
-  //   if (
-  //     attachment &&
-  //     attachment.size < maxFileSize &&
-  //     acceptedFormats.includes(`.${fileExtension}`)
-  //   ) {
-  //     const newAttachments = [...attachments];
-  //     newAttachments[index] = attachment;
-
-  //     setAttachments(newAttachments);
-  //     setBasicDetail({
-  //       ...basicDetail,
-  //       attachments: newAttachments,
-  //     });
-
-  //     // Add a new attachment box only after a file is selected
-  //     if (newAttachments.length === index + 1) {
-  //       const nextAttachments = [...newAttachments, null];
-  //       setAttachments(nextAttachments);
-  //       setBasicDetail({
-  //         ...basicDetail,
-  //         attachments: nextAttachments,
-  //       });
-  //     }
-  //   }
-  // };
-
   const handleAttachment = (file: any, index: number) => {
     const attachment = file.target.files[0];
     const fileExtension = attachment.name.split('.').pop().toLowerCase();
@@ -147,31 +115,26 @@ export default function BasicDetails({
       attachment.size < maxFileSize &&
       acceptedFormats.includes(`.${fileExtension}`)
     ) {
-      const newAttachments = [...attachments];
-      newAttachments[index] = attachment;
+      const newAttachments = [...basicDetail?.attachments];
+      newAttachments[addAttachId] = attachment;
 
-      setAttachments(newAttachments);
       setBasicDetail({
         ...basicDetail,
         attachments: newAttachments,
       });
     }
   };
-  // const addAttachment = () => {
-  //   if (attachmentRef.current) {
-  //     (attachmentRef.current as any).click();
-  //   }
-  // };
 
-  const addAttachment = () => {
+  const addAttachment = (index) => {
     if (attachmentRef.current) {
       (attachmentRef.current as any).click();
     }
-    const newAttachments = [...attachments, null];
-    console.log('attachment', newAttachments);
-    console.log('attachment', newAttachments);
+    setAddAttachId(index);
+    if (basicDetail?.attachments.length - 1 > index) {
+      return;
+    }
+    const newAttachments = [...basicDetail?.attachments, null];
 
-    setAttachments(newAttachments);
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,
@@ -179,9 +142,10 @@ export default function BasicDetails({
   };
 
   const removeAttachment = (index: number) => {
-    const newAttachments = attachments.filter((_, i) => i !== index);
+    const newAttachments = basicDetail?.attachments.filter(
+      (_, i) => i !== index,
+    );
 
-    setAttachments(newAttachments);
     setBasicDetail({
       ...basicDetail,
       attachments: newAttachments,
@@ -413,7 +377,11 @@ export default function BasicDetails({
                       type="file"
                       className="hidden"
                       title="file"
-                      ref={attachmentRef}
+                      ref={
+                        index === basicDetail?.attachments.length - 1
+                          ? attachmentRef
+                          : null
+                      }
                       onChange={(e) => handleAttachment(e, index)}
                     />
                     {!attachment ? (
@@ -430,23 +398,24 @@ export default function BasicDetails({
                       />
                     )}
                     {attachment ? (
-                      <div
-                        className="flex gap-x-2 justify-center items-center cursor-pointer"
-                        onClick={() => removeAttachment(index)}
-                      >
-                        <span className="text-neon font-bold text-[13px]">
+                      <div className="flex gap-x-2 justify-center items-center cursor-pointer">
+                        <span
+                          className="text-neon font-bold text-[13px]"
+                          onClick={() => addAttachment(index)}
+                        >
                           Change
                         </span>
                         <img
                           src="/icons/trash.svg"
                           alt="attachment"
                           className="w-5 h-5"
+                          onClick={() => removeAttachment(index)}
                         />
                       </div>
                     ) : (
                       <div
                         className="flex gap-x-2 justify-center items-center cursor-pointer"
-                        onClick={() => addAttachment()}
+                        onClick={() => addAttachment(index)}
                       >
                         <span className="text-neon  font-bold text-[13px]">
                           Upload

@@ -9,20 +9,22 @@ import BaseButton from '../ui/BaseButton';
 import Image from 'next/image';
 import { collectionServices } from '@/services/supplier';
 import { z } from 'zod';
-import TriggerModal from '../ui/TriggerModal';
 import ErrorModal from './create/ErrorModal';
 import CurationLoader from './create/CurationLoader';
 import AddNew from '../Icons/AddNew';
 import Upload from '../Icons/Upload';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
-import { removeEmptyStrings } from '@/utils/helpers';
+import {
+  acceptedFormats,
+  maxFileSize,
+  removeEmptyStrings,
+} from '@/utils/helpers';
 import { useActiveAccount } from 'thirdweb/react';
 import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
 import ConnectedCard from '../Cards/ConnectedCard';
-// 1GB file size
-const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-const acceptedFormats = ['.png', '.gif', '.webp', '.mp4', '.mp3'];
+import { BaseDialog } from '../ui/BaseDialog';
+import { stat } from 'fs';
 
 const createCurationSchema = z.object({
   name: z.string(),
@@ -43,7 +45,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   const [status, setStatus] = useState({
     error: false,
     loading: false,
-    active: false,
+    active: true,
   });
 
   const [formData, setFormData] = useState<any>({
@@ -92,33 +94,48 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   ]);
 
   const create = async () => {
-    toast({
-      title: 'Processing Transaction',
-      description: 'Please wait...',
-    });
-    setStatus({ error: false, loading: true, active: true });
     try {
       const result = createCurationSchema.safeParse(formData);
       if (
-        !result.success &&
-        !formData.logo &&
-        !formData.bannerImage &&
+        !result.success ||
+        !formData.logo ||
+        !formData.bannerImage ||
         !formData.descriptionImage
       ) {
+        let data = [];
+        if (!result.success) data = JSON.parse(result.error.message);
+
+        if (!formData.logo) {
+          data.push({
+            path: ['Logo'],
+          });
+        }
+
+        if (!formData.bannerImage) {
+          data.push({
+            path: ['Banner image'],
+          });
+        }
+
+        if (!formData.descriptionImage) {
+          data.push({
+            path: ['Description image'],
+          });
+        }
         setErrors({
           active: true,
-          data: JSON.parse(result.error.message),
+          data,
         });
         return null;
       }
-
-      const logoUri = formData.logo ? await uploadFile(formData.logo) : '';
-      const bannerUri = formData.bannerImage
-        ? await uploadFile(formData.bannerImage)
-        : '';
-      const desUri = formData.descriptionImage
-        ? await uploadFile(formData.descriptionImage)
-        : '';
+      setStatus({ error: false, loading: true, active: true });
+      // const logoUri = formData.logo ? await uploadFile(formData.logo) : '';
+      // const bannerUri = formData.bannerImage
+      //   ? await uploadFile(formData.bannerImage)
+      //   : '';
+      // const desUri = formData.descriptionImage
+      //   ? await uploadFile(formData.descriptionImage)
+      //   : '';
 
       const data = new FormData();
       data.append('name', formData.name);
@@ -133,27 +150,28 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       data.append('instagram', formData.instagram);
       data.append('youtube', JSON.stringify(youtube));
 
-      let metaData = {
-        name: formData.name,
-        symbol: formData.symbol,
-        discription: formData.discription,
-        website: formData.website,
-        twitter: formData.twitter,
-        facebook: formData.facebook,
-        instagram: formData.instagram,
-        youtube: formData.youtube,
-        logo: logoUri,
-        banner: bannerUri,
-        description: desUri,
-      };
-      metaData = removeEmptyStrings(metaData);
-      const metaUri = await uploadMetaData(metaData);
+      // let metaData = {
+      //   name: formData.name,
+      //   symbol: formData.symbol,
+      //   discription: formData.discription,
+      //   website: formData.website,
+      //   twitter: formData.twitter,
+      //   facebook: formData.facebook,
+      //   instagram: formData.instagram,
+      //   youtube: formData.youtube,
+      //   logo: logoUri,
+      //   banner: bannerUri,
+      //   description: desUri,
+      // };
+      // metaData = removeEmptyStrings(metaData);
+      // const metaUri = await uploadMetaData(metaData);
 
+      // check cancel
       if (activeAccount) {
         try {
           const result = await createCollection(
-            metaData.name,
-            metaUri,
+            // metaData.name,
+            // metaUri,
             activeAccount,
           );
           if (result === null) throw 'collection is not created!';
@@ -167,7 +185,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             setStatus({ error: false, loading: false, active: true });
           }
         } catch (error) {
-          setStatus({ error: false, loading: true, active: true });
+          setStatus({ error: true, loading: true, active: true });
           console.log('error:', error);
           throw error;
         }
@@ -266,30 +284,31 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       <ConnectedCard />
 
       {status.active && (
-        <TriggerModal
-          isOpen={status.loading || status.error}
-          close={() =>
-            setStatus({ error: false, loading: false, active: false })
-          }
+        <BaseDialog
+          isOpen={status.loading && !status.error}
+          onClose={(val) => setStatus({ ...status, loading: val })}
+          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
+          modal={status.loading}
         >
           <CurationLoader status={status} edit={editMode ? true : false} />
-        </TriggerModal>
+        </BaseDialog>
       )}
 
       {errors.active && (
-        <TriggerModal
+        <BaseDialog
           isOpen={errors.active}
-          close={() => setErrors({ active: false, data: [] })}
+          onClose={(val) => setErrors({ active: val, data: [] })}
+          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
         >
           <ErrorModal
-          title={'Error in creation found'}
+            title={'Error in creation found'}
             data={errors.data}
             close={() => {
               setErrors({ active: false, data: [] });
               handleCloseModal();
             }}
           />
-        </TriggerModal>
+        </BaseDialog>
       )}
 
       <div className=" grid grid-cols-12 flex gap-[50px] gap-y-5 flex-col lg:flex-row lg:justify-between">

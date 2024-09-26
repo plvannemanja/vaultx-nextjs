@@ -238,7 +238,7 @@ export default function ShippingInfo() {
     setSellerInfo({
       ...sellerInfo,
       id: value._id,
-      type: value.shippingAddr,
+      type: value.type,
       name: value.name,
       email: value.email,
       shippingAddr: value.shippingAddr,
@@ -389,12 +389,12 @@ export default function ShippingInfo() {
                               Shipping Address Name
                             </Label>
                             <Input
-                              onChange={(e) =>
+                              onChange={(e) => {
                                 setSellerInfo({
                                   ...sellerInfo,
                                   type: e.target.value,
-                                })
-                              }
+                                });
+                              }}
                               className="w-full border-none bg-[#161616]"
                               type="text"
                               value={sellerInfo.type}

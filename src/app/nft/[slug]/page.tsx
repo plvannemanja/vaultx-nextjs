@@ -3,7 +3,7 @@
 import NftServices from '@/services/nftService';
 import { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { userServices } from '@/services/supplier';
+import { getAllNftActivitys, userServices } from '@/services/supplier';
 import { FavoriteService } from '@/services/FavoriteService';
 import {
   ArrowTopRightOnSquareIcon,
@@ -41,6 +41,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
     setLiked,
     type,
     setType,
+    setActivityList,
   } = useNFTDetail();
   const [user, setUser] = useState(null);
 
@@ -127,15 +128,28 @@ function PageDetail({ params }: { params: { slug: string } }) {
     }
   };
 
+  const getAllNftActivity = async () => {
+    try {
+      const {
+        data: { data },
+      } = await getAllNftActivitys({ nftId: params.slug });
+      setActivityList(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchNftData = async () => {
     try {
       // set NFT ID
       setNftId(params.slug);
 
-      const response = await nftService.getNftById(params.slug);
+      getArtitsLikes();
+      userReaction();
 
-      await getArtitsLikes();
-      await userReaction();
+      getAllNftActivity();
+
+      const response = await nftService.getNftById(params.slug);
 
       setData(response.data.nft);
       if (response.data.nft) {
@@ -172,62 +186,67 @@ function PageDetail({ params }: { params: { slug: string } }) {
                         <InformationCircleIcon width={20} height={20} />
                         Details
                       </span>
-                        <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
-                        />
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
+                      />
                     </div>
                   </DisclosureButton>
                   <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <img
-                        src="/icons/ether.svg"
-                        alt="matic"
-                        className="w-[1.2rem] h-8 fill-white"
-                      />
-                      <Label className="font-extrabold text-[14px]">Erc721</Label>
-                    </div>
-                  </div>
-                  <hr/>
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <img
-                        src="/icons/ether.svg"
-                        alt="matic"
-                        className="w-[1.2rem] h-8 fill-white"
-                      />
-                      <Label className="font-medium">View on Polygon Scan</Label>
-                      <a href={data?.minted ? '?a=' : ''}>
-                        <ArrowTopRightOnSquareIcon
-                          width={20}
-                          height={20}
-                          className="fill-[#fff]"
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <img
+                          src="/icons/ether.svg"
+                          alt="matic"
+                          className="w-[1.2rem] h-8 fill-white"
                         />
-                      </a>
+                        <Label className="font-extrabold text-[14px]">
+                          Erc721
+                        </Label>
+                      </div>
                     </div>
-                  </div>
-                  <hr/>
-                  <div className="w-full flex flex-col gap-y-5">
-                    <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
-                      <EyeIcon width={20} height={20} />
-                      <Label className="font-medium">Open Original On IPFS</Label>
-                      <a target="_blank" href={data.uri}>
-                        <ArrowTopRightOnSquareIcon
-                          width={20}
-                          height={20}
-                          className="fill-[#fff]"
+                    <hr />
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <img
+                          src="/icons/ether.svg"
+                          alt="matic"
+                          className="w-[1.2rem] h-8 fill-white"
                         />
-                      </a>
+                        <Label className="font-medium">
+                          View on Polygon Scan
+                        </Label>
+                        <a href={data?.minted ? '?a=' : ''}>
+                          <ArrowTopRightOnSquareIcon
+                            width={20}
+                            height={20}
+                            className="fill-[#fff]"
+                          />
+                        </a>
+                      </div>
                     </div>
-                  </div>  
+                    <hr />
+                    <div className="w-full flex flex-col gap-y-5">
+                      <div className="w-full px-6 py-2 flex gap-x-2 items-center text-[#fff]">
+                        <EyeIcon width={20} height={20} />
+                        <Label className="font-medium">
+                          Open Original On IPFS
+                        </Label>
+                        <a target="_blank" href={data.uri}>
+                          <ArrowTopRightOnSquareIcon
+                            width={20}
+                            height={20}
+                            className="fill-[#fff]"
+                          />
+                        </a>
+                      </div>
+                    </div>
                   </DisclosurePanel>
                 </>
               )}
             </Disclosure>
           </div>
-          
         </>
       )}
     </div>

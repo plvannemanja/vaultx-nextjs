@@ -16,6 +16,8 @@ interface INFTDetailContext {
   setLiked: (data: boolean) => void;
   type: string;
   setType: (data: string) => void;
+  activityList: INFTActivity[];
+  setActivityList: (data: INFTActivity[]) => void;
 }
 
 interface NFTDetailProviderProps {
@@ -37,6 +39,7 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [type, setType] = useState('buy');
+  const [activityList, setActivityList] = useState<INFTActivity[]>([]);
 
   return (
     <NFTDetailContext.Provider
@@ -53,6 +56,8 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
         setLiked,
         type,
         setType,
+        activityList,
+        setActivityList,
       }}
     >
       {children}

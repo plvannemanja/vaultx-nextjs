@@ -10,14 +10,20 @@ import {
   useState,
 } from 'react';
 import {
+  useActiveAccount,
   useActiveWalletChain,
   useSwitchActiveWalletChain,
 } from 'thirdweb/react';
+import { SignUpModal } from '../Modules/SignUp';
+import { Address } from 'thirdweb';
+import { authenticationServices } from '@/services/supplier';
+import { createCookie } from '@/lib/cookie';
+import { checksumAddress } from 'viem';
 
 interface IGlobalContext {
   fee: number;
   user: any;
-  setUser: (data: any) => void;
+  fetchUser: () => void;
 }
 
 interface GlobalProviderProps {
@@ -37,6 +43,32 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   const activeChain = useActiveWalletChain();
   const switchChain = useSwitchActiveWalletChain();
+  const activeAccount = useActiveAccount();
+
+  const fetchUser = async () => {
+    if (!activeAccount) return;
+
+    try {
+      const address = checksumAddress(activeAccount?.address) as Address;
+
+      const { data } = await authenticationServices.connectWallet({
+        wallet: address,
+      });
+      const connectedUser = data.user;
+      const connectedToken = data.token;
+      createCookie('user', JSON.stringify(connectedUser));
+      createCookie('token', connectedToken);
+      setUser(connectedUser);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
+  useEffect(() => {
+    if (activeAccount?.address) {
+      fetchUser();
+    }
+  }, [activeAccount]);
 
   useEffect(() => {
     fetchProtocolFee();
@@ -52,9 +84,10 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       value={{
         fee,
         user,
-        setUser,
+        fetchUser,
       }}
     >
+      <SignUpModal />
       {children}
     </globalContext.Provider>
   );

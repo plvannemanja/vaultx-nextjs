@@ -27,6 +27,21 @@ import { CreateSellService } from '@/services/createSellService';
 import Link from 'next/link';
 import ArtistsCard from '../../Cards/ArtistsCard';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popOver';
+import { Button } from '@/components/ui/button';
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useDebounce } from 'use-debounce';
 
 const profileFilters = [
   {
@@ -42,7 +57,7 @@ const profileFilters = [
   {
     label: 'Recently Minted',
     value: -1,
-    param: 'createdAt',
+    param: 'mintingTime',
   },
   {
     label: 'Recently Listed',
@@ -58,6 +73,11 @@ const profileFilters = [
     label: 'Highest Last Sale',
     value: -1,
     param: 'price',
+  },
+  {
+    label: 'NFC Minted',
+    value: -1,
+    param: 'createdAt',
   },
 ];
 
@@ -76,7 +96,29 @@ const earnFilters = [
   },
 ];
 
-enum ProfileTabs {
+const curationFilters = [
+  {
+    label: 'Number of Artworks',
+    value: -1,
+    param: 'artworks',
+  },
+  {
+    label: 'Number of Artists',
+    value: -1,
+    param: 'artists',
+  },
+  {
+    label: 'Highest Volume',
+    value: -1,
+    param: 'volume',
+  },
+  {
+    label: 'New Curation',
+    value: -1,
+    param: 'createdAt',
+  },
+];
+export enum ProfileTabs {
   All = 'all',
   Own = 'owned',
   Created = 'created',
@@ -94,18 +136,21 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const { toast } = useToast();
 
   const [favType, setFavType] = useState<string>('nft');
+  const [categoryActive, setCategoryActive] = useState(false);
   const [filters, setFilters] = useState<any>({
     searchInput: '',
     earnFilter: {
       label: earnFilters[0].label,
       value: earnFilters[0].value,
-      active: false,
     },
     filter: {
       value: profileFilters[0].value,
       label: profileFilters[0].label,
       param: profileFilters[0].param,
-      active: false,
+    },
+    curationFilter: {
+      label: curationFilters[0].label,
+      value: curationFilters[0].value,
     },
   });
 
@@ -127,6 +172,22 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
     return false;
   }, [tab]);
+
+  const categoryTab = useMemo(() => {
+    if (tab == ProfileTabs.Earn) return 'earnFilter';
+    else if (tab == ProfileTabs.Curation) return 'curationFilter';
+
+    return 'filter';
+  }, [tab]);
+
+  const categoryList = useMemo(() => {
+    if (tab == ProfileTabs.Earn) return earnFilters;
+    else if (tab == ProfileTabs.Curation) return curationFilters;
+
+    return profileFilters;
+  }, [tab]);
+
+  const [debouncedFilter] = useDebounce(filters, 1000);
 
   const fetchUser = async () => {
     try {
@@ -356,7 +417,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     }
   };
 
-  useEffect(() => {
+  const fetchData = () => {
     toast({
       title: 'Loading...',
     });
@@ -392,12 +453,16 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     if (tab === ProfileTabs.Earn) {
       fetchEarnings();
     }
-  }, [tab]);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [tab, debouncedFilter]);
+
   return (
     <div className="flex flex-col gap-y-4">
       {/* Filters logic */}
       <div className="flex gap-4 my-4">
-      <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] rounded-xl px-2 w-full">
+        <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] rounded-xl px-2 w-full">
           <svg
             width="20px"
             height="20px"
@@ -426,129 +491,84 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           <input
             placeholder="Search by name or trait..."
             className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
-            />
+            value={filters.searchInput}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setFilters({
+                ...filters,
+                searchInput: e.target.value,
+              });
+            }}
+          />
         </div>
 
         <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
-        <div className="absolute left-2 top-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M2.77148 5.625C2.77148 5.21079 3.10727 4.875 3.52148 4.875H17.2715C17.6857 4.875 18.0215 5.21079 18.0215 5.625C18.0215 6.03921 17.6857 6.375 17.2715 6.375H3.52148C3.10727 6.375 2.77148 6.03921 2.77148 5.625ZM2.77148 10C2.77148 9.58579 3.10727 9.25 3.52148 9.25H17.2715C17.6857 9.25 18.0215 9.58579 18.0215 10C18.0215 10.4142 17.6857 10.75 17.2715 10.75H3.52148C3.10727 10.75 2.77148 10.4142 2.77148 10ZM2.77148 14.375C2.77148 13.9608 3.10727 13.625 3.52148 13.625H10.3965C10.8107 13.625 11.1465 13.9608 11.1465 14.375C11.1465 14.7892 10.8107 15.125 10.3965 15.125H3.52148C3.10727 15.125 2.77148 14.7892 2.77148 14.375Z" fill="white"/>
-            </svg>
-          </div>
-          <p className="text-sm w-[70%]">
-            {isEarn ? filters.earnFilter.label : filters.filter.label}
-          </p>
-
-          {isEarn ? (
-            <>
-              {filters.earnFilter.active ? (
-                <ChevronUpIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      earnFilter: {
-                        ...filters.earnFilter,
-                        active: !filters.earnFilter.active,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      earnFilter: {
-                        ...filters.earnFilter,
-                        active: !filters.earnFilter.active,
-                      },
-                    });
-                  }}
-                />
-              )}
-
-              {filters.earnFilter.active && (
-                <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                  {earnFilters.map((item, index) => (
-                    <span
-                      key={index}
-                      onClick={() => {
-                        setFilters({
-                          ...filters,
-                          earnFilter: {
-                            label: item.label,
-                            value: item.value,
-                            active: false,
-                          },
-                        });
-                      }}
-                      className="text-sm cursor-pointer"
-                    >
-                      {item.label}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {filters.filter.active ? (
-                <ChevronUpIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      filter: {
-                        ...filters.filter,
-                        active: !filters.filter.active,
-                      },
-                    });
-                  }}
-                />
-              ) : (
-                <ChevronDownIcon
-                  className="h-7 w-7"
-                  onClick={() => {
-                    setFilters({
-                      ...filters,
-                      filter: {
-                        ...filters.filter,
-                        active: !filters.filter.active,
-                      },
-                    });
-                  }}
-                />
-              )}
-
-              {filters.filter.active && (
-                <div className="absolute bg-dark p-3 rounded flex flex-col gap-y-3 min-w-[16rem] top-12 left-0 z-40">
-                  {profileFilters.map((item, index) => (
-                    <span
-                      key={index}
-                      onClick={() => {
-                        setFilters({
-                          ...filters,
-                          filter: {
-                            label: item.label,
-                            value: item.value,
-                            active: false,
-                          },
-                        });
-                      }}
-                      className="text-sm cursor-pointer"
-                    >
-                      {item.label}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+          <Popover
+            open={categoryActive}
+            onOpenChange={(val) => {
+              setCategoryActive(val);
+            }}
+          >
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                className="w-full bg-dark justify-between"
+              >
+                {filters[categoryTab]?.label}
+                <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-full p-0">
+              <Command className="w-full">
+                <CommandList>
+                  <CommandGroup>
+                    {categoryList &&
+                      categoryList.map((item, index) => (
+                        <CommandItem
+                          key={index}
+                          value={item.label}
+                          onSelect={() => {
+                            setCategoryActive(false);
+                            if (isEarn) {
+                              setFilters({
+                                ...filters,
+                                earnFilter: {
+                                  label: item.label,
+                                  value: item.value,
+                                  param: item.param,
+                                },
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                [categoryTab]: {
+                                  label: item.label,
+                                  value: item.value,
+                                  param: item.param,
+                                },
+                              });
+                            }
+                          }}
+                          className="text-sm cursor-pointer"
+                        >
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4',
+                              filters[categoryTab]?.label === item.label
+                                ? 'opacity-100'
+                                : 'opacity-0',
+                            )}
+                          />
+                          {item.label}
+                        </CommandItem>
+                      ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
-
       {/* User section */}
       {tab === ProfileTabs.All && data[ProfileTabs.All] ? (
         <div className="flex gap-5 my-4">
@@ -592,29 +612,36 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             <TableCaption>A list of your recent activity.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px] text-[14px] text-[#fff]">Event</TableHead>
+                <TableHead className="w-[100px] text-[14px] text-[#fff]">
+                  Event
+                </TableHead>
                 <TableHead className="text-[14px] text-[#fff]">Item</TableHead>
                 <TableHead className="text-[14px] text-[#fff]">Price</TableHead>
                 <TableHead className="text-[14px] text-[#fff]">From</TableHead>
                 <TableHead className="text-[14px] text-[#fff]">To</TableHead>
                 <TableHead className="text-[14px] text-[#fff]">Date</TableHead>
-                <TableHead className="text-right text-[14px] text-[#fff]">Time</TableHead>
+                <TableHead className="text-right text-[14px] text-[#fff]">
+                  Time
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-           
               {data.activity.map((item: any, index: number) => (
                 <TableRow key={index}>
-                  <TableCell className="azeret-mono-font text-[14px]">{item.state}</TableCell>
+                  <TableCell className="azeret-mono-font text-[14px]">
+                    {item.state}
+                  </TableCell>
                   <TableCell className="flex items-center gap-x-3">
                     <img
                       src={item.nftId.cloudinaryUrl}
                       className="w-12 h-12 object-contain rounded aspect-square "
                     />
-                    <span className='azeret-mono-font text-[14px]'>{item.nftId.name}</span>
+                    <span className="azeret-mono-font text-[14px]">
+                      {item.nftId.name}
+                    </span>
                   </TableCell>
-                  <TableCell >{item?.price ? item?.price : '-/-'}</TableCell>
-                  <TableCell className='azeret-mono-font text-[14px] text-[#DDF247]'>
+                  <TableCell>{item?.price ? item?.price : '-/-'}</TableCell>
+                  <TableCell className="azeret-mono-font text-[14px] text-[#DDF247]">
                     {item?.from?.username
                       ? item.from.username
                       : item?.from?.wallet
@@ -622,9 +649,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         : item?.fromWallet
                           ? trimString(item?.fromWallet)
                           : '-/-'}
-                          
                   </TableCell>
-                  <TableCell className='azeret-mono-font text-[14px] text-[#DDF247]'>
+                  <TableCell className="azeret-mono-font text-[14px] text-[#DDF247]">
                     {item?.to?.username
                       ? item?.to?.username
                       : item?.to?.wallet
@@ -633,7 +659,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                           ? trimString(item?.toWallet)
                           : '-/-'}
                   </TableCell>
-                  <TableCell className='azeret-mono-font text-[14px] text-[#fff]'>
+                  <TableCell className="azeret-mono-font text-[14px] text-[#fff]">
                     {item?.createdAt
                       ? new Date(item.createdAt).toLocaleString().slice(0, 10)
                       : '-/-'}
@@ -707,7 +733,6 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           </div>
         </div>
       ) : null}
-      
 
       {/* Orders section */}
       {tab === ProfileTabs.Order ? (
@@ -716,12 +741,25 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             <TableCaption>A list of your recent Orders.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px] text-[#fff] text-[14px] font-extrabold">Id</TableHead>
-                <TableHead className="text-[#fff] text-[14px] font-extrabold">Title</TableHead>
-                <TableHead  className="text-[#fff] text-[14px] font-extrabold">Payment Date</TableHead>
-                <TableHead  className="text-[#fff] text-[14px] font-extrabold">Escrow Period</TableHead>
-                <TableHead  className="text-[#fff] text-[14px] font-extrabold"> Status</TableHead>
-                <TableHead className="text-right text-[#fff] text-[14px] font-extrabold ">View Details</TableHead>
+                <TableHead className="w-[100px] text-[#fff] text-[14px] font-extrabold">
+                  Id
+                </TableHead>
+                <TableHead className="text-[#fff] text-[14px] font-extrabold">
+                  Title
+                </TableHead>
+                <TableHead className="text-[#fff] text-[14px] font-extrabold">
+                  Payment Date
+                </TableHead>
+                <TableHead className="text-[#fff] text-[14px] font-extrabold">
+                  Escrow Period
+                </TableHead>
+                <TableHead className="text-[#fff] text-[14px] font-extrabold">
+                  {' '}
+                  Status
+                </TableHead>
+                <TableHead className="text-right text-[#fff] text-[14px] font-extrabold ">
+                  View Details
+                </TableHead>
               </TableRow>
             </TableHeader>
             {data[ProfileTabs.Order] ? (
@@ -733,25 +771,31 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
                   return (
                     <TableRow key={index}>
-                      <TableCell className="font-medium azeret-mono-font text-[14px]">#{item._id}</TableCell>
+                      <TableCell className="font-medium azeret-mono-font text-[14px]">
+                        #{item._id}
+                      </TableCell>
                       <TableCell className="flex items-center gap-x-3">
                         <img
                           src={item.nftId.cloudinaryUrl}
                           className="w-12 h-12 object-contain  aspect-square rounded"
                         />
-                        <span classNamw='font-medium azeret-mono-font text-[14px] text-[#fff]'>{item.nftId.name}</span>
+                        <span className="font-medium azeret-mono-font text-[14px] text-[#fff]">
+                          {item.nftId.name}
+                        </span>
                       </TableCell>
-                      <TableCell classNamw='font-medium azeret-mono-font text-[14px] text-[#fff]'>
+                      <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
                         {item?.saleId?.ItemPurchasedOn
                           ? new Date(item?.saleId?.ItemPurchasedOn)
                               .toLocaleString()
                               .slice(0, 10)
                           : '-/-'}
                       </TableCell>
-                      <TableCell classNamw='font-medium azeret-mono-font text-[14px] text-[#fff]'>
+                      <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
                         Day {Math.round(day / (1000 * 3600 * 24))}
                       </TableCell>
-                      <TableCell classNamw='font-medium azeret-mono-font text-[14px] text-[#fff]'>In Escrow</TableCell>
+                      <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
+                        In Escrow
+                      </TableCell>
                       <TableCell className="text-right font-medium azeret-mono-font text-[14px] text-[#DDF247]">
                         <Link href={`/nft/${item._id}`}>View</Link>
                       </TableCell>
@@ -774,11 +818,21 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                 <TableHead className="w-[210px] text-[14px] font-extrabold text-[#fff] ">
                   Transaction Number (ID)
                 </TableHead>
-                <TableHead className="w-[210px] text-[14px] font-extrabold text-[#fff] ">Title</TableHead>
-                <TableHead className="text-[14px] font-extrabold text-[#fff] ">Earnings</TableHead>
-                <TableHead className="text-[14px] font-extrabold text-[#fff] ">Date</TableHead>
-                <TableHead className="text-[14px] font-extrabold text-[#fff] ">Status</TableHead>
-                <TableHead className="text-right text-[14px] font-extrabold text-[#fff]">View Details</TableHead>
+                <TableHead className="w-[210px] text-[14px] font-extrabold text-[#fff] ">
+                  Title
+                </TableHead>
+                <TableHead className="text-[14px] font-extrabold text-[#fff] ">
+                  Earnings
+                </TableHead>
+                <TableHead className="text-[14px] font-extrabold text-[#fff] ">
+                  Date
+                </TableHead>
+                <TableHead className="text-[14px] font-extrabold text-[#fff] ">
+                  Status
+                </TableHead>
+                <TableHead className="text-right text-[14px] font-extrabold text-[#fff]">
+                  View Details
+                </TableHead>
               </TableRow>
             </TableHeader>
             {data[ProfileTabs.Earn] ? (
@@ -786,7 +840,9 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                 {data[ProfileTabs.Earn].map((item: any, index: number) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell className="font-medium text-[18px] text-[#fff]">#{item._id}</TableCell>
+                      <TableCell className="font-medium text-[18px] text-[#fff]">
+                        #{item._id}
+                      </TableCell>
                       <TableCell className="flex items-center gap-x-3">
                         <img
                           src={item.nftId.cloudinaryUrl}
@@ -794,11 +850,25 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         />
                         <span>{item.nftId.name}</span>
                       </TableCell>
-                      <TableCell className='flex gap-x-2'> 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M12.6326 8.33517C12.4297 8.22135 12.1662 8.22135 11.9429 8.33517L10.3595 9.21082L9.28423 9.78153L7.70079 10.6566C7.49785 10.771 7.2344 10.771 7.0111 10.6566L5.75271 9.97158C5.54976 9.85776 5.40786 9.64864 5.40786 9.41994V8.06888C5.40786 7.8407 5.52941 7.63158 5.75271 7.51723L6.9902 6.85123C7.1937 6.73688 7.4577 6.73688 7.68099 6.85123L8.91849 7.51723C9.12199 7.63158 9.26389 7.8407 9.26389 8.06888V8.94453L10.3391 8.35423V7.47911C10.3403 7.36545 10.3087 7.2537 10.2478 7.1563C10.1869 7.05891 10.0992 6.97969 9.99428 6.92747L7.70079 5.6717C7.49785 5.55735 7.2344 5.55735 7.0111 5.6717L4.67691 6.92747C4.57202 6.97969 4.48425 7.05891 4.42337 7.1563C4.36248 7.2537 4.33088 7.36545 4.33206 7.47911V10.0097C4.33206 10.2384 4.45361 10.4475 4.67691 10.5619L7.0111 11.8176C7.21405 11.9315 7.47805 11.9315 7.70079 11.8176L9.28423 10.9611L10.3595 10.3713L11.9429 9.51523C12.1459 9.40088 12.4093 9.40088 12.6326 9.51523L13.8707 10.1812C14.0742 10.2951 14.2155 10.5042 14.2155 10.7329V12.0839C14.2155 12.3121 14.0945 12.5212 13.8707 12.6356L12.6332 13.3206C12.4297 13.435 12.1657 13.435 11.9429 13.3206L10.7049 12.6546C10.5014 12.5403 10.3595 12.3312 10.3595 12.103V11.2273L9.28423 11.8176V12.6928C9.28423 12.9209 9.40578 13.1306 9.62908 13.2444L11.9633 14.5002C12.1662 14.6145 12.4297 14.6145 12.653 14.5002L14.9872 13.2444C15.1901 13.1306 15.332 12.9215 15.332 12.6928V10.1622C15.3332 10.0485 15.3016 9.93676 15.2407 9.83936C15.1798 9.74197 15.092 9.66275 14.9872 9.61053L12.6326 8.33517Z" fill="white"/>
-                            <path d="M18.832 10.0859C18.832 15.0565 14.8026 19.0859 9.83203 19.0859C4.86147 19.0859 0.832031 15.0565 0.832031 10.0859C0.832031 5.11538 4.86147 1.08594 9.83203 1.08594C14.8026 1.08594 18.832 5.11538 18.832 10.0859Z" stroke="white"/>
-                          </svg> {item?.price} MATIC</TableCell>
+                      <TableCell className="flex gap-x-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <path
+                            d="M12.6326 8.33517C12.4297 8.22135 12.1662 8.22135 11.9429 8.33517L10.3595 9.21082L9.28423 9.78153L7.70079 10.6566C7.49785 10.771 7.2344 10.771 7.0111 10.6566L5.75271 9.97158C5.54976 9.85776 5.40786 9.64864 5.40786 9.41994V8.06888C5.40786 7.8407 5.52941 7.63158 5.75271 7.51723L6.9902 6.85123C7.1937 6.73688 7.4577 6.73688 7.68099 6.85123L8.91849 7.51723C9.12199 7.63158 9.26389 7.8407 9.26389 8.06888V8.94453L10.3391 8.35423V7.47911C10.3403 7.36545 10.3087 7.2537 10.2478 7.1563C10.1869 7.05891 10.0992 6.97969 9.99428 6.92747L7.70079 5.6717C7.49785 5.55735 7.2344 5.55735 7.0111 5.6717L4.67691 6.92747C4.57202 6.97969 4.48425 7.05891 4.42337 7.1563C4.36248 7.2537 4.33088 7.36545 4.33206 7.47911V10.0097C4.33206 10.2384 4.45361 10.4475 4.67691 10.5619L7.0111 11.8176C7.21405 11.9315 7.47805 11.9315 7.70079 11.8176L9.28423 10.9611L10.3595 10.3713L11.9429 9.51523C12.1459 9.40088 12.4093 9.40088 12.6326 9.51523L13.8707 10.1812C14.0742 10.2951 14.2155 10.5042 14.2155 10.7329V12.0839C14.2155 12.3121 14.0945 12.5212 13.8707 12.6356L12.6332 13.3206C12.4297 13.435 12.1657 13.435 11.9429 13.3206L10.7049 12.6546C10.5014 12.5403 10.3595 12.3312 10.3595 12.103V11.2273L9.28423 11.8176V12.6928C9.28423 12.9209 9.40578 13.1306 9.62908 13.2444L11.9633 14.5002C12.1662 14.6145 12.4297 14.6145 12.653 14.5002L14.9872 13.2444C15.1901 13.1306 15.332 12.9215 15.332 12.6928V10.1622C15.3332 10.0485 15.3016 9.93676 15.2407 9.83936C15.1798 9.74197 15.092 9.66275 14.9872 9.61053L12.6326 8.33517Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M18.832 10.0859C18.832 15.0565 14.8026 19.0859 9.83203 19.0859C4.86147 19.0859 0.832031 15.0565 0.832031 10.0859C0.832031 5.11538 4.86147 1.08594 9.83203 1.08594C14.8026 1.08594 18.832 5.11538 18.832 10.0859Z"
+                            stroke="white"
+                          />
+                        </svg>{' '}
+                        {item?.price} MATIC
+                      </TableCell>
                       <TableCell>
                         {item?.createdAt
                           ? new Date(item?.createdAt)

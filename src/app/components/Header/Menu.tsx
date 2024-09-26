@@ -2,7 +2,6 @@
 
 import { client } from '@/lib/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,15 +20,19 @@ import {
   useWalletBalance,
   useWalletImage,
 } from 'thirdweb/react';
-import { Data, Polygon } from '@3rdweb/chain-icons';
+import { TokenIcon } from '@web3icons/react';
 import { WalletId } from 'thirdweb/wallets';
-import { shortenAddress } from 'thirdweb/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { chain } from '@/lib/contract';
-
-interface MenuProps {
-  user: any;
-}
+import { useGlobalContext } from '../Context/GlobalContext';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { debug } from 'console';
+import { useRouter } from 'next/navigation';
 
 interface WalletDetailProps {
   walletId: WalletId;
@@ -40,7 +43,6 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
   const walletImage = useWalletImage(walletId || 'walletConnect');
   const { data: walletImageData } = walletImage;
 
-  // Fallback image if walletImageData is not available
   const { data: defaultImageData } = useWalletImage('io.metamask');
 
   const imageData = walletImageData || defaultImageData;
@@ -59,43 +61,12 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
 
   return null;
 };
-// const WalletImage = ({ walletId: number, size }: WalletDetailProps) => {
-//   // if(!walletId) return null;
-//   const walletImage = useWalletImage(walletId);
-//   // const { data: walletImageData } = walletId
-//   //   ? walletImage
-//   //   : { data: null, status: false };
-//     const { data: walletImageData } = walletImage;
 
-//   const { data: defaultImageData } =     useWalletImage('io.metamask');
-
-//   if (walletImageData) {
-//     return (
-//       <Image
-//         width={size}
-//         height={size}
-//         src={walletImageData}
-//         alt="wallet_img"
-//         className="rounded-full"
-//       />
-//     );
-//   }
-
-//   if (defaultImageData) {
-//     return (
-//       <Image
-//         width={size}
-//         height={size}
-//         src={defaultImageData}
-//         alt="wallet_img rounded-full"
-//       />
-//     );
-//   }
-
-//   return null;
-// };
-
-export default function Menu({ user }: MenuProps) {
+export default function Menu() {
+  const [copied, setCopied] = useState(false);
+  const [copyDelayed, setCopyDelayed] = useState(false);
+  const [copyHover, setCopyHover] = useState(false);
+  const { user } = useGlobalContext();
   const activeAccount = useActiveAccount();
   const activeWallet = useActiveWallet();
   const activeChain = useActiveWalletChain();
@@ -105,9 +76,25 @@ export default function Menu({ user }: MenuProps) {
     address: activeAccount?.address,
     chain: chain,
   });
+
+  const router = useRouter();
   useEffect(() => {
     console.log(user);
   }, [user]);
+
+  const copyText = async () => {
+    try {
+      await navigator.clipboard.writeText(activeAccount?.address);
+      setCopied(true);
+      setCopyDelayed(true);
+      // Reset the copied state after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopyDelayed(false), 2500);
+    } catch (error) {
+      console.error('Failed to copy text: ', error);
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -147,7 +134,14 @@ export default function Menu({ user }: MenuProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="my-1">My Profile</DropdownMenuItem>
+        <DropdownMenuItem
+          className="my-1"
+          onSelect={(event: Event) => {
+            router.push('/dashboard/profile');
+          }}
+        >
+          My Profile
+        </DropdownMenuItem>
         <DropdownMenuItem className="my-1">My Favorite</DropdownMenuItem>
         <DropdownMenuItem className="my-1">My Order</DropdownMenuItem>
         <DropdownMenuItem className="my-1">
@@ -181,14 +175,27 @@ export default function Menu({ user }: MenuProps) {
               </div>
               <div className="float-right justify-center items-center gap-3 inline-flex my-auto">
                 <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
-                  <Copy
-                    size={20}
-                    onClick={() => {
-                      navigator.clipboard.writeText(
-                        activeAccount?.address || '',
-                      );
-                    }}
-                  ></Copy>
+                  <TooltipProvider>
+                    <Tooltip open={copyHover || copied}>
+                      <TooltipTrigger>
+                        <Copy
+                          size={20}
+                          onMouseEnter={() => {
+                            setCopyHover(true);
+                          }}
+                          onMouseLeave={() => {
+                            setCopyHover(false);
+                          }}
+                          onClick={() => {
+                            copyText();
+                          }}
+                        ></Copy>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{copyDelayed ? 'Copied' : 'Click to copy'}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
                 <div className="bg-white bg-opacity-10 rounded-[18px] w-10 h-10 items-center justify-center inline-flex cursor-pointer hover:bg-gray-500">
                   <Power
@@ -206,10 +213,10 @@ export default function Menu({ user }: MenuProps) {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="justify-start items-center gap-[17px] flex">
                 <div className="w-5 h-5 relative">
-                  <Polygon className="text-white"></Polygon>
+                  <TokenIcon symbol="base" className="text-white"></TokenIcon>
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">
-                  {}Matic
+                  {` ${activeChain.nativeCurrency?.symbol}`}
                 </div>
               </div>
               <div className="text-center text-neutral-400 text-base font-semibold capitalize">

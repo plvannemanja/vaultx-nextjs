@@ -245,12 +245,11 @@ export default function PropertiesTemplate() {
         </div>
       </div>
 
-      {isModalOpenTemplate && (
-        <PropertiesInfo
-          close={() => setIsModalOpenTemplate(false)}
-          onTemplateAdd={fetchProperties}
-        />
-      )}
+      <PropertiesInfo
+        close={() => setIsModalOpenTemplate(false)}
+        isOpen={isModalOpenTemplate}
+        onTemplateAdd={fetchProperties}
+      />
     </div>
   );
 }

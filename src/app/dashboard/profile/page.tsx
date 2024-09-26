@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { trimString } from '@/utils/helpers';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Tabs from '@/app/components/Modules/profile/Tabs';
 import { userServices } from '@/services/supplier';
 import { FavoriteService } from '@/services/FavoriteService';
@@ -87,11 +87,11 @@ export default function Page() {
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
 
-  const handleLike = async () => {
+  const handleLike = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setLiked(!liked);
-      if (!liked === true) setLikes(likes + 1);
-      else if (!liked === false) setLikes(likes - 1);
+      setLiked(event.target.checked);
+      if (event.target.checked === true) setLikes(likes + 1);
+      else if (event.target.checked === false) setLikes(likes - 1);
       setNow(true);
     } catch (error) {
       console.log(error);
@@ -160,18 +160,31 @@ export default function Page() {
             onClick={() => copyAddr()}
           >
             {user ? (user?.wallet ? trimString(user?.wallet) : null) : null}
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
-              <path d="M8.66732 7.58333V16.25C8.66732 17.4466 9.63737 18.4167 10.834 18.4167H17.334M8.66732 7.58333V5.41667C8.66732 4.22005 9.63737 3.25 10.834 3.25H15.8019C16.0892 3.25 16.3648 3.36414 16.568 3.5673L21.35 8.34937C21.5532 8.55253 21.6673 8.82808 21.6673 9.1154V16.25C21.6673 17.4466 20.6973 18.4167 19.5006 18.4167H17.334M8.66732 7.58333H7.22287C5.62738 7.58333 4.33398 8.87673 4.33398 10.4722V20.5833C4.33398 21.78 5.30403 22.75 6.50065 22.75H14.4451C16.0406 22.75 17.334 21.4566 17.334 19.8611V18.4167" stroke="white" stroke-width="2.16667" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="26"
+              height="26"
+              viewBox="0 0 26 26"
+              fill="none"
+            >
+              <path
+                d="M8.66732 7.58333V16.25C8.66732 17.4466 9.63737 18.4167 10.834 18.4167H17.334M8.66732 7.58333V5.41667C8.66732 4.22005 9.63737 3.25 10.834 3.25H15.8019C16.0892 3.25 16.3648 3.36414 16.568 3.5673L21.35 8.34937C21.5532 8.55253 21.6673 8.82808 21.6673 9.1154V16.25C21.6673 17.4466 20.6973 18.4167 19.5006 18.4167H17.334M8.66732 7.58333H7.22287C5.62738 7.58333 4.33398 8.87673 4.33398 10.4722V20.5833C4.33398 21.78 5.30403 22.75 6.50065 22.75H14.4451C16.0406 22.75 17.334 21.4566 17.334 19.8611V18.4167"
+                stroke="white"
+                stroke-width="2.16667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </div>
           <div className="flex w-[80px] px-[20px] py-[11px] rounded-[61px] gap-x-3 p-3 border items-center border-none bg-[#00000063] cursor-pointer">
             <span className="font-medium">{likes}</span>
-            <div onClick={() => handleLike()}>
+            <div>
               <input
                 title="like"
                 type="checkbox"
                 className="sr-only"
                 checked={liked}
+                onChange={handleLike}
               />
               <div className="checkmark">
                 {liked ? (
@@ -218,30 +231,35 @@ export default function Page() {
           className={`flex flex-col gap-y-6 justify-center items-center text-[24px] font-medium absolute w-full ${user ? 'bottom-[-84px]' : 'bottom-[-48px]'} bottom-[-48px]`}
         >
           <div className="rounded-full w-29 h-29 border-neon border-2 flex items-center justify-center">
-
-          <img
-            src={
-              user?.avatar?.url ? user.avatar.url : '/images/work-default.png'
-            }
-            alt="like"
-            className="w-28 h-28 rounded-full object-cover "
-          />
+            <img
+              src={
+                user?.avatar?.url ? user.avatar.url : '/images/work-default.png'
+              }
+              alt="like"
+              className="w-28 h-28 rounded-full object-cover "
+            />
           </div>
-          
+
           {user
             ? user?.username
               ? user?.username
               : trimString(user?.wallet)
             : null}
         </div>
-        
       </div>
       <div className="text-white mt-[100px] w-full">
-          <div className="w-full bg-[#232323] rounded-[12px] p-[15px] text-[#FFFFFF87] text-[14px]  azeret-mono-font">
-            <p>Tellus est commodo nunc a montes. Tempus dolor convallis cras orci turpis sit aenean. Mi enim vitae proin facilisi. Sed tincidunt ullamcorper sed semper a. Rhoncus eu cras vel venenatis vel. Accumsan elit elementum viverra tellus lectus fermentum sapien. Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin.
-            Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin.</p>
-          </div>
+        <div className="w-full bg-[#232323] rounded-[12px] p-[15px] text-[#FFFFFF87] text-[14px]  azeret-mono-font">
+          <p>
+            Tellus est commodo nunc a montes. Tempus dolor convallis cras orci
+            turpis sit aenean. Mi enim vitae proin facilisi. Sed tincidunt
+            ullamcorper sed semper a. Rhoncus eu cras vel venenatis vel.
+            Accumsan elit elementum viverra tellus lectus fermentum sapien.
+            Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam
+            at proin. Porttitor tortor tristique cras sem leo in lacus. Etiam
+            amet etiam at proin.
+          </p>
         </div>
+      </div>
 
       <div className="flex gap-x-3 flex-wrap mt-[6rem]">
         {badges.map((badge, index) => {
