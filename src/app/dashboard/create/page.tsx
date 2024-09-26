@@ -148,7 +148,7 @@ export default function Page() {
                     <div className="flex flex-col gap-y-2">
                       <span className={`text-[22px] ${hovered === 'curation' ? 'font-bold ': 'font-extrabold'}`}>Create Curation</span>
                       <p
-                        className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
+                        className={`w-[100%] azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
 
                         // className={`text-sm ${hovered === 'curation' ? 'text-black' : 'text-gray-500'}`}
                       >
@@ -200,7 +200,7 @@ export default function Page() {
                         Create Artwork NFTs
                       </span>
                       <p
-                        className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'nft' ? 'text-black' : 'text-[#959595]'}`}
+                        className={`w-[100%] azeret-mono-font  text-sm ${hovered === 'nft' ? 'text-black' : 'text-[#959595]'}`}
                       >
                         Transform your art into a RWA, with one simple tap.
                       </p>
@@ -249,7 +249,7 @@ export default function Page() {
                       </span>
                       <p
                       
-                      className={`w-[80%] azeret-mono-font  text-sm ${hovered === 'mint' ? 'text-black' : 'text-[#959595]'}`}
+                      className={`w-[100%] azeret-mono-font  text-sm ${hovered === 'mint' ? 'text-black' : 'text-[#959595]'}`}
 
                         // className={`w-[80%] text-sm ${hovered === 'mint' ? 'text-black' : 'text-gray-500'}`}
                       >
