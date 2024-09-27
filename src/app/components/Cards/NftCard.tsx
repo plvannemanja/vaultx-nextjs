@@ -15,18 +15,19 @@ interface INftCardProps {
 
 export default function NftCard({ data }: { data: INftCardProps }) {
   return (
-    <Card className="bg-transparent text-white border-none max-w-[306px]">
-      <CardContent className="aspect-square p-0 rounded-[20px]">
-        <div className="w-full overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
+    <>
+     <Card className="bg-transparent text-white border-none max-w-[100%] bg-[#232323] px-3 pt-[11px] pb-[30.85px] rounded-[20px] gap-[17px]">
+      <CardContent className="aspect-square p-0">
+        <div className="w-full overflow-hidden mb-[17px]">
           <img
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-            className="rounded w-full object-contain hover:scale-110 transition-transform duration-300 min-h-[296px]"
+            className="w-full object-cover hover:scale-110 transition-transform duration-300 min-h-[244px] max-h-[244px] rounded-[20px]"
             alt="nft-image"
             loading="lazy"
           />
         </div>
-        <div className="flex flex-col gap-y-2.5 mb-2 px-[20px] py-[12px] bg-[#333333] rounded-b-[20px]">
-          <p className="font-extrabold">
+        <div className="flex flex-col gap-y-2.5  ">
+          <p className="font-extrabold font-[18px]">
             {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
           </p>
           <div className="flex justify-between">
@@ -42,13 +43,13 @@ export default function NftCard({ data }: { data: INftCardProps }) {
               Canvas Collection
             </Link>
           </p>
-          <hr className={'border-[#ffffff10] my-[5px]'} />
+          <hr className={'border-[#ffffff10] '} />
 
-          <div className="flex justify-between items-center">
+          <div className="flex items-center">
             <span className="text-xs text-dark  azeret-mono-font">Price </span>
-            <div className="flex gap-x-2 items-center">
+            <div className="flex gap-x-2 items-center gap-[5px]">
               <Image
-                src="/icons/Base.svg"
+                src="/icons/newmatic.svg"
                 height={20}
                 width={20}
                 alt="matic"
@@ -56,11 +57,13 @@ export default function NftCard({ data }: { data: INftCardProps }) {
                 blurDataURL={'/images/image_placeholder.png'}
                 quality={100}
               />
-              ${data.price}
+              <span className="text-[12px] font-extrabold">{data.price} MATIC</span>
             </div>
           </div>
         </div>
       </CardContent>
     </Card>
+    </>
+   
   );
 }

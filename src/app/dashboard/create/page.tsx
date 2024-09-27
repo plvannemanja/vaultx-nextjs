@@ -94,7 +94,7 @@ export default function Page() {
       </RestrictiveModal>
 
       {!step.active && (
-        <div className="flex gap-[] px-4 justify-between w-full items-center lg:justify-between">
+        <div className="flex  px-4 justify-between w-full items-center lg:justify-between ">
           <div className="flex flex-col gap-y-10 w-full lg:w-[48%]">
             <div className="flex gap-x-2 items-center">
               <Image
@@ -112,10 +112,10 @@ export default function Page() {
               <path d="M24.1816 22.7165V6.51652H27.3766V10.4615L26.9866 9.95153C27.1866 9.41153 27.4516 8.92152 27.7816 8.48152C28.1216 8.03152 28.5266 7.66153 28.9966 7.37153C29.3966 7.10153 29.8366 6.89152 30.3166 6.74152C30.8066 6.58152 31.3066 6.48652 31.8166 6.45652C32.3266 6.41652 32.8216 6.43652 33.3016 6.51652V9.89152C32.8216 9.75152 32.2666 9.70652 31.6366 9.75652C31.0166 9.80652 30.4566 9.98152 29.9566 10.2815C29.4566 10.5515 29.0466 10.8965 28.7266 11.3165C28.4166 11.7365 28.1866 12.2165 28.0366 12.7565C27.8866 13.2865 27.8116 13.8615 27.8116 14.4815V22.7165H24.1816Z" fill="#DDF247"/>
               <path d="M11.168 23.1665C9.00801 23.1665 7.15801 22.6965 5.61801 21.7565C4.07801 20.8065 2.89301 19.4865 2.06301 17.7965C1.24301 16.1065 0.833008 14.1465 0.833008 11.9165C0.833008 9.6865 1.24301 7.7265 2.06301 6.0365C2.89301 4.3465 4.07801 3.0315 5.61801 2.0915C7.15801 1.1415 9.00801 0.666504 11.168 0.666504C13.658 0.666504 15.733 1.2915 17.393 2.5415C19.053 3.7815 20.218 5.4565 20.888 7.5665L17.243 8.5715C16.823 7.1615 16.108 6.0615 15.098 5.2715C14.088 4.4715 12.778 4.0715 11.168 4.0715C9.71801 4.0715 8.50801 4.3965 7.53801 5.0465C6.57801 5.6965 5.85301 6.6115 5.36301 7.7915C4.88301 8.9615 4.63801 10.3365 4.62801 11.9165C4.62801 13.4965 4.86801 14.8765 5.34801 16.0565C5.83801 17.2265 6.56801 18.1365 7.53801 18.7865C8.50801 19.4365 9.71801 19.7615 11.168 19.7615C12.778 19.7615 14.088 19.3615 15.098 18.5615C16.108 17.7615 16.823 16.6615 17.243 15.2615L20.888 16.2665C20.218 18.3765 19.053 20.0565 17.393 21.3065C15.733 22.5465 13.658 23.1665 11.168 23.1665Z" fill="#DDF247"/>
             </svg>            </div>
-            <div className="flex flex-col flex-wrap items-center justify-between md:flex-row">
+            <div className="flex flex-col flex-wrap items-center justify-between md:flex-row ">
               <div className="flex flex-col gap-y-7 w-full">
                 <div
-                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#DDF247]  hover:text-black text-white"
+                  className="cursor-pointer min-h-[131px] w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#DDF247]  hover:text-black text-white"
                   onMouseEnter={() => setHovered('curation')}
                   onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('curation')}
@@ -154,7 +154,7 @@ export default function Page() {
                     <div className="flex flex-col gap-y-2">
                       <span className={`text-[22px] ${hovered === 'curation' ? 'font-bold ': 'font-extrabold'}`}>Create Curation</span>
                       <p
-                        className={`w-[100%] azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
+                        className={`w-[100%] font-azeret-mono azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
 
                         // className={`text-sm ${hovered === 'curation' ? 'text-black' : 'text-gray-500'}`}
                       >
@@ -166,7 +166,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div
-                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#ddf247] hover:text-black text-white"
+                  className="cursor-pointer min-h-[131px] w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('nft')}
                   onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('nft')}
@@ -214,7 +214,7 @@ export default function Page() {
                   </div>
                 </div>
                 <div
-                  className="cursor-pointer w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#ddf247] hover:text-black text-white"
+                  className="cursor-pointer min-h-[131px] w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#ddf247] hover:text-black text-white"
                   onMouseEnter={() => setHovered('mint')}
                   onMouseLeave={() => setHovered(false)}
                 >
