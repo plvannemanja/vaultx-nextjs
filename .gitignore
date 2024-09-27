@@ -11,6 +11,7 @@ yarn.lock
 # testing
 /coverage
 
+
 # next.js
 /.next/
 /out/
@@ -39,3 +40,4 @@ next-env.d.ts
 
 # yarn
 yarn.lock
+*.eot
