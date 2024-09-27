@@ -108,6 +108,7 @@ export default function Page() {
                 }}
               >
                 <NftCard data={nft} />
+                this is test
               </div>
             );
           })
