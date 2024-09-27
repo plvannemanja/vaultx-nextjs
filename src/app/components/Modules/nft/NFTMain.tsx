@@ -385,7 +385,7 @@ export default function NFTMain({
                             title="Buy Now"
                             className={'!rounded-[14px] w-full'}
                             variant="primary"
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -408,12 +408,12 @@ export default function NFTMain({
                             title="Place a Bid"
                             variant="secondaryOutline"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
                       >
-                        <BidModal title={data.name} update={() => {}} />
+                        <BidModal title={data.name} update={() => { }} />
                       </BaseDialog>
                     </div>
                   ) : null}
@@ -427,7 +427,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -448,7 +448,7 @@ export default function NFTMain({
                           <BaseButton
                             title="Cancel Order"
                             variant="primary"
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         isOpen={modalStatus.cancel}
@@ -460,6 +460,7 @@ export default function NFTMain({
                           onClose={() => {
                             setModalStatus({ ...modalStatus, cancel: false });
                           }}
+                          fetchNftData={fetchNftData}
                         />
                       </BaseDialog>
                     </div>
@@ -476,7 +477,7 @@ export default function NFTMain({
                             title="Put On Sale"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         isOpen={modalStatus.resell}
@@ -525,7 +526,7 @@ export default function NFTMain({
                       <BaseButton
                         title="Cancel Requested"
                         variant="primary"
-                        onClick={() => {}}
+                        onClick={() => { }}
                         className={'!rounded-[14px]'}
                       />
                     </div>
@@ -539,7 +540,7 @@ export default function NFTMain({
                             title="Escrow Release Request"
                             variant="primary"
                             className={'!rounded-[14px]'}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         onClose={() => {
@@ -568,7 +569,7 @@ export default function NFTMain({
                         title="In Escrow"
                         className={'!rounded-[14px]'}
                         variant="primary"
-                        onClick={() => {}}
+                        onClick={() => { }}
                       />
                     </div>
                   ) : null}
