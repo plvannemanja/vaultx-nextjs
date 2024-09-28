@@ -90,13 +90,13 @@ export default function Page() {
           alt="hero"
           width={100}
           height={100}
-          className="w-full object-fill max-h-[370px] mb-[14px]"
+          className="w-full object-fill max-h-[370px] rouded-[20px] mb-[14px]"
           onClick={() => window.open(hero.link, '_blank')}
         />
       ) : null}
       <Filters setState={handleFilters} />
 
-      <div className="grid grid-cols-12 gap-x-[24px] gap-y-[52px] flex-wrap my-4 justify-center ">
+      <div className="grid grid-cols-12 gap-x-[24px] gap-y-[52px] flex-wrap my-4 justify-center px-[20px] ">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
             return (

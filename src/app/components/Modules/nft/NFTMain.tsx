@@ -196,8 +196,8 @@ export default function NFTMain({
             />
           </Box>
         </Modal>
-        <div className="flex flex-col gap-y-3 items-center lg:flex-row lg:justify-between lg:items-start">
-          <div className="w-full relative lg:w-[55%]">
+        <div className="grid grid-cols-12 flex-col gap-y-3 gap-[30px] items-center lg:flex-row lg:justify-between lg:items-start ">
+          <div className=" col-span-6 w-full relative "> 
             <Image
               onClick={() => setModal(true)}
               src={mainImage ? mainImage : data.cloudinaryUrl}
@@ -208,7 +208,7 @@ export default function NFTMain({
               className="cursor-zoom-in rounded-xl object-cover aspect-square w-full max-h-[620px] lg:min-h-[683px]"
             />
 
-            <div className="absolute top-4 right-4 flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-gray-700/60 cursor-pointer">
+            <div className="absolute top-4 right-4 flex w-[80px] h-[38px] pl-[15px] rounded-[30px] gap-x-3 p-3 items-center bg-[#00000033] cursor-pointer">
               <span className="font-bold tex-[14px] text-[#fff]">
                 {likes ? likes : liked ? 1 : 0}
               </span>
@@ -261,6 +261,14 @@ export default function NFTMain({
               </div>
             </div>
 
+
+            <div className="absolute top-4 right-[110px] flex w-[38px] h-[38px] justify-center rounded-[30px] gap-x-3 items-center bg-[#00000033] cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M9.98255 20C15.515 20 20 15.5228 20 10C20 4.47714 15.515 0 9.98255 0C4.73366 0 0.427651 4.02992 0 9.15941H13.2408V10.8406H7.19141e-08C0.427651 15.9701 4.73366 20 9.98255 20Z" fill="white"/>
+            </svg>
+            </div>
+
+
             <Image
               alt="rwa"
               src="/images/rwa-logo.svg"
@@ -271,8 +279,8 @@ export default function NFTMain({
             />
           </div>
 
-          <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
-            <div className="w-full flex flex-col gap-y-3">
+          <div className=" col-span-6 flex flex-col gap-y-[20px] justify-center text-white w-full ">
+            <div className="w-full flex flex-col gap-y-[20px] ">
               <div className="ms-auto cursor-pointer">
                 <svg
                   width="24"
@@ -287,10 +295,10 @@ export default function NFTMain({
                   />
                 </svg>
               </div>
-              <p className="text-[32px] font-extrabold leading-[43.2px]">
+              <p className="text-[24px] font-extrabold leading-[24px]">
                 {data.name}
               </p>
-              <div className="flex justify-between">
+              <div className="flex justify-between mb-[10px]">
                 <div className="flex gap-2 items-center">
                   {data?.owner?.avatar?.url ? (
                     <img
@@ -300,7 +308,7 @@ export default function NFTMain({
                     />
                   ) : null}
                   <div className="flex flex-col gap-y-1 text-sm">
-                    <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    <p className="text-[12px] text-gray-400 azeret-mono-font mb-[4px]">
                       Owned by:
                     </p>
                     <p className="text-[12px] azeret-mono-font text-[#fff]">
@@ -318,7 +326,7 @@ export default function NFTMain({
                     />
                   ) : null}
                   <div className="flex flex-col gap-y-1 text-sm">
-                    <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    <p className="text-[12px] text-gray-400 azeret-mono-font mb-[4px]">
                       Created by:
                     </p>
                     <p className="text-[12px] azeret-mono-font text-[#fff]">
@@ -328,36 +336,49 @@ export default function NFTMain({
                 </div>
               </div>
               <div className="flex gap-x-3">
-                <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F] px-3 py-2 rounded-xl">
+                <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] px-3 py-2 rounded-xl font-extrabold min-w-[109px]">
                   <EyeIcon width={20} height={20} />
                   {views ? views : 1} view
                 </div>
-                <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F]  px-3 py-2 rounded-xl">
+                <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] px-3 py-2 rounded-xl font-extrabold min-w-[109px]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none">
+                  <path d="M9.71278 11.325L9.08203 9.75L8.45128 11.325L6.83203 11.469L8.06203 12.5858L7.69153 14.25L9.08203 13.3657L10.4725 14.25L10.102 12.5858L11.332 11.469L9.71278 11.325ZM4.58203 1.5H13.582V3H4.58203V1.5ZM3.08203 4.5H15.082V6H3.08203V4.5Z" fill="white"/>
+                  <path d="M15.082 9V15H3.08203V9H15.082ZM15.082 7.5H3.08203C2.68421 7.5 2.30268 7.65804 2.02137 7.93934C1.74007 8.22064 1.58203 8.60218 1.58203 9V15C1.58203 15.3978 1.74007 15.7794 2.02137 16.0607C2.30268 16.342 2.68421 16.5 3.08203 16.5H15.082C15.4799 16.5 15.8614 16.342 16.1427 16.0607C16.424 15.7794 16.582 15.3978 16.582 15V9C16.582 8.60218 16.424 8.22064 16.1427 7.93934C15.8614 7.65804 15.4799 7.5 15.082 7.5Z" fill="white"/>
+                </svg>
                   {data.category ? data.category.name : 'N/A'}
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
-              <div className="flex w-full justify-between">
-                <p className="text-sm text-gray-400 azeret-mono-font">
-                  {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
-                </p>
-              </div>
+            <div className="w-full flex flex-col gap-y-3 bg-[#232323] p-[20px] rounded-[20px]">
+              <div className="flex w-full justify-between items-center">
+                <div className="flex flex-col">
+                  <p className="text-sm text-gray-400 azeret-mono-font mb-[4px]">
+                    {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
+                  </p>
+                  <div className="flex justify-between items-center gap-y-2 w-full">
+                    {type === 'NotForSale' ? null : (
+                      <p className="text-[32px] font-extrabold">${data.price}</p>
+                    )}
+                  
+                  </div>
+                </div>
+               
 
-              <div className="flex flex-col justify-between w-full">
-                <div className="flex justify-between items-center gap-y-2 w-full mt-3">
-                  {type === 'NotForSale' ? null : (
-                    <p className="text-[32px] font-medium">${data.price}</p>
-                  )}
-                  <div>
+
+
+
+                <div>
                     <BaseDialog
                       trigger={
                         <span
-                          className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white"
+                          className="cursor-pointer px-3 py-2 rounded-xl border-2 border-[#ffffff12] min-w-[192px] inline-flex items-center"
                           onClick={() => {
                             setModalStatus({ ...modalStatus, quote: true });
                           }}
                         >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18" fill="none" className='mx-2'>
+                            <path d="M10.6875 7.875L16.625 2.25M16.625 2.25H12.6667M16.625 2.25V6M16.625 10.5V14.25C16.625 14.6478 16.4582 15.0294 16.1613 15.3107C15.8643 15.592 15.4616 15.75 15.0417 15.75H3.95833C3.53841 15.75 3.13568 15.592 2.83875 15.3107C2.54181 15.0294 2.375 14.6478 2.375 14.25V3.75C2.375 3.35218 2.54181 2.97064 2.83875 2.68934C3.13568 2.40804 3.53841 2.25 3.95833 2.25H7.91667" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
                           Check Eth Quotes
                         </span>
                       }
@@ -374,11 +395,11 @@ export default function NFTMain({
                         }}
                       />
                     </BaseDialog>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center gap-y-2 w-full mt-3">
+                    <div className="flex flex-col justify-between mt-[10px] w-full">
+                
+                <div className="flex flex-col justify-between f items-center gap-y-2 w-full ">
                   {type === 'buy' ? (
-                    <div className="flex  gap-y-2 gap-2 items-center w-full">
+                    <div className="flex flex-col  gap-y-2 gap-2 items-center w-full">
                       <BaseDialog
                         trigger={
                           <BaseButton
@@ -574,50 +595,59 @@ export default function NFTMain({
                   ) : null}
                 </div>
               </div>
+                  </div>
+              </div>
+
+             
             </div>
-            <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
-              <p className="text-lg font-medium">Overview</p>
-              <hr />
-              <div className="grid grid-cols-12 w-full gap-5 justify-between ">
+            <div className="w-full flex flex-col gap-y-3 bg-[#232323] p-6 rounded-[20px]">
+              <p className="text-[14px] font-medium text-[#fff]">Overview</p>
+
+              <div className="w-full h-[1px]  bg-[#ffffff08]"></div>
+              <div className="grid grid-cols-12 w-full gap-5 justify-between relative">
                 <div className="flex flex-col col-span-8 gap-y-[10px]">
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Artist</span>
-                    <span className="text-gray-400 azeret-mono-font">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff14] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                    <span className="font-extrabold text-[14px]">
+                      Artist</span>
+                      <span className="text-[14px] text-[#ffffff60] azeret-mono-font">
                       {data.name}
                     </span>
                   </div>
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Shipping Country</span>
-                    <span className="text-gray-400 azeret-mono-font">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff14] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                  <span className="font-extrabold text-[14px]">
+                  Shipping Country</span>
+                    <span className="text-[14px] text-[#ffffff60] azeret-mono-font">
                       {data.saleId ? data.saleId.sellerShippingId.country : ''}
                     </span>
                   </div>
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Royalties</span>
-                    <span className="text-gray-400 azeret-mono-font">
-                      {data.royalty}%
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff14] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
+                  <span className="font-extrabold text-[14px]">
+                  Royalties</span>
+                  <span className="text-[14px] text-[#ffffff60] azeret-mono-font">
+                  {data.royalty}%
                     </span>
                   </div>
+                 
                 </div>
                 <div className="flex flex-col col-span-4 gap-y-3">
                   <div className="flex flex-col px-4 py-4 rounded-md justify-between border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
                     <p className="font-medium">Size</p>
                     <div className="mt-2 flex flex-col gap-y-3 ">
-                      <p className="">
+                      <p className="text-[#ffffff60]">
                         <span className="w-[58px] inline-block">Length</span>
                         <span className="text-center w-[20px] inline-block">
                           :
                         </span>
                         {data?.shippingInformation?.lengths}cm
                       </p>
-                      <p>
+                      <p className="text-[#ffffff60]">
                         <span className="w-[58px] inline-block">Height</span>
                         <span className="text-center w-[20px] inline-block ">
                           :
                         </span>{' '}
                         {data?.shippingInformation?.height}cm
-                      </p>
-                      <p>
+                        </p>
+                        <p className="text-[#ffffff60]">
                         {' '}
                         <span className="w-[58px] inline-block">Width</span>
                         <span className="text-center w-[20px] inline-block ">
@@ -625,7 +655,7 @@ export default function NFTMain({
                         </span>
                         {data?.shippingInformation?.width}cm
                       </p>
-                      <p>
+                      <p className="text-[#ffffff60]">
                         <span className="w-[58px] inline-block">Weight</span>{' '}
                         <span className="text-center w-[20px] inline-block ">
                           :
