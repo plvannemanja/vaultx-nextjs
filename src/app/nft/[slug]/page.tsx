@@ -26,6 +26,7 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import { deliveryTime } from '@/lib/helper';
 
 function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
@@ -102,12 +103,14 @@ function PageDetail({ params }: { params: { slug: string } }) {
         const purchaseDate = new Date(nft?.saleId?.ItemPurchasedOn).getTime();
 
         // get release time - blockchain logic
-        // const time = await releaseTime()
-        const time = new Date().getTime(); // temporary edit
-        if (purchaseDate + time <= new Date().getTime())
-          setType('EscrowReleaseRequest');
+        const time = await deliveryTime();
+        if (purchaseDate + Number(time) > new Date().getTime())
+          setType('anyoneRelease');
         else setType('inEscrow');
-      } else {
+      } else if (nft?.saleId?.saleStatus === 'Dispute') {
+        setType('dispute');
+      }
+      else {
         setType('remove');
       }
     } else {
@@ -119,7 +122,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
         setType('bid');
       else if (
         nft?.saleId?.saleStatus === 'CancellationRequested' ||
-        nft?.saleId?.saleStatus === 'Ordered'
+        nft?.saleId?.saleStatus === 'Ordered' || nft?.saleId?.saleStatus === 'Dispute'
       ) {
         if (nft?.saleId?.saleWinner === userData?._id) setType('release');
         else setType('NotForSale');
@@ -187,9 +190,8 @@ function PageDetail({ params }: { params: { slug: string } }) {
                         Details
                       </span>
                       <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
                       />
                     </div>
                   </DisclosureButton>

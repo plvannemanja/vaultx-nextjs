@@ -125,7 +125,7 @@ export type NFTItemType = {
   mintedBy: Partial<UserType>;
   owner: Partial<UserType>;
   cloudinaryUrl: string;
-  curation: string;
+  curation: string | Partial<CurationType>;
   lastPrice: number;
   price: number;
   artist: string;
@@ -176,6 +176,7 @@ export type CurationType = {
   bannerImage: string;
   createdAt: string;
   updatedAt: string;
+  tokenId: number;
 };
 
 export type UserType = {

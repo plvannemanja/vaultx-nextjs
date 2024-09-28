@@ -60,6 +60,16 @@ export class CreateSellService {
     });
   }
 
+  async releaseRequest(data: any) {
+    const token = getCookie('token');
+    return await axios.post(`${server_uri}/sale/releaseRequest`, data, {
+      headers: {
+        authorization: 'Bearer ' + token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  }
+
   async placeBid(data: any) {
     const token = getCookie('token');
     return await axios.post(`${server_uri}/sale/placeBid`, data, {

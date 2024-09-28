@@ -532,7 +532,33 @@ export default function NFTMain({
                     </div>
                   ) : null}
 
-                  {type === 'escrowRelease' ? (
+                  {
+                    type === 'anyoneRelease' && (
+                      <BaseDialog
+                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                        trigger={
+                          <BaseButton
+                            title="Release Escrow"
+                            variant="primary"
+                            className={'rounded-[14px]'}
+                            onClick={() => { }}
+                          />
+                        }
+                        isOpen={modalStatus.release}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, release: val });
+                        }}
+                      >
+                        <EscrowModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, release: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
+                    )
+                  }
+                  {type === 'inEscrow' ? (
                     <div className="flex flex-col gap-x-2 items-center">
                       <BaseDialog
                         trigger={
@@ -558,21 +584,23 @@ export default function NFTMain({
                               escrowRelease: false,
                             });
                           }}
+                          fetchNftData={fetchNftData}
                         />
                       </BaseDialog>
                     </div>
                   ) : null}
-
-                  {type === 'inEscrow' ? (
-                    <div className="flex flex-col gap-x-2 items-center">
-                      <BaseButton
-                        title="In Escrow"
-                        className={'!rounded-[14px]'}
-                        variant="primary"
-                        onClick={() => { }}
-                      />
-                    </div>
-                  ) : null}
+                  {
+                    type === 'dispute' && (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseButton
+                          title="Release Requested"
+                          variant="primary"
+                          onClick={() => { }}
+                          className={'!rounded-[14px]'}
+                        />
+                      </div>
+                    )
+                  }
                 </div>
               </div>
             </div>
