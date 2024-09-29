@@ -4,14 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import PhoneInput from 'react-phone-input-2';
+import { City, Country, State } from 'country-state-city';
 import FileInput from '../../ui/FileInput';
-
-const validateSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string(),
-  request: z.string(),
-});
 
 import {
   Disclosure,
@@ -20,52 +16,82 @@ import {
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import BaseButton from '../../ui/BaseButton';
-import { z } from 'zod';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { CreateSellService } from '@/services/createSellService';
-import BasicLoadingModal from './BasicLoadingModal';
-export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
-  const { nftId } = useNFTDetail();
-
+export default function EscrowRequestModal({ onClose }) {
   const [step, setStep] = useState(1);
+  const [description, setDescription] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [description, setDescription] = useState("");
-  const [unlockableFiles, setUnlockableFiles] = useState([null]);
+  const countries = Country.getAllCountries();
+  const [advancedDetails, setAdvancedDetails] = useState({ certificates: [] });
 
-  const salesService = new CreateSellService();
+  const [formData, setFormData] = useState({
+    username: null,
+    email: null,
+    description: null,
+    accepted: true,
+  });
+  const [sellerInfo, setSellerInfo] = useState({
+    country: '',
+    postalCode: '',
+    phoneNumber: '',
+  });
+  const handleUpdateSeller = (e: any) => {
+    const { name, value } = e.target;
+
+    if (name === 'country') {
+      setSelectedCountry(value);
+      const parsedVal = JSON.parse(value);
+      const countryStates = State.getStatesOfCountry(parsedVal.isoCode);
+
+      // @ts-ignore
+      setStates(countryStates);
+      setCountryCode(parsedVal.isoCode);
+      setSellerInfo({
+        ...sellerInfo,
+        [name]: parsedVal,
+      });
+      return null;
+    } else if (name === 'state') {
+      const parsedVal = JSON.parse(value);
+      const stateCities = City.getCitiesOfState(countryCode, parsedVal.isoCode);
+
+      // @ts-ignore
+      setCities(stateCities);
+      setSellerInfo({
+        ...sellerInfo,
+        [name]: parsedVal,
+      });
+      return null;
+    } else if (name === 'city') {
+      const parsedVal = JSON.parse(value);
+      setSellerInfo({
+        ...sellerInfo,
+        [name]: parsedVal,
+      });
+      return null;
+    }
+    setSellerInfo({
+      ...sellerInfo,
+      [name]: value,
+    });
+  };
+
+  const [unlockableFiles, setUnlockableFiles] = useState([]);
+
+  useEffect(() => {
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: unlockableFiles,
+    });
+  }, [unlockableFiles]);
 
   const releseEscrowRequest = async () => {
+    // API call
     try {
-      debugger;
       setStep(2);
-      const result = validateSchema.safeParse({
-        email,
-        phoneNumber,
-        request: description,
-      });
-
-      if (!result.success)
-        throw new Error(result.error.message);
-
-      const formData = new FormData();
-      formData.append('nftId', nftId);
-      formData.append('request', description);
-      formData.append('email', email);
-      formData.append('phoneNumber', phoneNumber);
-
-      for (const file of unlockableFiles) {
-        if (file !== null)
-          formData.append('files', file);
-      }
-
-      await salesService.releaseRequest(formData);
-      await fetchNftData();
-      setStep(3);
     } catch (error) {
       console.log(error);
-      onClose();
     }
   };
   const handleFileChange = (file: any, index: number) => {
@@ -77,28 +103,22 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
     });
 
     setUnlockableFiles(newFiles);
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: newFiles,
+    });
   };
   const removeUnlockable = (index: number) => {
-    if (index === 0) {
-      setUnlockableFiles(unlockableFiles.map((file, i) => (i === 0 ? null : file)))
-      return;
-    }
-
     const newFiles = unlockableFiles.filter(
       (item: any, i: number) => i !== index,
     );
 
     setUnlockableFiles(newFiles);
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: newFiles,
+    });
   };
-
-  const addUnlockable: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault();
-    if (unlockableFiles.length === 0) {
-      setUnlockableFiles([null, null]);
-    } else {
-      setUnlockableFiles([...unlockableFiles, null]);
-    }
-  }
 
   return (
     <div className="">
@@ -128,9 +148,12 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
           <div className="flex flex-col gap-y-2 w-[100%]">
             <Label className="text-lg font-medium">Email*</Label>
             <Input
-              value={email}
+              value={formData.email ? formData.email : ''}
               onChange={(e) =>
-                setEmail((e.target as HTMLInputElement).value)
+                setFormData({
+                  ...formData,
+                  email: (e.target as HTMLInputElement).value,
+                })
               }
               className="w-full border border-[#3A3A3A] bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
               type="text"
@@ -145,7 +168,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
               buttonClass="phone-dropdown"
               inputClass="phone-control"
               country={'us'}
-              value={phoneNumber}
+              value={sellerInfo.phoneNumber ? sellerInfo.phoneNumber : ''}
               inputStyle={{
                 width: '100%',
                 height: '3.25rem',
@@ -156,9 +179,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                 backgroundColor: '#161616',
                 border: '1px solid #3A3A3A',
               }}
-              onChange={(val) =>
-                setPhoneNumber(val)
-              }
+              onChange={(e) => setSellerInfo({ ...sellerInfo, phoneNumber: e })}
             />
           </div>
           <div className="flex flex-col gap-y-4">
@@ -168,7 +189,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full border-none bg-[#161616] border border-[#3A3A3A] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
-                placeholder="Please describe your Request*"
+                placeholder="Please describe your product"
               />
             </div>
           </div>
@@ -181,8 +202,14 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                       <span>Attachment</span>
                       <div className="flex items-center">
                         <div
-                          className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                          onClick={addUnlockable}
+                          className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer me-5"
+                          onClick={() => {
+                            setUnlockableFiles([...unlockableFiles, null]);
+                            setAdvancedDetails({
+                              ...advancedDetails,
+                              certificates: [...unlockableFiles, null],
+                            });
+                          }}
                         >
                           <img
                             src="/icons/add-new.svg"
@@ -192,46 +219,50 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                           <p className="text-neon">Add</p>
                         </div>
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
                         />
                       </div>
                     </div>
                   </DisclosureButton>
 
-                  <DisclosurePanel className="flex flex-wrap gap-3 justify-between">
-                    {unlockableFiles.length == 0 && (
-                      <div className="flex gap-x-4 items-center">
-                        <FileInput
-                          onFileSelect={(file: any) => handleFileChange(file, 0)}
-                          maxSizeInBytes={1024 * 1024}
-                          deSelect={true}
-                        />
-                        <img
-                          src="/icons/trash.svg"
-                          alt="trash"
-                          className="w-6 h-6 cursor-pointer"
-                          onClick={() => removeUnlockable(0)}
-                        />
-
-                      </div>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="flex gap-x-4 items-center">
+                      <FileInput
+                        onFileSelect={(file: any) => handleFileChange(file, 0)}
+                        maxSizeInBytes={1024 * 1024}
+                      />
+                      <img
+                        src="/icons/trash.svg"
+                        alt="trash"
+                        className="w-6 h-6 cursor-pointer"
+                        onClick={() => removeUnlockable(0)}
+                      />
+                    </div>
+                    {advancedDetails.certificates.map(
+                      (item: any, index: number) => {
+                        return (
+                          <div
+                            className="flex gap-x-4 items-center"
+                            key={index}
+                          >
+                            <FileInput
+                              onFileSelect={(file: any) =>
+                                handleFileChange(file, index)
+                              }
+                              maxSizeInBytes={1024 * 1024}
+                            />
+                            <img
+                              src="/icons/trash.svg"
+                              alt="trash"
+                              className="w-6 h-6 cursor-pointer"
+                              onClick={() => removeUnlockable(index)}
+                            />
+                          </div>
+                        );
+                      },
                     )}
-                    {unlockableFiles.map((item: any, index: number) => {
-                      return (
-                        <div className="flex gap-x-4 items-center" key={index}>
-                          <FileInput
-                            onFileSelect={(file: any) => handleFileChange(file, index)}
-                            maxSizeInBytes={1024 * 1024}
-                          />
-                          <img
-                            src="/icons/trash.svg"
-                            alt="trash"
-                            className="w-6 h-6 cursor-pointer"
-                            onClick={() => removeUnlockable(index)}
-                          />
-                        </div>
-                      );
-                    })}
                   </DisclosurePanel>
                 </>
               )}
@@ -240,7 +271,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { onClose() }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Cancel
               </button>
             </div>
@@ -255,10 +286,8 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
           </div>
         </div>
       )}
+
       {step === 2 && (
-        <BasicLoadingModal message="Please wait while we are accepting NFT Realease Request" />
-      )}
-      {step === 3 && (
         <div className="flex w-full justify-center flex-col gap-y-4 text-center">
           <img src="/icons/success.svg" className="w-16 mx-auto" />
           <p className="text-[30px] font-extrabold">Application Success</p>
@@ -271,7 +300,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
           <BaseButton
             title="Close"
             variant="primary"
-            onClick={() => { onClose() }}
+            onClick={() => {}}
             className="w-full"
           />
         </div>

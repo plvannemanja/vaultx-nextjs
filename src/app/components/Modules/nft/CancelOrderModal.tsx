@@ -7,21 +7,10 @@ import { ArrowUpTrayIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BasicLoadingModal from './BasicLoadingModal';
-import PhoneInput from 'react-phone-input-2'
-import { z } from 'zod';
-import { Input } from '@/components/ui/input';
 
-const validateSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string(),
-  request: z.string(),
-});
-
-export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
+export default function CancelOrderModal({ onClose }: { onClose: () => void }) {
   const { nftId: id } = useNFTDetail();
   const [step, setStep] = useState(1);
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
   const [numberOfInputs, setNumberOfInputs] = useState(1);
   const [discriptionImage, setDiscriptionImage] = useState([]);
@@ -31,26 +20,15 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
 
   const submit = async () => {
     try {
-      const result = validateSchema.safeParse({
-        email,
-        phoneNumber,
-        request: description,
-      });
-
-      if (!result.success)
-        throw new Error(result.error.message);
-
       setStep(2);
       const formData = new FormData();
       formData.append('nftId', id);
       formData.append('request', description);
-      formData.append('email', email);
-      formData.append('phoneNumber', phoneNumber);
       for (const file of discriptionImage) {
         formData.append('files', file);
       }
       await salesService.cancelRequest(formData);
-      await fetchNftData();
+
       setStep(3);
     } catch (error) {
       console.log(error);
@@ -112,42 +90,6 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
             value your feedback as it helps us deliver the best possible
             service. Thank You!
           </p>
-
-          <div className="flex flex-col gap-y-2">
-            <h2 className="font-bold text-[#fff] text-[14px]">
-              Email*
-            </h2>
-
-            <Input
-              value={email}
-              onChange={(e) =>
-                setEmail((e.target as any).value)
-              }
-              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-              type="text"
-              placeholder="Enter your email"
-            />
-          </div>
-          <PhoneInput
-            enableLongNumbers={true}
-            containerClass="phone-container"
-            buttonClass="phone-dropdown"
-            inputClass="phone-control"
-            country={'us'}
-            value={phoneNumber}
-            inputStyle={{
-              width: '100%',
-              height: '2.5rem',
-              borderRadius: '0.375rem',
-              padding: '0.5rem',
-              marginTop: '0.5rem',
-              color: '#fff',
-              backgroundColor: '#161616',
-            }}
-            onChange={(val) =>
-              setPhoneNumber(val)
-            }
-          />
 
           <Textarea
             value={description}
@@ -221,7 +163,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Cancel
               </button>
             </div>
