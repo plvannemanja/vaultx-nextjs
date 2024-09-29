@@ -238,3 +238,7 @@ body {
   gap: 10px;
   width: 460px;
 }
+.icon-svg {
+  filter: brightness(0) saturate(100%) invert(95%) sepia(96%) saturate(753%) hue-rotate(10deg) brightness(104%) contrast(90%)
+
+}
