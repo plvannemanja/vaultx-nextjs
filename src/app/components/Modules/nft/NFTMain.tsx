@@ -26,6 +26,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import {  MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import EditNFTModal from './EditNFTModal';
+import { dividerClasses } from '@mui/material';
 
 const style = {
   borderRadius: '10px',
@@ -302,6 +303,31 @@ export default function NFTMain({
                     </svg>
                 </div>
                 <div className="flex  items-center cursor-pointer">
+                <BaseDialog
+                        trigger={
+                           <BaseButton
+                            title="Buy Now"
+                            className={'!rounded-[14px] w-full'}
+                            variant="primary"
+                            onClick={() => {}}
+                          />
+                        //   <div>
+                        // Edit RWA
+                        // </div>
+                        }
+                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                        isOpen={true}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, nftedit: val });
+                        }}
+                      >
+                        <EditNFTModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, nftedit: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
                   <Menu>
                       <MenuButton> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -313,19 +339,25 @@ export default function NFTMain({
                         
                         <BaseDialog
                         trigger={
-                          <div>
-                        Edit RWA
-                        </div>
+                           <BaseButton
+                            title="Buy Now"
+                            className={'!rounded-[14px] w-full'}
+                            variant="primary"
+                            onClick={() => {}}
+                          />
+                        //   <div>
+                        // Edit RWA
+                        // </div>
                         }
                         className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
-                        isOpen={modalStatus.nftedit}
+                        isOpen={true}
                         onClose={(val) => {
-                          setModalStatus({ ...modalStatus, nftedit: val });
+                          // setModalStatus({ ...modalStatus, nftedit: val });
                         }}
                       >
                         <EditNFTModal
                           onClose={() => {
-                            setModalStatus({ ...modalStatus, nftedit: false });
+                            // setModalStatus({ ...modalStatus, nftedit: false });
                           }}
                           fetchNftData={fetchNftData}
                         />
@@ -457,6 +489,7 @@ export default function NFTMain({
                     <div className="flex flex-col  gap-y-2 gap-2 items-center w-full">
                       <BaseDialog
                         trigger={
+                         
                           <BaseButton
                             title="Buy Now"
                             className={'!rounded-[14px] w-full'}

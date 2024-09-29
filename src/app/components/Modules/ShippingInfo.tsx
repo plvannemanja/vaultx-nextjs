@@ -623,7 +623,7 @@ export default function ShippingInfo() {
               );
             })
           : null}
-
+          
         <div
           className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
           onClick={resetState}
