@@ -20,7 +20,6 @@ import {
   useWalletBalance,
   useWalletImage,
 } from 'thirdweb/react';
-import { TokenIcon } from '@web3icons/react';
 import { WalletId } from 'thirdweb/wallets';
 import { useEffect, useState } from 'react';
 import { chain } from '@/lib/contract';
@@ -213,7 +212,15 @@ export default function Menu() {
             <div className="self-stretch justify-between items-center inline-flex">
               <div className="justify-start items-center gap-[17px] flex">
                 <div className="w-5 h-5 relative">
-                  <TokenIcon symbol="base" className="text-white"></TokenIcon>
+                  <Image
+                    src="/icons/Base.svg"
+                    height={20}
+                    width={20}
+                    alt="matic"
+                    loading="lazy"
+                    blurDataURL={'/images/image_placeholder.png'}
+                    quality={100}
+                  />
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">
                   {` ${activeChain.nativeCurrency?.symbol}`}
@@ -222,9 +229,9 @@ export default function Menu() {
               <div className="text-center text-neutral-400 text-base font-semibold capitalize">
                 {data
                   ? Number(
-                      Number(data?.value) /
-                        Math.pow(10, Number(data?.decimals)),
-                    ).toFixed(2)
+                    Number(data?.value) /
+                    Math.pow(10, Number(data?.decimals)),
+                  ).toFixed(2)
                   : 0}
               </div>
             </div>

@@ -78,7 +78,7 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
 
       // data fields
       unlockableContent: null,
-      certificates: [],
+      certificates: [null],
       propertyTemplateId: null,
       attributes: [],
     });

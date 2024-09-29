@@ -41,9 +41,8 @@ export default function ActivityList() {
 </svg>
                       </span> Item activity</div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </div>
               </DisclosureButton>
@@ -92,7 +91,7 @@ export default function ActivityList() {
                           </TableCell>
                           <TableCell>
                             {item.price
-                              ? `${item.price} ${item.currency ?? ''}`
+                              ? `${item.price} ${item.currency ?? 'USD'}`
                               : '-/-'}
                           </TableCell>
                           <TableCell>
