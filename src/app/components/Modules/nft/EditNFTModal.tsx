@@ -146,11 +146,9 @@ export default function EditNFTModal({
   };
  
   return (
-
-     
         <>
-
-            <div className="flex flex-col gap-y-6 w-full">
+            <div className="flex flex-col gap-y-6 w-full p-[30px]">
+              <h2 className='text-[30px] font-bold pb-[2px]'> Edit RWA </h2>
               <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
                 <Disclosure as="div" defaultOpen={true}>
                   {({ open }) => (
@@ -232,22 +230,19 @@ export default function EditNFTModal({
                   )}
                 </Disclosure>
               </div>
-
-            
               <div className="flex flex-col gap-y-2 w-full">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
-                              Category
-                            </h2>
-
-                            <select
-                              aria-label="select curation"
-                              className="rounded-[24px] px-6 bg-[#232323] text-white border-none h-[52px]"
-                              name="country"
-                            >
-                              <option value="">Select</option>
-                             
-                            </select>
-                          </div>
+                <h2 className="font-bold text-[#fff] text-[14px]">
+                  Category
+                </h2>
+                <select
+                  aria-label="select curation"
+                  className="rounded-[24px] px-6 bg-[#232323] text-white border-none h-[52px]"
+                  name="country"
+                >
+                  <option value="">Select</option>
+                  
+                </select>
+              </div>
               <div className="flex w-full flex-col">
                 <h2 className="font-bold text-[#ffffff] text-[14px] mb-[15px]">
                  Description
@@ -268,32 +263,26 @@ export default function EditNFTModal({
                     <div
                       key={index}
                       onClick={() => setSelectedShipping(item)}
-                      className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-6 rounded-md ${
+                      className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
                         selectedShipping?._id === item._id ? 'border-neon' : 'border-gray-400'
                       }`}
                     >
                       <div className="flex justify-between">
                         <div className="flex flex-col gap-y-2">
-                          <span>{item.name}</span>
-                          <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
+                          <span className='text-[18px] font-semibold'>{item.name}</span>
+                          <span className='text-[14px] text-[#A6A6A6] font-semibold '>{item.phoneNumber}</span>
                         </div>
-                        <div className="text-[#A6A6A6]">{item.shippingAddr}</div>
+                        <div className="text-[#fff]  text-[14px]  font-semibold ">{item.shippingAddr}</div>
                       </div>
-                      <div>
+                      <div className='mt-[26px]'>
                         <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
                           {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(0, 150)}
                         </p>
                         <span
                           onClick={() => setIsUpdateModalOpen(true)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-5 right-10 text-[14px]"
+                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
                         >
                           Edit
-                        </span>
-                        <span
-                          onClick={() => handleDeleteSeller(item)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-5 right-2 text-[14px]"
-                        >
-                          <img src="/icons/trash.svg" className="w-4 h-4" alt="Delete" />
                         </span>
                       </div>
                     </div>
@@ -362,38 +351,30 @@ export default function EditNFTModal({
                 <p className="text-lg font-medium">Contact Information</p>
                 <div className="flex flex-wrap gap-5">
                   {data.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setSelectedShipping(item)}
-                      className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${
-                        selectedShipping?._id === item._id ? 'border-neon' : 'border-gray-400'
-                      }`}
-                    >
-                      <div className="flex justify-between">
-                        <div className="flex flex-col gap-y-2">
-                          <span>{item.name}</span>
-                          <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
-                        </div>
-                        <div className="text-[#A6A6A6]">{item.shippingAddr}</div>
-                      </div>
-                      <div>
-                        <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                          {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(0, 150)}
-                        </p>
-                        <span
-                          onClick={() => setIsUpdateModalOpen(true)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
-                        >
-                          Edit
-                        </span>
-                        <span
-                          onClick={() => handleDeleteSeller(item)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                        >
-                          <img src="/icons/trash.svg" className="w-4 h-4" alt="Delete" />
-                        </span>
-                      </div>
+                  <div
+                  key={index}
+                  onClick={() => setSelectedShipping(item)}
+                  className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
+                    selectedShipping?._id === item._id ? 'border-neon' : 'border-gray-400'
+                  }`}
+                >
+                  <div className="flex justify-between">
+                    <div className="flex flex-col gap-y-2">
+                      <span className='text-[18px] font-semibold'>{item.name}</span>
                     </div>
+                  </div>
+                  <div className='mt-[26px]'>
+                    <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
+                      {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(0, 150)}
+                    </p>
+                    <span
+                      onClick={() => setIsUpdateModalOpen(true)}
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
+                    >
+                      Edit
+                    </span>
+                  </div>
+                </div>
                   ))}
                   
                   <div
@@ -455,7 +436,7 @@ export default function EditNFTModal({
                   </BaseDialog>
                 </div>
               </div>         
-              <div className="flex w-full gap-x-4 justify-center my-3 px-4">
+              <div className="flex w-full gap-x-4 justify-center my-3">
                 <BaseButton
                   title="Discard"
                   variant="secondary"
@@ -471,7 +452,5 @@ export default function EditNFTModal({
               </div>
             </div>
           </>
-   
-   
   );
 }
