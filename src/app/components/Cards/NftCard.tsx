@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 interface INftCardProps {
+  _id: string;
   name: string;
   cloudinaryUrl: string;
   curation: {
@@ -13,8 +14,7 @@ interface INftCardProps {
 }
 
 export default function NftCard({ data }: { data: INftCardProps }) {
-
-  console.log("data", data)
+  console.log('data', data);
   return (
     <>
       <Card className="bg-transparent text-white border-none max-w-[100%]">
@@ -29,7 +29,9 @@ export default function NftCard({ data }: { data: INftCardProps }) {
           </div>
           <div className="flex flex-col gap-y-2.5 bg-[#333] px-5 py-3 rounded-b-[20px]">
             <p className="font-extrabold font-[16px] h-[22px]">
-              {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
+              {data.name.length > 24
+                ? `${data.name.slice(0, 24)}...`
+                : data.name}
             </p>
             <div className="flex justify-between">
               <span className="text-xs text-dark  azeret-mono-font">
@@ -39,7 +41,8 @@ export default function NftCard({ data }: { data: INftCardProps }) {
                 {data.curation.name ? data.curation.name : data.artist}
               </span>
             </div>
-            <p className="text-[13px] text-[#fff] font-bold azeret-mono-font italic underline">            {' '}
+            <p className="text-[13px] text-[#fff] font-bold azeret-mono-font italic underline">
+              {' '}
               <Link className="italic " href={`/nft/${data._id}`}>
                 {data.curation?.name}
               </Link>
@@ -47,7 +50,9 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             <hr className={'border-[#ffffff10] my-[6px]'} />
 
             <div className="flex justify-between items-center">
-              <span className="text-xs text-dark  azeret-mono-font">Price </span>
+              <span className="text-xs text-dark  azeret-mono-font">
+                Price{' '}
+              </span>
               <div className="flex gap-x-2 items-center font-extrabold text-[16px]">
                 <Image
                   src="/icons/Base.svg"
@@ -65,6 +70,5 @@ export default function NftCard({ data }: { data: INftCardProps }) {
         </CardContent>
       </Card>
     </>
-
   );
 }

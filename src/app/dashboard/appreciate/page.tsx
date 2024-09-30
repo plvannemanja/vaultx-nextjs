@@ -99,18 +99,18 @@ export default function Page() {
       <div className="grid grid-cols-12 gap-x-[24px] gap-y-[52px] flex-wrap my-4 justify-center px-[20px] ">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-            return (
-              <div
-                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
-                key={index}
-                onClick={() => {
-                  router.push(`/nft/${nft._id}`);
-                }}
-              >
-                <NftCard data={nft} />
-              </div>
-            );
-          })
+              return (
+                <div
+                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                  key={index}
+                  onClick={() => {
+                    router.push(`/nft/${nft._id}`);
+                  }}
+                >
+                  <NftCard data={nft} />
+                </div>
+              );
+            })
           : null}
       </div>
     </div>

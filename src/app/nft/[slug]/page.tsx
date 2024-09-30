@@ -109,8 +109,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
         else setType('inEscrow');
       } else if (nft?.saleId?.saleStatus === 'Dispute') {
         setType('dispute');
-      }
-      else {
+      } else {
         setType('remove');
       }
     } else {
@@ -122,7 +121,8 @@ function PageDetail({ params }: { params: { slug: string } }) {
         setType('bid');
       else if (
         nft?.saleId?.saleStatus === 'CancellationRequested' ||
-        nft?.saleId?.saleStatus === 'Ordered' || nft?.saleId?.saleStatus === 'Dispute'
+        nft?.saleId?.saleStatus === 'Ordered' ||
+        nft?.saleId?.saleStatus === 'Dispute'
       ) {
         if (nft?.saleId?.saleWinner === userData?._id) setType('release');
         else setType('NotForSale');
@@ -186,10 +186,22 @@ function PageDetail({ params }: { params: { slug: string } }) {
                   <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left text-lg font-medium text-[#fff] text-[18px] border-b border-[#ffffff08] ">
                     <div className="flex w-full justify-between">
                       <span className="text-white flex items-center text-[14px] gap-2 content-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                        <path d="M9.75 12H9V9H8.25M9 6H9.0075M15.75 9C15.75 12.7279 12.7279 15.75 9 15.75C5.27208 15.75 2.25 12.7279 2.25 9C2.25 5.27208 5.27208 2.25 9 2.25C12.7279 2.25 15.75 5.27208 15.75 9Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg> 
-                           Details
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 18 18"
+                          fill="none"
+                        >
+                          <path
+                            d="M9.75 12H9V9H8.25M9 6H9.0075M15.75 9C15.75 12.7279 12.7279 15.75 9 15.75C5.27208 15.75 2.25 12.7279 2.25 9C2.25 5.27208 5.27208 2.25 9 2.25C12.7279 2.25 15.75 5.27208 15.75 9Z"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        Details
                       </span>
                       <ChevronUpIcon
                         className={`${

@@ -565,9 +565,14 @@ export default function BuyModal({
                         <div className="text-white/50 text-base font-normal font-['Azeret Mono'] leading-relaxed">
                           We collect two types of information from you:
                           <br />
-                          1. Personal Information: This includes your individual information such as Email, Phone Number, Username, Avatar, Profile Picture, Date of Birth, and more.
+                          1. Personal Information: This includes your individual
+                          information such as Email, Phone Number, Username,
+                          Avatar, Profile Picture, Date of Birth, and more.
                           <br />
-                          2. Non-Personal Information: This includes information that does not identify you as an individual, such as your device type, browser type, operating system, IP address, browsing history, and clickstream data.
+                          2. Non-Personal Information: This includes information
+                          that does not identify you as an individual, such as
+                          your device type, browser type, operating system, IP
+                          address, browsing history, and clickstream data.
                           <br />
                         </div>
                       </DisclosurePanel>

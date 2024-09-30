@@ -153,11 +153,11 @@ export const protocolFee = async () => {
 export const deliveryTime = async () => {
   const data = await readContract({
     contract,
-    method: "function deliverTime() view returns (uint256)",
-    params: []
-  })
+    method: 'function deliverTime() view returns (uint256)',
+    params: [],
+  });
   return data;
-}
+};
 
 export const tokenDetail = async (tokenId: bigint) => {
   const detail = await readContract({
@@ -218,9 +218,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 
@@ -305,9 +305,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 export const getExplorerURL = (
@@ -484,8 +484,8 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-      events,
-      transactionHash,
-    }
+        events,
+        transactionHash,
+      }
     : null;
 };

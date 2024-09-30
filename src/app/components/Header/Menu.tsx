@@ -229,9 +229,9 @@ export default function Menu() {
               <div className="text-center text-neutral-400 text-base font-semibold capitalize">
                 {data
                   ? Number(
-                    Number(data?.value) /
-                    Math.pow(10, Number(data?.decimals)),
-                  ).toFixed(2)
+                      Number(data?.value) /
+                        Math.pow(10, Number(data?.decimals)),
+                    ).toFixed(2)
                   : 0}
               </div>
             </div>

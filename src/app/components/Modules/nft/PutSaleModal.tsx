@@ -157,26 +157,23 @@ export default function PutSaleModal({
       const price = parseEther(formData.price.toString());
       let nftPayload = {};
       if (nft?.voucher) {
-        const voucher: INFTVoucher = JSON.parse(
-          nft.voucher,
-          (key, value) => {
-            // Check if the value is a number and can be safely converted to BigInt
-            if (typeof value === 'number' && Number.isSafeInteger(value)) {
-              return BigInt(value);
-            }
-            return value;
-          },
-        );
+        const voucher: INFTVoucher = JSON.parse(nft.voucher, (key, value) => {
+          // Check if the value is a number and can be safely converted to BigInt
+          if (typeof value === 'number' && Number.isSafeInteger(value)) {
+            return BigInt(value);
+          }
+          return value;
+        });
         let paymentSplits: PaymentSplitType[] = [];
         if (voucher.paymentPercentages.length !== voucher.paymentWallets.length)
-          throw new Error("Free minted Voucher information is incorrect.");
+          throw new Error('Free minted Voucher information is incorrect.');
 
         voucher.paymentPercentages.forEach((percentage, index) => {
           paymentSplits.push({
             paymentWallet: voucher.paymentWallets[index],
             paymentPercentage: percentage,
           });
-        })
+        });
 
         nftPayload = {
           curationId: Number(voucher.curationId),
@@ -185,12 +182,14 @@ export default function PutSaleModal({
           royaltyWallet: voucher.royaltyWallet,
           royaltyPercentage: voucher.royaltyPercentage,
           paymentSplits,
-          account: activeAccount
-        } as IListAsset
+          account: activeAccount,
+        } as IListAsset;
       } else {
-        throw new Error("Only free minted NFT can list in resale progress.")
+        throw new Error('Only free minted NFT can list in resale progress.');
       }
-      const { tokenId, transactionHash } = await listAsset(nftPayload as IListAsset);
+      const { tokenId, transactionHash } = await listAsset(
+        nftPayload as IListAsset,
+      );
       await nftService.mintAndSale({
         nftId,
         mintHash: transactionHash,
@@ -315,8 +314,9 @@ export default function PutSaleModal({
                             Give a new price to put this asset for sale.
                           </span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -346,8 +346,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Buyer Information</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -425,8 +426,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Shipping Address*</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -582,8 +584,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Contact Information For Seller</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -617,8 +620,9 @@ export default function PutSaleModal({
                               information
                             </span>
                             <ChevronUpIcon
-                              className={`${open ? 'rotate-180 transform' : ''
-                                } h-5 w-5 text-white`}
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                             />
                           </div>
                           <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
@@ -631,9 +635,16 @@ export default function PutSaleModal({
                           <div className="text-white/50 text-base font-normal font-['Azeret Mono'] leading-relaxed">
                             We collect two types of information from you:
                             <br />
-                            1. Personal Information: This includes your individual information such as Email, Phone Number, Username, Avatar, Profile Picture, Date of Birth, and more.
+                            1. Personal Information: This includes your
+                            individual information such as Email, Phone Number,
+                            Username, Avatar, Profile Picture, Date of Birth,
+                            and more.
                             <br />
-                            2. Non-Personal Information: This includes information that does not identify you as an individual, such as your device type, browser type, operating system, IP address, browsing history, and clickstream data.
+                            2. Non-Personal Information: This includes
+                            information that does not identify you as an
+                            individual, such as your device type, browser type,
+                            operating system, IP address, browsing history, and
+                            clickstream data.
                             <br />
                           </div>
                         </DisclosurePanel>

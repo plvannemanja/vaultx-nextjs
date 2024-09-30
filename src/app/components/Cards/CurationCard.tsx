@@ -39,17 +39,23 @@ export default function CurationCard({ data }: { data: ICurationCard }) {
           <p className="text-[24px] font-bold text-center">{data.name}</p>
           <div className="flex justify-between gap-x-2 p-2.5">
             <div className="flex flex-col gap-y-1 bg-[#323232] py-2 justify-center w-1/3">
-              <p className="text-center font-medium text-dark azeret-mono-font">Artworks</p>
+              <p className="text-center font-medium text-dark azeret-mono-font">
+                Artworks
+              </p>
               <p className="text-center text-sm">{data.nftCount}</p>
             </div>
 
             <div className="flex flex-col gap-y-1 bg-[#323232] py-2 justify-center w-1/3">
-              <p className="text-center font-medium text-dark azeret-mono-font">Artists</p>
+              <p className="text-center font-medium text-dark azeret-mono-font">
+                Artists
+              </p>
               <p className="text-center text-sm">{data.artistCount}</p>
             </div>
 
             <div className="flex flex-col gap-y-1 bg-[#323232] py-2 justify-center w-1/3">
-              <p className="text-center font-medium text-dark azeret-mono-font">Volume</p>
+              <p className="text-center font-medium text-dark azeret-mono-font">
+                Volume
+              </p>
               <p className="text-center text-sm">${data.totalVolume}</p>
             </div>
           </div>

@@ -48,7 +48,6 @@ export default function Page() {
     }
   };
 
-
   const fetchCollection = async () => {
     setLoading(true);
     const response = await collectionServices.getAllCollections(filters);
@@ -114,7 +113,9 @@ export default function Page() {
           width={1000}
           height={1000}
           className="w-full rounded-xl object-fill mb-[19px]"
-          onClick={() => { window.open(hero.link, '_blank') }}
+          onClick={() => {
+            window.open(hero.link, '_blank');
+          }}
         />
       ) : null}
       <>
@@ -130,7 +131,6 @@ export default function Page() {
                 </div>
               );
             })}
-
           </div>
         )}
       </>

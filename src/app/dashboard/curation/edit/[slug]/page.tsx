@@ -6,30 +6,29 @@ import CreateCuration from '@/app/components/Modules/CreateCuration';
 import { useRouter } from 'next/navigation';
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const curationId = params.slug;
   const router = useRouter();
 
   const [formData, setFormData] = useState(null);
 
+  const fetchData = async () => {
+    const collection =
+      await collectionServices.getCollectionById(params.slug);
+
+    if (collection.data.collection) {
+      if (collection.data.collection._id === '') {
+        router.push('/');
+        return;
+      }
+
+      setFormData(collection.data.collection);
+    }
+  };
+
   useEffect(() => {
     if (!formData) {
-      const fetchData = async () => {
-        const collection =
-          await collectionServices.getCollectionById(curationId);
-
-        if (collection.data.collection) {
-          if (collection.data.collection._id !== '') {
-            router.push('/');
-            return;
-          }
-
-          setFormData(collection.data.collection);
-        }
-      };
-
       fetchData();
     }
-  }, []);
+  }, [params.slug]);
   return (
     <div>
       <CreateCuration editMode={formData} />

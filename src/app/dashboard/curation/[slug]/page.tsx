@@ -30,12 +30,12 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
-  const [curation, setCuration] = useState<any>({})
-  const [curationInfo, setCurationInfo] = useState<any>({})
-  const [nfts, setNfts] = useState([])
+  const [curation, setCuration] = useState<any>({});
+  const [curationInfo, setCurationInfo] = useState<any>({});
+  const [nfts, setNfts] = useState([]);
   const [now, setNow] = useState(false);
-  const [showLess, setShowLess] = useState(false);
-  const [activity, setActivity] = useState([])
+  const [showLess, setShowLess] = useState(true);
+  const [activity, setActivity] = useState([]);
   const [tab, setTab] = useState('items');
   const [filters, setFilters] = useState<any>({
     filterString: '',
@@ -95,11 +95,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const setMyLike = async () => {
     try {
-      await favoriteService.handleLikeCollections({ collectionId: params.slug })
+      await favoriteService.handleLikeCollections({
+        collectionId: params.slug,
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const copyAddr = () => {
     navigator.clipboard.writeText(user?.wallet);
@@ -110,49 +112,47 @@ export default function Page({ params }: { params: { slug: string } }) {
       data: { activity },
     } = await collectionServices.getAllActivitiesCollection({
       collectionId: params.slug,
-    })
+    });
     setActivity(activity);
-  }
+  };
 
   const fetchNFTs = async () => {
-
     const {
-      data: { nfts }
+      data: { nfts },
     } = await collectionServices.getCollectionNfts({
       collectionId: params.slug,
       ...filters,
     });
 
     setNfts(nfts);
-  }
+  };
 
   const fetchLikes = async () => {
     const {
       data: { totalLikedCollection },
     } = await favoriteService.getCollectionTotalLikes({
-      collectionId: params.slug
-    })
+      collectionId: params.slug,
+    });
 
     const {
       data: { favorite },
     } = await favoriteService.getUserReactionToCollection({
-      collectionId: params.slug
-    })
-    setLikes(totalLikedCollection)
-    setLiked(favorite)
-  }
+      collectionId: params.slug,
+    });
+    setLikes(totalLikedCollection);
+    setLiked(favorite);
+  };
   const fetchData = async () => {
     fetchActivity();
     fetchNFTs();
     fetchLikes();
 
-    const curationRes = await collectionServices.getCollectionById(
+    const curationRes = await collectionServices.getCollectionById(params.slug);
+    const curationInfoRes = await collectionServices.getCollectionInfo(
       params.slug,
     );
-    const curationInfoRes = await collectionServices.getCollectionInfo(params.slug);
     setCuration(curationRes.data.collection);
     setCurationInfo(curationInfoRes.data.collection);
-
   };
 
   useEffect(() => {
@@ -163,18 +163,19 @@ export default function Page({ params }: { params: { slug: string } }) {
       {curation && (
         <>
           <div className="relative">
-
             <div
-              className={`relative overflow-hidden transition-all duration-500 ease-in-out 
-                }`}
+              className="relative overflow-hidden transition-all duration-500 ease-in-out"
             >
               <Image
                 src={curation?.bannerImage}
                 alt="hero"
-                width={100}
-                height={100}
+                width={1000}
+                height={1000}
                 quality={100}
-                className={cn("w-full object-cover rounded-xl", showLess ? 'h-[200px]' : 'h-auto h-min-[340px]')}
+                className={cn(
+                  'w-full object-cover rounded-xl',
+                  showLess ? 'h-[200px]' : 'h-auto h-min-[340px]',
+                )}
               />
             </div>
             <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
@@ -217,6 +218,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                       type="checkbox"
                       className="sr-only"
                       checked={liked}
+                      onChange={() => { }}
                     />
                     <div className="checkmark">
                       {liked ? (
@@ -257,13 +259,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                     </div>
                   </div>
                 </div>
-                {user?.wallet === curation.owner && (
+                {user?.wallet === curation.owner?.wallet && (
                   <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
-                    <div
-                      onClick={() =>
-                        router.push(`/dashboard/curation/edit/${params.slug}`)
-                      }
-                    >
+                    <Link href={`/dashboard/curation/edit/${params.slug}`}>
                       <svg
                         width="27"
                         height="26"
@@ -282,7 +280,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                       <div className="text-white text-base font-medium">
                         Edit
                       </div>
-                    </div>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -294,15 +292,13 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div className="text-sm">
                 <span>
                   <Image
-                    alt='double-down'
-                    src="/icons/double-down.svg"
-                    className={cn("", !showLess ? "rotate-180" : "")}
+                    alt="double-down"
+                    src="/icons/double_down.svg"
+                    className={cn('', !showLess ? 'rotate-180' : '')}
+                    width={24}
+                    height={24}
+                    onClick={() => setShowLess(!showLess)}
                   />
-                </span>
-                <span
-                  className="text-neon"
-                  onClick={() => setShowLess(!showLess)}
-                >
                 </span>
               </div>
               <div className="my-5 flex flex-wrap md:gap-x-3">

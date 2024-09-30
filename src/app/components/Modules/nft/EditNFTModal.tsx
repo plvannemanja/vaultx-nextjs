@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { City, Country, State } from 'country-state-city';
@@ -38,7 +38,6 @@ import SellerInformation from '../create/SellerInformation';
 import { BaseDialog } from '../../ui/BaseDialog';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 
-
 export default function EditNFTModal({
   onClose,
   fetchNftData,
@@ -57,9 +56,9 @@ export default function EditNFTModal({
         line2: 'Apt 4',
         state: 'California',
         city: 'Los Angeles',
-        postalCode: '90001'
+        postalCode: '90001',
       },
-      country: 'United States'
+      country: 'United States',
     },
     {
       _id: '2',
@@ -71,12 +70,12 @@ export default function EditNFTModal({
         line2: 'Suite 7',
         state: 'New York',
         city: 'New York City',
-        postalCode: '10001'
+        postalCode: '10001',
       },
-      country: 'United States'
-    }
+      country: 'United States',
+    },
   ]);
-  const [basicDetail, setBasicDetail ] = useState({ attachments: [null]});
+  const [basicDetail, setBasicDetail] = useState({ attachments: [null] });
   const attachmentRef = useRef(null);
   const [addAttachId, setAddAttachId] = useState(0);
 
@@ -113,13 +112,12 @@ export default function EditNFTModal({
     });
   };
 
-
   const [selectedShipping, setSelectedShipping] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const handleDeleteSeller = (item) => {
-    setData(data.filter(d => d._id !== item._id));
+    setData(data.filter((d) => d._id !== item._id));
   };
 
   const [sellerInfo, setSellerInfo] = useState<any>({
@@ -144,313 +142,324 @@ export default function EditNFTModal({
       attachments: newAttachments,
     });
   };
- 
+
   return (
-        <>
-            <div className="flex flex-col gap-y-6 w-full p-[30px]">
-              <h2 className='text-[30px] font-bold pb-[2px]'> Edit RWA </h2>
-              <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-                <Disclosure as="div" defaultOpen={true}>
-                  {({ open }) => (
-                    <>
-                      <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                        <span>Attachment</span>
-                        <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
-                        />
-                      </DisclosureButton>
-                      <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                      <div className="flex gap-4 flex-wrap my-2">
-              {basicDetail?.attachments?.map((attachment, index) => {
-                return (
-                  <div key={index} className="flex flex-col gap-y-2">
-                    <input
-                      type="file"
-                      className="hidden"
-                      title="file"
-                      ref={
-                        index === basicDetail?.attachments.length - 1
-                          ? attachmentRef
-                          : null
-                      }
-                      onChange={(e) => handleAttachment(e, index)}
-                    />
-                    {!attachment ? (
-                      <img
-                        src="https://i.ibb.co/c8FMdw1/attachment-link.png"
-                        alt="attachment"
-                        className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
-                      />
-                    ) : (
-                      <img
-                        src={URL.createObjectURL(attachment)}
-                        alt="attachment"
-                        className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
-                      />
-                    )}
-                    {attachment ? (
-                      <div className="flex gap-x-2 justify-center items-center cursor-pointer">
-                        <span
-                          className="text-neon font-bold text-[13px]"
-                          onClick={() => addAttachment(index)}
-                        >
-                          Change
-                        </span>
-                        <img
-                          src="/icons/trash.svg"
-                          alt="attachment"
-                          className="w-5 h-5"
-                          onClick={() => removeAttachment(index)}
-                        />
-                      </div>
-                    ) : (
-                      <div
-                        className="flex gap-x-2 justify-center items-center cursor-pointer"
-                        onClick={() => addAttachment(index)}
-                      >
-                        <span className="text-neon  font-bold text-[13px]">
-                          Upload
-                        </span>
-                        <img
-                          src="/icons/upload.svg"
-                          alt="attachment"
-                          className="w-5 h-5"
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-                       
-                      </DisclosurePanel>
-                    </>
-                  )}
-                </Disclosure>
-              </div>
-              <div className="flex flex-col gap-y-2 w-full">
-                <h2 className="font-bold text-[#fff] text-[14px]">
-                  Category
-                </h2>
-                <select
-                  aria-label="select curation"
-                  className="rounded-[24px] px-6 bg-[#232323] text-white border-none h-[52px]"
-                  name="country"
-                >
-                  <option value="">Select</option>
-                  
-                </select>
-              </div>
-              <div className="flex w-full flex-col">
-                <h2 className="font-bold text-[#ffffff] text-[14px] mb-[15px]">
-                 Description
-                </h2>
-
-                  <Textarea
-                              
-                  className="w-full border-none bg-[#232323] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-[24px] resize-none"
-                  placeholder="Please describe your product"
-                />
-        
-
-              </div>
-              <div className="flex flex-col gap-y-5">
-                <p className="text-lg font-medium">Shipping Information</p>
-                <div className="flex flex-wrap gap-5">
-                  {data.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() => setSelectedShipping(item)}
-                      className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
-                        selectedShipping?._id === item._id ? 'border-neon' : 'border-gray-400'
-                      }`}
-                    >
-                      <div className="flex justify-between">
-                        <div className="flex flex-col gap-y-2">
-                          <span className='text-[18px] font-semibold'>{item.name}</span>
-                          <span className='text-[14px] text-[#A6A6A6] font-semibold '>{item.phoneNumber}</span>
+    <>
+      <div className="flex flex-col gap-y-6 w-full p-[30px]">
+        <h2 className="text-[30px] font-bold pb-[2px]"> Edit RWA </h2>
+        <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+          <Disclosure as="div" defaultOpen={true}>
+            {({ open }) => (
+              <>
+                <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                  <span>Attachment</span>
+                  <ChevronUpIcon
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
+                  />
+                </DisclosureButton>
+                <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                  <div className="flex gap-4 flex-wrap my-2">
+                    {basicDetail?.attachments?.map((attachment, index) => {
+                      return (
+                        <div key={index} className="flex flex-col gap-y-2">
+                          <input
+                            type="file"
+                            className="hidden"
+                            title="file"
+                            ref={
+                              index === basicDetail?.attachments.length - 1
+                                ? attachmentRef
+                                : null
+                            }
+                            onChange={(e) => handleAttachment(e, index)}
+                          />
+                          {!attachment ? (
+                            <img
+                              src="https://i.ibb.co/c8FMdw1/attachment-link.png"
+                              alt="attachment"
+                              className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
+                            />
+                          ) : (
+                            <img
+                              src={URL.createObjectURL(attachment)}
+                              alt="attachment"
+                              className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
+                            />
+                          )}
+                          {attachment ? (
+                            <div className="flex gap-x-2 justify-center items-center cursor-pointer">
+                              <span
+                                className="text-neon font-bold text-[13px]"
+                                onClick={() => addAttachment(index)}
+                              >
+                                Change
+                              </span>
+                              <img
+                                src="/icons/trash.svg"
+                                alt="attachment"
+                                className="w-5 h-5"
+                                onClick={() => removeAttachment(index)}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className="flex gap-x-2 justify-center items-center cursor-pointer"
+                              onClick={() => addAttachment(index)}
+                            >
+                              <span className="text-neon  font-bold text-[13px]">
+                                Upload
+                              </span>
+                              <img
+                                src="/icons/upload.svg"
+                                alt="attachment"
+                                className="w-5 h-5"
+                              />
+                            </div>
+                          )}
                         </div>
-                        <div className="text-[#fff]  text-[14px]  font-semibold ">{item.shippingAddr}</div>
-                      </div>
-                      <div className='mt-[26px]'>
-                        <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                          {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(0, 150)}
-                        </p>
-                        <span
-                          onClick={() => setIsUpdateModalOpen(true)}
-                          className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
-                        >
-                          Edit
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  <div
-                    className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    <div className="flex flex-col gap-y-6 items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                        <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
-                      </div>
-                      <p className="text-[#828282]">Add New Address</p>
-                    </div>
+                      );
+                    })}
                   </div>
+                </DisclosurePanel>
+              </>
+            )}
+          </Disclosure>
+        </div>
+        <div className="flex flex-col gap-y-2 w-full">
+          <h2 className="font-bold text-[#fff] text-[14px]">Category</h2>
+          <select
+            aria-label="select curation"
+            className="rounded-[24px] px-6 bg-[#232323] text-white border-none h-[52px]"
+            name="country"
+          >
+            <option value="">Select</option>
+          </select>
+        </div>
+        <div className="flex w-full flex-col">
+          <h2 className="font-bold text-[#ffffff] text-[14px] mb-[15px]">
+            Description
+          </h2>
 
-                  <BaseDialog
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                  >
-                    {/* Add Address Form */}
-                    <div className="flex flex-col gap-y-5">
-                      {/* Form fields here */}
-                      <div className="flex gap-x-4 justify-center my-3 px-4">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={() => setIsModalOpen(false)}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={() => setIsModalOpen(false)}
-                        />
-                      </div>
-                    </div>
-                  </BaseDialog>
-
-                  <BaseDialog
-                    isOpen={isUpdateModalOpen}
-                    onClose={() => setIsUpdateModalOpen(false)}
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                  >
-                    {/* Update Address Form */}
-                    <div className="flex flex-col gap-y-5">
-                      {/* Form fields here */}
-                      <div className="flex gap-x-4 justify-center my-3 px-4">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={() => setIsUpdateModalOpen(false)}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={() => setIsUpdateModalOpen(false)}
-                        />
-                      </div>
-                    </div>
-                  </BaseDialog>
+          <Textarea
+            className="w-full border-none bg-[#232323] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-[24px] resize-none"
+            placeholder="Please describe your product"
+          />
+        </div>
+        <div className="flex flex-col gap-y-5">
+          <p className="text-lg font-medium">Shipping Information</p>
+          <div className="flex flex-wrap gap-5">
+            {data.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedShipping(item)}
+                className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
+                  selectedShipping?._id === item._id
+                    ? 'border-neon'
+                    : 'border-gray-400'
+                }`}
+              >
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <span className="text-[18px] font-semibold">
+                      {item.name}
+                    </span>
+                    <span className="text-[14px] text-[#A6A6A6] font-semibold ">
+                      {item.phoneNumber}
+                    </span>
+                  </div>
+                  <div className="text-[#fff]  text-[14px]  font-semibold ">
+                    {item.shippingAddr}
+                  </div>
                 </div>
-              </div>             
+                <div className="mt-[26px]">
+                  <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
+                    {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(
+                      0,
+                      150,
+                    )}
+                  </p>
+                  <span
+                    onClick={() => setIsUpdateModalOpen(true)}
+                    className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
+                  >
+                    Edit
+                  </span>
+                </div>
+              </div>
+            ))}
+
+            <div
+              className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <div className="flex flex-col gap-y-6 items-center">
+                <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
+                  <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
+                </div>
+                <p className="text-[#828282]">Add New Address</p>
+              </div>
+            </div>
+
+            <BaseDialog
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+            >
+              {/* Add Address Form */}
               <div className="flex flex-col gap-y-5">
-                <p className="text-lg font-medium">Contact Information</p>
-                <div className="flex flex-wrap gap-5">
-                  {data.map((item, index) => (
-                  <div
-                  key={index}
-                  onClick={() => setSelectedShipping(item)}
-                  className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
-                    selectedShipping?._id === item._id ? 'border-neon' : 'border-gray-400'
-                  }`}
-                >
-                  <div className="flex justify-between">
-                    <div className="flex flex-col gap-y-2">
-                      <span className='text-[18px] font-semibold'>{item.name}</span>
-                    </div>
-                  </div>
-                  <div className='mt-[26px]'>
-                    <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                      {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(0, 150)}
-                    </p>
-                    <span
-                      onClick={() => setIsUpdateModalOpen(true)}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
-                    >
-                      Edit
+                {/* Form fields here */}
+                <div className="flex gap-x-4 justify-center my-3 px-4">
+                  <BaseButton
+                    title="Cancel"
+                    variant="secondary"
+                    onClick={() => setIsModalOpen(false)}
+                  />
+                  <BaseButton
+                    title="Save"
+                    variant="primary"
+                    onClick={() => setIsModalOpen(false)}
+                  />
+                </div>
+              </div>
+            </BaseDialog>
+
+            <BaseDialog
+              isOpen={isUpdateModalOpen}
+              onClose={() => setIsUpdateModalOpen(false)}
+              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+            >
+              {/* Update Address Form */}
+              <div className="flex flex-col gap-y-5">
+                {/* Form fields here */}
+                <div className="flex gap-x-4 justify-center my-3 px-4">
+                  <BaseButton
+                    title="Cancel"
+                    variant="secondary"
+                    onClick={() => setIsUpdateModalOpen(false)}
+                  />
+                  <BaseButton
+                    title="Save"
+                    variant="primary"
+                    onClick={() => setIsUpdateModalOpen(false)}
+                  />
+                </div>
+              </div>
+            </BaseDialog>
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-5">
+          <p className="text-lg font-medium">Contact Information</p>
+          <div className="flex flex-wrap gap-5">
+            {data.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedShipping(item)}
+                className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
+                  selectedShipping?._id === item._id
+                    ? 'border-neon'
+                    : 'border-gray-400'
+                }`}
+              >
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <span className="text-[18px] font-semibold">
+                      {item.name}
                     </span>
                   </div>
                 </div>
-                  ))}
-                  
-                  <div
-                    className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
-                    onClick={() => setIsModalOpen(true)}
+                <div className="mt-[26px]">
+                  <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
+                    {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(
+                      0,
+                      150,
+                    )}
+                  </p>
+                  <span
+                    onClick={() => setIsUpdateModalOpen(true)}
+                    className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
                   >
-                    <div className="flex flex-col gap-y-6 items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                        <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
-                      </div>
-                      <p className="text-[#828282]">Add New Address</p>
-                    </div>
-                  </div>
-
-                  <BaseDialog
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                  >
-                    {/* Add Address Form */}
-                    <div className="flex flex-col gap-y-5">
-                      {/* Form fields here */}
-                      <div className="flex gap-x-4 justify-center my-3 px-4">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={() => setIsModalOpen(false)}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={() => setIsModalOpen(false)}
-                        />
-                      </div>
-                    </div>
-                  </BaseDialog>
-
-                  <BaseDialog
-                    isOpen={isUpdateModalOpen}
-                    onClose={() => setIsUpdateModalOpen(false)}
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                  >
-                    {/* Update Address Form */}
-                    <div className="flex flex-col gap-y-5">
-                      {/* Form fields here */}
-                      <div className="flex gap-x-4 justify-center my-3 px-4">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={() => setIsUpdateModalOpen(false)}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={() => setIsUpdateModalOpen(false)}
-                        />
-                      </div>
-                    </div>
-                  </BaseDialog>
+                    Edit
+                  </span>
                 </div>
-              </div>         
-              <div className="flex w-full gap-x-4 justify-center my-3">
-                <BaseButton
-                  title="Discard"
-                  variant="secondary"
-                   onClick={onClose}
-                  className="w-full"
-                />
-                <BaseButton
-                  title="Submit"
-                  variant="primary"
-                  onClick={onClose}
-                  className="w-full"
-                />
+              </div>
+            ))}
+
+            <div
+              className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <div className="flex flex-col gap-y-6 items-center">
+                <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
+                  <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
+                </div>
+                <p className="text-[#828282]">Add New Address</p>
               </div>
             </div>
-          </>
+
+            <BaseDialog
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+            >
+              {/* Add Address Form */}
+              <div className="flex flex-col gap-y-5">
+                {/* Form fields here */}
+                <div className="flex gap-x-4 justify-center my-3 px-4">
+                  <BaseButton
+                    title="Cancel"
+                    variant="secondary"
+                    onClick={() => setIsModalOpen(false)}
+                  />
+                  <BaseButton
+                    title="Save"
+                    variant="primary"
+                    onClick={() => setIsModalOpen(false)}
+                  />
+                </div>
+              </div>
+            </BaseDialog>
+
+            <BaseDialog
+              isOpen={isUpdateModalOpen}
+              onClose={() => setIsUpdateModalOpen(false)}
+              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+            >
+              {/* Update Address Form */}
+              <div className="flex flex-col gap-y-5">
+                {/* Form fields here */}
+                <div className="flex gap-x-4 justify-center my-3 px-4">
+                  <BaseButton
+                    title="Cancel"
+                    variant="secondary"
+                    onClick={() => setIsUpdateModalOpen(false)}
+                  />
+                  <BaseButton
+                    title="Save"
+                    variant="primary"
+                    onClick={() => setIsUpdateModalOpen(false)}
+                  />
+                </div>
+              </div>
+            </BaseDialog>
+          </div>
+        </div>
+        <div className="flex w-full gap-x-4 justify-center my-3">
+          <BaseButton
+            title="Discard"
+            variant="secondary"
+            onClick={onClose}
+            className="w-full"
+          />
+          <BaseButton
+            title="Submit"
+            variant="primary"
+            onClick={onClose}
+            className="w-full"
+          />
+        </div>
+      </div>
+    </>
   );
 }

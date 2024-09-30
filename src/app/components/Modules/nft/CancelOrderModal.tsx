@@ -7,18 +7,24 @@ import { ArrowUpTrayIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BasicLoadingModal from './BasicLoadingModal';
-import PhoneInput from 'react-phone-input-2'
+import PhoneInput from 'react-phone-input-2';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { ChevronUpIcon } from 'lucide-react';
 
 const validateSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email('Invalid email address'),
   phoneNumber: z.string(),
   request: z.string(),
 });
 
-export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
+export default function CancelOrderModal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
   const { nftId: id } = useNFTDetail();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
@@ -39,8 +45,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
         request: description,
       });
 
-      if (!result.success)
-        throw new Error(result.error.message);
+      if (!result.success) throw new Error(result.error.message);
 
       setStep(2);
       const formData = new FormData();
@@ -61,10 +66,10 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
   };
 
   const changeUnlocable = (file: any, index: number) => {
-    setUnlockableFiles((prevFiles) => (prevFiles.map((item, i) => (
-      index === i ? file : item
-    ))))
-  }
+    setUnlockableFiles((prevFiles) =>
+      prevFiles.map((item, i) => (index === i ? file : item)),
+    );
+  };
 
   const removeUnlockable = (index: number) => {
     const newFiles = unlockableFiles.filter(
@@ -81,7 +86,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
     } else {
       setUnlockableFiles([...unlockableFiles, null]);
     }
-  }
+  };
 
   return (
     <>
@@ -108,15 +113,11 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
           </p>
 
           <div className="flex flex-col gap-y-2">
-            <h2 className="font-bold text-[#fff] text-[14px]">
-              Email*
-            </h2>
+            <h2 className="font-bold text-[#fff] text-[14px]">Email*</h2>
 
             <Input
               value={email}
-              onChange={(e) =>
-                setEmail((e.target as any).value)
-              }
+              onChange={(e) => setEmail((e.target as any).value)}
               className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
               type="text"
               placeholder="Enter your email"
@@ -138,9 +139,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
               color: '#fff',
               backgroundColor: '#161616',
             }}
-            onChange={(val) =>
-              setPhoneNumber(val)
-            }
+            onChange={(val) => setPhoneNumber(val)}
           />
 
           <Textarea
@@ -151,7 +150,6 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
           />
 
           <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-
             <div className="flex w-full justify-between">
               <span>Attachment</span>
               <div className="flex items-center">
@@ -167,8 +165,9 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
                   <p className="text-neon">Add New</p>
                 </div>
                 <ChevronUpIcon
-                  className={`${open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                  className={`${
+                    open ? 'rotate-180 transform' : ''
+                  } h-5 w-5 text-white`}
                 />
               </div>
             </div>
@@ -204,16 +203,15 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
                         </span>
                       </button>
                       <span id="custom-text">
-                        {item
-                          ? item.name
-                          : 'Choose File'}
+                        {item ? item.name : 'Choose File'}
                       </span>
                       <img
                         src="/icons/trash.svg"
                         className="w-6 mr-3"
                         onClick={() => {
                           removeUnlockable(index);
-                        }} />
+                        }}
+                      />
                     </div>
                   </div>
                 );
@@ -223,7 +221,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Cancel
               </button>
             </div>

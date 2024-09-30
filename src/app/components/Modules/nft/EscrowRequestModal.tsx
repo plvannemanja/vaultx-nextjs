@@ -8,7 +8,7 @@ import PhoneInput from 'react-phone-input-2';
 import FileInput from '../../ui/FileInput';
 
 const validateSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.string().email('Invalid email address'),
   phoneNumber: z.string(),
   request: z.string(),
 });
@@ -24,14 +24,20 @@ import { z } from 'zod';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { CreateSellService } from '@/services/createSellService';
 import BasicLoadingModal from './BasicLoadingModal';
-export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose: () => void, fetchNftData: () => void, }) {
+export default function EscrowRequestModal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
   const { nftId } = useNFTDetail();
 
   const [step, setStep] = useState(1);
 
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [description, setDescription] = useState("");
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [description, setDescription] = useState('');
   const descriptionImageRef = useRef<HTMLInputElement>(null);
   const [imageId, setImageId] = useState(0);
   const [unlockableFiles, setUnlockableFiles] = useState([null]);
@@ -47,8 +53,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
         request: description,
       });
 
-      if (!result.success)
-        throw new Error(result.error.message);
+      if (!result.success) throw new Error(result.error.message);
 
       const formData = new FormData();
       formData.append('nftId', nftId);
@@ -57,8 +62,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
       formData.append('phoneNumber', phoneNumber);
 
       for (const file of unlockableFiles) {
-        if (file !== null)
-          formData.append('files', file);
+        if (file !== null) formData.append('files', file);
       }
 
       await salesService.releaseRequest(formData);
@@ -71,10 +75,10 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
   };
 
   const changeUnlocable = (file: any, index: number) => {
-    setUnlockableFiles((prevFiles) => (prevFiles.map((item, i) => (
-      index === i ? file : item
-    ))))
-  }
+    setUnlockableFiles((prevFiles) =>
+      prevFiles.map((item, i) => (index === i ? file : item)),
+    );
+  };
 
   const removeUnlockable = (index: number) => {
     const newFiles = unlockableFiles.filter(
@@ -91,7 +95,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
     } else {
       setUnlockableFiles([...unlockableFiles, null]);
     }
-  }
+  };
 
   return (
     <div className="">
@@ -122,9 +126,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
             <Label className="text-lg font-medium">Email*</Label>
             <Input
               value={email}
-              onChange={(e) =>
-                setEmail((e.target as HTMLInputElement).value)
-              }
+              onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
               className="w-full border border-[#3A3A3A] bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
               type="text"
               placeholder="Enter your email"
@@ -149,9 +151,7 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                 backgroundColor: '#161616',
                 border: '1px solid #3A3A3A',
               }}
-              onChange={(val) =>
-                setPhoneNumber(val)
-              }
+              onChange={(val) => setPhoneNumber(val)}
             />
           </div>
           <div className="flex flex-col gap-y-4">
@@ -166,7 +166,6 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
             </div>
           </div>
           <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-
             <div className="flex w-full justify-between">
               <span>Attachment</span>
               <div className="flex items-center">
@@ -182,8 +181,9 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                   <p className="text-neon">Add New</p>
                 </div>
                 <ChevronUpIcon
-                  className={`${open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                  className={`${
+                    open ? 'rotate-180 transform' : ''
+                  } h-5 w-5 text-white`}
                 />
               </div>
             </div>
@@ -219,16 +219,15 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
                         </span>
                       </button>
                       <span id="custom-text">
-                        {item
-                          ? item.name
-                          : 'Choose File'}
+                        {item ? item.name : 'Choose File'}
                       </span>
                       <img
                         src="/icons/trash.svg"
                         className="w-6 mr-3"
                         onClick={() => {
                           removeUnlockable(index);
-                        }} />
+                        }}
+                      />
                     </div>
                   </div>
                 );
@@ -238,7 +237,12 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { onClose() }}>
+              <button
+                className="w-full h-full"
+                onClick={() => {
+                  onClose();
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -269,7 +273,9 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
           <BaseButton
             title="Close"
             variant="primary"
-            onClick={() => { onClose() }}
+            onClick={() => {
+              onClose();
+            }}
             className="w-full"
           />
         </div>

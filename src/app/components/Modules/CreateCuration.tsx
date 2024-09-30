@@ -49,16 +49,16 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   });
 
   const [formData, setFormData] = useState<any>({
-    name: null,
-    symbol: null,
+    name: "",
+    symbol: "",
     logo: null,
     bannerImage: null,
     descriptionImage: null,
-    description: null,
-    website: null,
-    twitter: null,
-    facebook: null,
-    instagram: null,
+    description: "",
+    website: "",
+    twitter: "",
+    facebook: "",
+    instagram: "",
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -73,16 +73,16 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
   const cancelChanges = () => {
     setFormData({
-      name: null,
-      symbol: null,
+      name: "",
+      symbol: "",
       logo: null,
       bannerImage: null,
       descriptionImage: null,
-      description: null,
-      website: null,
-      twitter: null,
-      facebook: null,
-      instagram: null,
+      description: "",
+      website: "",
+      twitter: "",
+      facebook: "",
+      instagram: "",
     });
   };
 
@@ -167,7 +167,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       // const metaUri = await uploadMetaData(metaData);
 
       // check cancel
-      if (activeAccount) {
+      if (activeAccount && !editMode) {
         try {
           const result = await createCollection(
             // metaData.name,
@@ -189,31 +189,27 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           console.log('error:', error);
           throw error;
         }
-      } else {
+      } else if (!editMode) {
         throw 'no active account';
       }
 
       if (editMode) {
         try {
           let response;
-
+          data.append("curationId", editMode?._id);
           if (editMode) {
-            response = await collectionServices.update({
-              ...data,
-              curationId: editMode._id,
-            });
+            response = await collectionServices.update(data);
           }
 
           if (response) {
             setStatus({ error: false, loading: false, active: true });
-            cancelChanges();
           }
         } catch (error) {
           setStatus({ error: true, loading: true, active: true });
         }
       }
       setTimeout(() => {
-        window && window.location.reload();
+        // window && window.location.reload();
       }, 2000);
     } catch (error) {
       setStatus({ error: true, loading: true, active: true });
