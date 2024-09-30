@@ -412,6 +412,7 @@ export default function NFTMain({
                 </div>
               </div>
             </div>
+
             <div className="w-full flex flex-col gap-y-3 bg-[#232323] p-[20px] rounded-[20px]">
               <div className="flex w-full justify-between items-center">
                 <div className="flex flex-col">
@@ -456,95 +457,8 @@ export default function NFTMain({
                     <div className="flex flex-col justify-between mt-[10px] w-full">
                 
                 <div className="flex flex-col justify-between f items-center gap-y-2 w-full ">
-                  {type === 'buy' ? (
-                    <div className="flex flex-col  gap-y-2 gap-2 items-center w-full">
-                      <BaseDialog
-                        trigger={
-                         
-                          <BaseButton
-                            title="Buy Now"
-                            className={'!rounded-[14px] w-full'}
-                            variant="primary"
-                            onClick={() => {}}
-                          />
-                        }
-                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
-                        isOpen={modalStatus.buy}
-                        onClose={(val) => {
-                          setModalStatus({ ...modalStatus, buy: val });
-                        }}
-                      >
-                        <BuyModal
-                          onClose={() => {
-                            setModalStatus({ ...modalStatus, buy: false });
-                          }}
-                          fetchNftData={fetchNftData}
-                        />
-                      </BaseDialog>
-
-                      <BaseDialog
-                        trigger={
-                          <BaseButton
-                            title="Place a Bid"
-                            variant="secondaryOutline"
-                            className={'!rounded-[14px] w-full'}
-                            onClick={() => {}}
-                          />
-                        }
-                        className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
-                      >
-                        <BidModal title={data.name} update={() => {}} />
-                      </BaseDialog>
-                    </div>
-                  ) : null}
-
-                  {type === 'release' ? (
-                    <div className="flex flex-col gap-y-2 items-center">
-                      <BaseDialog
-                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
-                        trigger={
-                          <BaseButton
-                            title="Release Escrow"
-                            variant="primary"
-                            className={'rounded-[14px]'}
-                            onClick={() => {}}
-                          />
-                        }
-                        isOpen={modalStatus.release}
-                        onClose={(val) => {
-                          setModalStatus({ ...modalStatus, release: val });
-                        }}
-                      >
-                        <EscrowModal
-                          onClose={() => {
-                            setModalStatus({ ...modalStatus, release: false });
-                          }}
-                          fetchNftData={fetchNftData}
-                        />
-                      </BaseDialog>
-                      <BaseDialog
-                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
-                        trigger={
-                          <BaseButton
-                            title="Cancel Order"
-                            variant="primary"
-                            onClick={() => {}}
-                          />
-                        }
-                        isOpen={modalStatus.cancel}
-                        onClose={(val) => {
-                          setModalStatus({ ...modalStatus, cancel: val });
-                        }}
-                      >
-                        <CancelOrderModal
-                          onClose={() => {
-                            setModalStatus({ ...modalStatus, cancel: false });
-                          }}
-                        />
-                      </BaseDialog>
-                    </div>
-                  ) : null}
-
+               
+                
                   {type === 'resell' ? (
                     <div className="flex flex-col gap-x-2 items-center">
                       <BaseDialog
@@ -656,9 +570,101 @@ export default function NFTMain({
               </div>
                   </div>
               </div>
+              <div className="flex w-full">
+              {type === 'buy' ? (
+                    <div className="flex   gap-y-2 gap-2 items-center w-full">
+                      <BaseDialog
+                        trigger={
+                         
+                          <BaseButton
+                            title="Buy Now"
+                            className={'!rounded-[14px] w-full'}
+                            variant="primary"
+                            onClick={() => {}}
+                          />
+                        }
+                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                        isOpen={modalStatus.buy}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, buy: val });
+                        }}
+                      >
+                        <BuyModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, buy: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
+
+                      <BaseDialog
+                        trigger={
+                          <BaseButton
+                            title="Place a Bid"
+                            variant="secondaryOutline"
+                            className={'!rounded-[14px] w-full'}
+                            onClick={() => {}}
+                          />
+                        }
+                        className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
+                      >
+                        <BidModal title={data.name} update={() => {}} />
+                      </BaseDialog>
+                    </div>
+                  ) : null}
+
+                  {type === 'release' ? (
+                    <div className="flex  gap-y-2 items-center">
+                      <BaseDialog
+                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                        trigger={
+                          <BaseButton
+                            title="Release Escrow"
+                            variant="primary"
+                            className={'rounded-[14px]'}
+                            onClick={() => {}}
+                          />
+                        }
+                        isOpen={modalStatus.release}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, release: val });
+                        }}
+                      >
+                        <EscrowModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, release: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
+                      <BaseDialog
+                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                        trigger={
+                          <BaseButton
+                            title="Cancel Order"
+                            variant="primary"
+                            onClick={() => {}}
+                          />
+                        }
+                        isOpen={modalStatus.cancel}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, cancel: val });
+                        }}
+                      >
+                        <CancelOrderModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, cancel: false });
+                          }}
+                        />
+                      </BaseDialog>
+                    </div>
+                  ) : null}
+
+              </div>
 
              
             </div>
+
             <div className="w-full flex flex-col gap-y-3 bg-[#232323] p-6 rounded-[20px]">
               <p className="text-[14px] font-medium text-[#fff]">Overview</p>
 

@@ -306,7 +306,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </span>
               </div>
               <div className="my-5 flex flex-wrap md:gap-x-3">
-                {curation?.youtube.length > 0
+                {curation?.youtube?.length > 0
                   ? curation?.youtube.map((item: any, index: number) => {
                     const imageId = getYouTubeVideoId(item.url);
 
