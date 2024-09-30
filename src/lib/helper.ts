@@ -135,9 +135,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -218,9 +218,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -305,9 +305,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 export const getExplorerURL = (
@@ -484,8 +484,38 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-        events,
-        transactionHash,
-      }
+      events,
+      transactionHash,
+    }
     : null;
 };
+
+
+export const burnNFT = async (tokenId: number, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function burn(uint256 tokenId)",
+    params: [BigInt(tokenId)]
+  });
+
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  return transactionHash;
+}
+
+export const transferNFT = async (from: Address, to: Address, tokenId: number, account: Account) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: "function safeTransferFrom(address from, address to, uint256 tokenId)",
+    params: [from, to, BigInt(tokenId)]
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account
+  });
+
+  return transactionHash;
+}

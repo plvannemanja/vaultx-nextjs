@@ -151,6 +151,7 @@ export type NFTItemType = {
   uri: string;
   category: {
     name: string;
+    _id: string;
   };
   mintHash: string;
   tokenId: number;

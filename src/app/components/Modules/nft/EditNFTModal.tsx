@@ -2,27 +2,10 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { City, Country, State } from 'country-state-city';
-import PhoneInput from 'react-phone-input-2';
 import { Textarea } from '@headlessui/react';
-import { Checkbox } from '@/components/ui/checkbox';
 import BaseButton from '../../ui/BaseButton';
-import { CreateSellService } from '@/services/createSellService';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
-import {
-  getTokenAmount,
-  purchaseAsset,
-  purchaseAssetBeforeMint,
-} from '@/lib/helper';
-import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { CreateNFTProvider, useCreateNFT } from '../../Context/CreateNFTContext';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
-import { useGlobalContext } from '../../Context/GlobalContext';
-import { roundToDecimals, trimString } from '@/utils/helpers';
-import BasicLoadingModal from './BasicLoadingModal';
-import { nftServices } from '@/services/supplier';
-import moment from 'moment';
-import { INFTVoucher } from '@/types';
 import { CreateNftServices } from '@/services/createNftService';
 import {
   Disclosure,
@@ -30,13 +13,16 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
-import ConnectedCard from '../../Cards/ConnectedCard';
-import ErrorModal from '../create/ErrorModal';
 import ShippingInfo from '../ShippingInfo';
 import ContactInfo from '../ContactInfo';
-import SellerInformation from '../create/SellerInformation';
-import { BaseDialog } from '../../ui/BaseDialog';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
+import { CategoryService } from '@/services/catergoryService';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+
+interface IEditNFT {
+  category: any;
+  description: string;
+}
 
 export default function EditNFTModal({
   onClose,
@@ -45,54 +31,27 @@ export default function EditNFTModal({
   onClose: () => void;
   fetchNftData: () => void;
 }) {
-  const [data, setData] = useState([
-    {
-      _id: '1',
-      name: 'John Doe',
-      phoneNumber: '+1234567890',
-      shippingAddr: 'Home',
-      address: {
-        line1: '123 Main St',
-        line2: 'Apt 4',
-        state: 'California',
-        city: 'Los Angeles',
-        postalCode: '90001',
-      },
-      country: 'United States',
-    },
-    {
-      _id: '2',
-      name: 'Jane Smith',
-      phoneNumber: '+0987654321',
-      shippingAddr: 'Office',
-      address: {
-        line1: '456 Oak Ave',
-        line2: 'Suite 7',
-        state: 'New York',
-        city: 'New York City',
-        postalCode: '10001',
-      },
-      country: 'United States',
-    },
-  ]);
-  const [basicDetail, setBasicDetail] = useState({ attachments: [null] });
+  const { NFTDetail, nftId } = useNFTDetail();
+  const [formData, setFormData] = useState<IEditNFT>({
+    category: null,
+    description: "",
+  });
+  const [attachments, setAttachments] = useState<any[]>([null]);
   const attachmentRef = useRef(null);
   const [addAttachId, setAddAttachId] = useState(0);
 
-  const handleAttachment = (file: any, index: number) => {
+  const nftServices = new CreateNftServices();
+
+  const handleAttachment = (file: any) => {
     const attachment = file.target.files[0];
     const fileExtension = attachment.name.split('.').pop().toLowerCase();
     if (
       attachment.size < maxFileSize &&
       acceptedFormats.includes(`.${fileExtension}`)
     ) {
-      const newAttachments = [...basicDetail?.attachments];
+      const newAttachments = [...attachments];
       newAttachments[addAttachId] = attachment;
-
-      setBasicDetail({
-        ...basicDetail,
-        attachments: newAttachments,
-      });
+      setAttachments(newAttachments);
     }
   };
 
@@ -101,50 +60,80 @@ export default function EditNFTModal({
       (attachmentRef.current as any).click();
     }
     setAddAttachId(index);
-    if (basicDetail?.attachments.length - 1 > index) {
+    if (attachments.length - 1 > index) {
       return;
     }
-    const newAttachments = [...basicDetail?.attachments, null];
+    const newAttachments = [...attachments, null];
 
-    setBasicDetail({
-      ...basicDetail,
-      attachments: newAttachments,
-    });
+    setAttachments(newAttachments);
   };
 
-  const [selectedShipping, setSelectedShipping] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-  const handleDeleteSeller = (item) => {
-    setData(data.filter((d) => d._id !== item._id));
-  };
-
-  const [sellerInfo, setSellerInfo] = useState<any>({
-    data: null,
-    error: null,
-  });
-
-  const handleSellerInfo = (data: any, error: any) => {
-    setSellerInfo({
-      data: data,
-      error: error,
-    });
-  };
-
+  const getAttach = (obj) => {
+    if (typeof obj === 'string')
+      return obj;
+    return URL.createObjectURL(obj);
+  }
   const removeAttachment = (index: number) => {
-    const newAttachments = basicDetail?.attachments.filter(
+    const newAttachments = attachments.filter(
       (_, i) => i !== index,
     );
 
-    setBasicDetail({
-      ...basicDetail,
-      attachments: newAttachments,
-    });
+    setAttachments(newAttachments);
   };
 
+  const [categories, setCategories] = useState<any[]>([]);
+
+  const fetchCategories = async () => {
+    try {
+      const categoryService = new CategoryService();
+      const {
+        data: { categories },
+      } = await categoryService.getAllCategories(0, 0);
+      setCategories(categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleEdit = async () => {
+    try {
+      const data = new FormData();
+      data.append("description", formData.description);
+      if (formData.category)
+        data.append("category", formData.category);
+
+      attachments.forEach(attachment => {
+        if (attachment && typeof attachment !== 'string') {
+          data.append("files", attachment);
+        }
+      });
+
+      data.append("attachPrevs", JSON.stringify(attachments.filter(item => (typeof item === 'string' && item))));
+      data.append("nftId", nftId);
+      await nftServices.editNft(data);
+      fetchNftData();
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories();
+    if (NFTDetail) {
+      setFormData({
+        ...formData,
+
+        category: NFTDetail.category?._id,
+        description: NFTDetail.description
+      })
+      setAttachments([...NFTDetail.attachments, null])
+    }
+  }, []);
+
   return (
-    <>
+    <CreateNFTProvider>
       <div className="flex flex-col gap-y-6 w-full p-[30px]">
         <h2 className="text-[30px] font-bold pb-[2px]"> Edit RWA </h2>
         <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
@@ -154,27 +143,22 @@ export default function EditNFTModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Attachment</span>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
                   <div className="flex gap-4 flex-wrap my-2">
-                    {basicDetail?.attachments?.map((attachment, index) => {
+                    <input
+                      type="file"
+                      className="hidden"
+                      title="file"
+                      ref={attachmentRef}
+                      onChange={(e) => handleAttachment(e)}
+                    />
+                    {attachments?.map((attachment, index) => {
                       return (
                         <div key={index} className="flex flex-col gap-y-2">
-                          <input
-                            type="file"
-                            className="hidden"
-                            title="file"
-                            ref={
-                              index === basicDetail?.attachments.length - 1
-                                ? attachmentRef
-                                : null
-                            }
-                            onChange={(e) => handleAttachment(e, index)}
-                          />
                           {!attachment ? (
                             <img
                               src="https://i.ibb.co/c8FMdw1/attachment-link.png"
@@ -183,7 +167,7 @@ export default function EditNFTModal({
                             />
                           ) : (
                             <img
-                              src={URL.createObjectURL(attachment)}
+                              src={getAttach(attachment)}
                               alt="attachment"
                               className="w-[200px] mx-auto h-[200px] rounded-md object-cover"
                             />
@@ -227,14 +211,24 @@ export default function EditNFTModal({
             )}
           </Disclosure>
         </div>
-        <div className="flex flex-col gap-y-2 w-full">
-          <h2 className="font-bold text-[#fff] text-[14px]">Category</h2>
+        <div className="flex flex-col gap-y-2">
+          <Label className="text-lg font-medium">Category</Label>
           <select
-            aria-label="select curation"
-            className="rounded-[24px] px-6 bg-[#232323] text-white border-none h-[52px]"
+            aria-label="Select category"
+            // className="h-10 rounded-md px-2 w-full"
+            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
             name="country"
+            onChange={(e) => {
+              setFormData({ ...formData, category: (e.target as any).value });
+            }}
+            value={formData.category}
           >
             <option value="">Select</option>
+            {categories.map((item: any) => (
+              <option key={item._id} value={item._id}>
+                {item.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex w-full flex-col">
@@ -245,206 +239,16 @@ export default function EditNFTModal({
           <Textarea
             className="w-full border-none bg-[#232323] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-[24px] resize-none"
             placeholder="Please describe your product"
+            value={formData.description}
+            onChange={(e) => setFormData({
+              ...formData,
+              description: (e.target as any).value
+            })}
           />
         </div>
-        <div className="flex flex-col gap-y-5">
-          <p className="text-lg font-medium">Shipping Information</p>
-          <div className="flex flex-wrap gap-5">
-            {data.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedShipping(item)}
-                className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
-                  selectedShipping?._id === item._id
-                    ? 'border-neon'
-                    : 'border-gray-400'
-                }`}
-              >
-                <div className="flex justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <span className="text-[18px] font-semibold">
-                      {item.name}
-                    </span>
-                    <span className="text-[14px] text-[#A6A6A6] font-semibold ">
-                      {item.phoneNumber}
-                    </span>
-                  </div>
-                  <div className="text-[#fff]  text-[14px]  font-semibold ">
-                    {item.shippingAddr}
-                  </div>
-                </div>
-                <div className="mt-[26px]">
-                  <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                    {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(
-                      0,
-                      150,
-                    )}
-                  </p>
-                  <span
-                    onClick={() => setIsUpdateModalOpen(true)}
-                    className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
-                  >
-                    Edit
-                  </span>
-                </div>
-              </div>
-            ))}
 
-            <div
-              className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <div className="flex flex-col gap-y-6 items-center">
-                <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                  <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
-                </div>
-                <p className="text-[#828282]">Add New Address</p>
-              </div>
-            </div>
-
-            <BaseDialog
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-            >
-              {/* Add Address Form */}
-              <div className="flex flex-col gap-y-5">
-                {/* Form fields here */}
-                <div className="flex gap-x-4 justify-center my-3 px-4">
-                  <BaseButton
-                    title="Cancel"
-                    variant="secondary"
-                    onClick={() => setIsModalOpen(false)}
-                  />
-                  <BaseButton
-                    title="Save"
-                    variant="primary"
-                    onClick={() => setIsModalOpen(false)}
-                  />
-                </div>
-              </div>
-            </BaseDialog>
-
-            <BaseDialog
-              isOpen={isUpdateModalOpen}
-              onClose={() => setIsUpdateModalOpen(false)}
-              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-            >
-              {/* Update Address Form */}
-              <div className="flex flex-col gap-y-5">
-                {/* Form fields here */}
-                <div className="flex gap-x-4 justify-center my-3 px-4">
-                  <BaseButton
-                    title="Cancel"
-                    variant="secondary"
-                    onClick={() => setIsUpdateModalOpen(false)}
-                  />
-                  <BaseButton
-                    title="Save"
-                    variant="primary"
-                    onClick={() => setIsUpdateModalOpen(false)}
-                  />
-                </div>
-              </div>
-            </BaseDialog>
-          </div>
-        </div>
-        <div className="flex flex-col gap-y-5">
-          <p className="text-lg font-medium">Contact Information</p>
-          <div className="flex flex-wrap gap-5">
-            {data.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => setSelectedShipping(item)}
-                className={`w-[324px] h-[230px] bg-[#232323] relative flex flex-col  p-6 pb-[45px] rounded-md ${
-                  selectedShipping?._id === item._id
-                    ? 'border-neon'
-                    : 'border-gray-400'
-                }`}
-              >
-                <div className="flex justify-between">
-                  <div className="flex flex-col gap-y-2">
-                    <span className="text-[18px] font-semibold">
-                      {item.name}
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-[26px]">
-                  <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                    {`${item.address.line1} ${item.address.line2} ${item.address.state} ${item.address.city} ${item.country}`.slice(
-                      0,
-                      150,
-                    )}
-                  </p>
-                  <span
-                    onClick={() => setIsUpdateModalOpen(true)}
-                    className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-[10px] right-[10px] text-[14px]"
-                  >
-                    Edit
-                  </span>
-                </div>
-              </div>
-            ))}
-
-            <div
-              className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <div className="flex flex-col gap-y-6 items-center">
-                <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-                  <img src="/icons/plus.svg" className="w-5 h-5" alt="Add" />
-                </div>
-                <p className="text-[#828282]">Add New Address</p>
-              </div>
-            </div>
-
-            <BaseDialog
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-            >
-              {/* Add Address Form */}
-              <div className="flex flex-col gap-y-5">
-                {/* Form fields here */}
-                <div className="flex gap-x-4 justify-center my-3 px-4">
-                  <BaseButton
-                    title="Cancel"
-                    variant="secondary"
-                    onClick={() => setIsModalOpen(false)}
-                  />
-                  <BaseButton
-                    title="Save"
-                    variant="primary"
-                    onClick={() => setIsModalOpen(false)}
-                  />
-                </div>
-              </div>
-            </BaseDialog>
-
-            <BaseDialog
-              isOpen={isUpdateModalOpen}
-              onClose={() => setIsUpdateModalOpen(false)}
-              className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-            >
-              {/* Update Address Form */}
-              <div className="flex flex-col gap-y-5">
-                {/* Form fields here */}
-                <div className="flex gap-x-4 justify-center my-3 px-4">
-                  <BaseButton
-                    title="Cancel"
-                    variant="secondary"
-                    onClick={() => setIsUpdateModalOpen(false)}
-                  />
-                  <BaseButton
-                    title="Save"
-                    variant="primary"
-                    onClick={() => setIsUpdateModalOpen(false)}
-                  />
-                </div>
-              </div>
-            </BaseDialog>
-          </div>
-        </div>
+        <ShippingInfo />
+        <ContactInfo />
         <div className="flex w-full gap-x-4 justify-center my-3">
           <BaseButton
             title="Discard"
@@ -455,11 +259,11 @@ export default function EditNFTModal({
           <BaseButton
             title="Submit"
             variant="primary"
-            onClick={onClose}
+            onClick={handleEdit}
             className="w-full"
           />
         </div>
       </div>
-    </>
+    </CreateNFTProvider>
   );
 }

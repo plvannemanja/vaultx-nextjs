@@ -66,6 +66,22 @@ class NftServices {
     return axios.post(`${server_uri}/nft/add-view`, data);
   }
 
+  async transfer(data: NftData): Promise<AxiosResponse<any>> {
+    return axios.post(`${server_uri}/nft/transfer`, data, {
+      headers: {
+        authorization: 'Bearer ' + this.token,
+      },
+    });
+  }
+
+  async editNFT(data: NftData): Promise<AxiosResponse<any>> {
+    return axios.post(`${server_uri}/nft/editNft`, data, {
+      headers: {
+        authorization: 'Bearer ' + this.token,
+      },
+    });
+  }
+
   async getNftOfUser(data: NftData): Promise<AxiosResponse<any>> {
     return axios.post(`${server_uri}/nft/getNftByUser`, data, {
       headers: {
