@@ -383,7 +383,7 @@ export default function NFTMain({
                           className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
                         >
                           <TransferModal
-                            onClose={(val) => {
+                            onClose={() => {
                               setModalStatus({ ...modalStatus, nftTransfer: false });
                             }}
                             fetchNftData={fetchNftData}
@@ -397,7 +397,7 @@ export default function NFTMain({
                           className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
                         >
                           <BurnModal
-                            onClose={(val) => {
+                            onClose={() => {
                               setModalStatus({ ...modalStatus, nftBurn: false });
                             }}
                           />

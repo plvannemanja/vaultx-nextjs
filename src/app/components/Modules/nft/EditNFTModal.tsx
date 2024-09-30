@@ -24,14 +24,17 @@ interface IEditNFT {
   description: string;
 }
 
-export default function EditNFTModal({
+const Modal = ({
   onClose,
   fetchNftData,
 }: {
   onClose: () => void;
   fetchNftData: () => void;
-}) {
+}) => {
   const { NFTDetail, nftId } = useNFTDetail();
+  const { sellerInfo: {
+    shipping
+  } } = useCreateNFT();
   const [formData, setFormData] = useState<IEditNFT>({
     category: null,
     description: "",
@@ -111,6 +114,22 @@ export default function EditNFTModal({
 
       data.append("attachPrevs", JSON.stringify(attachments.filter(item => (typeof item === 'string' && item))));
       data.append("nftId", nftId);
+
+      const shippingAddress = {
+        name: shipping.name,
+        email: shipping.email,
+        country: shipping.country,
+        address: {
+          line1: shipping.address.line1,
+          line2: shipping.address.line2,
+          city: shipping.address.city,
+          state: shipping.address.state,
+          postalCode: shipping.address.postalCode,
+        },
+        phoneNumber: shipping.phoneNumber,
+      };
+
+      data.append("shippingAddress", JSON.stringify(shippingAddress));
       await nftServices.editNft(data);
       fetchNftData();
       onClose();
@@ -133,7 +152,7 @@ export default function EditNFTModal({
   }, []);
 
   return (
-    <CreateNFTProvider>
+    <>
       <div className="flex flex-col gap-y-6 w-full p-[30px]">
         <h2 className="text-[30px] font-bold pb-[2px]"> Edit RWA </h2>
         <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
@@ -264,6 +283,20 @@ export default function EditNFTModal({
           />
         </div>
       </div>
-    </CreateNFTProvider>
+    </>
   );
+}
+
+export default function EditNFTMOdal({
+  onClose,
+  fetchNftData,
+}: {
+  onClose: () => void;
+  fetchNftData: () => void;
+}) {
+  return (
+    <CreateNFTProvider>
+      <Modal onClose={onClose} fetchNftData={fetchNftData} />
+    </CreateNFTProvider>
+  )
 }
