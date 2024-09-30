@@ -36,7 +36,7 @@ export default function BurnModal({ onClose }: { onClose: () => void; }) {
         <BaseButton
           title="Confirm"
           variant="primary"
-          onClick={() => { }}
+          onClick={() => { handleBurn() }}
         />
         <BaseButton
           title="Cancel"
