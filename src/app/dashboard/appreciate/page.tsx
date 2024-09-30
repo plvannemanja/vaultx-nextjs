@@ -90,18 +90,18 @@ export default function Page() {
           alt="hero"
           width={1000}
           height={1000}
-          className="w-full object-fill max-h-[370px] mb-[14px]"
+          className="w-full object-fill max-h-[370px] rouded-[20px] mb-[14px]"
           onClick={() => window.open(hero.link, '_blank')}
         ></Image>
       ) : null}
       <Filters setState={handleFilters} />
 
-      <div className="flex gap-x-[52px] gap-y-[52px] flex-wrap my-4 justify-center ">
+      <div className="grid grid-cols-12 gap-x-[24px] gap-y-[52px] flex-wrap my-4 justify-center px-[20px] ">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
             return (
               <div
-                className="w-[306px]"
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
                 key={index}
                 onClick={() => {
                   router.push(`/nft/${nft._id}`);

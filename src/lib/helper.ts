@@ -135,9 +135,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 

@@ -95,7 +95,7 @@ export default function Filters({
 
   return (
     <div className="flex flex-wrap md:flex-nowrap gap-6 ">
-      <div className="flex gap-x-2 items-center pl-4">
+      <div className="flex gap-x-2 items-center pl-0">
         <svg
           width="24px"
           height="24px"
@@ -117,7 +117,7 @@ export default function Filters({
       </div>
 
       {!isCuration && (
-        <div className="relative flex rounded-[12px] min-w-[18rem] justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
+        <div className="relative flex rounded-[12px] min-w-[18rem] justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F] ">
           <p className="text-sm w-[70%]">{search.category.label}</p>
           {search.category.active ? (
             <ChevronUpIcon
