@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
-import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import { ArrowUpTrayIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import BaseButton from '../../ui/BaseButton';
 import { z } from 'zod';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
@@ -32,13 +32,14 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [description, setDescription] = useState("");
+  const descriptionImageRef = useRef<HTMLInputElement>(null);
+  const [imageId, setImageId] = useState(0);
   const [unlockableFiles, setUnlockableFiles] = useState([null]);
 
   const salesService = new CreateSellService();
 
   const releseEscrowRequest = async () => {
     try {
-      debugger;
       setStep(2);
       const result = validateSchema.safeParse({
         email,
@@ -68,22 +69,14 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
       onClose();
     }
   };
-  const handleFileChange = (file: any, index: number) => {
-    const newFiles = unlockableFiles.map((item: any, i: number) => {
-      if (i === index) {
-        return file;
-      }
-      return item;
-    });
 
-    setUnlockableFiles(newFiles);
-  };
+  const changeUnlocable = (file: any, index: number) => {
+    setUnlockableFiles((prevFiles) => (prevFiles.map((item, i) => (
+      index === i ? file : item
+    ))))
+  }
+
   const removeUnlockable = (index: number) => {
-    if (index === 0) {
-      setUnlockableFiles(unlockableFiles.map((file, i) => (i === 0 ? null : file)))
-      return;
-    }
-
     const newFiles = unlockableFiles.filter(
       (item: any, i: number) => i !== index,
     );
@@ -167,75 +160,80 @@ export default function EscrowRequestModal({ onClose, fetchNftData }: { onClose:
               <Textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full border-none bg-[#161616] border border-[#3A3A3A] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
+                className="w-full bg-[#161616] border border-[#3a3a3a] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
                 placeholder="Please describe your Request*"
               />
             </div>
           </div>
           <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-            <Disclosure as="div" defaultOpen={true}>
-              {({ open }) => (
-                <>
-                  <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <div className="flex w-full justify-between">
-                      <span>Attachment</span>
-                      <div className="flex items-center">
-                        <div
-                          className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                          onClick={addUnlockable}
-                        >
-                          <img
-                            src="/icons/add-new.svg"
-                            alt="plus"
-                            className="w-4 h-4"
-                          />
-                          <p className="text-neon">Add</p>
-                        </div>
-                        <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
-                        />
-                      </div>
+
+            <div className="flex w-full justify-between">
+              <span>Attachment</span>
+              <div className="flex items-center">
+                <div
+                  className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center cursor-pointer"
+                  onClick={addUnlockable}
+                >
+                  <img
+                    src="/icons/add-new.svg"
+                    alt="plus"
+                    className="w-4 h-4"
+                  />
+                  <p className="text-neon">Add New</p>
+                </div>
+                <ChevronUpIcon
+                  className={`${open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 justify-between">
+              <input
+                type="file"
+                id="discription-image"
+                ref={descriptionImageRef}
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const newFile = e.target.files[0];
+                  changeUnlocable(newFile, imageId);
+                }}
+              />
+              {unlockableFiles.map((item: any, index: number) => {
+                return (
+                  <div className="pb-2 w-full" key={index}>
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        className="px-[10px] py-[10px] cursor-pointer w-[174px] border-0 rounded-[14px] bg-[#dee8e8] text-[#161616] text-[14px] 
+                              font-extrabold capitalize flex items-center gap-[10px] flex-shrink-0 justify-center transition-all duration-300"
+                        onClick={() => {
+                          setImageId(index);
+                          descriptionImageRef &&
+                            (descriptionImageRef.current as any).click();
+                        }}
+                      >
+                        Upload{' '}
+                        <span>
+                          <ArrowUpTrayIcon className="w-5" />
+                        </span>
+                      </button>
+                      <span id="custom-text">
+                        {item
+                          ? item.name
+                          : 'Choose File'}
+                      </span>
+                      <img
+                        src="/icons/trash.svg"
+                        className="w-6 mr-3"
+                        onClick={() => {
+                          removeUnlockable(index);
+                        }} />
                     </div>
-                  </DisclosureButton>
-
-                  <DisclosurePanel className="flex flex-wrap gap-3 justify-between">
-                    {unlockableFiles.length == 0 && (
-                      <div className="flex gap-x-4 items-center">
-                        <FileInput
-                          onFileSelect={(file: any) => handleFileChange(file, 0)}
-                          maxSizeInBytes={1024 * 1024}
-                          deSelect={true}
-                        />
-                        <img
-                          src="/icons/trash.svg"
-                          alt="trash"
-                          className="w-6 h-6 cursor-pointer"
-                          onClick={() => removeUnlockable(0)}
-                        />
-
-                      </div>
-                    )}
-                    {unlockableFiles.map((item: any, index: number) => {
-                      return (
-                        <div className="flex gap-x-4 items-center" key={index}>
-                          <FileInput
-                            onFileSelect={(file: any) => handleFileChange(file, index)}
-                            maxSizeInBytes={1024 * 1024}
-                          />
-                          <img
-                            src="/icons/trash.svg"
-                            alt="trash"
-                            className="w-6 h-6 cursor-pointer"
-                            onClick={() => removeUnlockable(index)}
-                          />
-                        </div>
-                      );
-                    })}
-                  </DisclosurePanel>
-                </>
-              )}
-            </Disclosure>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex justify-between">

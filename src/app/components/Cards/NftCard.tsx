@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { TokenIcon } from '@web3icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -37,7 +36,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
               {data.curation.name ? data.curation.name : data.artist}
             </span>
           </div>
-     <p className="text-xs text-[#fff] font-bold azeret-mono-font italic underline">            {' '}
+          <p className="text-xs text-[#fff] font-bold azeret-mono-font italic underline">            {' '}
             <Link className="italic " href={`/nft/${data.curation.name}`}>
               Canvas Collection
             </Link>

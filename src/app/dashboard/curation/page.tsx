@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import CurationSearch from '@/app/components/Filters/CurationSearch';
 import { collectionServices, getMedia } from '@/services/supplier';
 import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 import { SkeletonCard } from '@/app/components/Skelton/Skelton';
 import { useDebounce } from 'use-debounce';
+import Image from 'next/image';
 
 export default function Page() {
   const { toast } = useToast();
@@ -108,13 +108,13 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-y-4 px-4">
       {hero?.image && hero.link ? (
-        <img
+        <Image
           src={hero.image}
           alt="hero"
-          width={100}
-          height={100}
+          width={1000}
+          height={1000}
           className="w-full rounded-xl object-fill mb-[19px]"
-          onClick={() => window.open(hero.link, '_blank')}
+          onClick={() => { window.open(hero.link, '_blank') }}
         />
       ) : null}
       <>

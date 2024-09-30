@@ -10,6 +10,7 @@ import BasicLoadingModal from './BasicLoadingModal';
 import PhoneInput from 'react-phone-input-2'
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
+import { ChevronUpIcon } from 'lucide-react';
 
 const validateSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -24,9 +25,10 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
   const [phoneNumber, setPhoneNumber] = useState('');
   const [description, setDescription] = useState('');
   const [numberOfInputs, setNumberOfInputs] = useState(1);
-  const [discriptionImage, setDiscriptionImage] = useState([]);
+  const [unlockableFiles, setUnlockableFiles] = useState([null]);
+  const [imageId, setImageId] = useState(0);
 
-  const discriptionImageRef = useRef<HTMLInputElement>(null);
+  const descriptionImageRef = useRef<HTMLInputElement>(null);
   const salesService = new CreateSellService();
 
   const submit = async () => {
@@ -46,7 +48,7 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
       formData.append('request', description);
       formData.append('email', email);
       formData.append('phoneNumber', phoneNumber);
-      for (const file of discriptionImage) {
+      for (const file of unlockableFiles) {
         formData.append('files', file);
       }
       await salesService.cancelRequest(formData);
@@ -58,41 +60,33 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
     }
   };
 
+  const changeUnlocable = (file: any, index: number) => {
+    setUnlockableFiles((prevFiles) => (prevFiles.map((item, i) => (
+      index === i ? file : item
+    ))))
+  }
+
+  const removeUnlockable = (index: number) => {
+    const newFiles = unlockableFiles.filter(
+      (item: any, i: number) => i !== index,
+    );
+
+    setUnlockableFiles(newFiles);
+  };
+
+  const addUnlockable: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    if (unlockableFiles.length === 0) {
+      setUnlockableFiles([null, null]);
+    } else {
+      setUnlockableFiles([...unlockableFiles, null]);
+    }
+  }
+
   return (
     <>
-      <style jsx>{`
-        .upload__file__with__name {
-          display: flex;
-          align-items: center;
-          border-radius: 12px;
-          background: var(--Text-in-Bg, #161616);
-          justify-content: space-between;
-        }
-
-        #custom-button {
-          padding: 10px;
-          cursor: pointer;
-          width: 174px;
-          border: 0;
-          border-radius: 14px;
-          background: var(--Light, #dee8e8);
-          color: var(--Text-in-Bg, #161616);
-          font-size: 14px;
-          font-style: normal;
-          font-weight: 800;
-          line-height: normal;
-          text-transform: capitalize;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex: 0 0 auto;
-          justify-content: center;
-          transition: 0.3s all;
-        }
-      `}</style>
-
       {step === 1 && (
-        <div className="flex flex-col gap-y-4">
+        <div className="flex flex-col gap-y-4 w-full">
           <div className="flex flex-col gap-y-2 items-center">
             <img src="/icons/success.svg" className="w-16 mx-auto" />
             <p className="text-lg font-medium">Order Cancellation Request</p>
@@ -152,45 +146,56 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
           <Textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border-none bg-[#161616]"
+            className="w-full bg-[#161616] border border-[#3a3a3a] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
             placeholder="Reason for cancellation"
           />
 
-          <div className="flex flex-col gap-y-4 mt-2">
-            <div className="flex items-center justify-between">
-              <p>Attachments</p>
-              <PlusCircleIcon
-                className="w-6 cursor-pointer"
-                onClick={() => {
-                  setNumberOfInputs(numberOfInputs + 1);
+          <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+
+            <div className="flex w-full justify-between">
+              <span>Attachment</span>
+              <div className="flex items-center">
+                <div
+                  className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center cursor-pointer"
+                  onClick={addUnlockable}
+                >
+                  <img
+                    src="/icons/add-new.svg"
+                    alt="plus"
+                    className="w-4 h-4"
+                  />
+                  <p className="text-neon">Add New</p>
+                </div>
+                <ChevronUpIcon
+                  className={`${open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3 justify-between">
+              <input
+                type="file"
+                id="discription-image"
+                ref={descriptionImageRef}
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const newFile = e.target.files[0];
+                  changeUnlocable(newFile, imageId);
                 }}
               />
-            </div>
-            <p className="text-sm text-gray-500">
-              PNG, GIF, WEBP, MP4 or MP3.Max 1Gb.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-between">
-              {_.times(numberOfInputs).map((_, index) => {
+              {unlockableFiles.map((item: any, index: number) => {
                 return (
                   <div className="pb-2 w-full" key={index}>
-                    <div className="upload__file__with__name">
-                      <input
-                        type="file"
-                        id="discription-image"
-                        ref={discriptionImageRef}
-                        style={{ display: 'none' }}
-                        onChange={(e) => {
-                          console.log('adding new file');
-                          const newFile = e.target.files[0];
-                          setDiscriptionImage([...discriptionImage, newFile]);
-                        }}
-                      />
+                    <div className="flex items-center justify-between">
                       <button
                         type="button"
-                        id="custom-button"
+                        className="px-[10px] py-[10px] cursor-pointer w-[174px] border-0 rounded-[14px] bg-[#dee8e8] text-[#161616] text-[14px] 
+                  font-extrabold capitalize flex items-center gap-[10px] flex-shrink-0 justify-center transition-all duration-300"
                         onClick={() => {
-                          discriptionImageRef &&
-                            (discriptionImageRef.current as any).click();
+                          setImageId(index);
+                          descriptionImageRef &&
+                            (descriptionImageRef.current as any).click();
                         }}
                       >
                         Upload{' '}
@@ -199,19 +204,16 @@ export default function CancelOrderModal({ onClose, fetchNftData }: { onClose: (
                         </span>
                       </button>
                       <span id="custom-text">
-                        {discriptionImage[index]
-                          ? discriptionImage[index].name
+                        {item
+                          ? item.name
                           : 'Choose File'}
                       </span>
                       <img
                         src="/icons/trash.svg"
                         className="w-6 mr-3"
                         onClick={() => {
-                          if (numberOfInputs > 1) {
-                            setNumberOfInputs(numberOfInputs - 1);
-                          }
-                        }}
-                      />
+                          removeUnlockable(index);
+                        }} />
                     </div>
                   </div>
                 );

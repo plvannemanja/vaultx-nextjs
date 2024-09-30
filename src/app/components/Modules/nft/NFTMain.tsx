@@ -419,14 +419,14 @@ export default function NFTMain({
                   ) : null}
 
                   {type === 'release' ? (
-                    <div className="flex flex-col gap-y-2 items-center">
+                    <div className="flex  gap-y-2 gap-2 items-center w-full">
                       <BaseDialog
                         className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
                         trigger={
                           <BaseButton
                             title="Release Escrow"
                             variant="primary"
-                            className={'rounded-[14px]'}
+                            className={'!rounded-[14px] w-full'}
                             onClick={() => { }}
                           />
                         }
@@ -443,11 +443,13 @@ export default function NFTMain({
                         />
                       </BaseDialog>
                       <BaseDialog
-                        className="bg-black max-h-[80%] w-[38rem] mx-auto overflow-y-auto overflow-x-hidden"
+                        className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
+
                         trigger={
                           <BaseButton
                             title="Cancel Order"
-                            variant="primary"
+                            variant="secondaryOutline"
+                            className={'!rounded-[14px] w-full'}
                             onClick={() => { }}
                           />
                         }
@@ -569,13 +571,15 @@ export default function NFTMain({
                             onClick={() => { }}
                           />
                         }
-                        onClose={() => {
+                        isOpen={modalStatus.escrowRelease}
+                        onClose={(val) => {
                           setModalStatus({
                             ...modalStatus,
-                            escrowRelease: false,
+                            escrowRelease: val,
                           });
                         }}
                         className="bg-[#161616] max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
+
                       >
                         <EscrowRequestModal
                           onClose={() => {

@@ -85,14 +85,14 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-y-4 px-4 ">
       {hero?.image && hero.link ? (
-        <img
+        <Image
           src={hero.image}
           alt="hero"
-          width={100}
-          height={100}
+          width={1000}
+          height={1000}
           className="w-full object-fill max-h-[370px] mb-[14px]"
           onClick={() => window.open(hero.link, '_blank')}
-        />
+        ></Image>
       ) : null}
       <Filters setState={handleFilters} />
 
