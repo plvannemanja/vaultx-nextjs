@@ -307,10 +307,14 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         if (sum > BigInt(100)) {
           throw new Error('Total split percentage exceeds 100%.');
         }
-        splitArr.push({
-          paymentWallet: activeAccount?.address as Address,
-          paymentPercentage: (BigInt(100) - sum) * BigInt(100),
-        });
+
+        if (sum < BigInt(100)) {
+          splitArr.push({
+            paymentWallet: activeAccount?.address as Address,
+            paymentPercentage: (BigInt(100) - sum) * BigInt(100),
+          });
+        }
+
         nftPayload.paymentSplits = splitArr;
       } else {
         nftPayload.paymentSplits = [

@@ -64,7 +64,13 @@ export default function BasicDetails({
   const create = async () => {
     const result = basicDetailsSchema.safeParse(basicDetail);
     if (!result.success || !basicDetail.file) {
-      let message = JSON.parse(result.error.message);
+      let message = [];
+      try {
+        message = JSON.parse(result.error.message);
+      } catch (err) {
+
+      }
+
       if (!basicDetail.file) {
         message.push({
           code: 'invalid_type',
