@@ -469,10 +469,36 @@ export const getProperties = async () => {
   return properties.data;
 };
 
+export const getUserArtists = async () => {
+  const token = getCookie('token');
+  const properties = await axios.get(`${server_uri}/info/get-user-artist`, {
+    headers: {
+      authorization: 'Bearer ' + token,
+    },
+  });
+
+  return properties.data;
+};
+
 export const upsertProperty = async (payload: any) => {
   const token = getCookie('token');
   const property = await axios.post(
     `${server_uri}/info/upsertProperty`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
+export const upsertUserArtist = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/upsertUserArtist`,
     payload,
     {
       headers: {
@@ -527,6 +553,22 @@ export const deleteSellerInfo = async (payload: any) => {
 
   return property;
 };
+
+export const deleteUserArtist = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete-user-artist`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
 // authentication api calls
 export const authenticationServices = {
   connectWallet: ({ wallet }: ConnectWalletParams) =>

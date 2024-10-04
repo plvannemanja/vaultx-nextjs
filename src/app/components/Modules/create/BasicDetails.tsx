@@ -13,6 +13,8 @@ import { BaseDialog } from '../../ui/BaseDialog';
 import CancelModal from './CancelModal';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
+import UserArtist from './UserArtist';
+import UserArtistModal from './UserArtistModal';
 
 const basicDetailsSchema = z.object({
   productName: z.string(),
@@ -174,7 +176,7 @@ export default function BasicDetails({
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
-        <div className="flex flex-col items-center gap-y-2 justify-center py-24 lg:w-[42%] bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
+        <div className="flex flex-col items-center gap-y-6 justify-center py-24 lg:w-[42%] bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] self-start px-10">
           {basicDetail.file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {basicDetail.imageSrc && (
@@ -325,18 +327,24 @@ export default function BasicDetails({
 
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium text-[11px]">Artist name*</Label>
-            <Input
-              value={basicDetail.artistName ? basicDetail.artistName : ''}
-              onChange={(e) =>
-                setBasicDetail({
-                  ...basicDetail,
-                  artistName: (e.target as any).value,
-                })
-              }
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-              type="text"
-              placeholder="Enter Artist Name"
-            />
+            <div className="grid grid-cols-12 gap-x-2">
+              <div className='col-span-10'>
+                <UserArtist />
+              </div>
+              <div className='col-span-2'>
+                <BaseDialog
+                  className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
+                  trigger={
+                    <div className='flex cursor-pointer h-12 justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md'>
+                      <img src="/icons/add-new.svg" className="w-6 h-6" />
+                      <p className="text-center text-sm text-[#DDF247]">Add Artist</p>
+                    </div>
+                  }
+                >
+                  <UserArtistModal editUser={null} />
+                </BaseDialog>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -358,10 +366,10 @@ export default function BasicDetails({
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any, index: number) => (
-                    <option key={index} value={JSON.stringify(item)}>
-                      {item.name}
-                    </option>
-                  ))
+                  <option key={index} value={JSON.stringify(item)}>
+                    {item.name}
+                  </option>
+                ))
                 : null}
             </select>
           </div>

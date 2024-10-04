@@ -8,6 +8,7 @@ interface IBaseButtonProps {
   displayIcon?: boolean;
   iconPath?: any;
   iconStyles?: any;
+  loading?: boolean;
 }
 
 export default function BaseButton({
@@ -18,6 +19,7 @@ export default function BaseButton({
   displayIcon,
   iconPath,
   iconStyles,
+  loading
 }: IBaseButtonProps) {
   const isPrimary = useMemo(() => variant === 'primary', [variant]);
   const isSecondaryOutline = useMemo(
@@ -35,6 +37,7 @@ export default function BaseButton({
       <button
         className="w-full h-full gap-[10px] flex items-center justify-center"
         onClick={onClick}
+        disabled={loading}
       >
         {title}
         {displayIcon && (

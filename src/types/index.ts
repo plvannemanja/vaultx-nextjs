@@ -319,3 +319,18 @@ export interface IBid {
   bidCanceled: boolean;
   biddderShippingId: string;
 }
+
+export interface IUserArtist {
+  _id: string,
+  userId: string | UserType,
+  name: string,
+  image: string,
+  wallet: string,
+  royalty: number,
+  royaltyAddress: string,
+  mySplit: number,
+  paymentSplits: ({
+    paymentWallet: string,
+    paymentPercentage: number,
+  })[]
+}

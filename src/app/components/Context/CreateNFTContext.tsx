@@ -5,6 +5,7 @@ import {
   IAdvancedDetailOption,
   IBasicDetailFormData,
   ISellerInfo,
+  IUserArtist,
   PaymentSplitType,
 } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
@@ -20,6 +21,10 @@ interface NFTContextType {
   setPaymentSplits: (data: Array<PaymentSplitType>) => void;
   sellerInfo: ISellerInfo;
   setSellerInfo: (data: Partial<ISellerInfo>) => void;
+  userArtists: IUserArtist[],
+  setUserArtists: (data: IUserArtist[]) => void;
+  selectedArtist: string | null,
+  setSelectedArtist: (data: string | null) => void;
 }
 
 interface CreateNFTProviderProps {
@@ -115,6 +120,8 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
     });
   };
 
+  const [userArtists, setUserArtists] = useState<IUserArtist[]>([]);
+  const [selectedArtist, setSelectedArtist] = useState<string | null>(null);
   return (
     <CreateNFTContext.Provider
       value={{
@@ -130,6 +137,10 @@ export const CreateNFTProvider: React.FC<CreateNFTProviderProps> = ({
         setPaymentSplits(data) {
           setPaymentSplits(data);
         },
+        userArtists,
+        setUserArtists,
+        selectedArtist,
+        setSelectedArtist,
       }}
     >
       {children}

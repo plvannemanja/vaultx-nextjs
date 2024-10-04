@@ -20,6 +20,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
+import UserArtistSetting from '@/app/components/Modules/create/UserArtistSetting';
 
 export default function Page() {
   const { toast } = useToast();
@@ -153,9 +154,8 @@ export default function Page() {
                   <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                     <span>Edit your avatar</span>
                     <ChevronUpIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                      className={`${open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
                     />
                   </DisclosureButton>
                   <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -197,9 +197,8 @@ export default function Page() {
                     <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                       <span>Edit your cover image</span>
                       <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
                       />
                     </DisclosureButton>
                     <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -240,9 +239,8 @@ export default function Page() {
                     <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                       <span>Basic Information</span>
                       <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
                       />
                     </DisclosureButton>
                     <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -309,9 +307,8 @@ export default function Page() {
                     <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                       <span>Your links</span>
                       <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white`}
                       />
                     </DisclosureButton>
                     <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -401,6 +398,7 @@ export default function Page() {
           <ShippingInfo />
           <ContactInfo />
           <PropertiesTemplate />
+          <UserArtistSetting />
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton
               title="Cancel"

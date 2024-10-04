@@ -30,6 +30,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   const [modal, setModal] = useState(false);
   const [mintLoaderStep, setMintLoaderStep] = useState(1);
+  const [mintSubStep, setMintSubStep] = useState(1);
   const [step, setStep] = useState(1);
   const [nftId, setNftId] = useState(null);
   const [basicDetails, setBasicDetails] = useState<any>({
@@ -189,6 +190,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         throw new Error('Failed to create NFT');
       }
 
+      setMintSubStep(1);
       await createAdvanceDetails(nftId);
       setNftId(nftId);
 
@@ -226,6 +228,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         nftId,
       };
 
+      setMintSubStep(2);
       const {
         data: { uri },
       } = await nftService.createSellerDetails(data);
@@ -234,6 +237,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         throw new Error('Failed to create NFT');
       }
 
+      setMintSubStep(3);
       await handleMint(uri, nftId);
       toast({
         title: 'NFT minted',
@@ -376,7 +380,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   return (
     <div className="flex flex-col gap-y-4 px-4">
       <RestrictiveModal open={modal} onClose={() => setModal(false)}>
-        <MintLoader progress={mintLoaderStep} nftId={nftId} />
+        <MintLoader progress={mintLoaderStep} nftId={nftId} subStep={mintSubStep} />
       </RestrictiveModal>
 
       <p className="text-xl font-medium">Create New NFT</p>
