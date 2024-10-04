@@ -24,7 +24,7 @@ import UserArtistModal from "./UserArtistModal";
 export default function UserArtist() {
   const activeAccount = useActiveAccount();
   const [open, setOpen] = useState(false)
-  const { userArtists, setUserArtists, selectedArtist, setSelectedArtist, basicDetail, advancedDetails, setBasicDetail, setPaymentSplits, setAdvancedDetails } = useCreateNFT();
+  const { userArtists, setUserArtists, selectedArtist, setSelectedArtist, basicDetail, advancedDetails, setBasicDetail, setPaymentSplits, setAdvancedDetails, advancedOptions, setAdvancedOptions } = useCreateNFT();
 
   const [edit, setEdit] = useState(false);
   const [editUser, setEditUser] = useState(null);
@@ -63,6 +63,13 @@ export default function UserArtist() {
           paymentPercentage: BigInt(item.paymentPercentage)
         })));
         setPaymentSplits(paymentSplits);
+
+        // set options
+        setAdvancedOptions({
+          ...advancedOptions,
+          royalties: true,
+          split: true,
+        })
       }
     }
   }, [selectedArtist]);

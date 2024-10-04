@@ -249,6 +249,8 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         window && window.location.reload();
       }, 2000);
     } catch (error) {
+      console.log(error)
+      setMintSubStep(1);
       setModal(false);
       toast({
         title: 'An error occurred',

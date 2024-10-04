@@ -292,6 +292,7 @@ export default function AdvanceDetails({
                   }
                   placeholder="Address"
                   type="text"
+                  disabled={true}
                   value={advancedDetails.royaltyAddress ?? ''}
                 />
               </div>
@@ -310,6 +311,7 @@ export default function AdvanceDetails({
                     min={0}
                     max={100}
                     type="number"
+                    disabled={true}
                     value={
                       isValidNumber(advancedDetails.royalty)
                         ? advancedDetails.royalty.toString()
@@ -322,7 +324,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 flex">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
@@ -475,6 +477,7 @@ export default function AdvanceDetails({
                     }
                     placeholder="Address"
                     type="text"
+                    disabled={true}
                     value={split.paymentWallet}
                   />
                 </div>
@@ -490,6 +493,7 @@ export default function AdvanceDetails({
                       min={0}
                       max={100}
                       type="number"
+                      disabled={true}
                       value={split.paymentPercentage.toString()} // Convert bigint to string for display
                     />
                     <p className="absolute top-4 right-2 text-[#979797]">%</p>
@@ -498,6 +502,7 @@ export default function AdvanceDetails({
                 <div className="col-span-2 flex">
                   {paymentSplits.length > 1 && (
                     <button
+                      disabled={true}
                       className="h-[52px] mx-4"
                       onClick={() => removeSplit(index)}
                     >
@@ -511,7 +516,9 @@ export default function AdvanceDetails({
                   {index === paymentSplits.length - 1 && (
                     <div
                       className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                      onClick={addSplit}
+                      onClick={() => {
+                        // addSplit();
+                      }}
                     >
                       <img src="/icons/add-new.svg" className="w-6 h-6" />
                       <p className="text-center text-sm text-[#DDF247]">
