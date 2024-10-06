@@ -397,7 +397,7 @@ export default function Page() {
 
           <ShippingInfo />
           <ContactInfo />
-          <PropertiesTemplate />
+          <PropertiesTemplate addStatus={true} />
           <UserArtistSetting />
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton

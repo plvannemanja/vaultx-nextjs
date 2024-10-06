@@ -321,7 +321,7 @@ export default function AdvanceDetails({
                   <p className="absolute top-4 right-2 text-[#979797]">%</p>
                 </div>
               </div>
-              <div className="col-span-2 flex">
+              <div className="col-span-2 hidden">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
                   onClick={() => { }}
@@ -503,7 +503,7 @@ export default function AdvanceDetails({
                   {paymentSplits.length > 1 && (
                     <button
                       disabled={true}
-                      className="h-[52px] mx-4"
+                      className="h-[52px] mx-4 hidden"
                       onClick={() => removeSplit(index)}
                     >
                       <img
@@ -515,7 +515,7 @@ export default function AdvanceDetails({
                   )}
                   {index === paymentSplits.length - 1 && (
                     <div
-                      className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
+                      className="hidden cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
                       onClick={() => {
                         // addSplit();
                       }}
@@ -532,7 +532,7 @@ export default function AdvanceDetails({
           </div>
         )}
 
-        <PropertiesTemplate />
+        <PropertiesTemplate addStatus={false} />
 
         <div className="flex gap-x-4 justify-center my-5">
           <BaseButton
