@@ -1,53 +1,65 @@
-import { acceptedFormats, isValidNumber, maxFileSize } from "@/utils/helpers";
-import { useEffect, useRef, useState } from "react";
-import BaseButton from "../../ui/BaseButton";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useActiveAccount } from "thirdweb/react";
-import Image from "next/image";
-import { BaseDialog } from "../../ui/BaseDialog";
-import ErrorModal from "./ErrorModal";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { z } from "zod";
-import { isZodAddress } from "@/lib/utils";
-import { useCreateNFT } from "../../Context/CreateNFTContext";
-import { getUserArtists, upsertUserArtist } from "@/services/supplier";
-import { useToast } from "@/hooks/use-toast";
-import { IUserArtist } from "@/types";
-import { debug } from "console";
+import { acceptedFormats, isValidNumber, maxFileSize } from '@/utils/helpers';
+import { useEffect, useRef, useState } from 'react';
+import BaseButton from '../../ui/BaseButton';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { useActiveAccount } from 'thirdweb/react';
+import Image from 'next/image';
+import { BaseDialog } from '../../ui/BaseDialog';
+import ErrorModal from './ErrorModal';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { z } from 'zod';
+import { isZodAddress } from '@/lib/utils';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { getUserArtists, upsertUserArtist } from '@/services/supplier';
+import { useToast } from '@/hooks/use-toast';
+import { IUserArtist } from '@/types';
+import { debug } from 'console';
 
 const paymentSplitSchema = z.object({
   paymentWallet: isZodAddress,
   paymentPercentage: z.number(),
-})
+});
 
 const fileSchema = z.object({
   file: z.instanceof(File),
 });
 
-const userArtistSchema = z.object({
-  name: z.string(),
-  wallet: isZodAddress,
-  confirmWallet: isZodAddress,
-  royalty: z.number(),
-  royaltyAddress: isZodAddress,
-  mySplit: z.number(),
-  paymentSplits: z.array(paymentSplitSchema),
-}).refine((data) => data.confirmWallet === data.wallet, {
-  path: ['confirmWallet'],
-  message: "Confirm wallet does not match",
-}).refine((data) => {
-  // calculate sum
-  const totalSplit = data.paymentSplits.reduce((sum, current) => sum + current.paymentPercentage, data.mySplit);
-  if (totalSplit === 100)
-    return true;
-  return false;
-}, {
-  path: ['totalPercent'],
-  message: "Total percent should be 100",
-});
+const userArtistSchema = z
+  .object({
+    name: z.string(),
+    wallet: isZodAddress,
+    confirmWallet: isZodAddress,
+    royalty: z.number(),
+    royaltyAddress: isZodAddress,
+    mySplit: z.number(),
+    paymentSplits: z.array(paymentSplitSchema),
+  })
+  .refine((data) => data.confirmWallet === data.wallet, {
+    path: ['confirmWallet'],
+    message: 'Confirm wallet does not match',
+  })
+  .refine(
+    (data) => {
+      // calculate sum
+      const totalSplit = data.paymentSplits.reduce(
+        (sum, current) => sum + current.paymentPercentage,
+        data.mySplit,
+      );
+      if (totalSplit === 100) return true;
+      return false;
+    },
+    {
+      path: ['totalPercent'],
+      message: 'Total percent should be 100',
+    },
+  );
 
-export default function UserArtistModal({ editUser }: { editUser: null | IUserArtist }) {
+export default function UserArtistModal({
+  editUser,
+}: {
+  editUser: null | IUserArtist;
+}) {
   const { toast } = useToast();
   const { setUserArtists } = useCreateNFT();
   const imageRef = useRef(null);
@@ -56,18 +68,18 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState<any>({
     _id: null,
-    name: "",
-    wallet: "",
-    confirmWallet: "",
-    royalty: "",
-    royaltyAddress: "",
-    mySplit: "",
+    name: '',
+    wallet: '',
+    confirmWallet: '',
+    royalty: '',
+    royaltyAddress: '',
+    mySplit: '',
   });
 
   const [errors, setErrors] = useState({
     active: false,
     data: [],
-  })
+  });
   const [loading, setLoading] = useState(false);
   const [paymentSplits, setPaymentSplits] = useState<any[]>([null]);
   const activeAccount = useActiveAccount();
@@ -86,7 +98,7 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
       reader.readAsDataURL(file);
       setFile(file);
     }
-  }
+  };
 
   const handleButtonClick = () => {
     if (imageRef.current) {
@@ -130,9 +142,9 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
 
   const cancel = () => {
     if (closeRef.current) {
-      (closeRef.current).click();
+      closeRef.current.click();
     }
-  }
+  };
   const create = async () => {
     // validate values
     const result = userArtistSchema.safeParse({
@@ -144,23 +156,23 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
       const message = JSON.parse(result.error.message);
       setErrors({
         active: true,
-        data: message
-      })
+        data: message,
+      });
       console.log(result.error.message);
       return;
     }
 
     if (!editUser || file) {
       const fileResult = fileSchema.safeParse({
-        file
+        file,
       });
 
       if (!fileResult.success) {
         const message = JSON.parse(fileResult.error.message);
         setErrors({
           active: true,
-          data: message
-        })
+          data: message,
+        });
         console.log(fileResult.error.message);
         return;
       }
@@ -168,15 +180,14 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
     try {
       setLoading(true);
       const data = new FormData();
-      data.append("id", formData._id ?? "");
-      data.append("name", formData.name);
-      data.append("wallet", formData.wallet);
-      data.append("royaltyAddress", formData.royaltyAddress);
-      data.append("royalty", formData.royalty);
-      data.append("mySplit", formData.mySplit);
-      data.append("paymentSplits", JSON.stringify(paymentSplits));
-      if (file)
-        data.append("file", file);
+      data.append('id', formData._id ?? '');
+      data.append('name', formData.name);
+      data.append('wallet', formData.wallet);
+      data.append('royaltyAddress', formData.royaltyAddress);
+      data.append('royalty', formData.royalty);
+      data.append('mySplit', formData.mySplit);
+      data.append('paymentSplits', JSON.stringify(paymentSplits));
+      if (file) data.append('file', file);
 
       await upsertUserArtist(data);
 
@@ -191,7 +202,7 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
         duration: 2000,
       });
     }
-  }
+  };
 
   useEffect(() => {
     if (editUser) {
@@ -219,53 +230,62 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
       <div className="col-span-12 flex-col justify-center items-center gap-4 inline-flex pt-8">
         <div className="flex-col justify-start items-start gap-12 flex">
           <div className="flex-col justify-start items-start gap-8 flex">
-            <div className="text-center text-white text-4xl font-extrabold leading-tight">Registering affiliated artists</div>
+            <div className="text-center text-white text-4xl font-extrabold leading-tight">
+              Registering affiliated artists
+            </div>
           </div>
         </div>
         <div className="h-16 flex-col justify-start items-start gap-12 flex">
           <div className="self-stretch text-center text-gray-500 text-2xl font-medium leading-normal">
-            We use artist templates to avoid mistakes that can arise from repetitive artist information entry. Entering artist information can shorten the mint time.
+            We use artist templates to avoid mistakes that can arise from
+            repetitive artist information entry. Entering artist information can
+            shorten the mint time.
           </div>
         </div>
       </div>
 
       {/* Upload Artist Profile Image Section */}
       <div className="col-span-3 px-10 py-5 bg-dark-700 rounded-2xl border-2 border-dark-600 flex-col justify-center items-center gap-6 inline-flex border-dashed h-[450px]">
-        {
-          (file || (editUser && imageSrc)) ? (
-            <div className="flex flex-col text-center gap-y-[23px]  ">
-              {imageSrc && (
-                <div className="width-[90%] object-cover mx-auto">
-                  <Image
-                    src={imageSrc}
-                    alt="logo"
-                    layout="responsive"
-                    width={100} // Required prop
-                    height={100} // Required prop
-                  />
-                </div>
-              )}
-              {file ? file.name : 'No files selected'}
+        {file || (editUser && imageSrc) ? (
+          <div className="flex flex-col text-center gap-y-[23px]  ">
+            {imageSrc && (
+              <div className="width-[90%] object-cover mx-auto">
+                <Image
+                  src={imageSrc}
+                  alt="logo"
+                  layout="responsive"
+                  width={100} // Required prop
+                  height={100} // Required prop
+                />
+              </div>
+            )}
+            {file ? file.name : 'No files selected'}
+          </div>
+        ) : (
+          <>
+            <div className="relative w-16 h-16">
+              <Image
+                className="relative"
+                src="/icons/upload.svg"
+                width={66}
+                height={66}
+                alt="upload"
+              ></Image>
             </div>
-          ) : (
-            <>
-              <div className="relative w-16 h-16">
-                <Image className="relative"
-                  src="/icons/upload.svg"
-                  width={66}
-                  height={66}
-                  alt="upload"
-                ></Image>
+            <div className="self-stretch h-14 flex-col justify-center items-center gap-3 flex">
+              <div className="self-stretch text-center text-white text-lg font-extrabold">
+                Upload Artist Profile Image
               </div>
-              <div className="self-stretch h-14 flex-col justify-center items-center gap-3 flex">
-                <div className="self-stretch text-center text-white text-lg font-extrabold">Upload Artist Profile Image</div>
-                <div className="self-stretch text-center text-gray-500 text-xs font-normal leading-tight">PNG, GIF, WEBP, MP4 or MP3. Max 50mb.</div>
+              <div className="self-stretch text-center text-gray-500 text-xs font-normal leading-tight">
+                PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
               </div>
-            </>
-          )
-        }
-        <button className="w-44 !h-12 bg-light-200 rounded-lg justify-center items-center gap-2.5 inline-flex"
-          onClick={handleButtonClick}>
+            </div>
+          </>
+        )}
+        <button
+          className="w-44 !h-12 bg-light-200 rounded-lg justify-center items-center gap-2.5 inline-flex"
+          onClick={handleButtonClick}
+        >
           <p className="text-dark-900 text-sm font-extrabold capitalize">
             Browse file
           </p>
@@ -286,7 +306,6 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
           title="file"
         />
         {file && (
-
           <BaseButton
             title="Reset"
             variant="secondary"
@@ -296,10 +315,10 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
             className="!w-44 !h-12 bg-light-200 rounded-lg justify-center items-center"
           />
         )}
-      </div >
+      </div>
 
       {/* Artist Information Section */}
-      < div className="col-span-9 flex-col justify-start items-start gap-8 inline-flex w-full" >
+      <div className="col-span-9 flex-col justify-start items-start gap-8 inline-flex w-full">
         <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-2 flex">
           <Label className="text-white text-base font-extrabold">
             Artist Name *
@@ -307,7 +326,9 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
           <hr className="border-white opacity-20 my-4 w-full" />
           <Input
             value={formData.name ? formData.name : ''}
-            onChange={(e) => setFormData({ ...formData, name: (e.target as any).value })}
+            onChange={(e) =>
+              setFormData({ ...formData, name: (e.target as any).value })
+            }
             className="w-full h-12 px-6 py-4 bg-dark-900 text-gray-500 text-sm font-normal rounded-xl"
             type="text"
             placeholder="Enter Artist Name"
@@ -316,7 +337,9 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
 
         <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-2 flex">
           <div className="self-stretch flex items-center">
-            <div className="text-white text-base font-extrabold">Artist Wallet Address *</div>
+            <div className="text-white text-base font-extrabold">
+              Artist Wallet Address *
+            </div>
           </div>
           <hr className="border-white opacity-20 my-4 w-full" />
           <Input
@@ -331,7 +354,10 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
           <Input
             value={formData.confirmWallet ? formData.confirmWallet : ''}
             onChange={(e) =>
-              setFormData({ ...formData, confirmWallet: (e.target as any).value })
+              setFormData({
+                ...formData,
+                confirmWallet: (e.target as any).value,
+              })
             }
             className="w-full border-none  h-12 px-6 py-4 bg-dark-900 text-gray-500 rounded-xl flex items-center gap-4"
             type="text"
@@ -341,7 +367,9 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
 
         <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-5 flex">
           <div className="self-stretch flex items-center">
-            <div className="text-white text-base font-extrabold">Royalties (%) *</div>
+            <div className="text-white text-base font-extrabold">
+              Royalties (%) *
+            </div>
           </div>
           <hr className="border-white opacity-20 my-4 w-full" />
           <div className="self-stretch flex items-center gap-3 grid-cols-6">
@@ -376,7 +404,12 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
             </div>
             <div className="h-12 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
               <div className="w-6 h-6 relative flex">
-                <Image src="/icons/add-new.svg" alt="add-royalty" width={24} height={24} />
+                <Image
+                  src="/icons/add-new.svg"
+                  alt="add-royalty"
+                  width={24}
+                  height={24}
+                />
               </div>
               <p className="text-center text-sm text-[#DDF247]">Add</p>
             </div>
@@ -385,15 +418,23 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
 
         <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-5 flex">
           <div className="self-stretch flex items-center">
-            <div className="text-white text-base font-extrabold">Split Payments (%) *</div>
+            <div className="text-white text-base font-extrabold">
+              Split Payments (%) *
+            </div>
           </div>
-          <div className="text-gray-500 text-sm font-normal">The sum of all numbers (percentages) must equal 100%.</div>
+          <div className="text-gray-500 text-sm font-normal">
+            The sum of all numbers (percentages) must equal 100%.
+          </div>
           <div className="self-stretch flex items-start gap-3 w-full">
             <div className="w-2/12 h-12 px-6 py-4 bg-dark-800 rounded-xl flex items-center">
-              <div className="text-gray-500 text-sm font-normal">My wallet address</div>
+              <div className="text-gray-500 text-sm font-normal">
+                My wallet address
+              </div>
             </div>
             <div className="w-7/12 h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center">
-              <div className="text-gray-500 text-sm font-normal">{activeAccount?.address}</div>
+              <div className="text-gray-500 text-sm font-normal">
+                {activeAccount?.address}
+              </div>
             </div>
             <div>
               <Input
@@ -401,8 +442,8 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
                 onChange={(e) => {
                   setFormData({
                     ...formData,
-                    mySplit: Number(e.target.value) ?? 0
-                  })
+                    mySplit: Number(e.target.value) ?? 0,
+                  });
                 }}
                 placeholder="%"
                 min={0}
@@ -412,65 +453,76 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
               />
             </div>
           </div>
-          {
-            paymentSplits.map((split, index) => (
-              <div className="self-stretch flex items-start gap-3" key={index}>
-                <div className="w-2/12 h-12 px-6 py-4 bg-dark-800 rounded-xl flex items-center">
-                  <div className="text-gray-500 text-sm font-normal">Artist wallet address</div>
-                </div>
-                <div className="w-7/12 px-0 py-0">
-                  <Input
-                    className="h-12 bg-dark-900 rounded-xl flex items-center text-gray-500 text-sm font-normal"
-                    onChange={(e) =>
-                      updateSplit(index, 'paymentWallet', e.target.value)
-                    }
-                    placeholder="Please enter the split payment rate you wish to pay to others."
-                    type="text"
-                    value={split?.paymentWallet ?? ""}
-                  />
-                </div>
-                <div>
-                  <Input
-                    className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center text-gray-600 text-xl font-bold"
-                    onChange={(e) => {
-                      const value = Number(e.target.value);
-                      updateSplit(index, 'paymentPercentage', value);
-                    }}
-                    placeholder="%"
-                    min={0}
-                    max={100}
-                    type="number"
-                    value={split?.paymentPercentage ? split.paymentPercentage.toString() : ""} // Convert bigint to string for display
-                  />
-                </div>
-                <div className="flex">
-                  {paymentSplits.length > 1 && (
-                    <div className="h-12 py-3 mx-4">
-                      <button
-                        className="w-6 h-6"
-                        onClick={() => removeSplit(index)}
-                      >
-                        <img
-                          src="/icons/trash.svg"
-                          alt=""
-                          className="cursor-pointer w-6 h-6"
-                        />
-                      </button>
-                    </div>
-                  )}
-                  {index === paymentSplits.length - 1 && (
-                    <div className="h-12 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5"
-                      onClick={addSplit}>
-                      <div className="w-6 h-6 relative flex">
-                        <Image src="/icons/add-new.svg" alt="add-royalty" width={24} height={24} />
-                      </div>
-                      <p className="text-center text-sm text-[#DDF247]">Add</p>
-                    </div>
-                  )}
+          {paymentSplits.map((split, index) => (
+            <div className="self-stretch flex items-start gap-3" key={index}>
+              <div className="w-2/12 h-12 px-6 py-4 bg-dark-800 rounded-xl flex items-center">
+                <div className="text-gray-500 text-sm font-normal">
+                  Artist wallet address
                 </div>
               </div>
-            ))
-          }
+              <div className="w-7/12 px-0 py-0">
+                <Input
+                  className="h-12 bg-dark-900 rounded-xl flex items-center text-gray-500 text-sm font-normal"
+                  onChange={(e) =>
+                    updateSplit(index, 'paymentWallet', e.target.value)
+                  }
+                  placeholder="Please enter the split payment rate you wish to pay to others."
+                  type="text"
+                  value={split?.paymentWallet ?? ''}
+                />
+              </div>
+              <div>
+                <Input
+                  className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center text-gray-600 text-xl font-bold"
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    updateSplit(index, 'paymentPercentage', value);
+                  }}
+                  placeholder="%"
+                  min={0}
+                  max={100}
+                  type="number"
+                  value={
+                    split?.paymentPercentage
+                      ? split.paymentPercentage.toString()
+                      : ''
+                  } // Convert bigint to string for display
+                />
+              </div>
+              <div className="flex">
+                {paymentSplits.length > 1 && (
+                  <div className="h-12 py-3 mx-4">
+                    <button
+                      className="w-6 h-6"
+                      onClick={() => removeSplit(index)}
+                    >
+                      <img
+                        src="/icons/trash.svg"
+                        alt=""
+                        className="cursor-pointer w-6 h-6"
+                      />
+                    </button>
+                  </div>
+                )}
+                {index === paymentSplits.length - 1 && (
+                  <div
+                    className="h-12 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5"
+                    onClick={addSplit}
+                  >
+                    <div className="w-6 h-6 relative flex">
+                      <Image
+                        src="/icons/add-new.svg"
+                        alt="add-royalty"
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                    <p className="text-center text-sm text-[#DDF247]">Add</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Cancel and Submit Buttons */}
@@ -478,12 +530,13 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
           <DialogClose asChild={false}>
             <button className="hidden" ref={closeRef} />
           </DialogClose>
+          <BaseButton title="Cancel" variant="secondary" onClick={cancel} />
           <BaseButton
-            title="Cancel"
-            variant="secondary"
-            onClick={cancel}
+            title="Save"
+            variant="primary"
+            onClick={create}
+            loading={loading}
           />
-          <BaseButton title="Save" variant="primary" onClick={create} loading={loading} />
         </div>
 
         <BaseDialog
@@ -499,8 +552,7 @@ export default function UserArtistModal({ editUser }: { editUser: null | IUserAr
             }}
           />
         </BaseDialog>
-      </div >
+      </div>
     </div>
-  )
-
+  );
 }

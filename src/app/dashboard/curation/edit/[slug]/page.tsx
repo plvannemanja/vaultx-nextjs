@@ -11,8 +11,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [formData, setFormData] = useState(null);
 
   const fetchData = async () => {
-    const collection =
-      await collectionServices.getCollectionById(params.slug);
+    const collection = await collectionServices.getCollectionById(params.slug);
 
     if (collection.data.collection) {
       if (collection.data.collection._id === '') {

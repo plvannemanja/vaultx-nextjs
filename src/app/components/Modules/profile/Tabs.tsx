@@ -42,6 +42,7 @@ import {
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useDebounce } from 'use-debounce';
+import { useRouter } from 'next/navigation';
 
 const profileFilters = [
   {
@@ -135,6 +136,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const createAndSellService = new CreateSellService();
   const { toast } = useToast();
 
+  const router = useRouter();
   const [favType, setFavType] = useState<string>('nft');
   const [categoryActive, setCategoryActive] = useState(false);
   const [filters, setFilters] = useState<any>({
@@ -275,6 +277,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               ...extra,
               name: collection.name,
               image: collection.bannerImage,
+              _id: collection._id,
             };
           }),
       );
@@ -571,36 +574,68 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       </div>
       {/* User section */}
       {tab === ProfileTabs.All && data[ProfileTabs.All] ? (
-        <div className="flex gap-5 my-4">
+        <div className="grid grid-cols-12 flex-wrap justify-center px-[20px] gap-5 my-4">
           {data[ProfileTabs.All].map((item: any, index: number) => {
-            return <NftCard key={index} data={item} />;
+            return (
+              <Link
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                key={index}
+                href={`/nft/${item._id}`}
+              >
+                <NftCard data={item} />
+              </Link>
+            );
           })}
         </div>
       ) : null}
 
       {/* Owned Section */}
       {tab === ProfileTabs.Own && data[ProfileTabs.Own] ? (
-        <div className="flex gap-5 my-4">
+        <div className="grid grid-cols-12 flex-wrap justify-center px-[20px] gap-5 my-4">
           {data[ProfileTabs.Own].map((item: any, index: number) => {
-            return <NftCard key={index} data={item} />;
+            return (
+              <Link
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                key={index}
+                href={`/nft/${item._id}`}
+              >
+                <NftCard data={item} />
+              </Link>
+            );
           })}
         </div>
       ) : null}
 
       {/* Created section */}
       {tab === ProfileTabs.Created && data[ProfileTabs.Created] ? (
-        <div className="flex gap-5 my-4">
+        <div className="grid grid-cols-12 flex-wrap justify-center px-[20px] gap-5 my-4">
           {data[ProfileTabs.Created].map((item: any, index: number) => {
-            return <NftCard key={index} data={item} />;
+            return (
+              <Link
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                key={index}
+                href={`/nft/${item._id}`}
+              >
+                <NftCard data={item} />
+              </Link>
+            );
           })}
         </div>
       ) : null}
 
       {/* Curation section */}
       {tab === ProfileTabs.Curation && data[ProfileTabs.Curation] ? (
-        <div className="flex gap-5 my-4">
+        <div className="grid grid-cols-12 flex-wrap justify-center px-[20px] gap-5 my-4">
           {data[ProfileTabs.Curation].map((item: any, index: number) => {
-            return <CurationCard key={index} data={item} />;
+            return (
+              <Link
+                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
+                key={index}
+                href={`/dashboard/curation/${item._id}`}
+              >
+                <CurationCard data={item} />
+              </Link>
+            );
           })}
         </div>
       ) : null}
@@ -867,7 +902,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                             stroke="white"
                           />
                         </svg>{' '}
-                        {item?.price} MATIC
+                        {item?.price} ETH
                       </TableCell>
                       <TableCell>
                         {item?.createdAt

@@ -17,7 +17,11 @@ const defaultAttributes = [
   { type: 'Authentication', value: 'Write it here' },
 ];
 
-export default function PropertiesTemplate({ addStatus }: { addStatus: boolean }) {
+export default function PropertiesTemplate({
+  addStatus,
+}: {
+  addStatus: boolean;
+}) {
   const { toast } = useToast();
   const { advancedDetails, setAdvancedDetails } = useCreateNFT();
   const [data, setData] = useState(advancedDetails.attributes);
@@ -150,10 +154,11 @@ export default function PropertiesTemplate({ addStatus }: { addStatus: boolean }
                 attributes: defaultAttributes,
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${!advancedDetails.propertyTemplateId
-              ? 'border-neon'
-              : 'border-none'
-              }`}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              !advancedDetails.propertyTemplateId
+                ? 'border-neon'
+                : 'border-none'
+            }`}
           >
             <p>Basic Template</p>
           </div>
@@ -162,10 +167,11 @@ export default function PropertiesTemplate({ addStatus }: { addStatus: boolean }
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === item._id
-                ? 'border-neon'
-                : 'border-none'
-                }`}
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+                advancedDetails.propertyTemplateId === item._id
+                  ? 'border-neon'
+                  : 'border-none'
+              }`}
             >
               <p>{item.name}</p>
               <button
@@ -227,17 +233,15 @@ export default function PropertiesTemplate({ addStatus }: { addStatus: boolean }
               </div>
             </div>
           ))}
-          {
-            addStatus && (
-              <div
-                className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
-                onClick={handleAddProperty}
-              >
-                <img src="/icons/add-new.svg" className="w-10 h-10" />
-                <p className="text-center text-sm text-[#DDF247]">Add New</p>
-              </div>
-            )
-          }
+          {addStatus && (
+            <div
+              className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
+              onClick={handleAddProperty}
+            >
+              <img src="/icons/add-new.svg" className="w-10 h-10" />
+              <p className="text-center text-sm text-[#DDF247]">Add New</p>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-x-3 item-center">

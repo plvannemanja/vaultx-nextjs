@@ -56,6 +56,7 @@ interface IModalStatus {
   nftEdit: boolean;
   nftTransfer: boolean;
   nftBurn: boolean;
+  bid: boolean;
 }
 
 export default function NFTMain({
@@ -87,6 +88,7 @@ export default function NFTMain({
     nftEdit: false,
     nftTransfer: false,
     nftBurn: false,
+    bid: false,
   });
   const activeAccount = useActiveAccount();
   const { user } = useGlobalContext();
@@ -288,7 +290,7 @@ export default function NFTMain({
           <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
             <div className="w-full flex flex-col gap-y-3">
               <div className="ms-auto cursor-pointer">
-                <div className='flex'>
+                <div className="flex">
                   <svg
                     width="24"
                     height="24"
@@ -301,110 +303,122 @@ export default function NFTMain({
                       fill="#919191"
                     />
                   </svg>
-                  {
-                    user?.wallet == data.owner?.wallet && (
-                      <div className="flex items-center cursor-pointer">
-                        <Menu>
-                          <MenuButton>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                            >
-                              <path
-                                d="M12 9C11.4067 9 10.8266 9.17595 10.3333 9.50559C9.83994 9.83524 9.45543 10.3038 9.22836 10.8519C9.0013 11.4001 8.94189 12.0033 9.05765 12.5853C9.1734 13.1672 9.45912 13.7018 9.87868 14.1213C10.2982 14.5409 10.8328 14.8266 11.4147 14.9424C11.9967 15.0581 12.5999 14.9987 13.1481 14.7716C13.6962 14.5446 14.1648 14.1601 14.4944 13.6667C14.8241 13.1734 15 12.5933 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7957 9 12 9ZM12 13.5C11.7033 13.5 11.4133 13.412 11.1666 13.2472C10.92 13.0824 10.7277 12.8481 10.6142 12.574C10.5007 12.2999 10.4709 11.9983 10.5288 11.7074C10.5867 11.4164 10.7296 11.1491 10.9393 10.9393C11.1491 10.7296 11.4164 10.5867 11.7074 10.5288C11.9983 10.4709 12.2999 10.5006 12.574 10.6142C12.8481 10.7277 13.0824 10.92 13.2472 11.1666C13.412 11.4133 13.5 11.7033 13.5 12C13.5 12.3978 13.342 12.7794 13.0607 13.0607C12.7794 13.342 12.3978 13.5 12 13.5ZM4.5 9C3.90666 9 3.32664 9.17595 2.83329 9.50559C2.33994 9.83524 1.95543 10.3038 1.72836 10.8519C1.5013 11.4001 1.44189 12.0033 1.55765 12.5853C1.6734 13.1672 1.95912 13.7018 2.37868 14.1213C2.79824 14.5409 3.33279 14.8266 3.91473 14.9424C4.49667 15.0581 5.09987 14.9987 5.64805 14.7716C6.19623 14.5446 6.66477 14.1601 6.99441 13.6667C7.32405 13.1734 7.5 12.5933 7.5 12C7.5 11.2044 7.18393 10.4413 6.62132 9.87868C6.05871 9.31607 5.29565 9 4.5 9ZM4.5 13.5C4.20333 13.5 3.91332 13.412 3.66665 13.2472C3.41997 13.0824 3.22771 12.8481 3.11418 12.574C3.00065 12.2999 2.97095 11.9983 3.02882 11.7074C3.0867 11.4164 3.22956 11.1491 3.43934 10.9393C3.64912 10.7296 3.91639 10.5867 4.20737 10.5288C4.49834 10.4709 4.79994 10.5006 5.07403 10.6142C5.34812 10.7277 5.58238 10.92 5.74721 11.1666C5.91203 11.4133 6 11.7033 6 12C6 12.3978 5.84197 12.7794 5.56066 13.0607C5.27936 13.342 4.89783 13.5 4.5 13.5ZM19.5 9C18.9067 9 18.3266 9.17595 17.8333 9.50559C17.3399 9.83524 16.9554 10.3038 16.7284 10.8519C16.5013 11.4001 16.4419 12.0033 16.5576 12.5853C16.6734 13.1672 16.9591 13.7018 17.3787 14.1213C17.7982 14.5409 18.3328 14.8266 18.9147 14.9424C19.4967 15.0581 20.0999 14.9987 20.6481 14.7716C21.1962 14.5446 21.6648 14.1601 21.9944 13.6667C22.3241 13.1734 22.5 12.5933 22.5 12C22.5 11.2044 22.1839 10.4413 21.6213 9.87868C21.0587 9.31607 20.2957 9 19.5 9ZM19.5 13.5C19.2033 13.5 18.9133 13.412 18.6666 13.2472C18.42 13.0824 18.2277 12.8481 18.1142 12.574C18.0007 12.2999 17.9709 11.9983 18.0288 11.7074C18.0867 11.4164 18.2296 11.1491 18.4393 10.9393C18.6491 10.7296 18.9164 10.5867 19.2074 10.5288C19.4983 10.4709 19.7999 10.5006 20.074 10.6142C20.3481 10.7277 20.5824 10.92 20.7472 11.1666C20.912 11.4133 21 11.7033 21 12C21 12.3978 20.842 12.7794 20.5607 13.0607C20.2794 13.342 19.8978 13.5 19.5 13.5Z"
-                                fill="#919191"
-                              />
-                            </svg>
-                          </MenuButton>
-                          <MenuItems
-                            anchor="bottom"
-                            className={
-                              'border border-[#404244] py-[15px] px-[6px] gap-[6px] bg-[#141618] w-[214px] rounded-[8px]'
-                            }
+                  {user?.wallet == data.owner?.wallet && (
+                    <div className="flex items-center cursor-pointer">
+                      <Menu>
+                        <MenuButton>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
                           >
-                            <MenuItem>
-                              <div
-                                className={
-                                  'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
-                                }
-                                onClick={() => {
-                                  setModalStatus({ ...modalStatus, nftEdit: true });
-                                }}
-                              >
-                                Edit RWA
-                              </div>
-                            </MenuItem>
-                            <MenuItem>
-                              <div
-                                className={
-                                  'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
-                                }
-                                onClick={() => {
-                                  setModalStatus({ ...modalStatus, nftTransfer: true })
-                                }}
-                              >
-                                Transfer RWA
-                              </div>
-                            </MenuItem>
-                            <MenuItem>
-                              <div
-                                className={
-                                  'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
-                                }
-                                onClick={() => { setModalStatus({ ...modalStatus, nftBurn: true }) }}
-                              >
-                                Burn RWA
-                              </div>
-                            </MenuItem>
-                          </MenuItems>
-                        </Menu>
-                        <BaseDialog
-                          className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
-                          isOpen={modalStatus.nftEdit}
-                          onClose={(val) => {
-                            setModalStatus({ ...modalStatus, nftEdit: val });
-                          }}
+                            <path
+                              d="M12 9C11.4067 9 10.8266 9.17595 10.3333 9.50559C9.83994 9.83524 9.45543 10.3038 9.22836 10.8519C9.0013 11.4001 8.94189 12.0033 9.05765 12.5853C9.1734 13.1672 9.45912 13.7018 9.87868 14.1213C10.2982 14.5409 10.8328 14.8266 11.4147 14.9424C11.9967 15.0581 12.5999 14.9987 13.1481 14.7716C13.6962 14.5446 14.1648 14.1601 14.4944 13.6667C14.8241 13.1734 15 12.5933 15 12C15 11.2044 14.6839 10.4413 14.1213 9.87868C13.5587 9.31607 12.7957 9 12 9ZM12 13.5C11.7033 13.5 11.4133 13.412 11.1666 13.2472C10.92 13.0824 10.7277 12.8481 10.6142 12.574C10.5007 12.2999 10.4709 11.9983 10.5288 11.7074C10.5867 11.4164 10.7296 11.1491 10.9393 10.9393C11.1491 10.7296 11.4164 10.5867 11.7074 10.5288C11.9983 10.4709 12.2999 10.5006 12.574 10.6142C12.8481 10.7277 13.0824 10.92 13.2472 11.1666C13.412 11.4133 13.5 11.7033 13.5 12C13.5 12.3978 13.342 12.7794 13.0607 13.0607C12.7794 13.342 12.3978 13.5 12 13.5ZM4.5 9C3.90666 9 3.32664 9.17595 2.83329 9.50559C2.33994 9.83524 1.95543 10.3038 1.72836 10.8519C1.5013 11.4001 1.44189 12.0033 1.55765 12.5853C1.6734 13.1672 1.95912 13.7018 2.37868 14.1213C2.79824 14.5409 3.33279 14.8266 3.91473 14.9424C4.49667 15.0581 5.09987 14.9987 5.64805 14.7716C6.19623 14.5446 6.66477 14.1601 6.99441 13.6667C7.32405 13.1734 7.5 12.5933 7.5 12C7.5 11.2044 7.18393 10.4413 6.62132 9.87868C6.05871 9.31607 5.29565 9 4.5 9ZM4.5 13.5C4.20333 13.5 3.91332 13.412 3.66665 13.2472C3.41997 13.0824 3.22771 12.8481 3.11418 12.574C3.00065 12.2999 2.97095 11.9983 3.02882 11.7074C3.0867 11.4164 3.22956 11.1491 3.43934 10.9393C3.64912 10.7296 3.91639 10.5867 4.20737 10.5288C4.49834 10.4709 4.79994 10.5006 5.07403 10.6142C5.34812 10.7277 5.58238 10.92 5.74721 11.1666C5.91203 11.4133 6 11.7033 6 12C6 12.3978 5.84197 12.7794 5.56066 13.0607C5.27936 13.342 4.89783 13.5 4.5 13.5ZM19.5 9C18.9067 9 18.3266 9.17595 17.8333 9.50559C17.3399 9.83524 16.9554 10.3038 16.7284 10.8519C16.5013 11.4001 16.4419 12.0033 16.5576 12.5853C16.6734 13.1672 16.9591 13.7018 17.3787 14.1213C17.7982 14.5409 18.3328 14.8266 18.9147 14.9424C19.4967 15.0581 20.0999 14.9987 20.6481 14.7716C21.1962 14.5446 21.6648 14.1601 21.9944 13.6667C22.3241 13.1734 22.5 12.5933 22.5 12C22.5 11.2044 22.1839 10.4413 21.6213 9.87868C21.0587 9.31607 20.2957 9 19.5 9ZM19.5 13.5C19.2033 13.5 18.9133 13.412 18.6666 13.2472C18.42 13.0824 18.2277 12.8481 18.1142 12.574C18.0007 12.2999 17.9709 11.9983 18.0288 11.7074C18.0867 11.4164 18.2296 11.1491 18.4393 10.9393C18.6491 10.7296 18.9164 10.5867 19.2074 10.5288C19.4983 10.4709 19.7999 10.5006 20.074 10.6142C20.3481 10.7277 20.5824 10.92 20.7472 11.1666C20.912 11.4133 21 11.7033 21 12C21 12.3978 20.842 12.7794 20.5607 13.0607C20.2794 13.342 19.8978 13.5 19.5 13.5Z"
+                              fill="#919191"
+                            />
+                          </svg>
+                        </MenuButton>
+                        <MenuItems
+                          anchor="bottom"
+                          className={
+                            'border border-[#404244] py-[15px] px-[6px] gap-[6px] bg-[#141618] w-[214px] rounded-[8px]'
+                          }
                         >
-                          <EditNFTModal
-                            onClose={() => {
-                              setModalStatus({ ...modalStatus, nftEdit: false });
-                            }}
-                            fetchNftData={fetchNftData}
-                          />
-                        </BaseDialog>
-                        <BaseDialog
-                          isOpen={modalStatus.nftTransfer}
-                          onClose={(val) => {
-                            setModalStatus({ ...modalStatus, nftTransfer: val });
+                          <MenuItem>
+                            <div
+                              className={
+                                'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
+                              }
+                              onClick={() => {
+                                setModalStatus({
+                                  ...modalStatus,
+                                  nftEdit: true,
+                                });
+                              }}
+                            >
+                              Edit RWA
+                            </div>
+                          </MenuItem>
+                          <MenuItem>
+                            <div
+                              className={
+                                'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
+                              }
+                              onClick={() => {
+                                setModalStatus({
+                                  ...modalStatus,
+                                  nftTransfer: true,
+                                });
+                              }}
+                            >
+                              Transfer RWA
+                            </div>
+                          </MenuItem>
+                          <MenuItem>
+                            <div
+                              className={
+                                'py-[6px] px-[10px] text-[#fff] text-[14px] cursor-pointer'
+                              }
+                              onClick={() => {
+                                setModalStatus({
+                                  ...modalStatus,
+                                  nftBurn: true,
+                                });
+                              }}
+                            >
+                              Burn RWA
+                            </div>
+                          </MenuItem>
+                        </MenuItems>
+                      </Menu>
+                      <BaseDialog
+                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                        isOpen={modalStatus.nftEdit}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, nftEdit: val });
+                        }}
+                      >
+                        <EditNFTModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, nftEdit: false });
                           }}
-                          className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
-                        >
-                          <TransferModal
-                            onClose={() => {
-                              setModalStatus({ ...modalStatus, nftTransfer: false });
-                            }}
-                            fetchNftData={fetchNftData}
-                          />
-                        </BaseDialog>
-                        <BaseDialog
-                          isOpen={modalStatus.nftBurn}
-                          onClose={(val) => {
-                            setModalStatus({ ...modalStatus, nftBurn: val });
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
+                      <BaseDialog
+                        isOpen={modalStatus.nftTransfer}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, nftTransfer: val });
+                        }}
+                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      >
+                        <TransferModal
+                          onClose={() => {
+                            setModalStatus({
+                              ...modalStatus,
+                              nftTransfer: false,
+                            });
                           }}
-                          className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
-                        >
-                          <BurnModal
-                            onClose={() => {
-                              setModalStatus({ ...modalStatus, nftBurn: false });
-                            }}
-                          />
-                        </BaseDialog>
-                      </div>
-                    )
-                  }
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
+                      <BaseDialog
+                        isOpen={modalStatus.nftBurn}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, nftBurn: val });
+                        }}
+                        className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      >
+                        <BurnModal
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, nftBurn: false });
+                          }}
+                        />
+                      </BaseDialog>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -506,7 +520,7 @@ export default function NFTMain({
                             title="Buy Now"
                             className={'!rounded-[14px] w-full'}
                             variant="primary"
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -524,17 +538,30 @@ export default function NFTMain({
                       </BaseDialog>
 
                       <BaseDialog
+                        isOpen={modalStatus.bid}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, bid: val });
+                        }}
                         trigger={
                           <BaseButton
                             title="Place a Bid"
                             variant="secondaryOutline"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => { }}
+                            onClick={() => {
+                              setModalStatus({ ...modalStatus, bid: true });
+                            }}
                           />
                         }
-                        className="bg-black max-h-[80%] w-[28rem] overflow-y-auto overflow-x-hidden"
+                        className="bg-black max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
                       >
-                        <BidModal title={data.name} update={() => { }} />
+                        <BidModal
+                          title={data.name}
+                          update={() => {}}
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, bid: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
                       </BaseDialog>
                     </div>
                   ) : null}
@@ -548,7 +575,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -570,7 +597,7 @@ export default function NFTMain({
                             title="Cancel Order"
                             variant="secondaryOutline"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.cancel}
@@ -599,7 +626,7 @@ export default function NFTMain({
                             title="Put On Sale"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.resell}
@@ -648,7 +675,7 @@ export default function NFTMain({
                       <BaseButton
                         title="Cancel Requested"
                         variant="primary"
-                        onClick={() => { }}
+                        onClick={() => {}}
                         className={'!rounded-[14px]'}
                       />
                     </div>
@@ -662,7 +689,7 @@ export default function NFTMain({
                           title="Release Escrow"
                           variant="primary"
                           className={'rounded-[14px]'}
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.release}
@@ -686,7 +713,7 @@ export default function NFTMain({
                             title="Escrow Release Request"
                             variant="primary"
                             className={'!rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.escrowRelease}
@@ -715,7 +742,7 @@ export default function NFTMain({
                       <BaseButton
                         title="Release Requested"
                         variant="primary"
-                        onClick={() => { }}
+                        onClick={() => {}}
                         className={'!rounded-[14px]'}
                       />
                     </div>

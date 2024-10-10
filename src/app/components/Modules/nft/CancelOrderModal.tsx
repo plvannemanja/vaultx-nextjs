@@ -11,11 +11,12 @@ import PhoneInput from 'react-phone-input-2';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { ChevronUpIcon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const validateSchema = z.object({
   email: z.string().email('Invalid email address'),
-  phoneNumber: z.string(),
-  request: z.string(),
+  phoneNumber: z.string().nonempty('Phone number is required.'),
+  request: z.string().nonempty('Dispute request is required.'),
 });
 
 export default function CancelOrderModal({
@@ -25,6 +26,7 @@ export default function CancelOrderModal({
   onClose: () => void;
   fetchNftData: () => void;
 }) {
+  const { toast } = useToast();
   const { nftId: id } = useNFTDetail();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
@@ -38,6 +40,7 @@ export default function CancelOrderModal({
   const salesService = new CreateSellService();
 
   const submit = async () => {
+    let validError = false;
     try {
       const result = validateSchema.safeParse({
         email,
@@ -45,8 +48,10 @@ export default function CancelOrderModal({
         request: description,
       });
 
-      if (!result.success) throw new Error(result.error.message);
-
+      if (!result.success) {
+        validError = true;
+        throw new Error(result.error.message);
+      }
       setStep(2);
       const formData = new FormData();
       formData.append('nftId', id);
@@ -60,6 +65,18 @@ export default function CancelOrderModal({
       await fetchNftData();
       setStep(3);
     } catch (error) {
+      if (validError) {
+        toast({
+          title: 'Input is invalid.',
+          variant: 'destructive',
+        });
+        return;
+      } else {
+        toast({
+          title: 'Already cancel requested or input is invalid.',
+          variant: 'destructive',
+        });
+      }
       console.log(error);
       onClose();
     }

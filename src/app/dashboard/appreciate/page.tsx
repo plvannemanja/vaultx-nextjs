@@ -9,6 +9,7 @@ import NftServices from '@/services/nftService';
 import { getMedia } from '@/services/supplier';
 import { useDebounce } from 'use-debounce';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
 
 export default function Page() {
   const nftService = new NftServices();
@@ -100,15 +101,13 @@ export default function Page() {
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
               return (
-                <div
+                <Link
                   className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
                   key={index}
-                  onClick={() => {
-                    router.push(`/nft/${nft._id}`);
-                  }}
+                  href={`/nft/${nft._id}`}
                 >
                   <NftCard data={nft} />
-                </div>
+                </Link>
               );
             })
           : null}

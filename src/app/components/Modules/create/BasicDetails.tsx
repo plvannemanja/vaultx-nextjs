@@ -67,9 +67,7 @@ export default function BasicDetails({
       let message = [];
       try {
         message = JSON.parse(result.error.message);
-      } catch (err) {
-
-      }
+      } catch (err) {}
 
       if (!basicDetail.file) {
         message.push({
@@ -334,16 +332,18 @@ export default function BasicDetails({
           <div className="flex flex-col gap-y-2">
             <Label className="font-medium text-[11px]">Artist name*</Label>
             <div className="grid grid-cols-12 gap-x-2">
-              <div className='col-span-10'>
+              <div className="col-span-10">
                 <UserArtist />
               </div>
-              <div className='col-span-2'>
+              <div className="col-span-2">
                 <BaseDialog
                   className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
                   trigger={
-                    <div className='flex cursor-pointer h-12 justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md'>
+                    <div className="flex cursor-pointer h-12 justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md">
                       <img src="/icons/add-new.svg" className="w-6 h-6" />
-                      <p className="text-center text-sm text-[#DDF247]">Add Artist</p>
+                      <p className="text-center text-sm text-[#DDF247]">
+                        Add Artist
+                      </p>
                     </div>
                   }
                 >
@@ -372,10 +372,10 @@ export default function BasicDetails({
               </option>
               {basicDetail.curations.length > 0
                 ? basicDetail?.curations?.map((item: any, index: number) => (
-                  <option key={index} value={JSON.stringify(item)}>
-                    {item.name}
-                  </option>
-                ))
+                    <option key={index} value={JSON.stringify(item)}>
+                      {item.name}
+                    </option>
+                  ))
                 : null}
             </select>
           </div>

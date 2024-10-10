@@ -26,7 +26,12 @@ export default function MintLoader({
           </p>
 
           <div className="flex flex-col gap-y-3">
-            <div className={cn("flex gap-x-2 items-center", `opacity-${subStep >= 1 ? '100' : '50'}`)}>
+            <div
+              className={cn(
+                'flex gap-x-2 items-center',
+                `opacity-${subStep >= 1 ? '100' : '50'}`,
+              )}
+            >
               <img src="/icons/refresh.svg" alt="step1" className="w-10 h-10" />
               <div>
                 <p>Upload NFTs</p>
@@ -35,7 +40,12 @@ export default function MintLoader({
                 </p>
               </div>
             </div>
-            <div className={cn("flex gap-x-2 items-center", `opacity-${subStep >= 2 ? '100' : '50'}`)}>
+            <div
+              className={cn(
+                'flex gap-x-2 items-center',
+                `opacity-${subStep >= 2 ? '100' : '50'}`,
+              )}
+            >
               <img src="/icons/refresh.svg" alt="step1" className="w-10 h-10" />
               <div>
                 <p>Mint</p>
@@ -44,7 +54,12 @@ export default function MintLoader({
                 </p>
               </div>
             </div>
-            <div className={cn("flex gap-x-2 items-center", `opacity-${subStep >= 3 ? '100' : '50'}`)}>
+            <div
+              className={cn(
+                'flex gap-x-2 items-center',
+                `opacity-${subStep >= 3 ? '100' : '50'}`,
+              )}
+            >
               <img src="/icons/refresh.svg" alt="step1" className="w-10 h-10" />
               <div>
                 <p>Listing for sale</p>
@@ -109,12 +124,12 @@ export default function MintLoader({
 
           <div className="flex justify-between">
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 View NFT
               </button>
             </div>
             <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
-              <button className="w-full h-full" onClick={() => { }}>
+              <button className="w-full h-full" onClick={() => {}}>
                 Close
               </button>
             </div>

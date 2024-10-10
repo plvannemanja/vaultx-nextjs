@@ -249,7 +249,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         window && window.location.reload();
       }, 2000);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setMintSubStep(1);
       setModal(false);
       toast({
@@ -386,7 +386,11 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
   return (
     <div className="flex flex-col gap-y-4 px-4">
       <RestrictiveModal open={modal} onClose={() => setModal(false)}>
-        <MintLoader progress={mintLoaderStep} nftId={nftId} subStep={mintSubStep} />
+        <MintLoader
+          progress={mintLoaderStep}
+          nftId={nftId}
+          subStep={mintSubStep}
+        />
       </RestrictiveModal>
 
       <p className="text-xl font-medium">Create New NFT</p>

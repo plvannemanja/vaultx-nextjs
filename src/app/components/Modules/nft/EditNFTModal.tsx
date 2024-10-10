@@ -4,7 +4,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
 import BaseButton from '../../ui/BaseButton';
-import { CreateNFTProvider, useCreateNFT } from '../../Context/CreateNFTContext';
+import {
+  CreateNFTProvider,
+  useCreateNFT,
+} from '../../Context/CreateNFTContext';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { CreateNftServices } from '@/services/createNftService';
 import {
@@ -18,6 +21,7 @@ import ContactInfo from '../ContactInfo';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 import { CategoryService } from '@/services/catergoryService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface IEditNFT {
   category: any;
@@ -31,13 +35,15 @@ const Modal = ({
   onClose: () => void;
   fetchNftData: () => void;
 }) => {
+  const [loading, setLoading] = useState(false);
   const { NFTDetail, nftId } = useNFTDetail();
-  const { sellerInfo: {
-    shipping
-  } } = useCreateNFT();
+  const { toast } = useToast();
+  const {
+    sellerInfo: { shipping },
+  } = useCreateNFT();
   const [formData, setFormData] = useState<IEditNFT>({
     category: null,
-    description: "",
+    description: '',
   });
   const [attachments, setAttachments] = useState<any[]>([null]);
   const attachmentRef = useRef(null);
@@ -71,16 +77,12 @@ const Modal = ({
     setAttachments(newAttachments);
   };
 
-
   const getAttach = (obj) => {
-    if (typeof obj === 'string')
-      return obj;
+    if (typeof obj === 'string') return obj;
     return URL.createObjectURL(obj);
-  }
+  };
   const removeAttachment = (index: number) => {
-    const newAttachments = attachments.filter(
-      (_, i) => i !== index,
-    );
+    const newAttachments = attachments.filter((_, i) => i !== index);
 
     setAttachments(newAttachments);
   };
@@ -100,20 +102,25 @@ const Modal = ({
   };
 
   const handleEdit = async () => {
+    setLoading(true);
     try {
       const data = new FormData();
-      data.append("description", formData.description);
-      if (formData.category)
-        data.append("category", formData.category);
+      data.append('description', formData.description);
+      if (formData.category) data.append('category', formData.category);
 
-      attachments.forEach(attachment => {
+      attachments.forEach((attachment) => {
         if (attachment && typeof attachment !== 'string') {
-          data.append("files", attachment);
+          data.append('files', attachment);
         }
       });
 
-      data.append("attachPrevs", JSON.stringify(attachments.filter(item => (typeof item === 'string' && item))));
-      data.append("nftId", nftId);
+      data.append(
+        'attachPrevs',
+        JSON.stringify(
+          attachments.filter((item) => typeof item === 'string' && item),
+        ),
+      );
+      data.append('nftId', nftId);
 
       const shippingAddress = {
         name: shipping.name,
@@ -129,14 +136,20 @@ const Modal = ({
         phoneNumber: shipping.phoneNumber,
       };
 
-      data.append("shippingAddress", JSON.stringify(shippingAddress));
+      data.append('shippingAddress', JSON.stringify(shippingAddress));
       await nftServices.editNft(data);
       fetchNftData();
       onClose();
     } catch (error) {
+      setLoading(false);
+      toast({
+        title: 'Error',
+        description: 'Pleae check all input forms.',
+        duration: 2000,
+      });
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchCategories();
@@ -145,9 +158,9 @@ const Modal = ({
         ...formData,
 
         category: NFTDetail.category?._id,
-        description: NFTDetail.description
-      })
-      setAttachments([...NFTDetail.attachments, null])
+        description: NFTDetail.description,
+      });
+      setAttachments([...NFTDetail.attachments, null]);
     }
   }, []);
 
@@ -162,8 +175,9 @@ const Modal = ({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Attachment</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -259,10 +273,12 @@ const Modal = ({
             className="w-full border-none bg-[#232323] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-[24px] resize-none"
             placeholder="Please describe your product"
             value={formData.description}
-            onChange={(e) => setFormData({
-              ...formData,
-              description: (e.target as any).value
-            })}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                description: (e.target as any).value,
+              })
+            }
           />
         </div>
 
@@ -279,13 +295,14 @@ const Modal = ({
             title="Submit"
             variant="primary"
             onClick={handleEdit}
+            loading={loading}
             className="w-full"
           />
         </div>
       </div>
     </>
   );
-}
+};
 
 export default function EditNFTMOdal({
   onClose,
@@ -298,5 +315,5 @@ export default function EditNFTMOdal({
     <CreateNFTProvider>
       <Modal onClose={onClose} fetchNftData={fetchNftData} />
     </CreateNFTProvider>
-  )
+  );
 }

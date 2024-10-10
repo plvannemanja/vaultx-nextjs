@@ -21,9 +21,9 @@ interface NFTContextType {
   setPaymentSplits: (data: Array<PaymentSplitType>) => void;
   sellerInfo: ISellerInfo;
   setSellerInfo: (data: Partial<ISellerInfo>) => void;
-  userArtists: IUserArtist[],
+  userArtists: IUserArtist[];
   setUserArtists: (data: IUserArtist[]) => void;
-  selectedArtist: string | null,
+  selectedArtist: string | null;
   setSelectedArtist: (data: string | null) => void;
 }
 

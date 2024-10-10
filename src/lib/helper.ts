@@ -135,9 +135,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 
@@ -218,9 +218,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 
@@ -305,9 +305,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-      ...events[0].args,
-      transactionHash,
-    }
+        ...events[0].args,
+        transactionHash,
+      }
     : null;
 };
 export const getExplorerURL = (
@@ -484,38 +484,219 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-      events,
-      transactionHash,
-    }
+        events,
+        transactionHash,
+      }
     : null;
 };
-
 
 export const burnNFT = async (tokenId: number, account: Account) => {
   const transaction = await prepareContractCall({
     contract,
-    method: "function burn(uint256 tokenId)",
-    params: [BigInt(tokenId)]
+    method: 'function burn(uint256 tokenId)',
+    params: [BigInt(tokenId)],
   });
 
   const { transactionHash } = await sendTransaction({
     transaction,
-    account
+    account,
   });
 
   return transactionHash;
-}
+};
 
-export const transferNFT = async (from: Address, to: Address, tokenId: number, account: Account) => {
+export const transferNFT = async (
+  from: Address,
+  to: Address,
+  tokenId: number,
+  account: Account,
+) => {
   const transaction = await prepareContractCall({
     contract,
-    method: "function safeTransferFrom(address from, address to, uint256 tokenId)",
-    params: [from, to, BigInt(tokenId)]
+    method:
+      'function safeTransferFrom(address from, address to, uint256 tokenId)',
+    params: [from, to, BigInt(tokenId)],
   });
   const { transactionHash } = await sendTransaction({
     transaction,
-    account
+    account,
   });
 
   return transactionHash;
-}
+};
+
+export const placeBid = async (
+  tokenId: number,
+  amount: bigint,
+  account: Account,
+) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: 'function placeBid(uint256 tokenId) payable',
+    params: [BigInt(tokenId)],
+    value: amount,
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account,
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+    maxBlocksWaitTime,
+  });
+
+  // get event log
+  const placeBidEvent = prepareEvent({
+    signature: 'event PlaceBid(uint256 indexed tokenId, uint256 bidId)',
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [placeBidEvent],
+  });
+
+  let ret = null;
+  if (events.length > 0)
+    ret = {
+      tokenId: Number(events[0].args.tokenId),
+      bidId: Number(events[0].args.bidId),
+      transactionHash: events[0].transactionHash,
+    };
+
+  return ret;
+};
+
+export const placeBidBeforeMint = async (
+  voucher: Omit<INFTVoucher, 'signature'> & { signature: `0x${string}` },
+  amount: bigint,
+  account: Account,
+) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method:
+      'function placeBidBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable',
+    params: [voucher],
+    value: amount,
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account,
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+    maxBlocksWaitTime,
+  });
+
+  // get event log
+  const placeBidEvent = prepareEvent({
+    signature: 'event PlaceBid(uint256 indexed tokenId, uint256 bidId)',
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [placeBidEvent],
+  });
+
+  let ret = null;
+  if (events.length > 0)
+    ret = {
+      tokenId: Number(events[0].args.tokenId),
+      bidId: Number(events[0].args.bidId),
+      transactionHash: events[0].transactionHash,
+    };
+
+  return ret;
+};
+
+export const acceptBid = async (
+  tokenId: number,
+  bidId: number,
+  account: Account,
+) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: 'function acceptBid(uint256 tokenId, uint256 bidId) payable',
+    params: [BigInt(tokenId), BigInt(bidId)],
+  });
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account,
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+    maxBlocksWaitTime,
+  });
+
+  const acceptBidEvent = prepareEvent({
+    signature:
+      'event AcceptBid(uint256 indexed tokenId, uint256 indexed bidId)',
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [acceptBidEvent],
+  });
+
+  let ret = null;
+  if (events.length > 0)
+    ret = {
+      tokenId: Number(events[0].args.tokenId),
+      bidId: Number(events[0].args.bidId),
+      transactionHash: events[0].transactionHash,
+    };
+
+  return ret;
+};
+
+export const cancelBid = async (
+  tokenId: number,
+  bidId: number,
+  account: Account,
+) => {
+  const transaction = await prepareContractCall({
+    contract,
+    method: 'function cancelBid(uint256 tokenId, uint256 bidId)',
+    params: [BigInt(tokenId), BigInt(bidId)],
+  });
+
+  const { transactionHash } = await sendTransaction({
+    transaction,
+    account,
+  });
+
+  const receipt = await waitForReceipt({
+    client,
+    chain,
+    transactionHash,
+    maxBlocksWaitTime,
+  });
+
+  const cancelBidEvent = prepareEvent({
+    signature:
+      'event CancelBid(uint256 indexed tokenId, uint256 indexed bidId)',
+  });
+
+  const events = parseEventLogs({
+    logs: receipt.logs,
+    events: [cancelBidEvent],
+  });
+
+  let ret = null;
+  if (events.length > 0)
+    ret = {
+      tokenId: Number(events[0].args.tokenId),
+      bidId: Number(events[0].args.bidId),
+      transactionHash: events[0].transactionHash,
+    };
+
+  return ret;
+};

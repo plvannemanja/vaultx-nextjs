@@ -67,11 +67,16 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   useEffect(() => {
     if (activeAccount?.address) {
       fetchUser();
+    } else {
+      setUser(null);
     }
   }, [activeAccount]);
 
   useEffect(() => {
     fetchProtocolFee();
+    if (activeAccount?.address) {
+      fetchUser();
+    }
   }, []);
 
   useEffect(() => {

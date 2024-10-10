@@ -163,9 +163,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       {curation && (
         <>
           <div className="relative">
-            <div
-              className="relative overflow-hidden transition-all duration-500 ease-in-out"
-            >
+            <div className="relative overflow-hidden transition-all duration-500 ease-in-out">
               <Image
                 src={curation?.bannerImage}
                 alt="hero"
@@ -218,7 +216,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                       type="checkbox"
                       className="sr-only"
                       checked={liked}
-                      onChange={() => { }}
+                      onChange={() => {}}
                     />
                     <div className="checkmark">
                       {liked ? (
@@ -304,34 +302,34 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div className="my-5 flex flex-wrap md:gap-x-3">
                 {curation?.youtube?.length > 0
                   ? curation?.youtube.map((item: any, index: number) => {
-                    const imageId = getYouTubeVideoId(item.url);
+                      const imageId = getYouTubeVideoId(item.url);
 
-                    return (
-                      <div
-                        className="flex flex-col gap-y-3 w-[20rem]"
-                        key={index}
-                      >
+                      return (
                         <div
-                          className="relative cursor-pointer"
-                          onClick={() => {
-                            window.open(item.url, '_blank');
-                          }}
+                          className="flex flex-col gap-y-3 w-[20rem]"
+                          key={index}
                         >
-                          <img
-                            src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
-                            className="w-full aspect-video"
-                          />
-                          <img
-                            src="/icons/play.svg"
-                            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                          />
+                          <div
+                            className="relative cursor-pointer"
+                            onClick={() => {
+                              window.open(item.url, '_blank');
+                            }}
+                          >
+                            <img
+                              src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
+                              className="w-full aspect-video"
+                            />
+                            <img
+                              src="/icons/play.svg"
+                              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                            />
+                          </div>
+                          <p className="text-center font-medium">
+                            {item.title}
+                          </p>
                         </div>
-                        <p className="text-center font-medium">
-                          {item.title}
-                        </p>
-                      </div>
-                    );
-                  })
+                      );
+                    })
                   : null}
               </div>
             </div>

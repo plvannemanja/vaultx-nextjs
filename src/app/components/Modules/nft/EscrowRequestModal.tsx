@@ -9,8 +9,8 @@ import FileInput from '../../ui/FileInput';
 
 const validateSchema = z.object({
   email: z.string().email('Invalid email address'),
-  phoneNumber: z.string(),
-  request: z.string(),
+  phoneNumber: z.string().nonempty('Phone number is required.'),
+  request: z.string().nonempty('Dispute request is required.'),
 });
 
 import {
@@ -24,6 +24,7 @@ import { z } from 'zod';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { CreateSellService } from '@/services/createSellService';
 import BasicLoadingModal from './BasicLoadingModal';
+import { useToast } from '@/hooks/use-toast';
 export default function EscrowRequestModal({
   onClose,
   fetchNftData,
@@ -32,7 +33,7 @@ export default function EscrowRequestModal({
   fetchNftData: () => void;
 }) {
   const { nftId } = useNFTDetail();
-
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
 
   const [email, setEmail] = useState('');
@@ -45,6 +46,7 @@ export default function EscrowRequestModal({
   const salesService = new CreateSellService();
 
   const releseEscrowRequest = async () => {
+    let validError = false;
     try {
       setStep(2);
       const result = validateSchema.safeParse({
@@ -53,8 +55,10 @@ export default function EscrowRequestModal({
         request: description,
       });
 
-      if (!result.success) throw new Error(result.error.message);
-
+      if (!result.success) {
+        validError = true;
+        throw new Error(result.error.message);
+      }
       const formData = new FormData();
       formData.append('nftId', nftId);
       formData.append('request', description);
@@ -69,6 +73,17 @@ export default function EscrowRequestModal({
       await fetchNftData();
       setStep(3);
     } catch (error) {
+      if (validError) {
+        toast({
+          title: 'Input is invalid.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Already release requested or input is invalid.',
+          variant: 'destructive',
+        });
+      }
       console.log(error);
       onClose();
     }

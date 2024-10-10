@@ -9,35 +9,61 @@ import { useActiveAccount } from 'thirdweb/react';
 import NftServices from '@/services/nftService';
 import { nftServices } from '@/services/supplier';
 
-export default function TransferModal({ onClose, fetchNftData }: {
+export default function TransferModal({
+  onClose,
+  fetchNftData,
+}: {
   onClose: () => void;
   fetchNftData: () => void;
 }) {
-  const { NFTDetail, nftId } = useNFTDetail();
+  const { NFTDetail, nftId, burnable } = useNFTDetail();
   const activeAccount = useActiveAccount();
-  const [toAddress, setToAddress] = useState("");
+  const [toAddress, setToAddress] = useState('');
   const nftService = new NftServices();
 
   const handleTransfer = async () => {
     try {
       if (!isAddress(toAddress)) {
-        throw new Error("Transfer address is not valid.");
+        throw new Error('Transfer address is not valid.');
       }
 
+      let transactionHash = '';
       if (NFTDetail?.minted) {
-        await transferNFT(activeAccount?.address as Address, toAddress, NFTDetail.tokenId, activeAccount);
+        transactionHash = await transferNFT(
+          activeAccount?.address as Address,
+          toAddress,
+          NFTDetail.tokenId,
+          activeAccount,
+        );
       }
 
       await nftServices.transfer({
         nftId,
-        toAddress
+        toAddress,
+        transferHash: transactionHash,
       });
 
       await fetchNftData();
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  if (!burnable)
+    return (
+      <div className="flex flex-col gap-y-5 w-full">
+        <Label className="text-lg font-medium">Transfer RWA</Label>
+        <p>
+          {
+            `You can't transfer current NFT. Only owner and not saled NFT can be transfered.`
+          }
+        </p>
+        <div className="flex gap-x-4 justify-center my-3 px-4">
+          <BaseButton title="Close" variant="secondary" onClick={onClose} />
+        </div>
+      </div>
+    );
+
   return (
     <div className="flex flex-col gap-y-5 w-full">
       <Label className="text-lg font-medium">Transfer RWA</Label>
@@ -48,21 +74,17 @@ export default function TransferModal({ onClose, fetchNftData }: {
         <Input
           placeholder="Recipient Address..."
           className="w-full"
-          value={toAddress ?? ""}
+          value={toAddress ?? ''}
           onChange={(e) => setToAddress((e.target as any).value)}
         />
       </div>
 
       <div className="flex gap-x-4 justify-center my-3 px-4">
+        <BaseButton title="Cancel" variant="secondary" onClick={onClose} />
         <BaseButton
           title="Confirm"
           variant="primary"
           onClick={() => handleTransfer()}
-        />
-        <BaseButton
-          title="Cancel"
-          variant="secondary"
-          onClick={onClose}
         />
       </div>
     </div>

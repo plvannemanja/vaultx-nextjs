@@ -49,16 +49,16 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   });
 
   const [formData, setFormData] = useState<any>({
-    name: "",
-    symbol: "",
+    name: '',
+    symbol: '',
     logo: null,
     bannerImage: null,
     descriptionImage: null,
-    description: "",
-    website: "",
-    twitter: "",
-    facebook: "",
-    instagram: "",
+    description: '',
+    website: '',
+    twitter: '',
+    facebook: '',
+    instagram: '',
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -73,16 +73,16 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
   const cancelChanges = () => {
     setFormData({
-      name: "",
-      symbol: "",
+      name: '',
+      symbol: '',
       logo: null,
       bannerImage: null,
       descriptionImage: null,
-      description: "",
-      website: "",
-      twitter: "",
-      facebook: "",
-      instagram: "",
+      description: '',
+      website: '',
+      twitter: '',
+      facebook: '',
+      instagram: '',
     });
   };
 
@@ -196,7 +196,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       if (editMode) {
         try {
           let response;
-          data.append("curationId", editMode?._id);
+          data.append('curationId', editMode?._id);
           if (editMode) {
             response = await collectionServices.update(data);
           }

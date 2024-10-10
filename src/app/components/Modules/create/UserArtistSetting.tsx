@@ -17,16 +17,14 @@ const UserArtistSetting = () => {
   const { userArtists: data, setUserArtists: setData } = useCreateNFT();
 
   const totalPages = useMemo(() => {
-    return Math.ceil(data.length / itemsPerPage)
+    return Math.ceil(data.length / itemsPerPage);
   }, [data]);
 
-
-  const currentItems = useMemo(() => (
-    data.slice(
-      (currentPage - 1) * itemsPerPage,
-      currentPage * itemsPerPage
-    )
-  ), [data, currentPage, itemsPerPage])
+  const currentItems = useMemo(
+    () =>
+      data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+    [data, currentPage, itemsPerPage],
+  );
 
   // Handle page change
   const handlePageChange = (page) => {
@@ -38,7 +36,7 @@ const UserArtistSetting = () => {
   const fetchUserArtists = async () => {
     const userArtists = await getUserArtists();
     setData(userArtists);
-  }
+  };
 
   useEffect(() => {
     fetchUserArtists();
@@ -53,7 +51,7 @@ const UserArtistSetting = () => {
   const handleDelete = async (item: IUserArtist) => {
     try {
       await deleteUserArtist({
-        id: item._id
+        id: item._id,
       });
 
       fetchUserArtists();
@@ -64,13 +62,15 @@ const UserArtistSetting = () => {
         duration: 2000,
       });
     }
-  }
+  };
 
   return (
     <div className="h-auto p-6 bg-dark-700 rounded-2xl flex flex-col justify-start items-start gap-3">
       <BaseDialog
         isOpen={edit}
-        onClose={(val) => { setEdit(val) }}
+        onClose={(val) => {
+          setEdit(val);
+        }}
         className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
       >
         <UserArtistModal editUser={editUser} />
@@ -79,12 +79,15 @@ const UserArtistSetting = () => {
         <div className="flex-grow text-white text-xl font-extrabold font-manrope">
           Add Properties Template
         </div>
-        <div className="flex justify-start items-center gap-3 cursor-pointer" onClick={() => {
-          setEditUser(null);
-          setTimeout(() => {
-            setEdit(true);
-          }, 200);
-        }}>
+        <div
+          className="flex justify-start items-center gap-3 cursor-pointer"
+          onClick={() => {
+            setEditUser(null);
+            setTimeout(() => {
+              setEdit(true);
+            }, 200);
+          }}
+        >
           <img src="/icons/add-new.svg" className="w-6 h-6" />
           <div className="text-white text-xl font-extrabold font-manrope">
             Add New template
@@ -126,16 +129,24 @@ const UserArtistSetting = () => {
               </div>
             </div>
             <div className="w-[35%] flex items-center gap-2">
-              <div className="w-6 h-6 cursor-pointer" onClick={() => {
-                setEditUser(item)
-                setTimeout(() => {
-                  setEdit(true);
-                }, 200);
-              }}>
+              <div
+                className="w-6 h-6 cursor-pointer"
+                onClick={() => {
+                  setEditUser(item);
+                  setTimeout(() => {
+                    setEdit(true);
+                  }, 200);
+                }}
+              >
                 <img src="/icons/edit.svg" className="w-6 h-6" />
               </div>
             </div>
-            <div className="w-6 h-6 relative cursor-pointer" onClick={() => { handleDelete(item) }}>
+            <div
+              className="w-6 h-6 relative cursor-pointer"
+              onClick={() => {
+                handleDelete(item);
+              }}
+            >
               <img src="/icons/trash.svg" className="w-6 h-6" />
             </div>
           </div>

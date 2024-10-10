@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { userServices } from '@/services/supplier';
 import { AxiosError } from 'axios';
+import { useActiveAccount } from 'thirdweb/react';
 
 const signUpSchema = z.object({
   nickname: z
@@ -29,7 +30,7 @@ export function SignUpModal() {
     axios?: string;
   }>({});
   const [step, setStep] = useState(1);
-
+  const activeAccount = useActiveAccount();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

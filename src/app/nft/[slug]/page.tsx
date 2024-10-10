@@ -27,24 +27,23 @@ import {
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import { deliveryTime } from '@/lib/helper';
+import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 
 function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
   const favoriteService = new FavoriteService();
-  const createSellService = new CreateSellService();
   const { toast } = useToast();
-
+  const { user } = useGlobalContext();
   const {
     NFTDetail: data,
     setNFTDetail: setData,
     setNftId,
     setLikes,
     setLiked,
-    type,
     setType,
+    setBurnable,
     setActivityList,
   } = useNFTDetail();
-  const [user, setUser] = useState(null);
 
   const getArtitsLikes = async () => {
     try {
@@ -75,29 +74,17 @@ function PageDetail({ params }: { params: { slug: string } }) {
     }
   };
 
-  const getUser = async () => {
-    try {
-      const user = await userServices.getSingleUser();
-
-      if (user.data && user.data.user) {
-        setUser(user.data.user);
-      }
-
-      return user;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleNFTType = async (nft: any, userData: any) => {
-    if (nft?.owner?.wallet?.toLowerCase() === userData.wallet?.toLowerCase()) {
+  const handleNFTType = async (nft: any) => {
+    let burnable = false;
+    if (nft?.owner?.wallet?.toLowerCase() === user?.wallet?.toLowerCase()) {
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||
         nft?.saleId?.saleStatus === 'NotForSale'
-      )
+      ) {
         setType('resell');
-      else if (nft?.saleId?.saleStatus === 'CancellationRequested')
+        burnable = true;
+      } else if (nft?.saleId?.saleStatus === 'CancellationRequested')
         setType('CancelRequested');
       else if (nft?.saleId?.saleStatus === 'Ordered') {
         const purchaseDate = new Date(nft?.saleId?.ItemPurchasedOn).getTime();
@@ -112,7 +99,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
       } else {
         setType('remove');
       }
-    } else {
+    } else if (user?.wallet) {
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||
@@ -124,11 +111,14 @@ function PageDetail({ params }: { params: { slug: string } }) {
         nft?.saleId?.saleStatus === 'Ordered' ||
         nft?.saleId?.saleStatus === 'Dispute'
       ) {
-        if (nft?.saleId?.saleWinner === userData?._id) setType('release');
+        if (nft?.saleId?.saleWinner === user?._id) setType('release');
         else setType('NotForSale');
       } else if (nft?.saleId?.saleStatus === 'Active') setType('buy');
       else setType('bid');
+    } else {
+      setType('');
     }
+    setBurnable(burnable);
   };
 
   const getAllNftActivity = async () => {
@@ -156,11 +146,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
 
       setData(response.data.nft);
       if (response.data.nft) {
-        const user = await getUser();
-        if (user.data && user.data.user) {
-          setUser(user.data.user);
-          await handleNFTType(response.data.nft, user.data.user);
-        }
+        await handleNFTType(response.data.nft);
       }
     } catch (error) {
       console.log(error);
@@ -171,6 +157,13 @@ function PageDetail({ params }: { params: { slug: string } }) {
   useEffect(() => {
     fetchNftData();
   }, [params.slug]);
+
+  useEffect(() => {
+    if (user && data) {
+      handleNFTType(data);
+    }
+  }, [user, data]);
+
   return (
     <div className="flex flex-col gap-y-4 py-20 w-full  container px-10">
       {data && (
