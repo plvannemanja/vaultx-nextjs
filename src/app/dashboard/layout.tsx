@@ -11,7 +11,7 @@ export default function DashboardLayout({
 }) {
   return (
     <section className="flex gap-x-2">
-      <div className="hidden lg:block w-[310px] min-w-[310px]">
+      <div className="hidden lg:block xl:w-[310px]">
         <SideBar />
       </div>
       <div className="w-full lg:w-[100%] flex flex-col gap-y-2 px-[20px]">

@@ -24,7 +24,7 @@ import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
 import ConnectedCard from '../Cards/ConnectedCard';
 import { BaseDialog } from '../ui/BaseDialog';
-import { stat } from 'fs';
+import { useRouter } from 'next/navigation';
 
 const createCurationSchema = z.object({
   name: z.string(),
@@ -34,6 +34,7 @@ const createCurationSchema = z.object({
 
 export default function CreateCuration({ editMode }: { editMode?: any }) {
   const { toast } = useToast();
+  const router = useRouter();
   const activeAccount = useActiveAccount();
   const fileInputRef = useRef(null);
   const [file, setFile] = useState<any>(null);
@@ -45,8 +46,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   const [status, setStatus] = useState({
     error: false,
     loading: false,
-    active: true,
+    active: false,
   });
+  const [successId, setSuccessId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<any>({
     name: '',
@@ -183,6 +185,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           const response = await collectionServices.create(data);
           if (response) {
             setStatus({ error: false, loading: false, active: true });
+            setSuccessId(response?.data?.data._id);
           }
         } catch (error) {
           setStatus({ error: true, loading: true, active: true });
@@ -202,19 +205,29 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           }
 
           if (response) {
+            setSuccessId(editMode?._id);
             setStatus({ error: false, loading: false, active: true });
           }
         } catch (error) {
           setStatus({ error: true, loading: true, active: true });
         }
       }
-      setTimeout(() => {
-        window && window.location.reload();
-      }, 2000);
     } catch (error) {
       setStatus({ error: true, loading: true, active: true });
     }
   };
+
+  useEffect(() => {
+    if (successId && !status.active) {
+      toast({
+        title: 'Redirectiong...',
+        duration: 2000,
+      });
+      setTimeout(() => {
+        router.push(`/dashboard/curation/${successId}`);
+      }, 200);
+    }
+  }, [successId, status]);
 
   const handleVideo = (index: number, e: any, type: string) => {
     let temp = [...youtube];
@@ -281,8 +294,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
 
       {status.active && (
         <BaseDialog
-          isOpen={status.loading && !status.error}
-          onClose={(val) => setStatus({ ...status, loading: val })}
+          isOpen={status.active}
+          onClose={(val) => setStatus({ ...status, active: val })}
           className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
           modal={status.loading}
         >
@@ -450,7 +463,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             <Textarea
               value={formData.description ? formData.description : ''}
               onChange={(e) => {
-                debugger;
                 setFormData({
                   ...formData,
                   description: (e.target as any).value,

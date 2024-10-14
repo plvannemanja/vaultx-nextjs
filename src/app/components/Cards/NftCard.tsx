@@ -17,12 +17,12 @@ export default function NftCard({ data }: { data: INftCardProps }) {
   console.log('data', data);
   return (
     <>
-      <Card className="bg-transparent text-white border-none max-w-[100%]">
+      <Card className="bg-transparent text-white border-none max-w-[348px]">
         <CardContent className="aspect-square p-0 rounded-[20px]">
-          <div className="w-full overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
+          <div className="w-full h-[336px] overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
             <img
               src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-              className="rounded w-full object-contain hover:scale-110 transition-transform duration-300 min-h-[296px] max-h-[296px]"
+              className="rounded w-full object-cover hover:scale-110 transition-transform duration-300 min-h-[296px] max-h-[296px]"
               alt="nft-image"
               loading="lazy"
             />

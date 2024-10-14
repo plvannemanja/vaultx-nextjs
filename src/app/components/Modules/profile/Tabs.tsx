@@ -323,26 +323,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-            return {
-              ...item.nftId,
-            };
-          })
+          return {
+            ...item.nftId,
+          };
+        })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-            return {
-              ...item.artistId,
-            };
-          })
+          return {
+            ...item.artistId,
+          };
+        })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-            return {
-              ...item.collectionId,
-            };
-          })
+          return {
+            ...item.collectionId,
+          };
+        })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -574,11 +574,10 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       </div>
       {/* User section */}
       {tab === ProfileTabs.All && data[ProfileTabs.All] ? (
-        <div className="grid grid-cols-12 flex-wrap justify-center px-[20px] gap-5 my-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {data[ProfileTabs.All].map((item: any, index: number) => {
             return (
               <Link
-                className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
                 key={index}
                 href={`/nft/${item._id}`}
               >
@@ -738,32 +737,32 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           <div className="flex gap-5 flex-wrap">
             {favType === 'nft' && data[ProfileTabs.Favorite].likedNft
               ? data[ProfileTabs.Favorite].likedNft.map(
-                  (item: any, index: number) => {
-                    return <NftCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <NftCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'curation' && data[ProfileTabs.Favorite].likedCuration
               ? data[ProfileTabs.Favorite].likedCuration.map(
-                  (item: any, index: number) => {
-                    return <CurationCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <CurationCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'artist' && data[ProfileTabs.Favorite]
               ? data[ProfileTabs.Favorite].likedArtist.map(
-                  (item: any, index: number) => {
-                    return (
-                      <ArtistsCard
-                        key={index}
-                        image={item.avatar ? item.avatar.url : ''}
-                        title={item.username}
-                      />
-                    );
-                  },
-                )
+                (item: any, index: number) => {
+                  return (
+                    <ArtistsCard
+                      key={index}
+                      image={item.avatar ? item.avatar.url : ''}
+                      title={item.username}
+                    />
+                  );
+                },
+              )
               : null}
           </div>
         </div>
@@ -821,8 +820,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
                         {item?.saleId?.ItemPurchasedOn
                           ? new Date(item?.saleId?.ItemPurchasedOn)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
@@ -907,8 +906,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell>
                         {item?.createdAt
                           ? new Date(item?.createdAt)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell>{item?.state}</TableCell>

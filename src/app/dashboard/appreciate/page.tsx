@@ -90,19 +90,18 @@ export default function Page() {
       ) : null}
       <Filters setState={handleFilters} />
 
-      <div className="grid grid-cols-12 gap-x-[24px] gap-y-[52px] flex-wrap my-4 justify-center px-[20px] ">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-              return (
-                <Link
-                  className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 2xl:col-span-3"
-                  key={index}
-                  href={`/nft/${nft._id}`}
-                >
-                  <NftCard data={nft} />
-                </Link>
-              );
-            })
+            return (
+              <Link
+                key={index}
+                href={`/nft/${nft._id}`}
+              >
+                <NftCard data={nft} />
+              </Link>
+            );
+          })
           : null}
       </div>
     </div>
