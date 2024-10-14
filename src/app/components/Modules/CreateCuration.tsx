@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Input, LinkInput } from '@/components/ui/input';
 import FileInput from '../ui/FileInput';
 import { Textarea } from '@/components/ui/textarea';
 import BaseButton from '../ui/BaseButton';
@@ -479,7 +479,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             <div className="mt-5 flex gap-x-3">
               <div className="flex flex-col gap-y-2 basis-1/2">
                 <Label className="font-medium text-[11px]">Website</Label>
-                <Input
+                <LinkInput
                   value={formData.website ? formData.website : ''}
                   onChange={(e) =>
                     setFormData({
@@ -494,7 +494,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
                 <Label className="font-medium text-[11px]">X(Twitter)</Label>
-                <Input
+                <LinkInput
                   value={formData.twitter ? formData.twitter : ''}
                   onChange={(e) =>
                     setFormData({
@@ -511,7 +511,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             <div className="mt-2 flex gap-x-3">
               <div className="flex flex-col gap-y-2 basis-1/2">
                 <Label className="font-medium text-[11px]">Facebook</Label>
-                <Input
+                <LinkInput
                   value={formData.facebook ? formData.facebook : ''}
                   onChange={(e) =>
                     setFormData({
@@ -526,7 +526,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
                 <Label className="font-medium text-[11px]">Instagram</Label>
-                <Input
+                <LinkInput
                   value={formData.instagram ? formData.instagram : ''}
                   onChange={(e) =>
                     setFormData({
@@ -592,7 +592,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     <Label className="font-medium text-[11px]">
                       Video Link
                     </Label>
-                    <Input
+                    <LinkInput
                       value={item.url ? item.url : ''}
                       onChange={(e) => handleVideo(index, e, 'link')}
                       className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
