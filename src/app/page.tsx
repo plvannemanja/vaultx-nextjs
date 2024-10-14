@@ -13,6 +13,7 @@ import ExceptionalCard from './components/Cards/ExceptionalCard';
 import { useEffect, useState } from 'react';
 import { AutoCarousel } from './components/Carousels/AutoCarousel';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useGlobalContext } from './components/Context/GlobalContext';
 
 interface Isection1 {
   title: string;
@@ -57,11 +58,6 @@ interface Isection4 {
   }>;
 }
 
-interface Iimages {
-  homeAutority: Array<{ image: string; link: string }>;
-  bottomBaner: { image: string; link: string };
-}
-
 interface Icuration {
   logo: string;
   name: string;
@@ -95,7 +91,7 @@ export default function Home() {
   const [section2, setSection2] = useState<Isection2 | null>(null);
   const [section3, setSection3] = useState<Isection3 | null>(null);
   const [section4, setSection4] = useState<Isection4 | null>(null);
-  const [images, setImages] = useState<Iimages | null>(null);
+  const { mediaImages: images } = useGlobalContext();
   const [curations, setCurations] = useState<any[]>([]);
 
   useEffect(() => {
@@ -106,7 +102,6 @@ export default function Home() {
       const { data } = await axios.get(`${server_uri}/homepage/get-sections`);
 
       console.log('this is data', data);
-      const images = await getMedia();
       const curationsList: any[] = [];
 
       if (data.section3 && data.section3.box.length > 0) {
@@ -125,7 +120,6 @@ export default function Home() {
       setSection2(data.section2);
       setSection3(data.section3);
       setSection4(data.section4);
-      setImages(images);
       setCurations(curationsList);
     };
 

@@ -54,9 +54,7 @@ export default function TransferModal({
       <div className="flex flex-col gap-y-5 w-full">
         <Label className="text-lg font-medium">Transfer RWA</Label>
         <p>
-          {
-            `You can't transfer current NFT. Only owner and not saled NFT can be transfered.`
-          }
+          {`You can't transfer current NFT. Only owner and not saled NFT can be transfered.`}
         </p>
         <div className="flex gap-x-4 justify-center my-3 px-4">
           <BaseButton title="Close" variant="secondary" onClick={onClose} />

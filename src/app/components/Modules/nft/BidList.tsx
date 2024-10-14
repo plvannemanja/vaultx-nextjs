@@ -106,7 +106,6 @@ export default function BidList() {
 
   const getBids = async () => {
     try {
-      debugger;
       const {
         data: { bids },
       } = await createSellService.getNftBids({ nftId });
@@ -132,8 +131,9 @@ export default function BidList() {
                 <div className="flex w-full justify-between">
                   <span>Bid Offers</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </div>
               </DisclosureButton>
@@ -164,8 +164,8 @@ export default function BidList() {
                           <TableCell>
                             {item?.createdAt
                               ? new Date(item?.createdAt)
-                                .toLocaleString()
-                                .slice(0, 10)
+                                  .toLocaleString()
+                                  .slice(0, 10)
                               : '-/-'}
                           </TableCell>
                           <TableCell>
@@ -202,7 +202,7 @@ export default function BidList() {
                               <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
                                 <button
                                   className="w-full h-full"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 >
                                   Bidded
                                 </button>

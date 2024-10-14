@@ -2,31 +2,20 @@
 
 import CreateCuration from '@/app/components/Modules/CreateCuration';
 import CreateNft from '@/app/components/Modules/CreateNft';
-import { getMedia, userServices } from '@/services/supplier';
+import { userServices } from '@/services/supplier';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { contract } from '@/lib/contract';
-import {
-  prepareContractCall,
-  sendTransaction,
-  readContract,
-  resolveMethod,
-  prepareEvent,
-  getContractEvents,
-} from 'thirdweb';
 import { useActiveAccount } from 'thirdweb/react';
 import { isCurator } from '@/lib/helper';
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import RestrictiveModal from '@/app/components/Modals/RestrictiveModal';
 import Curation from '@/app/components/Modals/content/Curation';
 import Rwa from '@/app/components/Modals/content/Rwa';
+import { ensureValidUrl } from '@/utils/helpers';
+import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 
 export default function Page() {
-  // For banner image in the create section
-  const [banner, setBanner] = useState({
-    image: null,
-    link: null,
-  });
+  const { mediaImages } = useGlobalContext();
   const [step, setStep] = useState<any>({
     active: false,
     stage: 1,
@@ -65,21 +54,6 @@ export default function Page() {
       });
     }
   };
-
-  useEffect(() => {
-    const fetchMedia = async () => {
-      const response = await getMedia();
-
-      if (response && response.mintingBanner) {
-        setBanner({
-          image: response.mintingBanner.image,
-          link: response.mintingBanner.link,
-        });
-      }
-    };
-
-    fetchMedia();
-  }, []);
 
   return (
     <>
@@ -302,16 +276,19 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="flex min-h-[calc(100vh-88px)] max-h-[calc(100vh-88px)]  md:w-[49%]">
-            {banner.image && (
-              <div
-                className="w-full"
-                onClick={() => {
-                  window.open(banner.link, '_blank');
-                }}
+          <div className="flex min-h-[calc(100vh-88px)] max-h-[calc(100vh-88px)]  md:w-[49%] relative">
+            {mediaImages?.mintingBanner.image && (
+              <a
+                href={ensureValidUrl(mediaImages?.mintingBanner.link)}
+                target="_blank"
               >
-                <img src={banner.image} className="w-full max-h-[100%]" />
-              </div>
+                <Image
+                  src={mediaImages?.mintingBanner.image}
+                  alt="hero"
+                  layout="fill"
+                  objectFit="cover"
+                ></Image>
+              </a>
             )}
           </div>
         </div>

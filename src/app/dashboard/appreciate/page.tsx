@@ -6,18 +6,17 @@ import NftCard from '@/app/components/Cards/NftCard';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NftServices from '@/services/nftService';
-import { getMedia } from '@/services/supplier';
 import { useDebounce } from 'use-debounce';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import { ensureValidUrl } from '@/utils/helpers';
+import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 
 export default function Page() {
   const nftService = new NftServices();
   const [data, setData] = useState<any[]>([]);
   const [nfts, setNfts] = useState<any[]>([]);
-  const [hero, setHero] = useState<any>({});
-
-  const router = useRouter();
+  const { mediaImages } = useGlobalContext();
   const [filters, setFilters] = useState({
     searchInput: '',
     filter: {
@@ -71,29 +70,23 @@ export default function Page() {
     fetchData();
   }, [debounceFilter]);
 
-  useEffect(() => {
-    const fetchMedia = async () => {
-      const response = await getMedia();
-
-      if (response) {
-        setHero(response.appreciateTop);
-      }
-    };
-
-    fetchMedia();
-  }, []);
-
   return (
-    <div className="flex flex-col gap-y-4 px-4 ">
-      {hero?.image && hero.link ? (
-        <Image
-          src={hero.image}
-          alt="hero"
-          width={1000}
-          height={1000}
-          className="w-full object-fill max-h-[370px] rouded-[20px] mb-[14px]"
-          onClick={() => window.open(hero.link, '_blank')}
-        ></Image>
+    <div className="flex flex-col gap-y-4 px-4">
+      {mediaImages?.appreciateTop?.image && mediaImages?.appreciateTop.link ? (
+        <a
+          href={ensureValidUrl(mediaImages?.appreciateTop.link)}
+          target="_blank"
+        >
+          <div className="w-full max-w-[1582px] h-[300px] sm:h-[350px] md:h-[370px] mx-auto relative">
+            <Image
+              src={mediaImages?.appreciateTop.image}
+              alt="hero"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg mb-3.5"
+            ></Image>
+          </div>
+        </a>
       ) : null}
       <Filters setState={handleFilters} />
 

@@ -68,10 +68,13 @@ export default function NFTDescription() {
                 </div>
               </DisclosureButton>
               <DisclosurePanel className=" pt-4 pb-2 text-sm  text-white  rounded-b-lg">
-                <p className="text-[#ffffff53] text-[14px] font-normal azeret-mono-font">
-                  {data.description}{' '}
-                  <span className="text-[#DDF247]">See more</span>
-                </p>
+                <p
+                  className="text-[#ffffff53] text-[14px] font-normal azeret-mono-font"
+                  dangerouslySetInnerHTML={{
+                    __html: data.description.replace(/\r\n|\n/g, '<br />'),
+                  }}
+                ></p>
+                <span className="text-[#DDF247]">See more</span>
               </DisclosurePanel>
             </>
           )}

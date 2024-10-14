@@ -144,14 +144,13 @@ export default function Page() {
   }, []);
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <div className="relative">
+      <div className="relative w-full h-[340px]">
         <Image
           src="/images/work-default.png"
           alt="hero"
-          width={100}
-          height={100}
-          quality={100}
-          className="w-full object-cover rounded-xl h-[340px]"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-xl"
         />
 
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">

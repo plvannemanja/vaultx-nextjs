@@ -16,14 +16,24 @@ import {
 } from 'thirdweb/react';
 import { SignUpModal } from '../Modules/SignUp';
 import { Address } from 'thirdweb';
-import { authenticationServices } from '@/services/supplier';
+import { authenticationServices, getMedia } from '@/services/supplier';
 import { createCookie } from '@/lib/cookie';
 import { checksumAddress } from 'viem';
+
+export interface Iimages {
+  homeAutority: Array<{ image: string; link: string }>;
+  bottomBaner: { image: string; link: string };
+  appreciateTop: { image: string; link: string };
+  curationTop: { image: string; link: string };
+  mintingBanner: { image: string; link: string };
+}
 
 interface IGlobalContext {
   fee: number;
   user: any;
   fetchUser: () => void;
+  mediaImages: Iimages | null;
+  setMediaImages: (data: Iimages | null) => void;
 }
 
 interface GlobalProviderProps {
@@ -36,9 +46,16 @@ const globalContext = createContext<IGlobalContext | undefined>(undefined);
 export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [fee, setFee] = useState<number>(0);
   const [user, setUser] = useState<any>(null);
+  const [mediaImages, setMediaImages] = useState<Iimages | null>(null);
+
   const fetchProtocolFee = async () => {
     let fee = await protocolFee();
     setFee(Number(fee) / 100);
+  };
+
+  const fetchMedia = async () => {
+    const images = await getMedia();
+    setMediaImages(images);
   };
 
   const activeChain = useActiveWalletChain();
@@ -74,6 +91,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   useEffect(() => {
     fetchProtocolFee();
+    fetchMedia();
     if (activeAccount?.address) {
       fetchUser();
     }
@@ -90,6 +108,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
         fee,
         user,
         fetchUser,
+        mediaImages,
+        setMediaImages,
       }}
     >
       <SignUpModal />

@@ -298,8 +298,9 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Buyer Information</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -378,8 +379,9 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Shipping Address*</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -532,8 +534,9 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Contact Information For Seller</span>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -564,8 +567,9 @@ export default function BidModal({
                       Consent for collection and usage of personal information
                     </span>
                     <ChevronUpIcon
-                      className={`${open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                     />
                   </div>
                   <p className="text-[#ffffff53] text-[16px] azeret-mono-font">

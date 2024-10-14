@@ -3,11 +3,13 @@
 import CurationCard from '@/app/components/Cards/CurationCard';
 import { useEffect, useState } from 'react';
 import CurationSearch from '@/app/components/Filters/CurationSearch';
-import { collectionServices, getMedia } from '@/services/supplier';
+import { collectionServices } from '@/services/supplier';
 import { useToast } from '@/hooks/use-toast';
 import { SkeletonCard } from '@/app/components/Skelton/Skelton';
 import { useDebounce } from 'use-debounce';
 import Image from 'next/image';
+import { ensureValidUrl } from '@/utils/helpers';
+import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 
 export default function Page() {
   const { toast } = useToast();
@@ -24,7 +26,7 @@ export default function Page() {
   });
 
   const [debouncedFilter] = useDebounce(filters, 1000);
-  const [hero, setHero] = useState<any>(null);
+  const { mediaImages } = useGlobalContext();
 
   const handleState = (e: any) => {
     let obj = {
@@ -88,16 +90,7 @@ export default function Page() {
       duration: 2000,
     });
 
-    const fetchMedia = async () => {
-      const response = await getMedia();
-
-      if (response) {
-        setHero(response ? response.curationTop : null);
-      }
-    };
-
     fetchCollection();
-    fetchMedia();
   }, []);
 
   useEffect(() => {
@@ -106,17 +99,18 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      {hero?.image && hero.link ? (
-        <Image
-          src={hero.image}
-          alt="hero"
-          width={1000}
-          height={1000}
-          className="w-full rounded-xl object-fill mb-[19px]"
-          onClick={() => {
-            window.open(hero.link, '_blank');
-          }}
-        />
+      {mediaImages?.curationTop?.image && mediaImages?.curationTop.link ? (
+        <a href={ensureValidUrl(mediaImages?.curationTop.link)} target="_blank">
+          <div className="w-full max-w-[1550px] h-[300px] sm:h-[350px] md:h-[370px] mx-auto relative">
+            <Image
+              src={mediaImages?.curationTop.image}
+              alt="hero"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-xl mb-4"
+            ></Image>
+          </div>
+        </a>
       ) : null}
       <>
         <CurationSearch setState={handleState} />

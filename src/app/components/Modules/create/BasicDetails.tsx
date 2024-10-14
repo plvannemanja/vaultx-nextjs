@@ -309,7 +309,7 @@ export default function BasicDetails({
               }}
               className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
               type="text" // Change to 'text' to allow decimals
-              placeholder=""
+              placeholder="Please write the selling price in USD($), not cryptocurrency."
             />
           </div>
 

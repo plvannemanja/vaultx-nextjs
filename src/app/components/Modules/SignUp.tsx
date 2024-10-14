@@ -11,11 +11,7 @@ const signUpSchema = z.object({
   nickname: z
     .string()
     .min(3, { message: 'Nick name must be at least 3 characters long' })
-    .max(20, { message: 'Nick name must be at most 20 characters long' })
-    .regex(/^[a-zA-Z0-9_]+$/, {
-      message:
-        'Nick name can only contain alphanumeric characters and underscores',
-    }),
+    .max(20, { message: 'Nick name must be at most 20 characters long' }),
   email: z.string().email({ message: 'Invalid email address' }),
 });
 
@@ -50,6 +46,7 @@ export function SignUpModal() {
       const data = new FormData();
       data.append('username', formData.nickname);
       data.append('email', formData.email);
+      debugger;
       await userServices.updateProfile(data);
       await fetchUser();
       setLoading(false);

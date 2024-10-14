@@ -12,6 +12,15 @@ export function getYouTubeVideoId(url: string) {
   return match && match[7]?.length === 11 ? match[7] : null;
 }
 
+export function ensureValidUrl(url) {
+  // Check if the URL already includes the protocol
+  if (!/^https?:\/\//i.test(url)) {
+    // If not, add "http://" or "https://"
+    return `https://${url}`;
+  }
+  return url;
+}
+
 export function removeEmptyStrings(obj: any) {
   Object.keys(obj).forEach((key) => {
     if (obj[key] === '') {

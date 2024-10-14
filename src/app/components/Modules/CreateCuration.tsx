@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import FileInput from '../ui/FileInput';
 import { Textarea } from '@/components/ui/textarea';
 import BaseButton from '../ui/BaseButton';
-import Image from 'next/image';
 import { collectionServices } from '@/services/supplier';
 import { z } from 'zod';
 import ErrorModal from './create/ErrorModal';
@@ -16,6 +15,7 @@ import Upload from '../Icons/Upload';
 import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
 import {
   acceptedFormats,
+  ensureValidUrl,
   maxFileSize,
   removeEmptyStrings,
 } from '@/utils/helpers';
@@ -144,10 +144,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       data.append('logo', formData.logo);
       data.append('bannerImage', formData.bannerImage);
       data.append('descriptionImage', formData.descriptionImage);
-      data.append('website', formData.website);
-      data.append('twitter', formData.twitter);
-      data.append('facebook', formData.facebook);
-      data.append('instagram', formData.instagram);
+      data.append('website', ensureValidUrl(formData.website));
+      data.append('twitter', ensureValidUrl(formData.twitter));
+      data.append('facebook', ensureValidUrl(formData.facebook));
+      data.append('instagram', ensureValidUrl(formData.instagram));
       data.append('youtube', JSON.stringify(youtube));
 
       // let metaData = {
@@ -449,12 +449,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             <Label className="font-medium">Description*</Label>
             <Textarea
               value={formData.description ? formData.description : ''}
-              onChange={(e) =>
+              onChange={(e) => {
+                debugger;
                 setFormData({
                   ...formData,
                   description: (e.target as any).value,
-                })
-              }
+                });
+              }}
               className="w-full border-none bg-[#232323] rounded-[20px] placeholder-[#fff] h-[180px] resize-none py-[15px] px-[26px]"
               placeholder="Please describe your product"
             />
@@ -477,7 +478,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your website link"
-                  showIcon
                 />
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
@@ -493,7 +493,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your twitter link"
-                  showIcon
                 />
               </div>
             </div>
@@ -511,7 +510,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your facebook link"
-                  showIcon
                 />
               </div>
               <div className="flex flex-col gap-y-2 basis-1/2">
@@ -527,7 +525,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter your instagram link"
-                  showIcon
                 />
               </div>
             </div>

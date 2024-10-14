@@ -30,8 +30,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { debug } from 'console';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface WalletDetailProps {
   walletId: WalletId;
@@ -133,16 +133,15 @@ export default function Menu() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="my-1"
-          onSelect={(event: Event) => {
-            router.push('/dashboard/profile');
-          }}
-        >
-          My Profile
+        <DropdownMenuItem className="my-1">
+          <Link href="/dashboard/profile">My Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="my-1">My Favorite</DropdownMenuItem>
-        <DropdownMenuItem className="my-1">My Order</DropdownMenuItem>
+        <DropdownMenuItem className="my-1">
+          <Link href="/dashboard/favourite">My Favorite</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="my-1">
+          <Link href="/dashboard/order">My Order</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem className="my-1">
           Language
           <div className="w-[109px] h-8 absolute right-0 justify-start items-center gap-14 inline-flex">
@@ -154,8 +153,12 @@ export default function Menu() {
             </div>
           </div>
         </DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Help Center</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/dashboard/settings">Settings</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/dashboard/helpCenter">Help Center</Link>
+        </DropdownMenuItem>
         <div className="w-full mt-4">
           <div className="mx-auto flex">
             <div className="justify-center w-full items-center">

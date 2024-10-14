@@ -10,6 +10,7 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
@@ -93,6 +94,7 @@ export default function UserArtist() {
   useEffect(() => {
     fetchUserArtists();
   }, []);
+
   return (
     <Popover
       open={open}
@@ -125,6 +127,7 @@ export default function UserArtist() {
         style={{ width: 'var(--radix-popover-trigger-width)' }}
       >
         <Command className="w-full bg-dark-900">
+          <CommandInput placeholder="Search by artist name..." />
           <CommandList>
             <CommandEmpty>There are no registered artists.</CommandEmpty>
             <CommandGroup>
@@ -132,7 +135,7 @@ export default function UserArtist() {
                 userArtists.map((item, index) => (
                   <CommandItem
                     key={index}
-                    value={item._id}
+                    value={item?.name}
                     onSelect={() => {
                       setSelectedArtist(item._id);
                       setOpen(false);
