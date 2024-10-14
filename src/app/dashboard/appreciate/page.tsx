@@ -35,7 +35,7 @@ export default function Page() {
           price: data.price.value,
         },
         category:
-          data.category.label === 'Test Category' ? null : data.category.label,
+          data.category.label === 'Category' ? null : data.category.label,
       });
     }
   };
@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       toast({
-        title: 'Fetching NFTs...',
+        title: 'Fetching RWAs...',
         duration: 2000,
       });
 
