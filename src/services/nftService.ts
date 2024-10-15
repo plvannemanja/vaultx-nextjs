@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { getCookie } from '../lib/cookie';
 
 const server_uri =
-  process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
+  process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
 
 interface NftData {
   [key: string]: any; // Define this more strictly based on your actual data structure
