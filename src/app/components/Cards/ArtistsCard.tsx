@@ -12,23 +12,20 @@ export default function ArtistsCard({
   subtitle2?: string;
 }) {
   return (
-    <div className="max-w-[30rem] w-[25rem] min-w-[20rem] relative">
+    <div className="w-[420px] h-[470px] relative">
       <a className="w-full" href={subtitle2 ? subtitle2 : ''}>
         <Image
           src={image}
-          width={100}
-          height={100}
-          className="w-full h-full object-cover"
+          layout='fill'
+          objectFit='cover'
           alt="artist-pic"
+          className='rounded'
         />
 
         <div className="absolute bottom-8 w-[90%] mx-auto ml-4 flex flex-col gap-y-4 text-white font-bold">
           <hr className="h-[0.15rem] bg-gradient-to-r from-blue-500 via-green-400 to-orange-400" />
           <p>{title}</p>
-          {
-            subtitle1 && 
-            <p>{subtitle1}</p>
-          }
+          {subtitle1 && <p>{subtitle1}</p>}
         </div>
       </a>
     </div>

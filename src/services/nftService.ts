@@ -1,7 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import { getCookie } from '../lib/cookie';
 
-const server_uri = process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
+const server_uri =
+  process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
 
 interface NftData {
   [key: string]: any; // Define this more strictly based on your actual data structure
@@ -63,6 +64,22 @@ class NftServices {
 
   async addView(data: NftData): Promise<AxiosResponse<any>> {
     return axios.post(`${server_uri}/nft/add-view`, data);
+  }
+
+  async transfer(data: NftData): Promise<AxiosResponse<any>> {
+    return axios.post(`${server_uri}/nft/transfer`, data, {
+      headers: {
+        authorization: 'Bearer ' + this.token,
+      },
+    });
+  }
+
+  async editNFT(data: NftData): Promise<AxiosResponse<any>> {
+    return axios.post(`${server_uri}/nft/editNft`, data, {
+      headers: {
+        authorization: 'Bearer ' + this.token,
+      },
+    });
   }
 
   async getNftOfUser(data: NftData): Promise<AxiosResponse<any>> {

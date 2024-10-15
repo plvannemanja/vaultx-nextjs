@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@headlessui/react';
@@ -8,43 +8,49 @@ import { Label } from '@/components/ui/label';
 import BaseButton from '../../ui/BaseButton';
 import FileInput from '../../ui/FileInput';
 import PropertiesTemplate from './PropertiesTemplate';
-import { StepType } from '../CreateNft';
-import { useActiveAccount } from 'thirdweb/react';
-const category = ['Fine Art', 'Abstract Art', 'Pop Art', 'Test Category'];
-type SplitItem =  {
-  address: string;
-  percentage: number;
-}
+import { useCreateNFT } from '../../Context/CreateNFTContext';
+import { BaseDialog } from '../../ui/BaseDialog';
+import PropertiesInfo from '../Properties';
+import { isAddress } from 'thirdweb';
+import { isValidNumber } from '@/utils/helpers';
+import { CategoryService } from '@/services/catergoryService';
+
 export default function AdvanceDetails({
-  //   handler,
+  handler,
   nextStep,
 }: {
-  //   handler: (data: any, error: any) => void;
-  nextStep: (next?: boolean, data?: any, error?: any, type?: StepType) => void;
+  handler: (data: any, error: any) => void;
+  nextStep: (next?: boolean) => void;
 }) {
+  const {
+    advancedOptions: options,
+    setAdvancedOptions: setOptions,
+    paymentSplits,
+    setPaymentSplits,
+    advancedDetails,
+    setAdvancedDetails,
+  } = useCreateNFT();
 
-  const activeAccount = useActiveAccount();
-  const [options, setOptions] = useState({
-    freeMint: false,
-    royalties: false,
-    unlockable: false,
-    category: false,
-    split: false,
-  });
-  const [splits, setSplits] = useState<SplitItem[]>([{
-    address: '',
-    percentage: 0,
-  }]);
-  const [unlockableFiles, setUnlockableFiles] = useState<any>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [unlockableFiles, setUnlockableFiles] = useState<any[]>(
+    advancedDetails.certificates,
+  );
+
+  useEffect(() => {
+    setAdvancedDetails({
+      ...advancedDetails,
+      certificates: unlockableFiles,
+    });
+  }, [unlockableFiles]);
+
   const [formData, setFormData] = useState<any>({
-    royaltyAddress: "0x0000000000000000000000000000000000000000",
-    royalty: 0,
+    royaltyAddress: null,
+    royalty: null,
     unlockable: null,
     category: null,
     address: null,
     percentage: null,
   });
-  const [selectedProperty, setSelectedProperty] = useState<any>(null);
 
   const handleFileChange = (file: any, index: number) => {
     const newFiles = unlockableFiles.map((item: any, i: number) => {
@@ -66,61 +72,60 @@ export default function AdvanceDetails({
   };
 
   const addSplit = () => {
-    const newSplit = {
-      address: '0x0000000000000000000000000000000000000000',
-      percentage: 0,
-    };
-
-    setSplits([...splits, newSplit]);
+    setPaymentSplits([
+      ...paymentSplits,
+      { paymentWallet: '', paymentPercentage: BigInt(0) },
+    ]);
   };
 
   const removeSplit = (index: number) => {
-    const newSplits = splits.filter((item: any, i: number) => i !== index);
-
-    setSplits([...newSplits]);
+    if (paymentSplits.length > 1) {
+      const newSplits = paymentSplits.filter((_, i) => i !== index);
+      setPaymentSplits(newSplits);
+    }
   };
 
-  const setPaymentSplit = (
+  const updateSplit = (
     index: number,
-    key: keyof SplitItem,
-    value: string,
+    field: 'paymentWallet' | 'paymentPercentage',
+    value: string | bigint,
   ) => {
-    const updatedData = splits.map((item: any, i: number) =>
-      i === index ? { ...item, [key]: value } : item,
-    );
-
-    setSplits([...updatedData]);
+    const newSplits = paymentSplits.map((split, i) => {
+      if (i === index) {
+        return {
+          ...split,
+          [field]: field === 'paymentPercentage' ? BigInt(value) : value,
+        };
+      }
+      return split;
+    });
+    setPaymentSplits(newSplits);
   };
 
   const toggleSwitch = (e: any) => {
     switch (e) {
       case 'free':
         setOptions({
-          ...options,
           freeMint: !options.freeMint,
         });
         break;
       case 'royalty':
         setOptions({
-          ...options,
           royalties: !options.royalties,
         });
         break;
       case 'unlockable':
         setOptions({
-          ...options,
           unlockable: !options.unlockable,
         });
         break;
       case 'category':
         setOptions({
-          ...options,
           category: !options.category,
         });
         break;
       case 'split':
         setOptions({
-          ...options,
           split: !options.split,
         });
         break;
@@ -134,95 +139,77 @@ export default function AdvanceDetails({
   };
 
   const create = async () => {
-    console.log('formData', formData);
-    // const err = [];
-    // if (!selectedProperty) {
-    //   err.push({ path: ['Properties'] });
-    // }
+    const err = [];
+    if (!advancedDetails.attributes) {
+      err.push({ path: ['Properties'] });
+    }
 
-    // if (options.royalties && !formData.royalty) {
-    //   err.push({ path: ['Royalties'] });
-    // }
+    if (options.royalties && !isAddress(advancedDetails.royaltyAddress)) {
+      err.push({ path: ['Royalties'] });
+    }
 
-    // if (options.catgory && !formData.category) {
-    //   err.push({ path: ['Category'] });
-    // }
+    if (options.category && !advancedDetails.category) {
+      err.push({ path: ['Category'] });
+    }
 
-    // if (options.unlockable && !formData.unlockable) {
-    //   err.push({ path: ['Unlockable Content'] });
-    // }
+    if (options.unlockable && !advancedDetails.unlockable) {
+      err.push({ path: ['Unlockable Content'] });
+    }
 
-    // if (options.split && !splits.data.length) {
-    //   err.push({ path: ['Split Payments'] });
-    // }
+    if (options.split) {
+      if (!paymentSplits.length) err.push({ path: ['Split Payments'] });
+      paymentSplits.forEach((split) => {
+        if (!isAddress(split.paymentWallet))
+          err.push({ path: ['Split Payments'] });
+      });
+    }
 
-    // if (err.length > 0) {
-    //   handler(null, JSON.stringify(err));
-    //   return;
-    // }
+    if (!advancedDetails.propertyTemplateId)
+      err.push({ path: ['Property Template'] });
 
-    // const data = new FormData();
-    // data.append('freeMinting', options.freeMint as any);
-    // data.append('royalty', formData.royalty);
-    // data.append('category', formData.category);
-    // data.append('unlockableContent', formData.unlockable);
-    // data.append(
-    //   'attributes',
-    //   JSON.stringify(
-    //     selectedProperty.attributes ? selectedProperty.attributes : [],
-    //   ),
-    // );
+    if (err.length > 0) {
+      handler(null, JSON.stringify(err));
+      return;
+    }
 
-    // for (let i = 0; i < unlockableFiles.length; i++) {
-    //   data.append('certificates', unlockableFiles[i]);
-    // }
-
-    const errors: { path: string[] }[] = [];
-
-    const addError = (field: string) => {
-      errors.push({ path: [field] });
-    };
-
-    // Validation checks
-    // if (!selectedProperty) addError('Properties');
-    // if (options.royalties && !formData.royalty) addError('Royalties');
-    // if (options.category && !formData.category) addError('Category');
-    // if (options.unlockable && !formData.unlockable)
-    //   addError('Unlockable Content');
-    // if (options.split && splits.data.length === 0) addError('Split Payments');
-
-    // // If there are errors, handle them and return early
-    // if (errors.length > 0) {
-    //   handler(null, JSON.stringify(errors));
-    //   return;
-    // }
-
-    // Create the data object using spreading and direct assignment
-    const data = {
-      freeMinting: String(options.freeMint),
-      royalty:
-        options.royalties == true ? { receiver: formData.royaltyAddress, percentage: formData.royalty } :
-        { receiver: activeAccount?.address, percentage: 0 },
-      category: formData.category || '',
-      unlockableContent: formData.unlockable || '',
-      attributes: selectedProperty?.attributes || [],
-      certificates: unlockableFiles, // Assuming this is a list of files
-      splits: options.split == true? splits : [{address: activeAccount?.address, percentage: 100}],
-    };
-
-    // handler(data, null);
-    nextStep(true, data, null, StepType.advanced);
+    handler({}, null);
+    nextStep(true);
   };
+
+  useEffect(() => {
+    if (options.split && paymentSplits.length === 0) {
+      setPaymentSplits([
+        {
+          paymentWallet: '',
+          paymentPercentage: BigInt(0),
+        },
+      ]);
+    }
+  }, [options.split]);
+
+  const fetchCategories = async () => {
+    try {
+      const categoryService = new CategoryService();
+      const {
+        data: { categories },
+      } = await categoryService.getAllCategories(0, 0);
+      setCategories(categories);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex gap-3 flex-wrap">
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
+      <div className="flex gap-3 grid grid-cols-1 lg:grid-cols-3 flex-wrap">
+        <div className="bg-dark px-3 py-2 grid-cols-1 sm:grid-cols-2 rounded-lg w-full flex justify-between items-center">
+          <div className="w-full flex flex-col gap-y-2">
             <p className="font-medium">Free Minting</p>
-            <p className="text-gray-500">
-              Free mint your nft. You don&apos;t need any gas fee
-            </p>
+            <p className="text-gray-500 azeret-mono-font">{`Free mint your nft. You don't need any gas fee `}</p>
           </div>
           <Switch
             id="free"
@@ -231,10 +218,12 @@ export default function AdvanceDetails({
           />
         </div>
 
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
+        <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
+          <div className="w-full flex flex-col gap-y-2">
             <p className="font-medium">Royalties</p>
-            <p className="text-gray-500">Earn a % on secondary sales</p>
+            <p className="text-gray-500 azeret-mono-font">
+              Earn a % on secondary sales
+            </p>
           </div>
           <Switch
             id="royalty"
@@ -243,10 +232,12 @@ export default function AdvanceDetails({
           />
         </div>
 
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
+        <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
+          <div className="w-full flex flex-col gap-y-2">
             <p className="font-medium">Unlockable Content</p>
-            <p className="text-gray-500">Only owner can view this content</p>
+            <p className="text-gray-500 azeret-mono-font">
+              Only owner can view this content
+            </p>
           </div>
           <Switch
             id="unlockable"
@@ -255,10 +246,12 @@ export default function AdvanceDetails({
           />
         </div>
 
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
+        <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
+          <div className="w-full flex flex-col gap-y-2">
             <p className="font-medium">Category</p>
-            <p className="text-gray-500">Put this item into category</p>
+            <p className="text-gray-500 azeret-mono-font">
+              Put this item into category
+            </p>
           </div>
           <Switch
             id="category"
@@ -267,10 +260,10 @@ export default function AdvanceDetails({
           />
         </div>
 
-        <div className="bg-dark px-3 py-2 rounded-lg w-[22rem] flex justify-between items-center">
-          <div className="w-[75%] flex flex-col gap-y-2">
+        <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
+          <div className="w- flex flex-col gap-y-2">
             <p className="font-medium">Split Payments</p>
-            <p className="text-gray-500">
+            <p className="text-gray-500 azeret-mono-font">
               Add multiple address to receive payments
             </p>
           </div>
@@ -285,27 +278,58 @@ export default function AdvanceDetails({
       <div className="flex flex-col gap-y-5">
         {options.royalties && (
           <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Royalties(%)</p>
-            <div className="flex gap-x-2">
-              <Input
-                className="bg-dark max-w-[22rem]"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    royaltyAddress: (e.target as any).value,
-                  })
-                }
-                placeholder="Address"
-                type="text"
-              />
-              <Input
-                className="bg-dark max-w-20"
-                onChange={(e) =>
-                  setFormData({ ...formData, royalty: (e.target as any).value })
-                }
-                placeholder="0"
-                type="number"
-              />
+            <p className="text-[20px] font-medium">Royalties</p>
+
+            <div className="grid grid-cols-12 gap-x-2">
+              <div className="col-span-4">
+                <Input
+                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  onChange={(e) =>
+                    setAdvancedDetails({
+                      ...advancedDetails,
+                      royaltyAddress: e.target.value,
+                    })
+                  }
+                  placeholder="Address"
+                  type="text"
+                  disabled={true}
+                  value={advancedDetails.royaltyAddress ?? ''}
+                />
+              </div>
+              <div className="col-span-1 flex">
+                <div className="relative">
+                  <Input
+                    className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+                    onChange={(e) => {
+                      let val = Number(e.target.value);
+                      setAdvancedDetails({
+                        ...advancedDetails,
+                        royalty: isValidNumber(val) ? val : 0,
+                      });
+                    }}
+                    placeholder="0"
+                    min={0}
+                    max={100}
+                    type="number"
+                    disabled={true}
+                    value={
+                      isValidNumber(advancedDetails.royalty)
+                        ? advancedDetails.royalty.toString()
+                        : ''
+                    }
+                  />
+                  <p className="absolute top-4 right-2 text-[#979797]">%</p>
+                </div>
+              </div>
+              <div className="col-span-2 hidden">
+                <div
+                  className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
+                  onClick={() => {}}
+                >
+                  <img src="/icons/add-new.svg" className="w-6 h-6" />
+                  <p className="text-center text-sm text-[#DDF247]">Add New</p>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -314,38 +338,95 @@ export default function AdvanceDetails({
           <div className="flex flex-col gap-y-3">
             <p className="text-lg font-medium">Unlockable Content</p>
             <Textarea
-              className="bg-dark p-4 rounded-md"
-              onChange={(e) =>
+              className="bg-[#232323] p-4 rounded-md azeret-mono-font"
+              onChange={(e) => {
                 setFormData({
                   ...formData,
                   unlockable: (e.target as any).value,
-                })
-              }
+                });
+                setAdvancedDetails({
+                  ...advancedDetails,
+                  unlockable: (e.target as any).value,
+                });
+              }}
               rows={4}
+              value={advancedDetails.unlockable}
               placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
             />
-            <div className="flex gap-x-4 items-center">
-              <p>File Selected</p>
-              <div
-                className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                onClick={() => {
-                  setUnlockableFiles([...unlockableFiles, null]);
-                }}
-              >
-                <img src="icons/plus.svg" alt="plus" className="w-4 h-4" />
-                <p className="text-neon">Add</p>
+            {unlockableFiles.length == 0 && (
+              <div className="flex gap-x-4 items-center">
+                <FileInput
+                  onFileSelect={(file: any) => handleFileChange(file, 0)}
+                  maxSizeInBytes={1024 * 1024}
+                  deSelect={true}
+                />
+                <img
+                  src="/icons/trash.svg"
+                  alt="trash"
+                  className="w-6 h-6 cursor-pointer"
+                  onClick={() => removeUnlockable(0)}
+                />
+                <div
+                  className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                  onClick={() => {
+                    if (unlockableFiles.length === 0) {
+                      setUnlockableFiles([null, null]);
+                    } else {
+                      setUnlockableFiles([...unlockableFiles, null]);
+                    }
+                  }}
+                >
+                  <img
+                    src="/icons/add-new.svg"
+                    alt="plus"
+                    className="w-4 h-4"
+                  />
+                  <p className="text-neon">Add</p>
+                </div>
               </div>
-            </div>
+            )}
             {unlockableFiles.map((item: any, index: number) => {
+              if (index == 0) {
+                return (
+                  <div className="flex gap-x-4 items-center" key={index}>
+                    <FileInput
+                      onFileSelect={(file: any) => handleFileChange(file, 0)}
+                      maxSizeInBytes={1024 * 1024}
+                    />
+                    <img
+                      src="/icons/trash.svg"
+                      alt="trash"
+                      className="w-6 h-6 cursor-pointer"
+                      onClick={() => removeUnlockable(0)}
+                    />
+                    <div
+                      className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                      onClick={() => {
+                        if (unlockableFiles.length === 0) {
+                          setUnlockableFiles([null, null]);
+                        } else {
+                          setUnlockableFiles([...unlockableFiles, null]);
+                        }
+                      }}
+                    >
+                      <img
+                        src="/icons/add-new.svg"
+                        alt="plus"
+                        className="w-4 h-4"
+                      />
+                      <p className="text-neon">Add</p>
+                    </div>
+                  </div>
+                );
+              }
               return (
                 <div className="flex gap-x-4 items-center" key={index}>
                   <FileInput
                     onFileSelect={(file: any) => handleFileChange(file, index)}
-                    key={index}
                     maxSizeInBytes={1024 * 1024}
                   />
                   <img
-                    src="icons/trash.svg"
+                    src="/icons/trash.svg"
                     alt="trash"
                     className="w-6 h-6 cursor-pointer"
                     onClick={() => removeUnlockable(index)}
@@ -361,16 +442,22 @@ export default function AdvanceDetails({
             <Label className="text-lg font-medium">Category</Label>
             <select
               aria-label="Select category"
-              className="h-10 rounded-md px-2 w-full"
+              // className="h-10 rounded-md px-2 w-full"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
               name="country"
-              onChange={(e) =>
-                setFormData({ ...formData, category: (e.target as any).value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, category: (e.target as any).value });
+                setAdvancedDetails({
+                  ...advancedDetails,
+                  category: (e.target as any).value,
+                });
+              }}
+              value={advancedDetails.category}
             >
               <option value="">Select</option>
-              {category.map((item: any) => (
-                <option key={item} value={item}>
-                  {item}
+              {categories.map((item: any) => (
+                <option key={item._id} value={item._id}>
+                  {item.name}
                 </option>
               ))}
             </select>
@@ -380,82 +467,72 @@ export default function AdvanceDetails({
         {options.split && (
           <div className="flex flex-col gap-y-3">
             <p className="text-lg font-medium">Split Payments (%)</p>
-            {/* <div className="flex gap-x-2">
-              <Input
-                className="bg-dark max-w-[22rem]"
-                onChange={(e) =>
-                  setFormData({ ...formData, address: (e.target as any).value })
-                }
-                placeholder="Address"
-                type="text"
-              />
-              <Input
-                className="bg-dark max-w-20"
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    percentage: (e.target as any).value,
-                  })
-                }
-                placeholder="%"
-                type="number"
-              />
-              <div
-                className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                onClick={addSplit}
-              >
-                <img src="icons/plus.svg" alt="plus" className="w-4 h-4" />
-                <p className="text-neon">Add</p>
-              </div>
-            </div> */}
-            <div className="flex flex-col gap-y-2">
-              {splits.map((item: any, index: number) => (
-                <div key={index} className="flex gap-x-2 items-center">
+            {paymentSplits.map((split, index) => (
+              <div key={index} className="grid grid-cols-12 gap-x-2">
+                <div className="col-span-4">
                   <Input
-                    className="bg-dark max-w-[22rem]"
+                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                    onChange={(e) =>
+                      updateSplit(index, 'paymentWallet', e.target.value)
+                    }
                     placeholder="Address"
                     type="text"
-                    value={item.address}
-                    onChange={(e) => {
-                      setPaymentSplit(index, 'address', e.target.value);
-                    }}
+                    disabled={true}
+                    value={split.paymentWallet}
                   />
-                  <Input
-                    className="bg-dark max-w-20"
-                    placeholder="%"
-                    type="number"
-                    value={item.percentage}
-                    onChange={(e) => {
-                      setPaymentSplit(index, 'percentage', e.target.value);
-                    }}
-                  />
-                  {index === 0 ? (
-                    <div
-                      className="flex gap-x-2 px-4 py-1 rounded-md items-center border-2 border-neon cursor-pointer"
-                      onClick={addSplit}
-                    >
-                      <img src="icons/plus.svg" alt="Add" className="w-4 h-4" />
-                      <p className="text-neon">Add</p>
-                    </div>
-                  ) : (
-                    <img
-                      src="icons/trash.svg"
-                      alt="Remove"
-                      className="w-6 h-6 cursor-pointer"
-                      onClick={() => removeSplit(index)}
+                </div>
+                <div className="col-span-1 flex">
+                  <div className="relative">
+                    <Input
+                      className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+                      onChange={(e) => {
+                        const value = BigInt(e.target.value); // Convert the input value to bigint
+                        updateSplit(index, 'paymentPercentage', value);
+                      }}
+                      placeholder="0"
+                      min={0}
+                      max={100}
+                      type="number"
+                      disabled={true}
+                      value={split.paymentPercentage.toString()} // Convert bigint to string for display
                     />
+                    <p className="absolute top-4 right-2 text-[#979797]">%</p>
+                  </div>
+                </div>
+                <div className="col-span-2 flex">
+                  {paymentSplits.length > 1 && (
+                    <button
+                      disabled={true}
+                      className="h-[52px] mx-4 hidden"
+                      onClick={() => removeSplit(index)}
+                    >
+                      <img
+                        src="/icons/trash.svg"
+                        alt=""
+                        className="cursor-pointer w-6 h-6"
+                      />
+                    </button>
+                  )}
+                  {index === paymentSplits.length - 1 && (
+                    <div
+                      className="hidden cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
+                      onClick={() => {
+                        // addSplit();
+                      }}
+                    >
+                      <img src="/icons/add-new.svg" className="w-6 h-6" />
+                      <p className="text-center text-sm text-[#DDF247]">
+                        Add New
+                      </p>
+                    </div>
                   )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         )}
 
-        <PropertiesTemplate
-          select={(e: any) => {
-            setSelectedProperty(e);
-          }}
-        />
+        <PropertiesTemplate addStatus={false} />
 
         <div className="flex gap-x-4 justify-center my-5">
           <BaseButton

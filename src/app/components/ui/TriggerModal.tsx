@@ -1,15 +1,23 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
+import React, { useState } from 'react';
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 
-export default function TriggerModal({ children, isOpen, close } : { children: React.ReactNode, isOpen: boolean, close: any }) {
-  const [open, setOpen] = useState(isOpen)
+export default function TriggerModal({
+  children,
+  isOpen,
+  close,
+}: {
+  children: React.ReactNode;
+  isOpen: boolean;
+  close: any;
+}) {
+  const [open, setOpen] = useState(isOpen);
 
   const handleClose = () => {
-    setOpen(false)
-    close()
-  }
+    setOpen(false);
+    close();
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-10">
@@ -29,5 +37,5 @@ export default function TriggerModal({ children, isOpen, close } : { children: R
         </div>
       </div>
     </Dialog>
-  )
+  );
 }

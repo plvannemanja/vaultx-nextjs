@@ -52,7 +52,17 @@ export class CreateSellService {
 
   async cancelRequest(data: any) {
     const token = getCookie('token');
-    return await axios.post(`${server_uri}/sale/cancelsale`, data, {
+    return await axios.post(`${server_uri}/sale/cancelsaleRequest`, data, {
+      headers: {
+        authorization: 'Bearer ' + token,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  }
+
+  async releaseRequest(data: any) {
+    const token = getCookie('token');
+    return await axios.post(`${server_uri}/sale/releaseRequest`, data, {
       headers: {
         authorization: 'Bearer ' + token,
         'Content-Type': 'application/x-www-form-urlencoded',

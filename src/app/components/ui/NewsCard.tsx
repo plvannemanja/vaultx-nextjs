@@ -16,7 +16,18 @@ export default function NewsCard({
   data,
 }: INewsCardProps) {
   return (
-    <div className="flex flex-col gap-y-10 text-white">
+    <div className="flex flex-col gap-y-10 text-white relative">
+      <img
+        src="/illustrations/news-1.png"
+        alt="neon-grid"
+        className="absolute hidden lg:block top-[-9rem] left-0 w-[14rem] h-[16rem]"
+      />
+      <img
+        src="/illustrations/news-1.png"
+        alt="neon-grid"
+        className="absolute hidden lg:block bottom-[-9rem] right-0 w-[14rem] h-[16rem]"
+      />
+
       <div className="flex flex-col gap-y-5 text-center">
         {heading}
         <p className="text-center px-10 text-gray-300 md:text-xl">
@@ -24,19 +35,19 @@ export default function NewsCard({
         </p>
       </div>
 
-      <div className="flex gap-3 lg:gap-6 w-full flex-wrap mx-auto justify-center">
-        <div className="w-[90%] lg:w-[45%]">
+      <div className="flex gap-3 lg:gap-6 max-w-[1582px] flex-wrap mx-auto justify-center">
+        <div className="w-[800px] h-[753px] relative">
           <Image
-            src="/pic.webp"
+            src="/images/news-big.png"
             alt="news"
-            width={200}
-            height={200}
-            className="rounded aspect-square w-full h-full"
+            layout='fill'
+            objectFit='cover'
+            className="rounded"
           />
         </div>
-        <div className="w-[90%] lg:w-[45%] grid grid-cols-2 grid-rows-3 gap-3 lg:gap-6">
+        <div className="grid grid-cols-2 grid-rows-3 gap-3 lg:gap-6">
           {data.slice(1).map((item, index) => (
-            <div key={index} className="w-full h-full relative">
+            <div key={index} className="w-[234px] h-[234px] relative">
               <Image
                 src={item.image}
                 alt="news"

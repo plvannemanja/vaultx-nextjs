@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        manrope: ['Manrope', 'Helvetica', 'Arial', 'sans-serif'],
+        manrope: ['Manrope', 'Helvetica', 'Arial', 'sans-serif', 'Azeret Mono'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -28,6 +28,7 @@ const config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
+          // DEFAULT: 'hsl(var(--primary))',
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
         },
@@ -55,6 +56,15 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        'dark-900': '#111111',
+        'dark-700': '#232323',
+        'dark-600': '#3a3a3a',
+        'dark-800': '#1e1e1e',
+        'gray-500': '#919191',
+        'gray-600': '#545454',
+        'light-200': '#dee8e8',
+        'yellow-400': '#ddf247',
+        'white-10': 'rgba(255, 255, 255, 0.1)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -74,6 +84,10 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      backgroundImage: {
+        'template-gradient':
+          'linear-gradient(101deg, rgba(255, 255, 255, 0.05) -0.78%, rgba(255, 255, 255, 0.01) 100%)',
       },
     },
   },

@@ -1,158 +1,145 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
-import { getProperties, upsertProperty } from '@/services/supplier';
+import {
+  deleteProperty,
+  getProperties,
+  upsertProperty,
+} from '@/services/supplier';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
+import PropertiesInfo from '../Properties';
+import { useToast } from '@/hooks/use-toast';
 
 const defaultAttributes = [
-  {
-    type: 'Type',
-    value: 'Write it here',
-  },
-  {
-    type: 'Medium',
-    value: 'Write it here',
-  },
-  {
-    type: 'Support',
-    value: 'Write it here',
-  },
-  {
-    type: 'Dimensions (cm)',
-    value: 'Write it here',
-  },
-  {
-    type: 'Signature',
-    value: 'Write it here',
-  },
-  {
-    type: 'Authentication',
-    value: 'Write it here',
-  },
+  { type: 'Type', value: 'Write it here' },
+  { type: 'Medium', value: 'Write it here' },
+  { type: 'Support', value: 'Write it here' },
+  { type: 'Dimensions (cm)', value: 'Write it here' },
+  { type: 'Signature', value: 'Write it here' },
+  { type: 'Authentication', value: 'Write it here' },
 ];
 
-export default function PropertiesTemplate({ select }: { select?: any }) {
-  const [selectedProperty, setSelectedProperty] = useState<any | null>(null);
-  const [data, setData] = useState([]);
-  const [propMod, setPropMod] = useState<any>({
-    by: null,
-    index: null,
-    type: false,
-    value: false,
-  });
-  const [property, setProperty] = useState({
-    id: null,
-    name: '',
-    attributes: [
-      {
-        type: 'Length',
-        value: '150cm',
-      },
-      {
-        type: 'Height',
-        value: '5cm',
-      },
-      {
-        type: 'Width',
-        value: '150cm',
-      },
-      {
-        type: 'Weight',
-        value: '5kg',
-      },
-    ],
-  });
+export default function PropertiesTemplate({
+  addStatus,
+}: {
+  addStatus: boolean;
+}) {
+  const { toast } = useToast();
+  const { advancedDetails, setAdvancedDetails } = useCreateNFT();
+  const [data, setData] = useState(advancedDetails.attributes);
+  const [isModalOpenTemplate, setIsModalOpenTemplate] = useState(false);
+  const [editableProperties, setEditableProperties] =
+    useState(defaultAttributes);
 
-  const modifyProp = (index: number, forType: string, value: string) => {
-    const newArr = property.attributes.map((item: any, idx) => {
-      if (idx === index) {
-        item[`${forType}`] = value;
-        item['key'] = idx;
-        return item;
-      }
-      return item;
+  useEffect(() => {
+    setAdvancedDetails({
+      ...advancedDetails,
+      attributes: data,
     });
-    setProperty({
-      ...property,
-      attributes: newArr,
-    });
-  };
+  }, [data]);
 
-  const removeProp = (index: number) => {
-    if (property.attributes.length === 1) {
-      return;
+  useEffect(() => {
+    fetchProperties();
+    if (advancedDetails.propertyTemplateId) {
     }
+  }, []);
 
-    setPropMod({
-      by: null,
-      index: null,
-      type: false,
-      value: false,
+  const updateTemplate = (updatedProperties) => {
+    let updateData = data.map((item) => {
+      if (item._id !== advancedDetails.propertyTemplateId) return item;
+      return {
+        ...item,
+        attributes: updatedProperties,
+      };
     });
-    const newArr = property.attributes.filter((item, idx) => idx !== index);
-    setProperty({
-      ...property,
-      attributes: newArr,
+    setData(updateData);
+  };
+
+  const fetchProperties = async () => {
+    const response = await getProperties();
+    setData(response);
+  };
+
+  const handleTemplateSelect = (template) => {
+    setEditableProperties(template.attributes);
+    setAdvancedDetails({
+      ...advancedDetails,
+      propertyTemplateId: template._id || null,
     });
   };
 
-  const addNewProp = () => {
-    setPropMod({
-      by: null,
-      index: null,
-      type: false,
-      value: false,
-    });
-    const newProp = {
-      type: 'Title Here',
-      value: 'Write it here',
-    };
+  const handleTemplateEdit = async (editedTemplate) => {
+    try {
+      const response = await upsertProperty({
+        id: editedTemplate._id,
+        name: editedTemplate.name,
+        attributes: editedTemplate.attributes,
+      });
 
-    setProperty({
-      ...property,
-      attributes: [...property.attributes, newProp],
-    });
-  };
+      if (response) {
+        toast({
+          title: 'Properties Template',
+          description: 'Edited successfully',
+          duration: 2000,
+        });
 
-  const makeUpdates = async () => {
-    if (selectedProperty !== null && selectedProperty !== property) {
-      await upsertProperty({
-        id: selectedProperty._id,
-        name: selectedProperty.name,
-        attributes: selectedProperty.attributes,
+        await fetchProperties();
+      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save template',
+        duration: 2000,
       });
     }
   };
 
-  useEffect(() => {
-    if (selectedProperty !== null) {
-      if (select) {
-        console.log("selectedProperty", selectedProperty);
-        select(selectedProperty);
+  const handleTemplateDelete = async (editedTemplate) => {
+    try {
+      const response = await deleteProperty({
+        id: editedTemplate._id,
+      });
+
+      if (response) {
+        toast({
+          title: 'Properties Template',
+          description: 'Deleted successfully',
+          duration: 2000,
+        });
+
+        await fetchProperties();
       }
-      makeUpdates();
-    } else {
-      if (select) {
-        select(null);
-      }
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete template',
+        duration: 2000,
+      });
     }
-  }, [selectedProperty]);
+  };
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      const response = await getProperties();
+  const handlePropertyChange = (index, field, value) => {
+    const updatedProperties = editableProperties.map((prop, i) =>
+      i === index ? { ...prop, [field]: value } : prop,
+    );
+    setEditableProperties(updatedProperties);
+    updateTemplate(updatedProperties);
+  };
 
-      if (response.length > 0) {
-        setData(response);
-      }
-    };
+  const handleAddProperty = () => {
+    const newProperty = { type: 'New Property', value: 'Enter value' };
+    setEditableProperties([...editableProperties, newProperty]);
+    updateTemplate([...editableProperties, newProperty]);
+  };
 
-    fetchProperties();
-  }, []);
+  const handleRemoveProperty = (index) => {
+    const updatedProperties = editableProperties.filter((_, i) => i !== index);
+    setEditableProperties(updatedProperties);
+    updateTemplate(updatedProperties);
+  };
 
   return (
-    <div className="bg-dark p-4 gap-y-2 rounded-lg flex flex-col">
+    <div className="bg-template-gradient p-4 gap-y-2 rounded-lg flex flex-col">
       <p>Properties</p>
-      <span className="text-gray-400">
+      <span className="text-gray-400 azeret-mono-font">
         Textual Traits that show up as rectangle.
       </span>
 
@@ -161,225 +148,116 @@ export default function PropertiesTemplate({ select }: { select?: any }) {
 
         <div className="flex flex-wrap gap-5">
           <div
-            onClick={() => setSelectedProperty(null)}
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${selectedProperty == null ? 'border-neon' : 'border-gray-400'}`}
+            onClick={() =>
+              handleTemplateSelect({
+                name: 'Basic Template',
+                attributes: defaultAttributes,
+              })
+            }
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              !advancedDetails.propertyTemplateId
+                ? 'border-neon'
+                : 'border-none'
+            }`}
           >
             <p>Basic Template</p>
           </div>
-          {data && data.length > 0
-            ? data.map((item: any, index: number) => {
-                return (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedProperty(item)}
-                    className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${selectedProperty == item ? 'border-neon' : 'border-gray-400'}`}
-                  >
-                    <p>{item.name}</p>
-                  </div>
-                );
-              })
-            : null}
+
+          {data.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => handleTemplateSelect(item)}
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+                advancedDetails.propertyTemplateId === item._id
+                  ? 'border-neon'
+                  : 'border-none'
+              }`}
+            >
+              <p>{item.name}</p>
+              <button
+                className="absolute bottom-2 right-2 text-[#DDF247] border border-[#ffffff20] px-[10px] rounded py-1 text-[14px]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTemplateEdit(item);
+                }}
+              >
+                Edit
+              </button>
+              <div
+                className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
+                onClick={() => handleTemplateDelete(item)}
+              >
+                <img src="/icons/trash.svg" className="w-4 h-4" />
+              </div>
+            </div>
+          ))}
+
+          <div
+            onClick={() => setIsModalOpenTemplate(true)}
+            className="w-[18rem] h-[15rem] bg-[#232323] border-2 flex flex-col justify-center items-center rounded-md relative"
+          >
+            <div className="w-12 h-12 rounded-full bg-[#111] border border-[#ffffff38] flex items-center justify-center">
+              <img src="/icons/plus.svg" />
+            </div>
+            <p className="text-[#828282]">Add new template</p>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-3 my-5">
-          {selectedProperty === null
-            ? defaultAttributes.map((item, index) => {
-                return (
-                  <div
-                    className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
-                    key={index}
-                  >
-                    {propMod.type &&
-                      propMod.index === index &&
-                      propMod.by === 'default' ? (
-                        <input
-                          type="text"
-                          className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                          onChange={(e) => {
-                            modifyProp(index, 'type', e.target.value);
-                          }}
-                        />
-                      ) : (
-                        <p
-                          className="text-white text-center text-sm"
-                          onClick={() =>
-                            setPropMod({
-                              ...propMod,
-                              type: true,
-                              index: index,
-                              by: 'default',
-                            })
-                          }
-                        >
-                          {item.type}
-                        </p>
-                      )}
-
-                    {propMod.value &&
-                    propMod.index === index &&
-                    propMod.by === 'default' ? (
-                      <input
-                        type="text"
-                        className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                        onChange={(e) => {
-                          modifyProp(index, 'value', e.target.value);
-                          e.target.value = e.target.value;
-                        }}
-                      />
-                    ) : (
-                      <p
-                        className="text-gray-400 text-center"
-                        onClick={() =>
-                          setPropMod({
-                            ...propMod,
-                            value: true,
-                            index: index,
-                            by: 'default',
-                          })
-                        }
-                      >
-                        {item.value}
-                      </p>
-                    )}
-
-                    <div
-                      className="absolute top-2 right-2 cursor-pointer"
-                      onClick={() => removeProp(index)}
-                    >
-                      <svg
-                        width="18"
-                        height="19"
-                        viewBox="0 0 18 19"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4 4L14 14"
-                          stroke="#DDF247"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M14 4L4 14"
-                          stroke="#DDF247"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                );
-              })
-            : selectedProperty.attributes &&
-                selectedProperty.attributes.length > 0
-              ? selectedProperty.attributes.map((item: any, index: number) => {
-                  return (
-                    <div
-                      className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
-                      key={index}
-                    >
-                    {propMod.type &&
-                      propMod.index === index &&
-                      propMod.by === 'default' ? (
-                        <input
-                          type="text"
-                          className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                          onChange={(e) => {
-                            modifyProp(index, 'type', e.target.value);
-                          }}
-                        />
-                      ) : (
-                        <p
-                          className="text-white text-center text-sm"
-                          onClick={() =>
-                            setPropMod({
-                              ...propMod,
-                              type: true,
-                              index: index,
-                              by: 'default',
-                            })
-                          }
-                        >
-                          {item.type}
-                        </p>
-                      )}
-
-                      {propMod.value &&
-                      propMod.index === index &&
-                      propMod.by === 'default' ? (
-                        <input
-                          type="text"
-                          className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                          onChange={(e) => {
-                            modifyProp(index, 'value', e.target.value);
-                            e.target.value = e.target.value;
-                          }}
-                        />
-                      ) : (
-                        <p
-                          className="text-gray-400 text-center"
-                          onClick={() =>
-                            setPropMod({
-                              ...propMod,
-                              value: true,
-                              index: index,
-                              by: 'default',
-                            })
-                          }
-                        >
-                          {item.value}
-                        </p>
-                      )}
-
-                      <div
-                        className="absolute top-2 right-2 cursor-pointer"
-                        onClick={() => removeProp(index)}
-                      >
-                        <svg
-                          width="18"
-                          height="19"
-                          viewBox="0 0 18 19"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M4 4L14 14"
-                            stroke="#DDF247"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M14 4L4 14"
-                            stroke="#DDF247"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  );
-                })
-              : null}
-          <div
-            className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
-            onClick={addNewProp}
-          >
-            <img src="icons/add-new.svg" className="w-10 h-10" />
-            <p className="text-center text-sm text-[#DDF247]">Add New</p>
-          </div>
+          {editableProperties.map((item, index) => (
+            <div
+              key={index}
+              className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border border-[#ffffff12] rounded-md"
+            >
+              <input
+                type="text"
+                className="text-white text-center w-[80%] rounded-md bg-transparent mx-auto"
+                value={item.type}
+                onChange={(e) =>
+                  handlePropertyChange(index, 'type', e.target.value)
+                }
+              />
+              <input
+                type="text"
+                className="text-[#888] text-center w-[80%] rounded-md bg-transparent mx-auto"
+                value={item.value}
+                onChange={(e) =>
+                  handlePropertyChange(index, 'value', e.target.value)
+                }
+              />
+              <div
+                className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
+                onClick={() => handleRemoveProperty(index)}
+              >
+                <img src="/icons/trash.svg" className="w-4 h-4" />
+              </div>
+            </div>
+          ))}
+          {addStatus && (
+            <div
+              className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
+              onClick={handleAddProperty}
+            >
+              <img src="/icons/add-new.svg" className="w-10 h-10" />
+              <p className="text-center text-sm text-[#DDF247]">Add New</p>
+            </div>
+          )}
         </div>
+
         <div className="flex gap-x-3 item-center">
-          <img src="icons/dot.svg" className="w-5 h-5" />
+          <img src="/icons/dot.svg" className="w-5 h-5" />
           <span>
-            You can freely change properties values ​​by clicking on the title
-            and content.
+            You can freely change properties values by clicking on the title and
+            content.
           </span>
         </div>
       </div>
+
+      <PropertiesInfo
+        close={() => setIsModalOpenTemplate(false)}
+        isOpen={isModalOpenTemplate}
+        onTemplateAdd={fetchProperties}
+      />
     </div>
   );
 }

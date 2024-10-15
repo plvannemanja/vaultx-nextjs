@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap');
+/* @import url('../css/azeret-mono.css'); */
+/* @import url('https://fonts.googleapis.com/css?family=Azeret Mono'); */
+@import url('https://fonts.cdnfonts.com/css/azeret-mono');
 
 @layer base {
   :root {
@@ -75,9 +79,44 @@
     @apply bg-background text-foreground;
   }
 }
+/* azeret-mono-latin-wght-normal */
+/* @font-face {
+  font-family: 'Azeret Mono Variable';
+  font-style: normal;
+  font-display: auto;
+  font-weight: 100 900;
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/azeret-mono:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+} */
+/* azeret-mono-latin-400-normal */
+@font-face {
+  font-family: 'Azeret Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    url(https://cdn.jsdelivr.net/fontsource/fonts/azeret-mono@latest/latin-400-normal.woff2)
+      format('woff2'),
+    url(https://cdn.jsdelivr.net/fontsource/fonts/azeret-mono@latest/latin-400-normal.woff)
+      format('woff');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+    U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
+/* font classes start */
+.azeret-mono-font {
+  font-family: 'Azeret Mono', sans-serif;
+  /* font-family: 'Azeret Mono', sans-serif!important; */
+  /* font-family: 'Azeret Mono' */
+  /* font-family: AzeretMono-Regular; */
+  /* font-family: 'Azeret Mono', monospace;
+  font-optical-sizing: auto;
+  font-style: normal; */
+}
+/* font classes END */
 body {
-  background-color: black;
+  background-color: #111111;
   font-family: Manrope;
 }
 
@@ -97,8 +136,16 @@ body {
   color: #ddf247;
 }
 
+.fill-neon {
+  fill: #ddf247;
+}
+
 .bg-neon {
   background-color: #ddf247;
+}
+
+.bg-light {
+  background-color: #dee8e8;
 }
 
 .border-neon {
@@ -196,4 +243,8 @@ body {
   font-family: 'Manrope', sans-serif;
   gap: 10px;
   width: 460px;
+}
+.icon-svg {
+  filter: brightness(0) saturate(100%) invert(95%) sepia(96%) saturate(753%)
+    hue-rotate(10deg) brightness(104%) contrast(90%);
 }

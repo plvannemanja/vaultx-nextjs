@@ -4,7 +4,7 @@ import { Address } from 'thirdweb';
 import { CurationType, NFTItemType, UserType } from '@/types';
 
 const server_uri =
-  process.env.Next_PUBLIC_APP_BACKEND_URL || 'https://tapi.vault-x.io/api/v1';
+  process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
 
 const options = {
   baseURL: server_uri,
@@ -60,9 +60,7 @@ interface ContactUsParams {
   contactNumber: string;
 }
 
-interface UpdateProfileParams {
-  details: Record<string, unknown>;
-}
+type UpdateProfileParams = Partial<Omit<UserType, '_id'>>;
 
 interface GetArtistsParams {
   data: Record<string, unknown>;
@@ -75,9 +73,9 @@ interface IGetSearchRequest {
 export interface IGetSearchResponse {
   success: boolean;
   nfts: Array<Partial<NFTItemType>>;
-  curations: Array<Partial<CurationType>>,
-  artistsNfts: Array<Partial<NFTItemType>>,
-  users: Array<Partial<UserType>>,
+  curations: Array<Partial<CurationType>>;
+  artistsNfts: Array<Partial<NFTItemType>>;
+  users: Array<Partial<UserType>>;
 }
 
 // API calls for NFTs
@@ -265,13 +263,13 @@ export const collectionServices = {
   ): Promise<AxiosResponse<any>> =>
     api.post(`${server_uri}/collection/getCollectionActivities/`, data),
   getSearch: (data: IGetSearchRequest): Promise<IGetSearchResponse> => {
-    return api.post(`${server_uri}/collection/search`, data)
+    return api
+      .post(`${server_uri}/collection/search`, data)
       .then((res: AxiosResponse) => {
         return res.data;
       })
-      .catch(err => err)
-
-  }
+      .catch((err) => err);
+  },
 };
 
 // API calls for auctions
@@ -471,10 +469,95 @@ export const getProperties = async () => {
   return properties.data;
 };
 
+export const getUserArtists = async () => {
+  const token = getCookie('token');
+  const properties = await axios.get(`${server_uri}/info/get-user-artist`, {
+    headers: {
+      authorization: 'Bearer ' + token,
+    },
+  });
+
+  return properties.data;
+};
+
 export const upsertProperty = async (payload: any) => {
   const token = getCookie('token');
   const property = await axios.post(
     `${server_uri}/info/upsertProperty`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
+export const upsertUserArtist = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/upsertUserArtist`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
+export const deleteProperty = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete-properties`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
+export const deleteContactInfo = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete-contacts`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+export const deleteSellerInfo = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete-sellers`,
+    payload,
+    {
+      headers: {
+        authorization: 'Bearer ' + token,
+      },
+    },
+  );
+
+  return property;
+};
+
+export const deleteUserArtist = async (payload: any) => {
+  const token = getCookie('token');
+  const property = await axios.post(
+    `${server_uri}/info/delete-user-artist`,
     payload,
     {
       headers: {
@@ -537,7 +620,7 @@ export const userServices = {
       contactNumber,
     });
   },
-  updateProfile: (details: UpdateProfileParams) => {
+  updateProfile: (details: UpdateProfileParams | FormData) => {
     return axios.post(`${server_uri}/user/updateUserDetails`, details, {
       headers: {
         authorization: 'Bearer ' + getCookie('token'),

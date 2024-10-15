@@ -7,7 +7,10 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['vaultx-backet.s3.ap-northeast-2.amazonaws.com', 'tan-absent-fox-474.mypinata.cloud'], // Add your image domain here
+    domains: [
+      'vaultx-backet.s3.ap-northeast-2.amazonaws.com',
+      'tan-absent-fox-474.mypinata.cloud',
+    ], // Add your image domain here
   },
   experimental: {
     missingSuspenseWithCSRBailout: false,
