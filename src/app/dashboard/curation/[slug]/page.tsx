@@ -22,6 +22,7 @@ import Image from 'next/image';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { BaseDialog } from '@/app/components/ui/BaseDialog';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -34,7 +35,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [curationInfo, setCurationInfo] = useState<any>({});
   const [nfts, setNfts] = useState([]);
   const [now, setNow] = useState(false);
-  const [showLess, setShowLess] = useState(true);
   const [activity, setActivity] = useState([]);
   const [tab, setTab] = useState('items');
   const [filters, setFilters] = useState<any>({
@@ -162,23 +162,22 @@ export default function Page({ params }: { params: { slug: string } }) {
   if (!curation) return null;
 
   return (
-    <div className="flex flex-col gap-y-4 px-4">
-      <div className="relative">
-        <div className="relative overflow-hidden transition-all duration-500 ease-in-out">
-          <Image
-            src={curation?.bannerImage}
-            alt="hero"
-            width={1000}
-            height={400}
-            className={cn(
-              'w-full object-cover rounded-xl',
-              showLess ? 'h-[200px]' : 'h-auto h-min-[340px]',
-            )}
-          />
-        </div>
-        <div className="absolute bottom-4 left-4 bg-gray-800 p-2 rounded-md">
+    <div className="flex flex-col gap-y-4 px-4 mx-4 my-4">
+      <div className={cn("relative w-full transition-all duration-500 ease-in-out", "h-[340px]")}>
+        {
+          curation?.bannerImage && (
+            <Image
+              src={curation?.bannerImage}
+              alt="hero"
+              layout="fill"
+              objectFit='cover'
+              className="rounded-xl"
+            />
+          )
+        }
+        <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div
-            className="flex gap-x-3 items-center p-3 rounded-xl text-white border-2 border-white cursor-pointer"
+            className="flex gap-x-3 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"
             onClick={() => copyAddr()}
           >
             {trimString(user?.wallet)}
@@ -207,9 +206,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               ></path>
             </svg>
           </div>
-        </div>
-        <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
-          <div className="inline-block">
+          <div className="flex gap-4">
             <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
               <span className="font-medium">{likes}</span>
               <div onClick={() => handleLike()}>
@@ -218,7 +215,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => {}}
+                  onChange={() => { }}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -259,7 +256,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 </div>
               </div>
             </div>
-            {user?.wallet === curation.owner?.wallet && (
+            {user?.wallet && user?.wallet === curation.owner?.wallet && (
               <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
                 <Link href={`/dashboard/curation/edit/${params.slug}`}>
                   <svg
@@ -287,70 +284,93 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       <div className="flex flex-col gap-y-5 md:flex-row md:gap-x-4">
         <div className="w-full md:w-[60%] flex flex-col">
-          <div className="text-sm">
-            <span>
-              <Image
-                alt="double-down"
-                src="/icons/double_down.svg"
-                className={cn('', !showLess ? 'rotate-180' : '')}
-                width={24}
-                height={24}
-                onClick={() => setShowLess(!showLess)}
-              />
-            </span>
-          </div>
           <div className="my-5 flex flex-wrap md:gap-x-3">
-            {curation?.youtube?.length > 0
-              ? curation?.youtube.map((item: any, index: number) => {
+            <div>
+              <p
+                className="text-[#ffffff53] text-[14px] font-normal azeret-mono-font"
+                dangerouslySetInnerHTML={{
+                  __html: curation.description?.replace(/\r\n|\n/g, '<br />'),
+                }}
+              ></p>
+              <span className="text-[#DDF247]">More...</span>
+            </div>
+            <div className='flex  justify-between gap-4'>
+              {curation?.youtube?.length > 0
+                && curation?.youtube.map((item: any, index: number) => {
                   const imageId = getYouTubeVideoId(item.url);
 
                   return (
                     <div
-                      className="flex flex-col gap-y-3 w-[20rem]"
+                      className="flex flex-col gap-y-3"
                       key={index}
                     >
-                      <div
-                        className="relative cursor-pointer"
-                        onClick={() => {
-                          window.open(item.url, '_blank');
-                        }}
+                      <BaseDialog
+                        trigger={
+                          <div
+                            className="relative cursor-pointer rounded-xl"
+                          >
+                            <img
+                              src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
+                              className="w-full aspect-video rounded-2xl"
+                            />
+                            <img
+                              src="/icons/play.svg"
+                              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                            />
+                          </div>
+                        }
+                        className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
                       >
-                        <img
-                          src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
-                          className="w-full aspect-video"
-                        />
-                        <img
-                          src="/icons/play.svg"
-                          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        />
-                      </div>
+                        <div className="relative w-full h-full flex justify-center items-center overflow-hidden">
+                          <iframe
+                            width="979"
+                            height="675"
+                            src={`https://www.youtube.com/embed/${imageId}?autoplay=1`}
+                            title="item.title"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="min-w-[979px] min-h-[675px]"
+                          ></iframe>
+                        </div>
+                      </BaseDialog>
                       <p className="text-center font-medium">{item.title}</p>
                     </div>
                   );
                 })
-              : null}
+              }
+            </div>
           </div>
         </div>
-        <div className="w-full md:w-[38%] h-[250px] py-4 flex flex-col gap-y-4 border-2 border-gray-500 rounded-lg">
-          <div className="px-4 flex justify-between items-center">
-            <span className="text-lg font-medium">Items</span>
-            <span>{curationInfo?.nftCount}</span>
+        <div className='w-full md:w-[38%] py-4'>
+          <div className="h-[250px] py-4 flex flex-col gap-y-4 border-2 border-white/20 rounded-lg">
+            <div className="px-4 flex justify-between items-center">
+              <span className="text-lg font-medium">Items</span>
+              <span>{curationInfo?.nftCount}</span>
+            </div>
+            <hr />
+            <div className="px-4 flex justify-between items-center">
+              <span className="text-lg font-medium">Artist</span>
+              <span>{curationInfo?.artistCount}</span>
+            </div>
+            <hr />
+            <div className="px-4 flex justify-between items-center">
+              <span className="text-lg font-medium">Owner</span>
+              <span>{curationInfo?.ownerCount}</span>
+            </div>
+            <hr />
+            <div className="px-4 flex justify-between items-center">
+              <span className="text-lg font-medium">Volume Ranking</span>
+              <span>{curationInfo?.totalVolume}</span>
+            </div>
           </div>
-          <hr />
-          <div className="px-4 flex justify-between items-center">
-            <span className="text-lg font-medium">Artist</span>
-            <span>{curationInfo?.artistCount}</span>
+          <div className="w-full h-20 px-20 py-5 bg-white/0 rounded-xl border border-white/20 flex justify-center items-center my-4">
+            <div className="flex gap-8">
+              <div className="w-8 h-8 flex justify-center items-center">
+              </div>
+            </div>
           </div>
-          <hr />
-          <div className="px-4 flex justify-between items-center">
-            <span className="text-lg font-medium">Owner</span>
-            <span>{curationInfo?.ownerCount}</span>
-          </div>
-          <hr />
-          <div className="px-4 flex justify-between items-center">
-            <span className="text-lg font-medium">Volume Ranking</span>
-            <span>{curationInfo?.totalVolume}</span>
-          </div>
+
         </div>
       </div>
     </div>

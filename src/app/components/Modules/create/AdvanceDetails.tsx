@@ -324,7 +324,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 hidden">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
@@ -338,7 +338,7 @@ export default function AdvanceDetails({
           <div className="flex flex-col gap-y-3">
             <p className="text-lg font-medium">Unlockable Content</p>
             <Textarea
-              className="bg-[#232323] p-4 rounded-md azeret-mono-font"
+              className="bg-[#232323] p-4 rounded-md azeret-mono-font focus:placeholder-transparent focus:outline-none"
               onChange={(e) => {
                 setFormData({
                   ...formData,

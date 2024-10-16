@@ -129,10 +129,12 @@ export default function SellerInformation({
         </p>
         <hr />
         <Textarea
-          // disabled={true}
-          className="p-4 rounded-md azeret-mono-font"
+          disabled={true}
+          className="p-4 rounded-md azeret-mono-font overflow-hidden"
           rows={4}
-          placeholder="faucibus id malesuada aliquam. Tempus morbi turpis nulla viverra tellus mauris cum. Est consectetur commodo turpis habitasse sed. Nibh tincidunt quis nunc placerat arcu sagittis. In vitae fames nunc consectetur. Magna faucibus sit risus sed tortor malesuada purus. Donec fringilla orci lobortis quis id blandit rhoncus. "
+          placeholder={`We collect two types of information from you: 
+1. Personal Information: This includes your individual information such as Email, Phone Number, Username, Avatar, Profile Picture, Date of Birth, and more.  
+2. Non-Personal Information: This includes information that does not identify you as an individual, such as your device type, browser type, operating system, IP address, browsing history, and clickstream data.`}
         />
       </div>
 

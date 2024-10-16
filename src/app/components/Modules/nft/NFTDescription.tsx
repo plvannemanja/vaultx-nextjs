@@ -12,11 +12,11 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid';
 
 export default function NFTDescription() {
   const { NFTDetail: data, setMainImage } = useNFTDetail();
-
+  const maxAttachments = 4;
   return (
     <>
       <div className="w-full flex gap-[27px] flex-wrap">
-        {[data.cloudinaryUrl, ...data.attachments].map((item, index) => {
+        {[data.cloudinaryUrl, ...(data.attachments.slice(0, maxAttachments))].map((item, index) => {
           return (
             <img
               key={index}
@@ -61,9 +61,8 @@ export default function NFTDescription() {
                     Description
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </div>
               </DisclosureButton>
@@ -111,9 +110,8 @@ export default function NFTDescription() {
                     Properties
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </div>
               </DisclosureButton>
