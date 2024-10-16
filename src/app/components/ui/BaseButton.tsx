@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
-import React, { useMemo } from 'react';
+import Image from 'next/image';
+import { useMemo } from 'react';
 
 interface IBaseButtonProps {
   title: string;
@@ -54,9 +55,11 @@ export default function BaseButton({
         )}
         {title}
         {displayIcon && (
-          <img
+          <Image
+            width={18}
+            height={18}
             src={iconPath ?? '/icons/arrow_ico.svg'}
-            alt=""
+            alt="icon"
             className={`w-[18px] h-[18px] ${iconStyles}`}
           />
         )}

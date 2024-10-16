@@ -5,7 +5,7 @@ import { BaseHeader } from '../components/Header/BaseHeader';
 export default function NFTLayout({ children }: { children: React.ReactNode }) {
   return (
     <section className="flex flex-col gap-y-2">
-      <BaseHeader />
+      <BaseHeader isNFT={true} />
       {children}
       <BaseFooter />
     </section>

@@ -1,15 +1,14 @@
 'use client';
-
 import CurationCard from '@/app/components/Cards/CurationCard';
-import { useEffect, useState } from 'react';
-import CurationSearch from '@/app/components/Filters/CurationSearch';
-import { collectionServices } from '@/services/supplier';
-import { useToast } from '@/hooks/use-toast';
-import { SkeletonCard } from '@/app/components/Skelton/Skelton';
-import { useDebounce } from 'use-debounce';
-import Image from 'next/image';
-import { ensureValidUrl } from '@/utils/helpers';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
+import CurationSearch from '@/app/components/Filters/CurationSearch';
+import { SkeletonCard } from '@/app/components/Skelton/Skelton';
+import { useToast } from '@/hooks/use-toast';
+import { collectionServices } from '@/services/supplier';
+import { ensureValidUrl } from '@/utils/helpers';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 export default function Page() {
   const { toast } = useToast();
@@ -62,9 +61,7 @@ export default function Page() {
           const info = await collectionServices.getCollectionInfo(
             collection._id,
           );
-
-          console.log('info', info);
-
+          // console.log('info', info);
           const extra = {
             nftCount: info.data.collection.nftCount,
             totalVolume: info.data.collection.totalVolume,

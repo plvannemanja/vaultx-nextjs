@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Rwa() {
   return (
     <div className="flex flex-col gap-y-4 py-10 text-white text-center items-center bg-dark px-6  rounded-md min-w-[700px] max-w-[700px]">

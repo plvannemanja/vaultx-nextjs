@@ -1,29 +1,28 @@
 'use client';
-import { client, wallets } from '@/lib/client';
 import Logo from '@/components/Icon/Logo';
-import Link from 'next/link';
-import {
-  useWalletDetailsModal,
-  useConnectModal,
-  useActiveAccount,
-} from 'thirdweb/react';
-import { Search } from './Search';
 import WalletIcon from '@/components/Icon/WalletIcon';
+import { Label } from '@/components/ui/label';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { client, wallets } from '@/lib/client';
 import { List } from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import Menu from './Menu';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { WalletAutoConnect } from '../theme-provider';
+import {
+  useActiveAccount,
+  useConnectModal,
+  useWalletDetailsModal,
+} from 'thirdweb/react';
 import { useGlobalContext } from '../Context/GlobalContext';
+import { WalletAutoConnect } from '../theme-provider';
+import Menu from './Menu';
+import { Search } from './Search';
 
 const socials = [
   {
@@ -48,7 +47,11 @@ const socials = [
   },
 ];
 
-export function BaseHeader() {
+type Props = {
+  isNFT?: boolean;
+};
+
+export function BaseHeader({ isNFT = false }: Props) {
   const { user } = useGlobalContext();
   const detailsModal = useWalletDetailsModal();
   const { connect } = useConnectModal();
@@ -138,26 +141,26 @@ export function BaseHeader() {
       <div className="hidden xl:block">
         <div className="justify-start items-center gap-8 flex text-base text-white">
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] gap-1.5"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] transition-all duration-300"
             href="/dashboard/appreciate"
           >
             Appreciation
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] transition-all duration-300"
             href="/dashboard/curation"
           >
             Curation
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] transition-all duration-300"
             href="https://artistvaultx.wpcomstaging.com/"
             target="_blank"
           >
             Magazine
           </Link>
           <Link
-            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247]"
+            className="hover:font-bold hover:cursor-pointer hover:text-[#DDF247] transition-all duration-300"
             href="https://www.monsterx.io"
             target="_blank"
           >
@@ -165,11 +168,23 @@ export function BaseHeader() {
           </Link>
         </div>
       </div>
-
-      <Search />
+      {!isNFT && <Search />}
       <div className="flex gap-3.5 self-stretch text-sm max-md:flex-wrap">
         {activeAccount ? (
-          <Menu />
+          <>
+            {isNFT && (
+              <button
+                className={
+                  'px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex cursor-pointer mr-2 self-center'
+                }
+              >
+                <div className="text-neutral-900 text-sm font-semibold leading-normal">
+                  Create RWA
+                </div>
+              </button>
+            )}
+            <Menu />
+          </>
         ) : (
           <div
             className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"

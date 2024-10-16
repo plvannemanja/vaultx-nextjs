@@ -1,6 +1,5 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
 import {
   Table,
   TableBody,
@@ -11,22 +10,23 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
+import { cancelBid } from '@/lib/helper';
 import { CreateSellService } from '@/services/createSellService';
-import { useEffect, useState } from 'react';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { IBid } from '@/types';
 import { trimString } from '@/utils/helpers';
-import moment from 'moment';
-import { useGlobalContext } from '../../Context/GlobalContext';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
-import BaseButton from '../../ui/BaseButton';
-import { cancelBid } from '@/lib/helper';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
+import { useGlobalContext } from '../../Context/GlobalContext';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import BidIcon from '../../Icons/bid-icon';
+import BaseButton from '../../ui/BaseButton';
 
 export default function BidList() {
   const [loading, setLoading] = useState(false);
@@ -117,6 +117,7 @@ export default function BidList() {
 
   useEffect(() => {
     getBids();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (bids.length === 0) return null;
@@ -127,26 +128,39 @@ export default function BidList() {
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left border-b border-[#353535]">
                 <div className="flex w-full justify-between">
-                  <span>Bid Offers</span>
+                  <div className="flex text-sm font-extrabold items-center gap-2">
+                    <BidIcon />
+                    <span>Bid Offers</span>
+                  </div>
                   <ChevronUpIcon
                     className={`${
                       open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    } h-5 w-5 text-[#989898]`}
                   />
                 </div>
               </DisclosureButton>
-              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+              <DisclosurePanel className=" pt-4 pb-2 text-sm rounded-b-lg">
                 <Table>
-                  <TableCaption>A list of your Bid activity.</TableCaption>
+                  <TableCaption className="text-[#989898]">
+                    A list of your Bid activity.
+                  </TableCaption>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[100px]">Price</TableHead>
-                      <TableHead>USD Price</TableHead>
-                      <TableHead>Placed On</TableHead>
-                      <TableHead>From</TableHead>
-                      <TableHead className="text-right">Confirmation</TableHead>
+                      <TableHead className="w-[100px] text-[#989898]">
+                        Price
+                      </TableHead>
+                      <TableHead className="text-[#989898]">
+                        USD Price
+                      </TableHead>
+                      <TableHead className="text-[#989898]">
+                        Placed On
+                      </TableHead>
+                      <TableHead className="text-[#989898]">From</TableHead>
+                      <TableHead className="text-right text-[#989898]">
+                        Confirmation
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
