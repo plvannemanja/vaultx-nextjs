@@ -3,8 +3,17 @@
 import { FavoriteService } from '@/services/FavoriteService';
 import { collectionServices } from '@/services/supplier';
 import { useEffect, useRef, useState } from 'react';
-import { getYouTubeVideoId, trimString } from '@/utils/helpers';
-import { Label } from '@/components/ui/label';
+import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -20,15 +29,65 @@ import Link from 'next/link';
 import { PencilIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { BaseDialog } from '@/app/components/ui/BaseDialog';
+import { Badge } from '@/components/ui/badge';
+
+const badges = [
+  {
+    label: 'Items',
+    value: 'all',
+  },
+  {
+    label: 'Activity',
+    value: 'activity',
+  },
+];
+
+const profileFilters = [
+  {
+    label: 'Price: Low To High',
+    value: 1,
+    param: 'price',
+  },
+  {
+    label: 'Price: High To Low',
+    value: -1,
+    param: 'price',
+  },
+  {
+    label: 'Recently Minted',
+    value: -1,
+    param: 'mintingTime',
+  },
+  {
+    label: 'Recently Listed',
+    value: -1,
+    param: 'updatedAt',
+  },
+  {
+    label: 'Most Favorited',
+    value: -1,
+    param: 'likes',
+  },
+  {
+    label: 'Highest Last Sale',
+    value: -1,
+    param: 'price',
+  },
+  {
+    label: 'NFC Minted',
+    value: -1,
+    param: 'createdAt',
+  },
+];
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const router = useRouter();
+  const [filterbadge, setFilterBadge] = useState(badges[0].value);
   const favoriteService = new FavoriteService();
   const { user } = useGlobalContext();
 
+  const [showLess, setShowLess] = useState(true);
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [curation, setCuration] = useState<any>({});
@@ -40,47 +99,14 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [filters, setFilters] = useState<any>({
     filterString: '',
     filter: {
-      price: null,
+      label: 'Recently Listed',
+      param: 'updatedAt',
+      value: -1,
     },
   });
 
-  const [expandImage, setExpandImage] = useState(false);
-  const [heightExpand, setHeightExpand] = useState(1000);
-
-  const containerRef = useRef(null);
-
-  const getImageDimensions = (imageUrl: any, callback: any) => {
-    if (!containerRef.current) return;
-    const containerWidth = (containerRef.current as any).offsetWidth;
-
-    // @ts-ignore
-    const img = new Image();
-
-    img.onload = function () {
-      const width = img.width;
-      const height = img.height;
-
-      const aspectRatio = width / height;
-      if (containerWidth) {
-        const newWidth = containerWidth;
-        const newHeight = newWidth / aspectRatio;
-        setHeightExpand(newHeight);
-
-        callback(newWidth, newHeight);
-      } else {
-        callback(width, height);
-      }
-    };
-
-    // Handle potential errors
-    img.onerror = function () {
-      console.error('Error loading the image.');
-      callback(null, null);
-    };
-
-    // Set the image source to the provided URL
-    img.src = imageUrl;
-  };
+  const [items, setItems] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
 
   const handleLike = async () => {
     try {
@@ -218,7 +244,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => {}}
+                  onChange={() => { }}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -363,10 +389,246 @@ export default function Page({ params }: { params: { slug: string } }) {
           </div>
           <div className="w-full h-20 px-20 py-5 bg-white/0 rounded-xl border border-white/20 flex justify-center items-center my-4">
             <div className="flex gap-8">
-              <div className="w-8 h-8 flex justify-center items-center"></div>
+              <div className="w-8 h-8 flex justify-center items-center relative">
+                <Link href={ensureValidUrl(curation?.twitter)}>
+                  <Image
+                    layout='fill'
+                    alt='twitter'
+                    src="/icons/twitter-x.svg"
+                    objectFit='cover'
+                  >
+                  </Image>
+                </Link>
+              </div>
+              <div className="w-8 h-8 flex justify-center items-center relative">
+                <Link href={ensureValidUrl(curation?.website)}>
+                  <Image
+                    layout='fill'
+                    alt='twitter'
+                    src="/icons/discord.svg"
+                    objectFit='cover'
+                  >
+                  </Image>
+                </Link>
+              </div>
+              <div className="w-8 h-8 flex justify-center items-center relative">
+                <Link href={ensureValidUrl(curation?.facebook)}>
+                  <Image
+                    layout='fill'
+                    alt='twitter'
+                    src="/icons/telegram.svg"
+                    objectFit='cover'
+                  >
+                  </Image>
+                </Link>
+              </div>
+              <div className="w-8 h-8 flex justify-center items-center relative">
+                <Link href={ensureValidUrl(curation?.instagram)}>
+                  <Image
+                    layout='fill'
+                    alt='twitter'
+                    src="/icons/discord.svg"
+                    objectFit='cover'
+                  >
+                  </Image>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        className={cn(
+          'relative w-full transition-all duration-500 ease-in-out',
+          showLess ? 'h-[200px]' : 'h-[340px]',
+        )}
+      >
+        {
+          curation?.descriptionImage?.[0] && (
+            <Image
+              src={curation?.descriptionImage?.[0]}
+              alt="hero"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-xl"
+            />
+          )
+        }
+      </div>
+
+      <div className="flex gap-x-3 flex-wrap mt-[6rem]">
+        {badges.map((badge, index) => {
+          return (
+            <Badge
+              key={index}
+              onClick={() => setFilterBadge(badge.value)}
+              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${filterbadge === badge.value
+                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                : 'hover:bg-[#232323] bg-transparent text-white'
+                }`}
+            >
+              {badge.label}
+            </Badge>
+          );
+        })}
+      </div>
+
+      <div className="flex flex-col gap-y-4">
+        {/* Filters logic */}
+        <div className="flex gap-4 my-4">
+          <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] rounded-xl px-2 w-full">
+            <svg
+              width="20px"
+              height="20px"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              color="#fff"
+            >
+              <path
+                d="M17 17L21 21"
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+              <path
+                d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z"
+                stroke="#fff"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></path>
+            </svg>
+
+            <input
+              placeholder="Search by name or trait..."
+              className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
+              value={filters.searchInput}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setFilters({
+                  ...filters,
+                  searchInput: e.target.value,
+                });
+              }}
+            />
+          </div>
+
+          <Select
+            onValueChange={(value: string) => {
+              const filteredProfile = profileFilters.filter(
+                (profile) => profile.label === value,
+              )?.[0];
+              if (filteredProfile) {
+                setFilters({
+                  ...filters,
+                  filter: profileFilters
+                })
+              }
+            }}
+            // value={profileFilters[0].label}
+            defaultValue={profileFilters?.[0].label}
+          >
+            <SelectTrigger className="relative flex rounded min-w-[18rem] max-w-[20rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
+              <SelectValue placeholder="" />
+            </SelectTrigger>
+            <SelectContent className="">
+              <SelectGroup>
+                {profileFilters.map((filter, index: number) => (
+                  <SelectItem value={filter.label} key={index}>
+                    {filter.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        {/* User section */}
+        {tab === "items" && items.length ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {items.map((item: any, index: number) => {
+              return (
+                <Link key={index} href={`/nft/${item._id}`}>
+                  <NftCard data={item} />
+                </Link>
+              );
+            })}
+          </div>
+        ) : null}
+
+        {/* Activity section */}
+        {tab === "activity" && activities.length ? (
+          <div>
+            <Table>
+              <TableCaption>A list of your recent activity.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px] text-[14px] text-[#fff]">
+                    Event
+                  </TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">Item</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">Price</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">From</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">To</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">Date</TableHead>
+                  <TableHead className="text-right text-[14px] text-[#fff]">
+                    Time
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {activities.map((item: any, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell className="azeret-mono-font text-[14px]">
+                      {item.state}
+                    </TableCell>
+                    <TableCell className="flex items-center gap-x-3">
+                      <img
+                        src={item.nftId.cloudinaryUrl}
+                        className="w-12 h-12 object-contain rounded aspect-square "
+                      />
+                      <span className="azeret-mono-font text-[14px]">
+                        {item.nftId.name}
+                      </span>
+                    </TableCell>
+                    <TableCell>{item?.price ? item?.price : '-/-'}</TableCell>
+                    <TableCell className="azeret-mono-font text-[14px] text-[#DDF247]">
+                      {item?.from?.username
+                        ? item.from.username
+                        : item?.from?.wallet
+                          ? trimString(item.from.wallet)
+                          : item?.fromWallet
+                            ? trimString(item?.fromWallet)
+                            : '-/-'}
+                    </TableCell>
+                    <TableCell className="azeret-mono-font text-[14px] text-[#DDF247]">
+                      {item?.to?.username
+                        ? item?.to?.username
+                        : item?.to?.wallet
+                          ? trimString(item.to.wallet)
+                          : item?.toWallet
+                            ? trimString(item?.toWallet)
+                            : '-/-'}
+                    </TableCell>
+                    <TableCell className="azeret-mono-font text-[14px] text-[#fff]">
+                      {item?.createdAt
+                        ? new Date(item.createdAt).toLocaleString().slice(0, 10)
+                        : '-/-'}
+                    </TableCell>
+                    <TableCell className="text-right azeret-mono-font text-[14px] text-[#fff]">
+                      {item?.createdAt
+                        ? new Date(item.createdAt).toLocaleTimeString()
+                        : '-/-'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        ) : null}
+
       </div>
     </div>
   );
