@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import BaseButton from './BaseButton';
 import {
-  maxFileSize,
   acceptedFormats as acceptedFileFormats,
+  maxFileSize,
 } from '@/utils/helpers';
+import { useEffect, useRef, useState } from 'react';
+import BaseButton from './BaseButton';
 
 interface IFileInputProps {
   title?: string;
@@ -69,7 +69,7 @@ export default function FileInput({
       {title && <p className={`text-sm font-medium ${titleStyles}`}>{title}</p>}
       <input
         type="file"
-        className="file-input hidden"
+        className="file-input hidden font-AzeretMono file:font-AzeretMono"
         ref={fileInputRef}
         onChange={handleFileChange}
       />

@@ -1,19 +1,18 @@
 'use client';
 
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import {
   deleteContactInfo,
   getContactsInfo,
   upsertContactInfo,
 } from '@/services/supplier';
 import { useEffect, useMemo, useState } from 'react';
-import { BaseDialog } from '../ui/BaseDialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import BaseButton from '../ui/BaseButton';
-import Image from 'next/image';
 import { useCreateNFT } from '../Context/CreateNFTContext';
-import { useToast } from '@/hooks/use-toast';
+import BaseButton from '../ui/BaseButton';
+import { BaseDialog } from '../ui/BaseDialog';
 export default function ContactInfo() {
   const { toast } = useToast();
   const [data, setData] = useState<null | any[]>(null);
@@ -112,7 +111,9 @@ export default function ContactInfo() {
 
   return (
     <div className="flex flex-col gap-y-5">
-      <p className="text-lg font-medium">Contact Information</p>
+      <p className="text-lg font-semibold text-white font-manrope">
+        Contact Information
+      </p>
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data.map((item: any, index: number) => (
@@ -223,25 +224,19 @@ export default function ContactInfo() {
               </div>
             ))
           : null}
-
         <div
-          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
+          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
           onClick={() => setIsModalOpen(true)}
         >
           <div className="flex flex-col gap-y-6 items-center">
-            <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
-              <Image
-                src="/icons/plus.svg"
-                className="w-5 h-5"
-                alt=""
-                width={100}
-                height={100}
-              />
+            <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
+              <img src="/icons/plus.svg" className="w-5 h-5" />
             </div>
-            <p className="text-[#828282]">Add New Information</p>
+            <p className="text-[#828282] font-medium text-lg">
+              Add New Information
+            </p>
           </div>
         </div>
-
         <BaseDialog
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

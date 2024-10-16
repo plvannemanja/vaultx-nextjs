@@ -1,19 +1,19 @@
 'use client';
 
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 import {
   deleteSellerInfo,
   getSellerInfo,
   upsertSellerInfo,
 } from '@/services/supplier';
-import { useEffect, useMemo, useState } from 'react';
-import { BaseDialog } from '../ui/BaseDialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import BaseButton from '../ui/BaseButton';
-import PhoneInput from 'react-phone-input-2';
 import { City, Country, State } from 'country-state-city';
+import { useEffect, useMemo, useState } from 'react';
+import PhoneInput from 'react-phone-input-2';
 import { useCreateNFT } from '../Context/CreateNFTContext';
-import { useToast } from '@/hooks/use-toast';
+import BaseButton from '../ui/BaseButton';
+import { BaseDialog } from '../ui/BaseDialog';
 
 export default function ShippingInfo() {
   const nftContext = useCreateNFT();
@@ -327,7 +327,9 @@ export default function ShippingInfo() {
   };
   return (
     <div className="flex flex-col gap-y-5">
-      <p className="text-lg font-medium">Shipping Information</p>
+      <p className="text-lg font-semibold text-white font-manrope">
+        Shipping Information
+      </p>
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data?.map((item: any, index: number) => {
@@ -337,7 +339,7 @@ export default function ShippingInfo() {
                   onClick={() => {
                     setSelectedShipping(item);
                   }}
-                  className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-neon' : 'border-gray-400'}`}
+                  className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-transparent' : 'border-[#DDF247]'}`}
                 >
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
@@ -358,7 +360,6 @@ export default function ShippingInfo() {
                           : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
                       </p>
                     ) : null}
-
                     <span
                       onClick={() => {
                         preserveState(item);
@@ -625,14 +626,16 @@ export default function ShippingInfo() {
           : null}
 
         <div
-          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-center cursor-pointer items-center rounded-md"
+          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
           onClick={resetState}
         >
           <div className="flex flex-col gap-y-6 items-center">
-            <div className="w-16 h-16 rounded-full bg-[#111111] border-2 border-[#FFFFFF4D] flex justify-center items-center">
+            <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <img src="/icons/plus.svg" className="w-5 h-5" />
             </div>
-            <p className="text-[#828282]">Add New Address</p>
+            <p className="text-[#828282] font-medium text-lg">
+              Add New Address
+            </p>
           </div>
         </div>
 

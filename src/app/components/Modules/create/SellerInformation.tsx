@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import ShippingInfo from '../ShippingInfo';
-import ContactInfo from '../ContactInfo';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@headlessui/react';
-import BaseButton from '../../ui/BaseButton';
+import { useState } from 'react';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
+import BaseButton from '../../ui/BaseButton';
+import ContactInfo from '../ContactInfo';
+import ShippingInfo from '../ShippingInfo';
 
 export default function SellerInformation({
   handler,

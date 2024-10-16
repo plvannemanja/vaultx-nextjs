@@ -1,30 +1,30 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Label } from '@/components/ui/label';
 import { Input, LinkInput } from '@/components/ui/input';
-import FileInput from '../ui/FileInput';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import BaseButton from '../ui/BaseButton';
-import { collectionServices } from '@/services/supplier';
-import { z } from 'zod';
-import ErrorModal from './create/ErrorModal';
-import CurationLoader from './create/CurationLoader';
-import AddNew from '../Icons/AddNew';
-import Upload from '../Icons/Upload';
-import { pinataGateway, uploadFile, uploadMetaData } from '@/utils/uploadData';
-import {
-  acceptedFormats,
-  ensureValidUrl,
-  maxFileSize,
-  removeEmptyStrings,
-} from '@/utils/helpers';
-import { useActiveAccount } from 'thirdweb/react';
-import { createCollection } from '@/lib/helper';
 import { useToast } from '@/hooks/use-toast';
-import ConnectedCard from '../Cards/ConnectedCard';
-import { BaseDialog } from '../ui/BaseDialog';
+import { createCollection } from '@/lib/helper';
+import { cn } from '@/lib/utils';
+import { collectionServices } from '@/services/supplier';
+import { acceptedFormats, ensureValidUrl, maxFileSize } from '@/utils/helpers';
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from '@headlessui/react';
+import { ChevronUpIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { useActiveAccount } from 'thirdweb/react';
+import { z } from 'zod';
+import ConnectedCard from '../Cards/ConnectedCard';
+import AddNew from '../Icons/AddNew';
+import BaseButton from '../ui/BaseButton';
+import { BaseDialog } from '../ui/BaseDialog';
+import FileInput from '../ui/FileInput';
+import CurationLoader from './create/CurationLoader';
+import ErrorModal from './create/ErrorModal';
 
 const createCurationSchema = z.object({
   name: z.string(),
@@ -282,16 +282,15 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       setImageSrc(editMode.logo);
     }
   }, [editMode]);
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <p className="text-xl font-medium">Create Curation</p>
-
+      <p className="text-[32px] text-white font-extrabold">Create Curation</p>
       <ConnectedCard />
-
       {status.active && (
         <BaseDialog
           isOpen={status.active}
@@ -320,8 +319,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         </BaseDialog>
       )}
 
-      <div className=" grid grid-cols-12 flex gap-[50px] gap-y-5 flex-col lg:flex-row lg:justify-between">
-        <div className="flex flex-col col-span-12 lg:col-span-5 items-center gap-y-2 justify-center py-24 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
+      <div className="flex gap-[50px] gap-y-5 flex-col lg:flex-row lg:justify-between">
+        <div className="col-span-12 lg:col-span-5 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
           {file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {imageSrc && (
@@ -340,28 +339,28 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 alt="upload"
                 className="w-[66px] h-[66px]"
               />
-              <div className="gap-y-[2px]">
-                <p className="text-center text-white text-lg font-extrabold font-['Manrope']">
+              <div className="flex flex-col gap-y-1 font-manrope">
+                <p className="text-center text-white text-lg font-extrabold">
                   Upload original RWA File
                 </p>
                 <div>
-                  <p className="mt-2 text-gray-400 mb-[4px]">
+                  <p className="mt-2 text-white/[53%] mb-[4px]">
                     Drag or choose your file to IPFS upload
                   </p>
-                  <p className="opacity-30 text-center text-white text-xs font-normal font-['Azeret Mono'] leading-tight">
+                  <p className="text-center text-white/30 text-xs font-normal leading-tight">
                     PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
                   </p>
                 </div>
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-2 font-manrope">
             <button
-              className="py-3 w-[20rem] h-[50px] text-black font-semibold bg-[#dee8e8]  p-2.5 rounded-[14px] justify-center items-center gap-2.5"
+              className="py-3 w-[20rem] h-[50px] text-black font-semibold bg-[#dee8e8] p-2.5 rounded-[14px] justify-center items-center gap-2.5"
               onClick={handleButtonClick}
             >
               <span className="flex gap-x-[10px] items-center justify-center">
-                <p className="text-[#161616] text-sm font-extrabold font-['Manrope'] capitalize">
+                <p className="text-[#161616] text-sm font-extrabold capitalize">
                   Browse file
                 </p>
                 <img
@@ -394,7 +393,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           <div className="w-full rounded-md pb-3 flex flex-col gap-y-2">
             <div className="flex gap-x-3">
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-medium text-[11px]">
+                <Label className="font-semibold test-sm text-white">
                   Curation Title*
                 </Label>
                 <Input
@@ -402,13 +401,15 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   onChange={(e) =>
                     setFormData({ ...formData, name: (e.target as any).value })
                   }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] font-AzeretMono rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter Collection Name"
                 />
               </div>
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-medium text-[11px]">Symbol*</Label>
+                <Label className="font-semibold test-sm text-white">
+                  Symbol*
+                </Label>
                 <Input
                   value={formData.symbol ? formData.symbol : ''}
                   onChange={(e) =>
@@ -417,17 +418,71 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       symbol: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] font-['Azeret Mono'] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  className="w-full border-none h-[48px] placeholder:text-xs font-AzeretMono bg-[#232323] gap-[30px] inline-flex"
                   type="text"
                   placeholder="i.e TAT"
                 />
               </div>
             </div>
           </div>
-
           <div className="w-full rounded-[20px] px-5 py-3 bg-[#232323] flex flex-col gap-y-[16px]">
-            <div className="flex justify-between items-center">
-              <Label className="text-[15px] font-medium">Banner Image</Label>
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton
+                    className={cn(
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      open ? 'border-b border-white/[8%]' : '',
+                    )}
+                  >
+                    <div className="flex w-full justify-between items-center">
+                      <Label className="text-[20px] font-extrabold">
+                        Banner Image
+                      </Label>
+                      <div className="flex justify-center">
+                        {formData.bannerImage && (
+                          <span
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setFormData({ ...formData, bannerImage: null });
+                            }}
+                          >
+                            Remove
+                          </span>
+                        )}
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
+                        />
+                      </div>
+                    </div>
+                  </DisclosureButton>
+                  <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                    <div className="flex gap-x-4 items-center my-5 mb-0">
+                      <FileInput
+                        title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                        titleStyles={
+                          'text-[#979797] text-sm font-normal font-AzeretMono leading-snug'
+                        }
+                        acceptedFormats={acceptedFormats}
+                        maxSizeInBytes={maxFileSize}
+                        onFileSelect={(file: any) =>
+                          handleFileChange(file, 'banner')
+                        }
+                        deSelect={!formData.bannerImage}
+                        // editMode={
+                        //   formData.bannerImage != '' && formData.bannerImage != null
+                        // }
+                        editMode={!!formData.bannerImage}
+                      />
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+            {/* <div className="flex justify-between items-center">
+              <Label className="text-[20px] font-extrabold">Banner Image</Label>
               {formData.bannerImage && (
                 <span
                   className="cursor-pointer"
@@ -439,12 +494,12 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 </span>
               )}
             </div>
-            <hr className="border-white opacity-[0.2] mt-[15px] mb-[15px]" />
+            <hr className="border-white opacity-[0.2]" />
             <div className="flex gap-x-4 items-center my-5 mb-0">
               <FileInput
                 title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
                 titleStyles={
-                  "text-[#979797] text-sm font-normal font-['Azeret Mono'] leading-snug"
+                  "text-[#979797] text-sm font-normal font-AzeretMono leading-snug"
                 }
                 acceptedFormats={acceptedFormats}
                 maxSizeInBytes={maxFileSize}
@@ -455,11 +510,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 // }
                 editMode={!!formData.bannerImage}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col gap-y-[16px]">
-            <Label className="font-medium">Description*</Label>
+            <Label className="font-semibold test-sm text-white">
+              Description*
+            </Label>
             <Textarea
               value={formData.description ? formData.description : ''}
               onChange={(e) => {
@@ -468,146 +525,267 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   description: (e.target as any).value,
                 });
               }}
-              className="w-full border-none bg-[#232323] rounded-[20px] placeholder-[#fff] h-[180px] resize-none py-[15px] px-[26px]"
+              className="w-full border-none bg-[#232323] font-AzeretMono rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-xs"
               placeholder="Please describe your product"
             />
           </div>
 
           <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-[16px]">
-            <Label className="font-medium text-[15px]">Your links</Label>
-            <hr className="border-white opacity-[0.2] " />
-            <div className="mt-5 flex gap-x-3">
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium text-[11px]">Website</Label>
-                <LinkInput
-                  value={formData.website ? formData.website : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      website: (e.target as any).value,
-                    })
-                  }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                  type="text"
-                  placeholder="Enter your website link"
-                />
-              </div>
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium text-[11px]">X(Twitter)</Label>
-                <LinkInput
-                  value={formData.twitter ? formData.twitter : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      twitter: (e.target as any).value,
-                    })
-                  }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                  type="text"
-                  placeholder="Enter your twitter link"
-                />
-              </div>
-            </div>
-            <div className="mt-2 flex gap-x-3">
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium text-[11px]">Facebook</Label>
-                <LinkInput
-                  value={formData.facebook ? formData.facebook : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      facebook: (e.target as any).value,
-                    })
-                  }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                  type="text"
-                  placeholder="Enter your facebook link"
-                />
-              </div>
-              <div className="flex flex-col gap-y-2 basis-1/2">
-                <Label className="font-medium text-[11px]">Instagram</Label>
-                <LinkInput
-                  value={formData.instagram ? formData.instagram : ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      instagram: (e.target as any).value,
-                    })
-                  }
-                  className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                  type="text"
-                  placeholder="Enter your instagram link"
-                />
-              </div>
-            </div>
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton
+                    className={cn(
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      open ? 'border-b border-white/[8%]' : '',
+                    )}
+                  >
+                    <div className="flex w-full justify-between items-center">
+                      <Label className="font-extrabold test-[20] text-white">
+                        Your links
+                      </Label>
+                      <ChevronUpIcon
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white/[53%]`}
+                      />
+                    </div>
+                  </DisclosureButton>
+                  <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                    <div className="mt-5 flex gap-x-3">
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-semibold test-sm text-white">
+                          Website
+                        </Label>
+                        <LinkInput
+                          value={formData.website ? formData.website : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              website: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          type="text"
+                          placeholder="Enter your website link"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-semibold test-sm text-white">
+                          X(Twitter)
+                        </Label>
+                        <LinkInput
+                          value={formData.twitter ? formData.twitter : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              twitter: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          type="text"
+                          placeholder="Enter your twitter link"
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-2 flex gap-x-3">
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-semibold test-sm text-white">
+                          Facebook
+                        </Label>
+                        <LinkInput
+                          value={formData.facebook ? formData.facebook : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              facebook: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          type="text"
+                          placeholder="Enter your facebook link"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-semibold test-sm text-white">
+                          Instagram
+                        </Label>
+                        <LinkInput
+                          value={formData.instagram ? formData.instagram : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              instagram: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          type="text"
+                          placeholder="Enter your instagram link"
+                        />
+                      </div>
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
           <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-2">
-            <div className="flex justify-between items-center">
-              <Label className="text-[15px] font-medium">
-                Youtube Video Link
-              </Label>
-              {youtube.length == 2 ? (
-                <p
-                  className="text-sm cursor-pointer"
-                  onClick={() => {
-                    if (youtube.length > 1) {
-                      setYoutube(youtube.slice(0, youtube.length - 1));
-                    }
-                  }}
-                >
-                  Delete
-                </p>
-              ) : (
-                <div className="flex gap-x-2 items-center">
-                  <div
-                    className="h-6 w-6 cursor-pointer"
-                    onClick={() => {
-                      if (youtube.length < 2) {
-                        setYoutube([...youtube, { title: '', url: '' }]);
-                      }
-                    }}
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton
+                    className={cn(
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      open ? 'border-b border-white/[8%]' : '',
+                    )}
                   >
-                    <AddNew />
-                  </div>
-                  <p className="text-sm">Add New</p>
-                </div>
+                    <div className="flex w-full justify-between items-center">
+                      <Label className="font-extrabold test-[20] text-white">
+                        Youtube Video Link
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        {youtube.length == 2 ? (
+                          <p
+                            className="text-sm cursor-pointer"
+                            onClick={() => {
+                              if (youtube.length > 1) {
+                                setYoutube(
+                                  youtube.slice(0, youtube.length - 1),
+                                );
+                              }
+                            }}
+                          >
+                            Delete
+                          </p>
+                        ) : (
+                          <div className="flex gap-x-2 items-center">
+                            <div
+                              className="h-6 w-6 cursor-pointer"
+                              onClick={() => {
+                                if (youtube.length < 2) {
+                                  setYoutube([
+                                    ...youtube,
+                                    { title: '', url: '' },
+                                  ]);
+                                }
+                              }}
+                            >
+                              <AddNew />
+                            </div>
+                            <p className="text-sm">Add New</p>
+                          </div>
+                        )}
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-[#949494] text-xs font-AzeretMono mt-1">
+                      You can add new fields by clicking the Add New button (up
+                      to 2 total)
+                    </p>
+                  </DisclosureButton>
+                  <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                    {youtube.map((item, index) => {
+                      return (
+                        <div key={index} className="mt-5 flex gap-x-3">
+                          <div className="flex flex-col gap-y-2 basis-1/2">
+                            <Label className="font-semibold test-sm text-white">
+                              Title
+                            </Label>
+                            <Input
+                              value={item.title ? item.title : ''}
+                              onChange={(e) => handleVideo(index, e, 'title')}
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px]"
+                              type="text"
+                              placeholder="Enter video title"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-y-2 basis-1/2">
+                            <Label className="font-semibold test-sm text-white">
+                              Video Link
+                            </Label>
+                            <LinkInput
+                              value={item.url ? item.url : ''}
+                              onChange={(e) => handleVideo(index, e, 'link')}
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                              type="text"
+                              placeholder="Enter video link"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </DisclosurePanel>
+                </>
               )}
-            </div>
-            <hr className="border-white opacity-[0.2] my-[10px]" />
-            {youtube.map((item, index) => {
-              return (
-                <div key={index} className="mt-5 flex gap-x-3">
-                  <div className="flex flex-col gap-y-2 basis-1/2">
-                    <Label className="font-medium text-[11px]">Title</Label>
-                    <Input
-                      value={item.title ? item.title : ''}
-                      onChange={(e) => handleVideo(index, e, 'title')}
-                      className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                      type="text"
-                      placeholder="Enter video title"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-y-2 basis-1/2">
-                    <Label className="font-medium text-[11px]">
-                      Video Link
-                    </Label>
-                    <LinkInput
-                      value={item.url ? item.url : ''}
-                      onChange={(e) => handleVideo(index, e, 'link')}
-                      className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex"
-                      type="text"
-                      placeholder="Enter video link"
-                    />
-                  </div>
-                </div>
-              );
-            })}
+            </Disclosure>
           </div>
 
           <div className="w-full rounded-[20px] px-[20px] py-[20px]  bg-dark flex flex-col gap-y-2">
-            <div className="flex justify-between items-center">
-              <Label className="text-[15px] font-medium">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton
+                    className={cn(
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      open ? 'border-b border-white/[8%]' : '',
+                    )}
+                  >
+                    <div className="flex w-full justify-between items-center">
+                      <Label className="text-[20px] font-extrabold">
+                        Custom Description Image
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        {formData.descriptionImage && (
+                          <span
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                descriptionImage: null,
+                              });
+                            }}
+                          >
+                            Remove
+                          </span>
+                        )}
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-[#949494] text-xs font-AzeretMono mt-1">
+                      You can add new fields by clicking the Add New button (up
+                      to 2 total)
+                    </p>
+                  </DisclosureButton>
+                  <DisclosurePanel className="pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="flex gap-x-4 items-center my-5">
+                      <FileInput
+                        title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                        acceptedFormats={acceptedFormats}
+                        maxSizeInBytes={maxFileSize}
+                        onFileSelect={(file: any) =>
+                          handleFileChange(file, 'description')
+                        }
+                        // editMode={
+                        //   formData.bannerImage != '' && formData.bannerImage != null
+                        // }
+                        editMode={!!formData.descriptionImage}
+                      />
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+            {/* <div className="flex justify-between items-center">
+              <Label className="text-[20px] font-extrabold">
                 Custom Description Image
               </Label>
               {formData.descriptionImage && (
@@ -635,7 +813,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 // }
                 editMode={!!formData.descriptionImage}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="flex gap-x-4 justify-center my-5">

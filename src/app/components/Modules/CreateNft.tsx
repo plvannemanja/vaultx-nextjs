@@ -1,22 +1,22 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import BasicDetails from './create/BasicDetails';
-import AdvanceDetails from './create/AdvanceDetails';
-import SellerInformation from './create/SellerInformation';
-import ErrorModal from './create/ErrorModal';
-import TriggerModal from '../ui/TriggerModal';
-import { CreateNftServices } from '@/services/createNftService';
-import { useActiveAccount } from 'thirdweb/react';
-import { useCreateNFT } from '../Context/CreateNFTContext';
-import { getVoucherSignature, IListAsset, listAsset } from '@/lib/helper';
-import { parseEther, zeroAddress } from 'viem';
-import { Address, isAddress } from 'thirdweb';
 import { useToast } from '@/hooks/use-toast';
-import MintLoader from './create/MintLoader';
-import RestrictiveModal from '../Modals/RestrictiveModal';
-import ConnectedCard from '../Cards/ConnectedCard';
+import { getVoucherSignature, IListAsset, listAsset } from '@/lib/helper';
+import { CreateNftServices } from '@/services/createNftService';
 import { INFTVoucher } from '@/types';
+import { useState } from 'react';
+import { Address, isAddress } from 'thirdweb';
+import { useActiveAccount } from 'thirdweb/react';
+import { parseEther, zeroAddress } from 'viem';
+import ConnectedCard from '../Cards/ConnectedCard';
+import { useCreateNFT } from '../Context/CreateNFTContext';
+import RestrictiveModal from '../Modals/RestrictiveModal';
+import TriggerModal from '../ui/TriggerModal';
+import AdvanceDetails from './create/AdvanceDetails';
+import BasicDetails from './create/BasicDetails';
+import ErrorModal from './create/ErrorModal';
+import MintLoader from './create/MintLoader';
+import SellerInformation from './create/SellerInformation';
 
 export enum StepType {
   basic,
@@ -393,7 +393,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         />
       </RestrictiveModal>
 
-      <p className="text-xl font-medium">Create New NFT</p>
+      <p className="text-[32px] text-white font-extrabold">Create RWA</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
         <div
           className={`flex gap-x-2 items-center ${step !== 1 ? 'opacity-60' : ''}`}
@@ -403,7 +403,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           </div>
           <p>Basic Details</p>
         </div>
-
         <svg
           className={`${step !== 1 ? 'opacity-60' : ''}`}
           width="24px"
@@ -460,7 +459,6 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           <p>Seller Information</p>
         </div>
       </div>
-
       {basicDetails.error && (
         <TriggerModal
           isOpen={basicDetails.error ? true : false}

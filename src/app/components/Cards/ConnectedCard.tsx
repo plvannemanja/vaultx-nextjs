@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 export default function ConnectedCard() {
   const activeAccount = useActiveAccount();
@@ -43,13 +42,13 @@ export default function ConnectedCard() {
             <p className="text-white text-lg font-extrabold">
               {address ?? 'Connect Wallet'}
             </p>
-            <p className="text-gray-400 font-normal">{activeChain?.name}</p>
+            <p className="text-white/[53%] font-normal">{activeChain?.name}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-5">
           <div>
-            <button className="bg-transparent px-[16px] py-[14px] rounded-lg text-[#DDF247] bg-[rgba(221, 242, 71, 0.09)] font-bold border">
+            <button className="px-4 py-3 rounded-xl text-[#DDF247] bg-[#DDF247]/[0.09] font-bold">
               Connected
             </button>
           </div>

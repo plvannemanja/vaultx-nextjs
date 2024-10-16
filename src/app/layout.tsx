@@ -1,12 +1,16 @@
-import type { Metadata } from 'next';
-import { Manrope } from 'next/font/google';
-import './globals.css';
-import { ThirdwebProvider } from 'thirdweb/react';
-import { ThemeProvider } from './components/theme-provider';
-import { GlobalProvider } from './components/Context/GlobalContext';
 import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next';
+import { Azeret_Mono, Manrope } from 'next/font/google';
+import { ThirdwebProvider } from 'thirdweb/react';
+import { GlobalProvider } from './components/Context/GlobalContext';
+import { ThemeProvider } from './components/theme-provider';
+import './globals.css';
 
 const manrope = Manrope({ subsets: ['latin'] });
+export const AzeretMono = Azeret_Mono({
+  subsets: ['latin'],
+  variable: '--azeret-mono',
+});
 
 export const metadata: Metadata = {
   title: 'Vault',
@@ -20,7 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={manrope.className}>
+      <body
+        className={`${manrope.className} ${AzeretMono.className} font-manrope`}
+      >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <ThirdwebProvider>
             <GlobalProvider>

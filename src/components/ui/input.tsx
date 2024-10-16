@@ -17,7 +17,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none file:text-sm file:font-medium placeholder:text-white/[53%] disabled:cursor-not-allowed disabled:opacity-50',
             className,
             showIcon && 'pr-10',
           )}
@@ -44,18 +44,14 @@ Input.displayName = 'Input';
 const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, value, onChange, showIcon, ...props }, ref) => {
     return (
-      <div className="relative flex items-center w-full">
+      <div className="w-full border-none pl-6 py-1 bg-[#161616] rounded-xl placeholder:text-white/[53%] justify-start items-center inline-flex font-AzeretMono placeholder:text-xs">
         <button onClick={props.onPressIcon}>
-          <img
-            src="/icons/link-shape.svg"
-            alt=""
-            className="absolute top-3 left-3 w-5 h-5"
-          />
+          <img src="/icons/link-shape-white.svg" alt="" className="w-5 h-5" />
         </button>
         <input
           type={type}
           className={cn(
-            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
             className,
             'pl-10',
           )}

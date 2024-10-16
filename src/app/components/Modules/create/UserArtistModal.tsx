@@ -1,20 +1,19 @@
-import { acceptedFormats, isValidNumber, maxFileSize } from '@/utils/helpers';
-import { useEffect, useRef, useState } from 'react';
-import BaseButton from '../../ui/BaseButton';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { useActiveAccount } from 'thirdweb/react';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { isZodAddress } from '@/lib/utils';
+import { getUserArtists, upsertUserArtist } from '@/services/supplier';
+import { IUserArtist } from '@/types';
+import { acceptedFormats, maxFileSize } from '@/utils/helpers';
+import { DialogClose } from '@radix-ui/react-dialog';
 import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import { useActiveAccount } from 'thirdweb/react';
+import { z } from 'zod';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
+import BaseButton from '../../ui/BaseButton';
 import { BaseDialog } from '../../ui/BaseDialog';
 import ErrorModal from './ErrorModal';
-import { DialogClose } from '@radix-ui/react-dialog';
-import { z } from 'zod';
-import { isZodAddress } from '@/lib/utils';
-import { useCreateNFT } from '../../Context/CreateNFTContext';
-import { getUserArtists, upsertUserArtist } from '@/services/supplier';
-import { useToast } from '@/hooks/use-toast';
-import { IUserArtist } from '@/types';
-import { debug } from 'console';
 
 const paymentSplitSchema = z.object({
   paymentWallet: isZodAddress,
@@ -228,20 +227,14 @@ export default function UserArtistModal({
     <div className="grid grid-cols-12 gap-4 h-auto relative bg-dark-900">
       {/* Header Section */}
       <div className="col-span-12 flex-col justify-center items-center gap-4 inline-flex pt-8">
-        <div className="flex-col justify-start items-start gap-12 flex">
-          <div className="flex-col justify-start items-start gap-8 flex">
-            <div className="text-center text-white text-4xl font-extrabold leading-tight">
-              Registering affiliated artists
-            </div>
-          </div>
+        <div className="text-center text-white text-[32px] font-extrabold">
+          Registering affiliated artists
         </div>
-        <div className="h-16 flex-col justify-start items-start gap-12 flex">
-          <div className="self-stretch text-center text-gray-500 text-2xl font-medium leading-normal">
-            We use artist templates to avoid mistakes that can arise from
-            repetitive artist information entry. Entering artist information can
-            shorten the mint time.
-          </div>
-        </div>
+        <p className="self-stretch text-center text-white text-2xl font-medium leading-normal">
+          We use artist templates to avoid mistakes that can arise from
+          repetitive artist information entry. Entering artist information can
+          shorten the mint time.
+        </p>
       </div>
 
       {/* Upload Artist Profile Image Section */}
