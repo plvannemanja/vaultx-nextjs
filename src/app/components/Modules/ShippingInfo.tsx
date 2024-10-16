@@ -9,6 +9,7 @@ import {
   upsertSellerInfo,
 } from '@/services/supplier';
 import { City, Country, State } from 'country-state-city';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import { useCreateNFT } from '../Context/CreateNFTContext';
@@ -306,6 +307,7 @@ export default function ShippingInfo() {
 
       return false;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedShipping, nftContext.sellerInfo.shipping],
   );
 
@@ -315,6 +317,7 @@ export default function ShippingInfo() {
       shippingId: selectedShipping?._id,
       shipping: selectedShipping,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedShipping]);
 
   useEffect(() => {
@@ -360,21 +363,29 @@ export default function ShippingInfo() {
                           : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
                       </p>
                     ) : null}
-                    <span
-                      onClick={() => {
-                        preserveState(item);
-                        setIsUpdateModalOpen(true);
-                      }}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
-                    >
-                      Edit
-                    </span>
-                    <span
-                      onClick={() => handleDeleteSeller(item)}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                    >
-                      <img src="/icons/trash.svg" className="w-4 h-4" />
-                    </span>
+                    <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                      <div
+                        className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                        onClick={() => {
+                          preserveState(item);
+                          setIsUpdateModalOpen(true);
+                        }}
+                      >
+                        Edit
+                      </div>
+                      <span
+                        onClick={() => handleDeleteSeller(item)}
+                        className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] text-[14px]"
+                      >
+                        <Image
+                          width={16}
+                          height={16}
+                          alt="delete"
+                          src="/icons/trash.svg"
+                          className="w-4 h-4"
+                        />
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex justify-end ">
@@ -631,7 +642,13 @@ export default function ShippingInfo() {
         >
           <div className="flex flex-col gap-y-6 items-center">
             <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
-              <img src="/icons/plus.svg" className="w-5 h-5" />
+              <Image
+                src="/icons/plus.svg"
+                className="w-5 h-5"
+                alt="plus"
+                width={20}
+                height={20}
+              />
             </div>
             <p className="text-[#828282] font-medium text-lg">
               Add New Address
