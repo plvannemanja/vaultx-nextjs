@@ -1,21 +1,20 @@
 'use client';
 
+import WalletIcon from '@/components/Icon/WalletIcon';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { List } from 'lucide-react';
-import Menu from './Menu';
-import SideBar from '../ui/SideBar';
-import { WalletAutoConnect } from '../theme-provider';
-import { useActiveAccount, useConnectModal } from 'thirdweb/react';
-import WalletIcon from '@/components/Icon/WalletIcon';
 import { client, wallets } from '@/lib/client';
+import { List } from 'lucide-react';
+import { useActiveAccount, useConnectModal } from 'thirdweb/react';
 import { useGlobalContext } from '../Context/GlobalContext';
+import { WalletAutoConnect } from '../theme-provider';
+import SideBar from '../ui/SideBar';
+import Menu from './Menu';
 
 export default function AppHeader() {
   const { user } = useGlobalContext();

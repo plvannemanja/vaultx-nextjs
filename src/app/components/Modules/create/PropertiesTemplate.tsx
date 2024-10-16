@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import {
   deleteProperty,
   getProperties,
   upsertProperty,
 } from '@/services/supplier';
+import { useEffect, useState } from 'react';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import PropertiesInfo from '../Properties';
-import { useToast } from '@/hooks/use-toast';
 
 const defaultAttributes = [
   { type: 'Type', value: 'Write it here' },
@@ -138,15 +138,13 @@ export default function PropertiesTemplate({
 
   return (
     <div className="bg-template-gradient p-4 gap-y-2 rounded-lg flex flex-col">
-      <p>Properties</p>
-      <span className="text-gray-400 azeret-mono-font">
+      <p className="text-lg font-semibold">Properties</p>
+      <span className="text-white/[53%] font-AzeretMono text-xs">
         Textual Traits that show up as rectangle.
       </span>
-
       <div className="flex flex-col gap-y-3 mt-4">
-        <p>Select Properties Template</p>
-
-        <div className="flex flex-wrap gap-5">
+        <p className="font-medium">Select Properties Template</p>
+        <div className="flex flex-wrap gap-5 font-medium text-lg">
           <div
             onClick={() =>
               handleTemplateSelect({
@@ -167,7 +165,7 @@ export default function PropertiesTemplate({
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
                 advancedDetails.propertyTemplateId === item._id
                   ? 'border-neon'
                   : 'border-none'
@@ -175,7 +173,7 @@ export default function PropertiesTemplate({
             >
               <p>{item.name}</p>
               <button
-                className="absolute bottom-2 right-2 text-[#DDF247] border border-[#ffffff20] px-[10px] rounded py-1 text-[14px]"
+                className="absolute bottom-2 right-2 text-[#DDF247] border border-white/[20%] px-[10px] rounded py-1 text-[14px]"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTemplateEdit(item);
@@ -184,7 +182,7 @@ export default function PropertiesTemplate({
                 Edit
               </button>
               <div
-                className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
+                className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-white/[20%]"
                 onClick={() => handleTemplateDelete(item)}
               >
                 <img src="/icons/trash.svg" className="w-4 h-4" />
@@ -194,12 +192,14 @@ export default function PropertiesTemplate({
 
           <div
             onClick={() => setIsModalOpenTemplate(true)}
-            className="w-[18rem] h-[15rem] bg-[#232323] border-2 flex flex-col justify-center items-center rounded-md relative"
+            className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
           >
-            <div className="w-12 h-12 rounded-full bg-[#111] border border-[#ffffff38] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <img src="/icons/plus.svg" />
             </div>
-            <p className="text-[#828282]">Add new template</p>
+            <p className="text-[#828282] font-medium text-lg">
+              Add new template
+            </p>
           </div>
         </div>
 
@@ -211,7 +211,7 @@ export default function PropertiesTemplate({
             >
               <input
                 type="text"
-                className="text-white text-center w-[80%] rounded-md bg-transparent mx-auto"
+                className="text-white text-center text-sm w-[80%] rounded-md bg-transparent mx-auto"
                 value={item.type}
                 onChange={(e) =>
                   handlePropertyChange(index, 'type', e.target.value)
@@ -219,7 +219,7 @@ export default function PropertiesTemplate({
               />
               <input
                 type="text"
-                className="text-[#888] text-center w-[80%] rounded-md bg-transparent mx-auto"
+                className="text-[#888] text-sm text-center w-[80%] rounded-md bg-transparent mx-auto"
                 value={item.value}
                 onChange={(e) =>
                   handlePropertyChange(index, 'value', e.target.value)
@@ -246,7 +246,7 @@ export default function PropertiesTemplate({
 
         <div className="flex gap-x-3 item-center">
           <img src="/icons/dot.svg" className="w-5 h-5" />
-          <span>
+          <span className="tex-sm">
             You can freely change properties values by clicking on the title and
             content.
           </span>

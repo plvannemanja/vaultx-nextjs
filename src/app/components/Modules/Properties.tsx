@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { getProperties, upsertProperty } from '@/services/supplier';
-import { BaseDialog } from '../ui/BaseDialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import BaseButton from '../ui/BaseButton';
 import { useToast } from '@/hooks/use-toast';
+import { upsertProperty } from '@/services/supplier';
+import { useState } from 'react';
+import BaseButton from '../ui/BaseButton';
+import { BaseDialog } from '../ui/BaseDialog';
 
 export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
   const { toast } = useToast();

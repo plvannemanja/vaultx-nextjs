@@ -1,34 +1,31 @@
 'use client';
 
-import Image from 'next/image';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 import SlickCarousel from '@/app/components/Carousels/SlickCarousel';
-import { EyeIcon } from 'lucide-react';
-import NftServices from '@/services/nftService';
-import BaseButton from '@/app/components/ui/BaseButton';
-import { BaseDialog } from '@/app/components/ui/BaseDialog';
-import BuyModal from '@/app/components/Modules/nft/BuyModal';
 import BidModal from '@/app/components/Modules/nft/BidModal';
-import Quotes from '@/app/components/Modules/nft/Quotes';
-import AcceptBidModal from '@/app/components/Modules/nft/AcceptBidModal';
+import BuyModal from '@/app/components/Modules/nft/BuyModal';
+import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
 import EscrowModal from '@/app/components/Modules/nft/EscrowModal';
 import EscrowRequestModal from '@/app/components/Modules/nft/EscrowRequestModal';
-import CancelOrderModal from '@/app/components/Modules/nft/CancelOrderModal';
 import PutSaleModal from '@/app/components/Modules/nft/PutSaleModal';
-import BasicLoadingModal from './BasicLoadingModal';
+import Quotes from '@/app/components/Modules/nft/Quotes';
+import BaseButton from '@/app/components/ui/BaseButton';
+import { BaseDialog } from '@/app/components/ui/BaseDialog';
 import { unlistAsset } from '@/lib/helper';
-import { useActiveAccount } from 'thirdweb/react';
 import { CreateSellService } from '@/services/createSellService';
-import ErrorModal from '../create/ErrorModal';
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import EditNFTModal from './EditNFTModal';
-import { dividerClasses } from '@mui/material';
+import NftServices from '@/services/nftService';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { EyeIcon, SquareArrowOutUpRight } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useActiveAccount } from 'thirdweb/react';
 import { useGlobalContext } from '../../Context/GlobalContext';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import ErrorModal from '../create/ErrorModal';
+import BasicLoadingModal from './BasicLoadingModal';
 import BurnModal from './BurnModal';
+import EditNFTModal from './EditNFTModal';
 import TransferModal from './TransferModal';
 
 const style = {
@@ -74,6 +71,7 @@ export default function NFTMain({
     setLiked,
     type,
   } = useNFTDetail();
+  console.log({ type });
   const [modal, setModal] = useState(false);
   const [views, setViews] = useState(0);
   const [modalStatus, setModalStatus] = useState<IModalStatus>({
@@ -145,12 +143,14 @@ export default function NFTMain({
 
   useEffect(() => {
     handleView();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nftId]);
 
   useEffect(() => {
     if (error) {
       setModalStatus({ ...modalStatus, errorModal: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   return (
@@ -286,7 +286,6 @@ export default function NFTMain({
               className="w-20 h-16 absolute bottom-3 right-4"
             />
           </div>
-
           <div className="flex flex-col gap-y-3 justify-center text-white w-full lg:w-[43%]">
             <div className="w-full flex flex-col gap-y-3">
               <div className="ms-auto cursor-pointer">
@@ -421,21 +420,22 @@ export default function NFTMain({
                   )}
                 </div>
               </div>
-
               <p className="text-[32px] font-extrabold leading-[43.2px]">
                 {data.name}
               </p>
               <div className="flex justify-between">
                 <div className="flex gap-2 items-center">
                   {data?.owner?.avatar?.url ? (
-                    <img
+                    <Image
+                      width={32}
+                      height={32}
                       src={data?.owner?.avatar?.url}
                       alt="avatar"
                       className="w-8 h-8 rounded-full"
                     />
                   ) : null}
                   <div className="flex flex-col gap-y-1 text-sm">
-                    <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    <p className="text-[12px] text-white/30 azeret-mono-font">
                       Owned by:
                     </p>
                     <p className="text-[12px] azeret-mono-font text-[#fff]">
@@ -443,17 +443,18 @@ export default function NFTMain({
                     </p>
                   </div>
                 </div>
-
                 <div className="flex gap-2 items-center">
                   {data?.mintedBy?.avatar?.url ? (
-                    <img
+                    <Image
+                      width={32}
+                      height={32}
                       src={data?.mintedBy?.avatar?.url}
                       alt="avatar"
                       className="w-8 h-8 rounded-full"
                     />
                   ) : null}
                   <div className="flex flex-col gap-y-1 text-sm">
-                    <p className="text-[12px] text-gray-400 azeret-mono-font">
+                    <p className="text-[12px] text-white/30 azeret-mono-font">
                       Created by:
                     </p>
                     <p className="text-[12px] azeret-mono-font text-[#fff]">
@@ -463,38 +464,85 @@ export default function NFTMain({
                 </div>
               </div>
               <div className="flex gap-x-3">
-                <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F] px-3 py-2 rounded-xl">
-                  <EyeIcon width={20} height={20} />
-                  {views ? views : 1} view
+                <div className="flex gap-x-2 items-center border font-semibold border-white border-opacity-[12%] text-white px-3 py-2 rounded-xl">
+                  <EyeIcon className="w-5 h-5" />
+                  <span className="text-white">{views ? views : 1} view</span>
                 </div>
-                <div className="flex gap-x-2 items-center border-2 border-[#FFFFFF1F]  px-3 py-2 rounded-xl">
+                <div className="flex gap-x-2 items-center border font-semibold border-white border-opacity-[12%] text-white px-3 py-2 rounded-xl">
+                  <svg
+                    width="18"
+                    height="19"
+                    viewBox="0 0 18 19"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M9.63075 11.825L9 10.25L8.36925 11.825L6.75 11.969L7.98 13.0858L7.6095 14.75L9 13.8657L10.3905 14.75L10.02 13.0858L11.25 11.969L9.63075 11.825ZM4.5 2H13.5V3.5H4.5V2ZM3 5H15V6.5H3V5Z"
+                      fill="white"
+                    />
+                    <path
+                      d="M15 9.5V15.5H3V9.5H15ZM15 8H3C2.60218 8 2.22064 8.15804 1.93934 8.43934C1.65804 8.72064 1.5 9.10218 1.5 9.5V15.5C1.5 15.8978 1.65804 16.2794 1.93934 16.5607C2.22064 16.842 2.60218 17 3 17H15C15.3978 17 15.7794 16.842 16.0607 16.5607C16.342 16.2794 16.5 15.8978 16.5 15.5V9.5C16.5 9.10218 16.342 8.72064 16.0607 8.43934C15.7794 8.15804 15.3978 8 15 8Z"
+                      fill="white"
+                    />
+                  </svg>
                   {data.category ? data.category.name : 'N/A'}
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
-              <div className="flex w-full justify-between">
-                <p className="text-sm text-gray-400 azeret-mono-font">
-                  {type === 'NotForSale' ? 'Not For Sale' : 'Current Price'}
+            <div className="w-full flex flex-col gap-y-1 bg-[#232323] p-6 rounded-[20px]">
+              <div className="items-center grid grid-cols-12 justify-between">
+                <p className="text-xs text-white/60 col-span-8 azeret-mono-font">
+                  {'Current Price'}
                 </p>
-              </div>
-
-              <div className="flex flex-col justify-between w-full">
-                <div className="flex justify-between items-center gap-y-2 w-full mt-3">
-                  {type === 'NotForSale' ? null : (
-                    <p className="text-[32px] font-medium">${data.price}</p>
-                  )}
-                  <div>
+                {type === 'resell' && (
+                  <div className="col-span-4">
                     <BaseDialog
                       trigger={
-                        <span
-                          className="cursor-pointer px-3 py-2 rounded-xl border-2 border-white"
+                        <div
+                          className="cursor-pointer flex items-center gap-x-2 h-8 px-3 font-bold py-2 rounded-lg border text-sm border-[#a3a3a3]"
                           onClick={() => {
                             setModalStatus({ ...modalStatus, quote: true });
                           }}
                         >
-                          Check Eth Quotes
-                        </span>
+                          <SquareArrowOutUpRight className="w-4 h-4" />
+                          <span>Check Eth Quotes</span>
+                        </div>
+                      }
+                      className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
+                      isOpen={modalStatus.quote}
+                      onClose={(val) => {
+                        setModalStatus({ ...modalStatus, quote: val });
+                      }}
+                    >
+                      <Quotes
+                        gasFee={0.0001}
+                        onClose={() => {
+                          setModalStatus({ ...modalStatus, quote: false });
+                        }}
+                      />
+                    </BaseDialog>
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col justify-between w-full">
+                <div className="flex justify-between items-center gap-y-2 w-full mt-2">
+                  {type === 'NotForSale' ? (
+                    <p className="text-[32px] font-extrabold">Not For Sale</p>
+                  ) : (
+                    <p className="text-[32px] font-extrabold">$ {data.price}</p>
+                  )}
+                  <div>
+                    <BaseDialog
+                      trigger={
+                        <div
+                          className="cursor-pointer flex items-center gap-x-1 px-3 font-bold py-2 rounded-lg border text-sm border-[#a3a3a3]"
+                          onClick={() => {
+                            setModalStatus({ ...modalStatus, quote: true });
+                          }}
+                        >
+                          <SquareArrowOutUpRight className="w-4 h-4" />
+                          <span>Check Eth Quotes</span>
+                        </div>
                       }
                       className="bg-black max-h-[80%] mx-auto overflow-y-auto overflow-x-hidden"
                       isOpen={modalStatus.quote}
@@ -511,9 +559,37 @@ export default function NFTMain({
                     </BaseDialog>
                   </div>
                 </div>
-                <div className="flex justify-between items-center gap-y-2 w-full mt-3">
+                <div className="flex justify-between items-center gap-y-2 w-full mt-2">
                   {type === 'buy' ? (
-                    <div className="flex  gap-y-2 gap-2 items-center w-full">
+                    <div className="flex gap-y-2 gap-2 items-center w-full">
+                      <BaseDialog
+                        isOpen={modalStatus.bid}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, bid: val });
+                        }}
+                        trigger={
+                          <BaseButton
+                            title="Place a Bid"
+                            variant="secondaryOutline"
+                            className={
+                              '!rounded-[14px] w-full bg-[#DDF24733] !border-0'
+                            }
+                            onClick={() => {
+                              setModalStatus({ ...modalStatus, bid: true });
+                            }}
+                          />
+                        }
+                        className="bg-black max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
+                      >
+                        <BidModal
+                          title={data.name}
+                          update={() => { }}
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, bid: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
                       <BaseDialog
                         trigger={
                           <BaseButton
@@ -565,7 +641,6 @@ export default function NFTMain({
                       </BaseDialog>
                     </div>
                   ) : null}
-
                   {type === 'release' ? (
                     <div className="flex  gap-y-2 gap-2 items-center w-full">
                       <BaseDialog
@@ -750,62 +825,75 @@ export default function NFTMain({
                 </div>
               </div>
             </div>
-            <div className="w-full flex flex-col gap-y-3 bg-dark p-6 rounded-[20px]">
-              <p className="text-lg font-medium">Overview</p>
-              <hr />
+            <div className="w-full flex flex-col gap-y-3 bg-[#232323] p-6 rounded-[20px] ">
+              <p className="font-extrabold text-sm">Overview</p>
+              <hr className="border-white border-opacity-[8%]" />
               <div className="grid grid-cols-12 w-full gap-5 justify-between ">
-                <div className="flex flex-col col-span-8 gap-y-[10px]">
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Artist</span>
-                    <span className="text-gray-400 azeret-mono-font">
+                <div className="flex flex-col col-span-7 gap-y-[15px]">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
+                    <span className="font-extrabold text-white text-sm">
+                      Artist
+                    </span>
+                    <span className="text-white/60 azeret-mono-font text-sm">
                       {data.artist}
                     </span>
                   </div>
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Shipping Country</span>
-                    <span className="text-gray-400 azeret-mono-font">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
+                    <span className="font-extrabold text-white text-sm">
+                      Shipping Country
+                    </span>
+                    <span className="text-white/60 azeret-mono-font text-sm">
                       {data.saleId ? data.saleId.sellerShippingId.country : ''}
                     </span>
                   </div>
-                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <span className="font-medium">Royalties</span>
-                    <span className="text-gray-400 azeret-mono-font">
+                  <div className="flex px-4 py-4 rounded-md justify-between  items-center border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
+                    <span className="font-extrabold text-white text-sm">
+                      Royalties
+                    </span>
+                    <span className="text-white/60 azeret-mono-font text-sm">
                       {data.royalty}%
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col col-span-4 gap-y-3">
-                  <div className="flex flex-col px-4 py-4 rounded-md justify-between border border-[#ffffff52] bg-gradient-to-br from-[#ffffff0f] to-[#32282808]">
-                    <p className="font-medium">Size</p>
-                    <div className="mt-2 flex flex-col gap-y-3 ">
-                      <p className="">
-                        <span className="w-[58px] inline-block">Length</span>
+                <div className="flex flex-col col-span-5 gap-y-3">
+                  <div className="flex flex-col px-4 py-4 rounded-md justify-between border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
+                    <p className="font-semibold">Size</p>
+                    <div className="mt-2 flex flex-col gap-y-3 text-white/60">
+                      <p className="flex">
+                        <span className="inline-block flex-1">Length</span>
                         <span className="text-center w-[20px] inline-block">
                           :
                         </span>
-                        {data?.shippingInformation?.lengths}cm
+                        <span className="flex-1">
+                          {data?.shippingInformation?.lengths}cm
+                        </span>
                       </p>
-                      <p>
-                        <span className="w-[58px] inline-block">Height</span>
-                        <span className="text-center w-[20px] inline-block ">
+                      <p className="flex">
+                        <span className="inline-block flex-1">Height</span>
+                        <span className="text-center w-[20px] inline-block">
                           :
-                        </span>{' '}
-                        {data?.shippingInformation?.height}cm
+                        </span>
+                        <span className="flex-1">
+                          {data?.shippingInformation?.height}cm
+                        </span>
                       </p>
-                      <p>
-                        {' '}
-                        <span className="w-[58px] inline-block">Width</span>
+                      <p className="flex">
+                        <span className="inline-block flex-1">Width</span>
                         <span className="text-center w-[20px] inline-block ">
                           :
                         </span>
-                        {data?.shippingInformation?.width}cm
+                        <span className="flex-1">
+                          {data?.shippingInformation?.width}cm
+                        </span>
                       </p>
-                      <p>
-                        <span className="w-[58px] inline-block">Weight</span>{' '}
+                      <p className="flex">
+                        <span className="inline-block flex-1">Weight</span>{' '}
                         <span className="text-center w-[20px] inline-block ">
                           :
                         </span>
-                        {data?.shippingInformation?.weight}cm
+                        <span className="flex-1">
+                          {data?.shippingInformation?.weight}cm
+                        </span>
                       </p>
                     </div>
                   </div>

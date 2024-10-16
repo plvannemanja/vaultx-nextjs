@@ -1,16 +1,15 @@
 'use client';
 
-import Filters from '@/app/components/ui/Filters';
-import Image from 'next/image';
 import NftCard from '@/app/components/Cards/NftCard';
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import NftServices from '@/services/nftService';
-import { useDebounce } from 'use-debounce';
-import { useToast } from '@/hooks/use-toast';
-import Link from 'next/link';
-import { ensureValidUrl } from '@/utils/helpers';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
+import Filters from '@/app/components/ui/Filters';
+import { useToast } from '@/hooks/use-toast';
+import NftServices from '@/services/nftService';
+import { ensureValidUrl } from '@/utils/helpers';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 export default function Page() {
   const nftService = new NftServices();
@@ -89,19 +88,15 @@ export default function Page() {
         </a>
       ) : null}
       <Filters setState={handleFilters} />
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-            return (
-              <Link
-                key={index}
-                href={`/nft/${nft._id}`}
-              >
-                <NftCard data={nft} />
-              </Link>
-            );
-          })
+              return (
+                <Link key={index} href={`/nft/${nft._id}`}>
+                  <NftCard data={nft} />
+                </Link>
+              );
+            })
           : null}
       </div>
     </div>

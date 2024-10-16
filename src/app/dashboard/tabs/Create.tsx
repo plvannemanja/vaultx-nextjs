@@ -1,22 +1,12 @@
 'use client';
 
+import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import CreateCuration from '@/app/components/Modules/CreateCuration';
 import CreateNft from '@/app/components/Modules/CreateNft';
-import { userServices } from '@/services/supplier';
+import { isCurator } from '@/lib/helper';
 import Image from 'next/image';
 import { useState } from 'react';
-import { contract } from '@/lib/contract';
-import {
-  prepareContractCall,
-  sendTransaction,
-  readContract,
-  resolveMethod,
-  prepareEvent,
-  getContractEvents,
-} from 'thirdweb';
 import { useActiveAccount } from 'thirdweb/react';
-import { isCurator } from '@/lib/helper';
-import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 enum ModalType {
   Curation = 'curation',
   Rwa = 'rwa',

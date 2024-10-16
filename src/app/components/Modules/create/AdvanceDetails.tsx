@@ -1,19 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@headlessui/react';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { CategoryService } from '@/services/catergoryService';
+import { isValidNumber } from '@/utils/helpers';
+import { Textarea } from '@headlessui/react';
+import { useEffect, useState } from 'react';
+import { isAddress } from 'thirdweb';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 import BaseButton from '../../ui/BaseButton';
 import FileInput from '../../ui/FileInput';
 import PropertiesTemplate from './PropertiesTemplate';
-import { useCreateNFT } from '../../Context/CreateNFTContext';
-import { BaseDialog } from '../../ui/BaseDialog';
-import PropertiesInfo from '../Properties';
-import { isAddress } from 'thirdweb';
-import { isValidNumber } from '@/utils/helpers';
-import { CategoryService } from '@/services/catergoryService';
 
 export default function AdvanceDetails({
   handler,
@@ -205,11 +203,11 @@ export default function AdvanceDetails({
 
   return (
     <div className="flex flex-col gap-y-4">
-      <div className="flex gap-3 grid grid-cols-1 lg:grid-cols-3 flex-wrap">
+      <div className="gap-3 grid grid-cols-1 lg:grid-cols-3 flex-wrap">
         <div className="bg-dark px-3 py-2 grid-cols-1 sm:grid-cols-2 rounded-lg w-full flex justify-between items-center">
           <div className="w-full flex flex-col gap-y-2">
-            <p className="font-medium">Free Minting</p>
-            <p className="text-gray-500 azeret-mono-font">{`Free mint your nft. You don't need any gas fee `}</p>
+            <p className="font-semibold">Free Minting</p>
+            <p className="text-[#B7B2B2] font-AzeretMono text-xs">{`Free mint your nft. You don't need any gas fee `}</p>
           </div>
           <Switch
             id="free"
@@ -220,8 +218,8 @@ export default function AdvanceDetails({
 
         <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
           <div className="w-full flex flex-col gap-y-2">
-            <p className="font-medium">Royalties</p>
-            <p className="text-gray-500 azeret-mono-font">
+            <p className="font-semibold">Royalties</p>
+            <p className="text-[#B7B2B2] font-AzeretMono text-xs">
               Earn a % on secondary sales
             </p>
           </div>
@@ -234,8 +232,8 @@ export default function AdvanceDetails({
 
         <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
           <div className="w-full flex flex-col gap-y-2">
-            <p className="font-medium">Unlockable Content</p>
-            <p className="text-gray-500 azeret-mono-font">
+            <p className="font-semibold">Unlockable Content</p>
+            <p className="text-[#B7B2B2] font-AzeretMono text-xs">
               Only owner can view this content
             </p>
           </div>
@@ -248,8 +246,8 @@ export default function AdvanceDetails({
 
         <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
           <div className="w-full flex flex-col gap-y-2">
-            <p className="font-medium">Category</p>
-            <p className="text-gray-500 azeret-mono-font">
+            <p className="font-semibold">Category</p>
+            <p className="text-[#B7B2B2] font-AzeretMono text-xs">
               Put this item into category
             </p>
           </div>
@@ -262,8 +260,8 @@ export default function AdvanceDetails({
 
         <div className="bg-dark px-3 py-2 grid-cols-3 rounded-lg w-full flex justify-between items-center">
           <div className="w- flex flex-col gap-y-2">
-            <p className="font-medium">Split Payments</p>
-            <p className="text-gray-500 azeret-mono-font">
+            <p className="font-semibold">Split Payments</p>
+            <p className="text-[#B7B2B2] font-AzeretMono text-xs">
               Add multiple address to receive payments
             </p>
           </div>
@@ -277,13 +275,12 @@ export default function AdvanceDetails({
 
       <div className="flex flex-col gap-y-5">
         {options.royalties && (
-          <div className="flex flex-col gap-y-3">
-            <p className="text-[20px] font-medium">Royalties</p>
-
+          <div className="flex flex-col gap-y-3 mt-3">
+            <p className="text-lg font-semibold">Royalties(%)</p>
             <div className="grid grid-cols-12 gap-x-2">
               <div className="col-span-4">
                 <Input
-                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl inline-flex text-[#B7B2B2]"
                   onChange={(e) =>
                     setAdvancedDetails({
                       ...advancedDetails,
@@ -299,7 +296,7 @@ export default function AdvanceDetails({
               <div className="col-span-1 flex">
                 <div className="relative">
                   <Input
-                    className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+                    className="h-[52px] py-[15px] text-[#979797] disabled:bg-[#232323] bg-[#232323] rounded-xl justify-start items-center"
                     onChange={(e) => {
                       let val = Number(e.target.value);
                       setAdvancedDetails({
@@ -318,7 +315,6 @@ export default function AdvanceDetails({
                         : ''
                     }
                   />
-                  <p className="absolute top-4 right-2 text-[#979797]">%</p>
                 </div>
               </div>
               <div className="col-span-2 hidden">
@@ -335,10 +331,10 @@ export default function AdvanceDetails({
         )}
 
         {options.unlockable && (
-          <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Unlockable Content</p>
+          <div className="flex flex-col gap-y-3 mt-3">
+            <p className="text-lg font-semibold">Unlockable Content</p>
             <Textarea
-              className="bg-[#232323] p-4 rounded-md azeret-mono-font focus:placeholder-transparent focus:outline-none"
+              className="font-AzeretMono rounded-md focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none text-[#989898] placeholder:text-[#989898] resize-none p-4 placeholder:text-xs bg-[#232323] focus:placeholder-transparent focus:outline-none"
               onChange={(e) => {
                 setFormData({
                   ...formData,
@@ -360,12 +356,14 @@ export default function AdvanceDetails({
                   maxSizeInBytes={1024 * 1024}
                   deSelect={true}
                 />
-                <img
-                  src="/icons/trash.svg"
-                  alt="trash"
-                  className="w-6 h-6 cursor-pointer"
-                  onClick={() => removeUnlockable(0)}
-                />
+                {unlockableFiles.length === 0 ? (
+                  <img
+                    src="/icons/trash.svg"
+                    alt="trash"
+                    className="w-6 h-6 cursor-pointer"
+                    onClick={() => removeUnlockable(0)}
+                  />
+                ) : null}
                 <div
                   className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
                   onClick={() => {
@@ -439,11 +437,11 @@ export default function AdvanceDetails({
 
         {options.category && (
           <div className="flex flex-col gap-y-2">
-            <Label className="text-lg font-medium">Category</Label>
+            <Label className="text-lg font-semibold">Category</Label>
             <select
               aria-label="Select category"
               // className="h-10 rounded-md px-2 w-full"
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+              className="w-full border-none bg-[#232323] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs font-AzeretMono inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
               name="country"
               onChange={(e) => {
                 setFormData({ ...formData, category: (e.target as any).value });
@@ -466,12 +464,12 @@ export default function AdvanceDetails({
 
         {options.split && (
           <div className="flex flex-col gap-y-3">
-            <p className="text-lg font-medium">Split Payments (%)</p>
+            <p className="text-lg font-semibold">Split Payments (%)</p>
             {paymentSplits.map((split, index) => (
               <div key={index} className="grid grid-cols-12 gap-x-2">
                 <div className="col-span-4">
                   <Input
-                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
+                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl inline-flex text-[#B7B2B2]"
                     onChange={(e) =>
                       updateSplit(index, 'paymentWallet', e.target.value)
                     }
@@ -484,7 +482,7 @@ export default function AdvanceDetails({
                 <div className="col-span-1 flex">
                   <div className="relative">
                     <Input
-                      className="max-w-23 h-[52px] px-[12px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px]"
+                      className="h-[52px] py-[15px] text-[#979797] disabled:bg-[#232323] bg-[#232323] rounded-xl justify-start items-center"
                       onChange={(e) => {
                         const value = BigInt(e.target.value); // Convert the input value to bigint
                         updateSplit(index, 'paymentPercentage', value);
@@ -496,7 +494,6 @@ export default function AdvanceDetails({
                       disabled={true}
                       value={split.paymentPercentage.toString()} // Convert bigint to string for display
                     />
-                    <p className="absolute top-4 right-2 text-[#979797]">%</p>
                   </div>
                 </div>
                 <div className="col-span-2 flex">
