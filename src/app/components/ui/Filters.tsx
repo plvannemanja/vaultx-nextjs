@@ -12,7 +12,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 
 export const prices = [
   {
@@ -64,10 +64,12 @@ export default function Filters({
   setState?: any;
   isCuration?: boolean;
 }) {
-  const [categories, setCategories] = useState<any[]>([{
-    name: "Category",
-    _id: null,
-  }]);
+  const [categories, setCategories] = useState<any[]>([
+    {
+      name: 'Category',
+      _id: null,
+    },
+  ]);
 
   const [search, setSearch] = useState<any>({
     search: '',
@@ -89,7 +91,7 @@ export default function Filters({
       const {
         data: { categories },
       } = await categoryService.getAllCategories(0, 0);
-      setCategories([{ name: "Category", _id: null }, ...categories]);
+      setCategories([{ name: 'Category', _id: null }, ...categories]);
     } catch (error) {
       console.log(error);
     }
@@ -127,9 +129,9 @@ export default function Filters({
         </svg>
         <Label>Filter:</Label>
       </div>
-      {
-        !isCuration && (
-          <Select onValueChange={(value: string) => {
+      {!isCuration && (
+        <Select
+          onValueChange={(value: string) => {
             setSearch({
               ...search,
               category: {
@@ -138,41 +140,49 @@ export default function Filters({
               },
             });
             setState(search);
-          }}>
-            <SelectTrigger className="relative flex rounded-[12px] min-w-[18rem] max-w-[20rem] h-full justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
-              <SelectValue placeholder="Select a category" />
-            </SelectTrigger>
-            <SelectContent className=''>
-              <SelectGroup>
-                {categories.map((category, index: number) => (
-                  <SelectItem value={category.name} key={index}>{category.name}</SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        )
-      }
+          }}
+        >
+          <SelectTrigger className="relative flex rounded-[12px] min-w-[18rem] max-w-[20rem] h-full justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
+            <SelectValue placeholder="Select a category" />
+          </SelectTrigger>
+          <SelectContent className="">
+            <SelectGroup>
+              {categories.map((category, index: number) => (
+                <SelectItem value={category.name} key={index}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      )}
 
-      <Select onValueChange={(value: string) => {
-        const filteredPrice = prices.filter(price => price.value === value)?.[0];
-        if (filteredPrice) {
-          setSearch({
-            ...search,
-            price: {
-              label: filteredPrice.param,
-              value: filteredPrice.paramValue,
-            },
-          });
-          setState(search);
-        }
-      }}>
+      <Select
+        onValueChange={(value: string) => {
+          const filteredPrice = prices.filter(
+            (price) => price.value === value,
+          )?.[0];
+          if (filteredPrice) {
+            setSearch({
+              ...search,
+              price: {
+                label: filteredPrice.param,
+                value: filteredPrice.paramValue,
+              },
+            });
+            setState(search);
+          }
+        }}
+      >
         <SelectTrigger className="relative flex rounded-[12px] h-full min-w-[18rem] max-w-[20rem] justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
           <SelectValue placeholder="Sort by..." />
         </SelectTrigger>
-        <SelectContent className=''>
+        <SelectContent className="">
           <SelectGroup>
             {prices.map((price, index: number) => (
-              <SelectItem value={price.value} key={index}>{price.label}</SelectItem>
+              <SelectItem value={price.value} key={index}>
+                {price.label}
+              </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>

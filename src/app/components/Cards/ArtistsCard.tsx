@@ -16,10 +16,10 @@ export default function ArtistsCard({
       <a className="w-full" href={subtitle2 ? subtitle2 : ''}>
         <Image
           src={image}
-          layout='fill'
-          objectFit='cover'
+          layout="fill"
+          objectFit="cover"
           alt="artist-pic"
-          className='rounded'
+          className="rounded"
         />
 
         <div className="absolute bottom-8 w-[90%] mx-auto ml-4 flex flex-col gap-y-4 text-white font-bold">

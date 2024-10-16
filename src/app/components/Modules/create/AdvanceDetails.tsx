@@ -334,7 +334,7 @@ export default function AdvanceDetails({
           <div className="flex flex-col gap-y-3 mt-3">
             <p className="text-lg font-semibold">Unlockable Content</p>
             <Textarea
-              className="font-AzeretMono rounded-md focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none text-[#989898] placeholder:text-[#989898] resize-none p-4 placeholder:text-xs bg-[#232323]"
+              className="font-AzeretMono rounded-md focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none text-[#989898] placeholder:text-[#989898] resize-none p-4 placeholder:text-xs bg-[#232323] focus:placeholder-transparent focus:outline-none"
               onChange={(e) => {
                 setFormData({
                   ...formData,

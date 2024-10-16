@@ -169,16 +169,16 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
-                  return (
-                    <ArtistsCard
-                      key={index}
-                      image={item.image}
-                      title={item.title}
-                      subtitle1={item.subtitle1}
-                      subtitle2={item.subtitle2}
-                    />
-                  );
-                })
+                    return (
+                      <ArtistsCard
+                        key={index}
+                        image={item.image}
+                        title={item.title}
+                        subtitle1={item.subtitle1}
+                        subtitle2={item.subtitle2}
+                      />
+                    );
+                  })
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10 relative">
@@ -234,14 +234,14 @@ export default function Home() {
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.length > 0
                 ? curations.map((item: any, index: number) => {
-                  return (
-                    <ExceptionalCard
-                      key={index}
-                      logo={item.logo}
-                      name={item.name}
-                    />
-                  );
-                })
+                    return (
+                      <ExceptionalCard
+                        key={index}
+                        logo={item.logo}
+                        name={item.name}
+                      />
+                    );
+                  })
                 : null}
             </div>
           </div>
@@ -286,7 +286,11 @@ export default function Home() {
           Click it to enter the Real World Asset Era
         </div>
 
-        <Link href={ensureValidUrl(images?.bottomBaner?.link)} target='_blank' className='z-[1]'>
+        <Link
+          href={ensureValidUrl(images?.bottomBaner?.link)}
+          target="_blank"
+          className="z-[1]"
+        >
           <button className="w-full sm:w-40 h-14 px-5 py-3.5 bg-neutral-900 rounded-md border flex justify-center items-center text-white text-lg font-semibold font-['Manrope'] hover:bg-neutral-700 transition-colors duration-300">
             Join Us
           </button>

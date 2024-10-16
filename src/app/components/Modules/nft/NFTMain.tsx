@@ -612,6 +612,33 @@ export default function NFTMain({
                           fetchNftData={fetchNftData}
                         />
                       </BaseDialog>
+
+                      <BaseDialog
+                        isOpen={modalStatus.bid}
+                        onClose={(val) => {
+                          setModalStatus({ ...modalStatus, bid: val });
+                        }}
+                        trigger={
+                          <BaseButton
+                            title="Place a Bid"
+                            variant="secondaryOutline"
+                            className={'!rounded-[14px] w-full'}
+                            onClick={() => {
+                              setModalStatus({ ...modalStatus, bid: true });
+                            }}
+                          />
+                        }
+                        className="bg-black max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
+                      >
+                        <BidModal
+                          title={data.name}
+                          update={() => {}}
+                          onClose={() => {
+                            setModalStatus({ ...modalStatus, bid: false });
+                          }}
+                          fetchNftData={fetchNftData}
+                        />
+                      </BaseDialog>
                     </div>
                   ) : null}
                   {type === 'release' ? (
@@ -808,7 +835,7 @@ export default function NFTMain({
                       Artist
                     </span>
                     <span className="text-white/60 azeret-mono-font text-sm">
-                      {data.name}
+                      {data.artist}
                     </span>
                   </div>
                   <div className="flex px-4 py-4 rounded-md justify-between  items-center border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
