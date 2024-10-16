@@ -65,8 +65,8 @@ export default function Page() {
         setNfts(nfts);
       }
     };
-
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceFilter]);
 
   return (

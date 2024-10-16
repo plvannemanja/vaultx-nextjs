@@ -13,12 +13,12 @@ interface INftCardProps {
   artist?: string;
 }
 
-export default function NftCard({ data }: { data: INftCardProps }) {
-  // console.log('data', data);
+export default function NFTCardData({ data }: { data: INftCardProps }) {
+  console.log('data', data);
   return (
-    <Card className="bg-transparent text-white border-none w-full bg-[#232323]">
+    <Card className="bg-transparent text-white border-none w-full">
       <CardContent className="aspect-square p-0 rounded-[20px]">
-        <div className="w-full h-[336px] overflow-hidden p-[20px] rounded-t-[20px]">
+        <div className="w-full h-[336px] overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
           <Image
             width={296}
             height={296}

@@ -1,18 +1,16 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
-import { CategoryService } from '@/services/catergoryService';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { CategoryService } from '@/services/catergoryService';
+import { useEffect, useState } from 'react';
 
 export const prices = [
   {
@@ -105,6 +103,7 @@ export default function Filters({
     if (setState) {
       setState(search);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search.search, search.price.value, search.category.label]);
 
   return (
@@ -216,7 +215,7 @@ export default function Filters({
 
         <input
           placeholder="Search by name..."
-          className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font placeholder:text-[#FFFFFF87]"
+          className="w-full bg-transparent border-none outline-none focus:outline-none bg-[#161616] placeholder:text-xs font-AzeretMono"
           onChange={(e) =>
             setSearch({ ...search, search: (e.target as any).value })
           }

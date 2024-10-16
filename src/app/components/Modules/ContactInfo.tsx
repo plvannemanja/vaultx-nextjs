@@ -127,9 +127,11 @@ export default function ContactInfo() {
                   setSelectedContact(item);
                 }}
               >
-                <span>{item.name ? item.name : `#${index + 1}`}</span>
+                <span className="text-xl font-semibold">
+                  {item.name ? item.name : `#${index + 1}`}
+                </span>
                 <div>
-                  <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
+                  <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
                     {item?.contactInfo?.length > 150
                       ? `${item.contactInfo.slice(0, 150)}...`
                       : item.contactInfo}
@@ -186,7 +188,7 @@ export default function ContactInfo() {
                               name: e.target.value,
                             })
                           }
-                          className="w-full border-none bg-[#161616]"
+                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                           type="text"
                           placeholder="Enter contact name"
                         />
@@ -208,7 +210,7 @@ export default function ContactInfo() {
                               contactInfo: e.target.value,
                             })
                           }
-                          className="w-full border-none bg-[#161616]"
+                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                           placeholder="Please describe your product"
                         />
                       </div>
@@ -267,7 +269,7 @@ export default function ContactInfo() {
                 onChange={(e) =>
                   setNewContact({ ...newContact, name: e.target.value })
                 }
-                className="w-full border-none bg-[#161616]"
+                className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                 type="text"
                 placeholder="Enter contact name"
               />
@@ -281,7 +283,7 @@ export default function ContactInfo() {
                 onChange={(e) =>
                   setNewContact({ ...newContact, contactInfo: e.target.value })
                 }
-                className="w-full border-none bg-[#161616]"
+                className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                 placeholder="Please describe your product"
               />
             </div>

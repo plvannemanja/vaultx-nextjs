@@ -228,7 +228,6 @@ export default function NFTMain({
               <span className="font-bold tex-[14px] text-[#fff]">
                 {likes ? likes : liked ? 1 : 0}
               </span>
-
               <div>
                 <input
                   title="like"
@@ -276,7 +275,6 @@ export default function NFTMain({
                 </div>
               </div>
             </div>
-
             <Image
               alt="rwa"
               src="/images/rwa-logo.svg"
@@ -420,9 +418,7 @@ export default function NFTMain({
                   )}
                 </div>
               </div>
-              <p className="text-[32px] font-extrabold leading-[43.2px]">
-                {data.name}
-              </p>
+              <p className="text-[32px] font-extrabold">{data.name}</p>
               <div className="flex justify-between">
                 <div className="flex gap-2 items-center">
                   {data?.owner?.avatar?.url ? (
