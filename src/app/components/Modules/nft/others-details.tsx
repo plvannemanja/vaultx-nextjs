@@ -42,7 +42,7 @@ const OthersDetails = ({ data }: Props) => {
                     height={32}
                     className="w-[1.2rem] h-8 fill-white"
                   />
-                  <Label className="font-extrabold text-[14px]">Erc721</Label>
+                  <Label className="font-extrabold text-sm">Erc721</Label>
                 </div>
               </div>
               <hr className="border-white/[8%]" />
@@ -55,7 +55,9 @@ const OthersDetails = ({ data }: Props) => {
                     height={32}
                     className="w-[1.2rem] h-8 fill-white"
                   />
-                  <Label className="font-medium">View on Polygon Scan</Label>
+                  <Label className="font-extrabold text-sm">
+                    View on Polygon Scan
+                  </Label>
                   <a href={data?.minted ? '?a=' : ''}>
                     <ArrowTopRightOnSquareIcon
                       width={20}
@@ -69,7 +71,9 @@ const OthersDetails = ({ data }: Props) => {
               <div className="w-full flex flex-col gap-y-5">
                 <div className="w-full py-3 flex gap-x-2 items-center text-white">
                   <EyeIcon width={20} height={20} />
-                  <Label className="font-medium">Open Original On IPFS</Label>
+                  <Label className="font-extrabold text-sm">
+                    Open Original On IPFS
+                  </Label>
                   <a target="_blank" href={data.uri}>
                     <ArrowTopRightOnSquareIcon
                       width={20}

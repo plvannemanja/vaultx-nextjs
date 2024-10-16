@@ -14,10 +14,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
-import {
-  ArrowTopRightOnSquareIcon,
-  ChevronUpIcon,
-} from '@heroicons/react/20/solid';
+import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import { ArrowUpDown } from 'lucide-react';
 import moment from 'moment';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
@@ -34,7 +31,7 @@ import Unlisted from '../../Icons/nft/unlisted';
 
 export default function ActivityList() {
   const { activityList } = useNFTDetail();
-  console.log(`\n\n ~ ActivityList ~ activityList:`, activityList);
+  // console.log(`\n\n ~ ActivityList ~ activityList:`, activityList);
 
   if (activityList.length === 0) return null;
 
@@ -48,7 +45,9 @@ export default function ActivityList() {
         return <SubscriptionIcon />;
       case 'Unlisted':
         return <Unlisted />;
-      case 'Purchase':
+      case 'Purchased':
+        return <PurchaseIcon />;
+      case 'Fee':
         return <PurchaseIcon />;
       case 'Burn':
         return <FireIcon />;
@@ -58,9 +57,11 @@ export default function ActivityList() {
         return <FireIcon />;
       case 'Royalties':
         return <SparklesIcon />;
-      case 'Split Payment':
+      case 'Split Payments':
         return <ProjectIcon />;
-      case 'in escrow':
+      case 'In Escrow':
+        return <InEscrowIcon />;
+      case 'Release escrow':
         return <InEscrowIcon />;
       default:
         return null;
@@ -107,11 +108,13 @@ export default function ActivityList() {
                         ? item.from.wallet
                         : item?.fromWallet;
                       item.toWallet = item.to ? item.to.wallet : item?.toWallet;
-
                       return (
-                        <TableRow key={index} className="border-white/[8%]">
-                          <TableCell className="font-medium w-[14rem] ">
-                            <div className="flex gap-x-2 items-center azeret-mono-font">
+                        <TableRow
+                          key={index}
+                          className="border-white/[8%] font-normal azeret-mono-font"
+                        >
+                          <TableCell className="whitespace-nowrap">
+                            <div className="flex gap-x-2 items-center">
                               {getIcon(item.state)}
                               {item.actionHash ? (
                                 <a
@@ -140,7 +143,7 @@ export default function ActivityList() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex gap-x-2 items-center text-neon">
+                            <div className="flex gap-x-2 items-center capitalize">
                               {item.fromWallet ? (
                                 <a
                                   target="_blank"
@@ -166,25 +169,28 @@ export default function ActivityList() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex gap-x-2 items-center text-neon">
-                              {item.to && item.to.username
-                                ? item.to.username
-                                : item.toWallet
-                                  ? trimString(item.toWallet)
-                                  : '-/-'}
-                              {item.toWallet && (
+                            <div className="flex gap-x-2 items-center">
+                              {item.toWallet ? (
                                 <a
                                   target="_blank"
+                                  className="hover:underline"
                                   href={getExplorerURL(
                                     'address',
                                     item.to?.wallet,
                                   )}
                                 >
-                                  <ArrowTopRightOnSquareIcon
-                                    width={20}
-                                    height={20}
-                                  />
+                                  {item.to && item.to.username
+                                    ? item.to.username
+                                    : item.toWallet
+                                      ? trimString(item.toWallet)
+                                      : '-/-'}
                                 </a>
+                              ) : item.to && item.to.username ? (
+                                item.to.username
+                              ) : item.toWallet ? (
+                                trimString(item.toWallet)
+                              ) : (
+                                '-/-'
                               )}
                             </div>
                           </TableCell>

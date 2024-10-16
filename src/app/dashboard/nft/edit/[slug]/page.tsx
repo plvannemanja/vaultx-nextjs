@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import NftServices from '@/services/nftService';
 import CreateNft from '@/app/components/Modules/CreateNft';
+import NftServices from '@/services/nftService';
+import { useEffect, useState } from 'react';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const nftId = params.slug;
@@ -23,7 +23,9 @@ export default function Page({ params }: { params: { slug: string } }) {
 
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
+
   return (
     <div>
       <CreateNft editMode={formData} />

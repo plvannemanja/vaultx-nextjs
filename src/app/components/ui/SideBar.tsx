@@ -109,7 +109,7 @@ export default function SideBar({ className }: { className?: string }) {
               href={`/dashboard/${link.value}`}
               key={index}
               className={cn(
-                'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-colors duration-200',
+                'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-all duration-300',
                 pathname === `/dashboard/${link.value}`
                   ? 'text-[#ddf247] before:absolute before:w-1 before:h-full before:bg-[#ddf247] before:top-0 before:left-0 before:rounded-r-lg'
                   : '',
@@ -148,7 +148,7 @@ export default function SideBar({ className }: { className?: string }) {
             <Link
               key={index}
               className={cn(
-                'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-colors duration-200',
+                'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-all duration-300',
                 pathname === `/dashboard/${link.value}`
                   ? 'text-[#ddf247] before:absolute before:w-1 before:h-full before:bg-[#ddf247] before:top-0 before:left-0 before:rounded-r-lg'
                   : '',

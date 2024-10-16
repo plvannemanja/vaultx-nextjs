@@ -151,7 +151,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
   }, [user, data]);
 
   return (
-    <div className="flex flex-col gap-y-4 py-10 w-full  container px-10">
+    <div className="flex flex-col gap-y-4 py-5 w-full container px-10">
       {data && (
         <>
           <NFTMain fetchNftData={fetchNftData} />
