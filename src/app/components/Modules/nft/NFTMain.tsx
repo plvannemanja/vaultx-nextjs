@@ -583,7 +583,7 @@ export default function NFTMain({
                       >
                         <BidModal
                           title={data.name}
-                          update={() => { }}
+                          update={() => {}}
                           onClose={() => {
                             setModalStatus({ ...modalStatus, bid: false });
                           }}
@@ -596,7 +596,7 @@ export default function NFTMain({
                             title="Buy Now"
                             className={'!rounded-[14px] w-full'}
                             variant="primary"
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -632,7 +632,7 @@ export default function NFTMain({
                       >
                         <BidModal
                           title={data.name}
-                          update={() => { }}
+                          update={() => {}}
                           onClose={() => {
                             setModalStatus({ ...modalStatus, bid: false });
                           }}
@@ -650,7 +650,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -672,7 +672,7 @@ export default function NFTMain({
                             title="Cancel Order"
                             variant="secondaryOutline"
                             className={'!rounded-[14px] w-full'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.cancel}
@@ -701,7 +701,7 @@ export default function NFTMain({
                             title="Put On Sale"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.resell}
@@ -750,7 +750,7 @@ export default function NFTMain({
                       <BaseButton
                         title="Cancel Requested"
                         variant="primary"
-                        onClick={() => { }}
+                        onClick={() => {}}
                         className={'!rounded-[14px]'}
                       />
                     </div>
@@ -764,7 +764,7 @@ export default function NFTMain({
                           title="Release Escrow"
                           variant="primary"
                           className={'rounded-[14px]'}
-                          onClick={() => { }}
+                          onClick={() => {}}
                         />
                       }
                       isOpen={modalStatus.release}
@@ -788,7 +788,7 @@ export default function NFTMain({
                             title="Escrow Release Request"
                             variant="primary"
                             className={'!rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.escrowRelease}
@@ -817,7 +817,7 @@ export default function NFTMain({
                       <BaseButton
                         title="Release Requested"
                         variant="primary"
-                        onClick={() => { }}
+                        onClick={() => {}}
                         className={'!rounded-[14px]'}
                       />
                     </div>

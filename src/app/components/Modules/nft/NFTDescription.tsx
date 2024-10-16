@@ -16,21 +16,23 @@ export default function NFTDescription() {
   return (
     <>
       <div className="w-full flex gap-[27px] flex-wrap">
-        {[data.cloudinaryUrl, ...(data.attachments.slice(0, maxAttachments))].map((item, index) => {
-          return (
-            <Image
-              alt={data.name}
-              width={242}
-              height={242}
-              key={index}
-              onClick={() => {
-                setMainImage(item);
-              }}
-              src={item}
-              className="w-[242px] h-[242px] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover"
-            />
-          );
-        })}
+        {[data.cloudinaryUrl, ...data.attachments.slice(0, maxAttachments)].map(
+          (item, index) => {
+            return (
+              <Image
+                alt={data.name}
+                width={242}
+                height={242}
+                key={index}
+                onClick={() => {
+                  setMainImage(item);
+                }}
+                src={item}
+                className="w-[242px] h-[242px] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover"
+              />
+            );
+          },
+        )}
       </div>
 
       <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-6 bg-[#232323]">
@@ -44,8 +46,9 @@ export default function NFTDescription() {
                     <span>Description</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white/[53%]`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
@@ -95,8 +98,9 @@ export default function NFTDescription() {
                     Properties
                   </div>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white/[53%]`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>

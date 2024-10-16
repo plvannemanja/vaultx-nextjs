@@ -163,18 +163,21 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4 mx-4 my-4">
-      <div className={cn("relative w-full transition-all duration-500 ease-in-out", "h-[340px]")}>
-        {
-          curation?.bannerImage && (
-            <Image
-              src={curation?.bannerImage}
-              alt="hero"
-              layout="fill"
-              objectFit='cover'
-              className="rounded-xl"
-            />
-          )
-        }
+      <div
+        className={cn(
+          'relative w-full transition-all duration-500 ease-in-out',
+          'h-[340px]',
+        )}
+      >
+        {curation?.bannerImage && (
+          <Image
+            src={curation?.bannerImage}
+            alt="hero"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-xl"
+          />
+        )}
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div
             className="flex gap-x-3 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"
@@ -215,7 +218,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => { }}
+                  onChange={() => {}}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -294,21 +297,16 @@ export default function Page({ params }: { params: { slug: string } }) {
               ></p>
               <span className="text-[#DDF247]">More...</span>
             </div>
-            <div className='flex  justify-between gap-4'>
-              {curation?.youtube?.length > 0
-                && curation?.youtube.map((item: any, index: number) => {
+            <div className="flex  justify-between gap-4">
+              {curation?.youtube?.length > 0 &&
+                curation?.youtube.map((item: any, index: number) => {
                   const imageId = getYouTubeVideoId(item.url);
 
                   return (
-                    <div
-                      className="flex flex-col gap-y-3"
-                      key={index}
-                    >
+                    <div className="flex flex-col gap-y-3" key={index}>
                       <BaseDialog
                         trigger={
-                          <div
-                            className="relative cursor-pointer rounded-xl"
-                          >
+                          <div className="relative cursor-pointer rounded-xl">
                             <img
                               src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
                               className="w-full aspect-video rounded-2xl"
@@ -337,12 +335,11 @@ export default function Page({ params }: { params: { slug: string } }) {
                       <p className="text-center font-medium">{item.title}</p>
                     </div>
                   );
-                })
-              }
+                })}
             </div>
           </div>
         </div>
-        <div className='w-full md:w-[38%] py-4'>
+        <div className="w-full md:w-[38%] py-4">
           <div className="h-[250px] py-4 flex flex-col gap-y-4 border-2 border-white/20 rounded-lg">
             <div className="px-4 flex justify-between items-center">
               <span className="text-lg font-medium">Items</span>
@@ -366,11 +363,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           </div>
           <div className="w-full h-20 px-20 py-5 bg-white/0 rounded-xl border border-white/20 flex justify-center items-center my-4">
             <div className="flex gap-8">
-              <div className="w-8 h-8 flex justify-center items-center">
-              </div>
+              <div className="w-8 h-8 flex justify-center items-center"></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

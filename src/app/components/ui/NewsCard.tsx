@@ -40,8 +40,8 @@ export default function NewsCard({
           <Image
             src="/images/news-big.png"
             alt="news"
-            layout='fill'
-            objectFit='cover'
+            layout="fill"
+            objectFit="cover"
             className="rounded"
           />
         </div>
