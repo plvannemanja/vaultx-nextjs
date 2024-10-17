@@ -172,13 +172,15 @@ export default function Page() {
                       ) : (
                         <div className="w-28 h-28 rounded-full bg-black"></div>
                       )}
-                      <FileInput
-                        title="Upload a new avatar"
-                        subtitle="JPEG 100x100"
-                        onFileSelect={(file: any) =>
-                          handleFileChange(file, 'avatar')
-                        }
-                      />
+                      <div className="w-6/12">
+                        <FileInput
+                          title="Upload a new avatar"
+                          subtitle="JPEG 100x100"
+                          onFileSelect={(file: any) =>
+                            handleFileChange(file, 'avatar')
+                          }
+                        />
+                      </div>
                     </div>
                   </DisclosurePanel>
                 </>
@@ -216,13 +218,15 @@ export default function Page() {
                         ) : (
                           <div className="w-28 h-28 rounded-full bg-black"></div>
                         )}
-                        <FileInput
-                          title="Upload a new banner"
-                          subtitle="JPEG 100x100"
-                          onFileSelect={(file: any) =>
-                            handleFileChange(file, 'cover')
-                          }
-                        />
+                        <div className="w-6/12">
+                          <FileInput
+                            title="Upload a new banner"
+                            subtitle="JPEG 100x100"
+                            onFileSelect={(file: any) =>
+                              handleFileChange(file, 'cover')
+                            }
+                          />
+                        </div>
                       </div>
                     </DisclosurePanel>
                   </>

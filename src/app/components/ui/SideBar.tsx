@@ -29,13 +29,13 @@ const marketPlaceLinks = [
   },
   {
     name: 'Magazine',
-    value: 'news',
+    value: 'magazine',
     icon: () => <PencilIcon />,
-    link: 'https://magazinex.io/',
+    link: 'https://magazinex.io',
   },
   {
     name: 'How to work',
-    value: 'howtowork',
+    value: 'how-to-work',
     icon: () => <CarbonBoard />,
   },
 ];
@@ -63,7 +63,7 @@ const accountLinks = [
   },
   {
     name: 'Help Center',
-    value: 'helpCenter',
+    value: 'help-center',
     icon: () => <HelpIcon />,
   },
 ];
@@ -109,7 +109,7 @@ export default function SideBar({ className }: { className?: string }) {
         {marketPlaceLinks.map((link, index) => {
           return (
             <Link
-              href={`/dashboard/${link.value}`}
+              href={link?.link ? link?.link : `/dashboard/${link.value}`}
               key={index}
               className={cn(
                 'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-all duration-300',
