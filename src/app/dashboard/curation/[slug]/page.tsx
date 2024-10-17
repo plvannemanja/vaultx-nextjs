@@ -28,11 +28,12 @@ import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 const badges = [
   {
     label: 'Items',
-    value: 'all',
+    value: 'items',
   },
   {
     label: 'Activity',
@@ -90,8 +91,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [curationInfo, setCurationInfo] = useState<any>({});
   const [nfts, setNfts] = useState([]);
   const [now, setNow] = useState(false);
-  const [activity, setActivity] = useState([]);
-  const [tab, setTab] = useState('items');
   const [filters, setFilters] = useState<any>({
     filterString: '',
     filter: {
@@ -101,8 +100,9 @@ export default function Page({ params }: { params: { slug: string } }) {
     },
   });
 
-  const [items, setItems] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
+
+  const [debouncedFilter] = useDebounce(filters, 1000);
 
   const handleLike = async () => {
     try {
@@ -129,13 +129,14 @@ export default function Page({ params }: { params: { slug: string } }) {
     navigator.clipboard.writeText(user?.wallet);
   };
 
-  const fetchActivity = async () => {
+  const fetchActivities = async () => {
     const {
       data: { activity },
     } = await collectionServices.getAllActivitiesCollection({
       collectionId: params.slug,
+      searchInput: filters?.filterString
     });
-    setActivity(activity);
+    setActivities(activity);
   };
 
   const fetchNFTs = async () => {
@@ -143,7 +144,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       data: { nfts },
     } = await collectionServices.getCollectionNfts({
       collectionId: params.slug,
-      ...filters,
+      [filters.filter.param]: filters.filter.value,
     });
 
     setNfts(nfts);
@@ -165,7 +166,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     setLiked(favorite);
   };
   const fetchData = async () => {
-    fetchActivity();
+    fetchActivities();
     fetchNFTs();
     fetchLikes();
 
@@ -182,6 +183,13 @@ export default function Page({ params }: { params: { slug: string } }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
 
+  useEffect(() => {
+    if (filterbadge === 'items') {
+      fetchNFTs();
+    } else if (filterbadge === 'activity') {
+      fetchActivities();
+    }
+  }, [debouncedFilter, filterbadge])
   if (!curation) return null;
 
   return (
@@ -241,7 +249,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => {}}
+                  onChange={() => { }}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -454,11 +462,10 @@ export default function Page({ params }: { params: { slug: string } }) {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${
-                filterbadge === badge.value
-                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                  : 'hover:bg-[#232323] bg-transparent text-white'
-              }`}
+              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${filterbadge === badge.value
+                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                : 'hover:bg-[#232323] bg-transparent text-white'
+                }`}
             >
               {badge.label}
             </Badge>
@@ -498,11 +505,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             <input
               placeholder="Search by name or trait..."
               className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
-              value={filters.searchInput}
+              value={filters.filterString}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFilters({
                   ...filters,
-                  searchInput: e.target.value,
+                  filterString: e.target.value,
                 });
               }}
             />
@@ -538,9 +545,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           </Select>
         </div>
         {/* User section */}
-        {tab === 'items' && items.length ? (
+        {filterbadge === 'items' && nfts.length ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {items.map((item: any, index: number) => {
+            {nfts.map((item: any, index: number) => {
               return (
                 <Link key={index} href={`/nft/${item._id}`}>
                   <NftCard data={item} />
@@ -551,7 +558,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         ) : null}
 
         {/* Activity section */}
-        {tab === 'activity' && activities.length ? (
+        {filterbadge === 'activity' && activities.length ? (
           <div>
             <Table>
               <TableCaption>A list of your recent activity.</TableCaption>
