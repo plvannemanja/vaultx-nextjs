@@ -1,15 +1,15 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Label } from '@/components/ui/label';
 import { CategoryService } from '@/services/catergoryService';
+import { AlignLeft, Archive, ChevronDown, Filter, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export const prices = [
@@ -107,115 +107,110 @@ export default function Filters({
   }, [search.search, search.price.value, search.category.label]);
 
   return (
-    <div className="flex flex-wrap md:flex-nowrap gap-6 ">
+    <div className="flex flex-wrap md:flex-nowrap gap-3 py-3">
       <div className="flex gap-x-2 items-center pl-0">
-        <svg
-          width="24px"
-          height="24px"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#fff"
-        >
-          <path
-            d="M3.99961 3H19.9997C20.552 3 20.9997 3.44764 20.9997 3.99987L20.9999 5.58569C21 5.85097 20.8946 6.10538 20.707 6.29295L14.2925 12.7071C14.105 12.8946 13.9996 13.149 13.9996 13.4142L13.9996 19.7192C13.9996 20.3698 13.3882 20.8472 12.7571 20.6894L10.7571 20.1894C10.3119 20.0781 9.99961 19.6781 9.99961 19.2192L9.99961 13.4142C9.99961 13.149 9.89425 12.8946 9.70672 12.7071L3.2925 6.29289C3.10496 6.10536 2.99961 5.851 2.99961 5.58579V4C2.99961 3.44772 3.44732 3 3.99961 3Z"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
-        <Label>Filter:</Label>
+        <Filter className="w-4 h-4" />
+        <Label className="font-extrabold text-xs">Filter:</Label>
       </div>
       {!isCuration && (
-        <Select
-          onValueChange={(value: string) => {
-            setSearch({
-              ...search,
-              category: {
-                label: value,
-                value: value,
-              },
-            });
-            setState(search);
-          }}
-        >
-          <SelectTrigger className="relative flex rounded-[12px] min-w-[18rem] max-w-[20rem] h-full justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent className="">
-            <SelectGroup>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="relative flex gap-x-1 rounded-[12px] min-w-[14rem] max-w-[16rem] h-full items-center p-3 py-[10px] bg-transparent text-white border border-white/[12%]">
+            <div className="flex items-center flex-1 gap-x-2">
+              <Archive className="w-4 h-4" />
+              <span className="font-extrabold text-xs">
+                {search.category.label}
+              </span>
+            </div>
+            <ChevronDown className="w-4 h-4 text-white/30" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="min-w-[14rem] max-w-[16rem]">
+            <DropdownMenuGroup>
               {categories.map((category, index: number) => (
-                <SelectItem value={category.name} key={index}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setSearch({
+                      ...search,
+                      category: {
+                        label: category.name,
+                        value: category.name,
+                      },
+                    });
+                    setState(search);
+                  }}
+                  key={index}
+                >
                   {category.name}
-                </SelectItem>
+                </DropdownMenuItem>
               ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
 
-      <Select
-        onValueChange={(value: string) => {
-          const filteredPrice = prices.filter(
-            (price) => price.value === value,
-          )?.[0];
-          if (filteredPrice) {
-            setSearch({
-              ...search,
-              price: {
-                label: filteredPrice.param,
-                value: filteredPrice.paramValue,
-              },
-            });
-            setState(search);
-          }
-        }}
+      <DropdownMenu
+      // onValueChange={(value: string) => {
+      //   const filteredPrice = prices.filter(
+      //     (price) => price.value === value,
+      //   )?.[0];
+      //   if (filteredPrice) {
+      //     setSearch({
+      //       ...search,
+      //       price: {
+      //         label: filteredPrice.param,
+      //         value: filteredPrice.paramValue,
+      //       },
+      //     });
+      //     setState(search);
+      //   }
+      // }}
       >
-        <SelectTrigger className="relative flex rounded-[12px] h-full min-w-[18rem] max-w-[20rem] justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
+        <DropdownMenuTrigger className="relative flex gap-x-1 rounded-[12px] min-w-[14rem] max-w-[16rem] h-full items-center p-3 py-[10px] bg-transparent text-white border border-white/[12%]">
+          <div className="flex items-center flex-1 gap-x-2">
+            <AlignLeft className="w-4 h-4" />
+            <span className="font-extrabold text-xs">
+              {search?.price?.label}
+            </span>
+          </div>
+          <ChevronDown className="w-4 h-4 text-white/30" />
+        </DropdownMenuTrigger>
+        {/* <DropdownMenuTrigger className="relative flex rounded-[12px] h-full min-w-[14rem] max-w-[16rem] justify-between items-center pl-[37px] px-3 py-2 bg-transparent text-white border border-[#FFFFFF1F]">
+          <AlignLeft />
           <SelectValue placeholder="Sort by..." />
-        </SelectTrigger>
-        <SelectContent className="">
-          <SelectGroup>
+        </DropdownMenuTrigger> */}
+        <DropdownMenuContent className="min-w-[14rem] max-w-[16rem]">
+          <DropdownMenuGroup>
             {prices.map((price, index: number) => (
-              <SelectItem value={price.value} key={index}>
+              <DropdownMenuItem
+                key={index}
+                onClick={() => {
+                  const filteredPrice = prices.filter(
+                    (p) => p.value === price.value,
+                  )?.[0];
+                  console.log(filteredPrice);
+                  if (filteredPrice) {
+                    setSearch({
+                      ...search,
+                      price: {
+                        label: filteredPrice.label,
+                        value: filteredPrice.paramValue,
+                      },
+                    });
+                    setState(search);
+                  }
+                }}
+              >
                 {price.label}
-              </SelectItem>
+              </DropdownMenuItem>
             ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-      <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] rounded-xl px-2 w-full">
-        <svg
-          width="20px"
-          height="20px"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          color="#fff"
-        >
-          <path
-            d="M17 17L21 21"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-          <path
-            d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z"
-            stroke="#fff"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          ></path>
-        </svg>
-
+      <div className="flex gap-x-2 items-center border bg-[#232323]/[14%] border-white/[12%] rounded-xl p-3 py-[10px] w-full">
+        <Search className="w-4 h-4" />
         <input
-          placeholder="Search by name..."
-          className="w-full bg-transparent border-none outline-none focus:outline-none bg-[#161616] placeholder:text-xs font-AzeretMono"
+          placeholder="Search by name or trait..."
+          className="w-full bg-transparent border-none outline-none focus:outline-none placeholder:text-white/[53%] text-white/[53%] text-xs font-AzeretMono"
           onChange={(e) =>
             setSearch({ ...search, search: (e.target as any).value })
           }

@@ -10,3 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export const isZodAddress = z
   .string()
   .refine(isAddress, { message: 'Invalid address' });
+
+export function formatNumberWithCommas(number: number | string) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
