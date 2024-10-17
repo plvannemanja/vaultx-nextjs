@@ -155,13 +155,14 @@ function PageDetail({ params }: { params: { slug: string } }) {
     <div className="flex flex-col gap-y-4 py-5 w-full container px-10">
       {data && (
         <>
-          <NFTMain fetchNftData={fetchNftData} />
-          <NFTDescription />
-          <BidList />
-          <ActivityList />
-          <OthersDetails data={data} />
-
-          <div className="w-11/12 pt-5 px-5 pb-[30px] mx-auto rounded-[12px] bg-[#DDF247] relative flex justify-center items-center overflow-hidden mt-[120px]">
+          <div className="flex flex-col gap-y-6">
+            <NFTMain fetchNftData={fetchNftData} />
+            <NFTDescription />
+            <BidList />
+            <ActivityList />
+            <OthersDetails data={data} />
+          </div>
+          <div className="w-11/12 pt-5 px-5 pb-[30px] mx-auto rounded-[12px] bg-[#DDF247] relative flex justify-center items-center overflow-hidden mt-[55px]">
             <div className="absolute -translate-y-1/2 top-1/2 -left-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
             <div className="absolute -translate-y-1/2 top-1/2 -right-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
             <div>

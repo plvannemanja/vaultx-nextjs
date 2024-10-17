@@ -15,7 +15,7 @@ type Props = {
 
 const OthersDetails = ({ data }: Props) => {
   return (
-    <div className="w-full rounded-[20px] px-6 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+    <div className="w-full rounded-[20px] p-5 bg-dark flex flex-col gap-y-6 bg-[#232323]">
       <Disclosure as="div" defaultOpen={true}>
         {({ open }) => (
           <>
