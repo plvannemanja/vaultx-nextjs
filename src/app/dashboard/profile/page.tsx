@@ -139,9 +139,9 @@ export default function Page() {
       description: 'Please be patient',
       duration: 2000,
     });
-
     fetchData();
   }, []);
+
   return (
     <div className="flex flex-col gap-y-4 px-4">
       <div className="relative w-full h-[340px]">
