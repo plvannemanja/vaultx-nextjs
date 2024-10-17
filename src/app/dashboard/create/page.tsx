@@ -58,7 +58,6 @@ export default function Page() {
       <RestrictiveModal
         closeButton={true}
         open={modal.active}
-        // open={true}
         onClose={() => setModal({ active: false, type: null })}
       >
         {modal.type === 'curation' && <Curation />}
