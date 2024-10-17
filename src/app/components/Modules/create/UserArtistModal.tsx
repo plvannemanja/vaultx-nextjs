@@ -223,14 +223,15 @@ export default function UserArtistModal({
       setImageSrc(editUser.image);
     }
   }, [editUser]);
+
   return (
     <div className="grid grid-cols-12 gap-4 h-auto relative bg-dark-900">
       {/* Header Section */}
-      <div className="col-span-12 text-[#DEE8E8] max-w-[1000px] mx-auto flex-col justify-center items-center gap-4 inline-flex pt-8">
-        <div className="text-center text-2xl font-extrabold">
+      <div className="col-span-12 mb-10 text-[#DEE8E8] lg:w-11/12 mx-auto flex-col justify-center items-center gap-4 inline-flex pt-8">
+        <div className="text-center text-xl font-extrabold">
           Registering affiliated artists
         </div>
-        <p className="self-stretch text-center text-lg azeret-mono-font font-medium leading-normal">
+        <p className="self-stretch text-sm text-center azeret-mono-font font-medium leading-normal">
           We use artist templates to avoid mistakes that can arise from
           repetitive artist information entry. Entering artist information can
           shorten the mint time.
@@ -264,11 +265,11 @@ export default function UserArtistModal({
                 alt="upload"
               ></Image>
             </div>
-            <div className="self-stretch h-14 flex-col justify-center items-center gap-3 flex">
+            <div className="self-stretch h-14 flex-col justify-center items-center gap-3 flex font-manrope">
               <div className="self-stretch text-center text-white text-lg font-extrabold">
                 Upload Artist Profile Image
               </div>
-              <div className="self-stretch text-center text-gray-500 text-xs font-normal leading-tight">
+              <div className="self-stretch text-center text-xs azeret-mono-font text-white/30 font-normal leading-tight">
                 PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
               </div>
             </div>
@@ -315,13 +316,13 @@ export default function UserArtistModal({
           <Label className="text-white text-base font-extrabold">
             Artist Name *
           </Label>
-          <hr className="border-white opacity-20 my-4 w-full" />
+          <hr className="border-white/[8%] my-4 w-full" />
           <Input
             value={formData.name ? formData.name : ''}
             onChange={(e) =>
               setFormData({ ...formData, name: (e.target as any).value })
             }
-            className="w-full h-12 px-6 py-4 bg-dark-900 text-gray-500 text-sm font-normal rounded-xl"
+            className="w-full h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal rounded-xl"
             type="text"
             placeholder="Enter Artist Name"
           />
@@ -333,13 +334,13 @@ export default function UserArtistModal({
               Artist Wallet Address *
             </div>
           </div>
-          <hr className="border-white opacity-20 my-4 w-full" />
+          <hr className="border-white/[8%] my-4 w-full" />
           <Input
             value={formData.wallet ? formData.wallet : ''}
             onChange={(e) =>
               setFormData({ ...formData, wallet: (e.target as any).value })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 text-gray-500 rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address"
           />
@@ -351,22 +352,22 @@ export default function UserArtistModal({
                 confirmWallet: (e.target as any).value,
               })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 text-gray-500 rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address again"
           />
         </div>
 
-        <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-5 flex">
+        <div className="self-stretch px-5 pt-5 pb-8 bg-dark-700 rounded-xl flex-col justify-start items-start gap-2 flex">
           <div className="self-stretch flex items-center">
             <div className="text-white text-base font-extrabold">
               Royalties (%) *
             </div>
           </div>
-          <hr className="border-white opacity-20 my-4 w-full" />
+          <hr className="border-white/[8%] my-4 w-full" />
           <div className="self-stretch flex items-center gap-3 grid-cols-6">
             <Input
-              className="flex-grow h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center text-gray-500 text-sm font-normal col-span-4"
+              className="flex-grow h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal col-span-4"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -380,7 +381,7 @@ export default function UserArtistModal({
 
             <div>
               <Input
-                className="h-12 px-5 py-4 bg-dark-900 rounded-xl flex items-center text-gray-600 text-xl font-bold col-span-1"
+                className="h-12 px-5 py-4 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-xl font-bold col-span-1"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -394,7 +395,7 @@ export default function UserArtistModal({
                 value={formData.royalty.toString()}
               />
             </div>
-            <div className="h-12 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
+            <div className="h-10 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
               <div className="w-6 h-6 relative flex">
                 <Image
                   src="/icons/add-new.svg"
@@ -414,23 +415,23 @@ export default function UserArtistModal({
               Split Payments (%) *
             </div>
           </div>
-          <div className="text-gray-500 text-sm font-normal">
+          <div className="text-[#696969] text-sm font-normal">
             The sum of all numbers (percentages) must equal 100%.
           </div>
           <div className="self-stretch flex items-start gap-3 w-full">
-            <div className="w-2/12 h-12 px-6 py-4 bg-dark-800 rounded-xl flex items-center">
-              <div className="text-gray-500 text-sm font-normal">
+            <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl flex items-center">
+              <div className="text-[#696969] text-center text-sm font-normal">
                 My wallet address
               </div>
             </div>
-            <div className="w-7/12 h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center">
-              <div className="text-gray-500 text-sm font-normal">
+            <div className="w-6/12 h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center">
+              <div className="text-[#696969] text-sm font-normal">
                 {activeAccount?.address}
               </div>
             </div>
             <div>
               <Input
-                className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center text-gray-600 text-xl font-bold"
+                className="h-10 px-5 py-4 bg-dark-800 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-xl font-bold"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -444,17 +445,18 @@ export default function UserArtistModal({
                 value={formData.mySplit.toString()}
               />
             </div>
+            <div className="h-10 w-[95px] px-4 py-3"></div>
           </div>
           {paymentSplits.map((split, index) => (
             <div className="self-stretch flex items-start gap-3" key={index}>
-              <div className="w-2/12 h-12 px-6 py-4 bg-dark-800 rounded-xl flex items-center">
-                <div className="text-gray-500 text-sm font-normal">
+              <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl flex items-center">
+                <div className="text-[#696969] text-sm font-normal">
                   Artist wallet address
                 </div>
               </div>
-              <div className="w-7/12 px-0 py-0">
+              <div className="w-6/12 px-0 py-0">
                 <Input
-                  className="h-12 bg-dark-900 rounded-xl flex items-center text-gray-500 text-sm font-normal"
+                  className="h-12 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal"
                   onChange={(e) =>
                     updateSplit(index, 'paymentWallet', e.target.value)
                   }
@@ -465,7 +467,7 @@ export default function UserArtistModal({
               </div>
               <div>
                 <Input
-                  className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center text-gray-600 text-xl font-bold"
+                  className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs font-bold"
                   onChange={(e) => {
                     const value = Number(e.target.value);
                     updateSplit(index, 'paymentPercentage', value);
@@ -483,7 +485,7 @@ export default function UserArtistModal({
               </div>
               <div className="flex">
                 {paymentSplits.length > 1 && (
-                  <div className="h-12 py-3 mx-4">
+                  <div className="h-10 py-3 mx-4">
                     <button
                       className="w-6 h-6"
                       onClick={() => removeSplit(index)}
@@ -498,7 +500,7 @@ export default function UserArtistModal({
                 )}
                 {index === paymentSplits.length - 1 && (
                   <div
-                    className="h-12 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5"
+                    className="h-11 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5"
                     onClick={addSplit}
                   >
                     <div className="w-6 h-6 relative flex">

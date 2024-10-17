@@ -1,10 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-import { useCreateNFT } from '../../Context/CreateNFTContext';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popOver';
 import { Button } from '@/components/ui/button';
 import {
   Command,
@@ -14,11 +7,18 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { Check, Edit } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popOver';
 import { cn } from '@/lib/utils';
 import { getUserArtists } from '@/services/supplier';
 import { PaymentSplitType } from '@/types';
+import { Check, Edit } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { BaseDialog } from '../../ui/BaseDialog';
 import UserArtistModal from './UserArtistModal';
 
@@ -115,7 +115,7 @@ export default function UserArtist() {
         <Button
           variant="outline"
           role="combobox"
-          className="w-full bg-dark justify-between !h-13"
+          className="w-full bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]/50 hover:text-white/30 border-white/[12%] justify-between !h-13 azeret-mono-font text-xs text-white/30"
         >
           {selectedArtist
             ? userArtists.find((item) => item._id === selectedArtist)?.name
@@ -123,11 +123,14 @@ export default function UserArtist() {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-full p-0 bg-dark-900"
+        className="w-full p-0 bg-dark-900 border-white/[12%]"
         style={{ width: 'var(--radix-popover-trigger-width)' }}
       >
-        <Command className="w-full bg-dark-900">
-          <CommandInput placeholder="Search by artist name..." />
+        <Command className="w-full bg-[#1A1A1A]/50 border-white/[12%]">
+          <CommandInput
+            className="azeret-mono-font placeholder:text-white/30 placeholder:text-sm border-white/[12%]"
+            placeholder="Search by artist name..."
+          />
           <CommandList>
             <CommandEmpty>There are no registered artists.</CommandEmpty>
             <CommandGroup>
