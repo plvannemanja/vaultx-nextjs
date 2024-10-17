@@ -319,7 +319,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         </BaseDialog>
       )}
 
-      <div className="flex gap-[50px] gap-y-5 flex-col lg:flex-row lg:justify-between">
+      <div className="flex gap-[40px] gap-y-5 flex-col lg:flex-row lg:justify-between">
         <div className="col-span-12 lg:col-span-5 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
           {file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
@@ -333,7 +333,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               {file ? file.name : 'No files selected'}
             </div>
           ) : (
-            <div className="flex flex-col justify-center items-center gap-y-[23px] ">
+            <div className="flex flex-col justify-center items-center gap-y-[23px]">
               <img
                 src="/icons/upload.svg"
                 alt="upload"
@@ -344,10 +344,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   Upload original RWA File
                 </p>
                 <div>
-                  <p className="mt-2 text-white/[53%] mb-[4px]">
+                  <p className="mt-2 text-white/[53%] mb-[4px] font-normal text-center text-sm azeret-mono-font">
                     Drag or choose your file to IPFS upload
                   </p>
-                  <p className="text-center text-white/30 text-xs font-normal leading-tight">
+                  <p className="text-center text-white/30 text-xs azeret-mono-font">
                     PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
                   </p>
                 </div>
@@ -389,11 +389,11 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             )}
           </div>
         </div>
-        <div className="flex flex-col col-span-12 lg:col-span-7 gap-y-[26px] lg:w-full">
-          <div className="w-full rounded-md pb-3 flex flex-col gap-y-2">
+        <div className="flex flex-col col-span-12 lg:col-span-7 gap-y-[30px] lg:w-full">
+          <div className="w-full rounded-md flex flex-col gap-y-2">
             <div className="flex gap-x-3">
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-semibold test-sm text-white">
+                <Label className="font-bold test-sm text-white manrope-font">
                   Curation Title*
                 </Label>
                 <Input
@@ -401,13 +401,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   onChange={(e) =>
                     setFormData({ ...formData, name: (e.target as any).value })
                   }
-                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] font-AzeretMono rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                   type="text"
                   placeholder="Enter Collection Name"
                 />
               </div>
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-semibold test-sm text-white">
+                <Label className="font-bold test-sm text-white manrope-font">
                   Symbol*
                 </Label>
                 <Input
@@ -418,7 +418,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       symbol: (e.target as any).value,
                     })
                   }
-                  className="w-full border-none h-[48px] placeholder:text-xs font-AzeretMono bg-[#232323] gap-[30px] inline-flex"
+                  className="w-full border-none h-[48px] placeholder:text-xs azeret-mono-font bg-[#232323] gap-[30px] inline-flex"
                   type="text"
                   placeholder="i.e TAT"
                 />
@@ -436,7 +436,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     )}
                   >
                     <div className="flex w-full justify-between items-center">
-                      <Label className="text-[20px] font-extrabold">
+                      <Label className="text-[20px] font-semibold">
                         Banner Image
                       </Label>
                       <div className="flex justify-center">
@@ -459,11 +459,11 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     </div>
                   </DisclosureButton>
                   <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
-                    <div className="flex gap-x-4 items-center my-5 mb-0">
+                    <div className="my-5 mb-0 w-full">
                       <FileInput
                         title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
                         titleStyles={
-                          'text-[#979797] text-sm font-normal font-AzeretMono leading-snug'
+                          'text-[#979797] text-sm font-normal azeret-mono-font'
                         }
                         acceptedFormats={acceptedFormats}
                         maxSizeInBytes={maxFileSize}
@@ -499,7 +499,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               <FileInput
                 title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
                 titleStyles={
-                  "text-[#979797] text-sm font-normal font-AzeretMono leading-snug"
+                  "text-[#979797] text-sm font-normal azeret-mono-font leading-snug"
                 }
                 acceptedFormats={acceptedFormats}
                 maxSizeInBytes={maxFileSize}
@@ -512,9 +512,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               />
             </div> */}
           </div>
-
           <div className="flex flex-col gap-y-[16px]">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Description*
             </Label>
             <Textarea
@@ -525,18 +524,17 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   description: (e.target as any).value,
                 });
               }}
-              className="w-full border-none bg-[#232323] font-AzeretMono rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-xs"
-              placeholder="Please describe your product"
+              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-sm placeholder:font-normal"
+              placeholder="Please describe your curation"
             />
           </div>
-
           <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-[16px]">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
                   <DisclosureButton
                     className={cn(
-                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      'flex w-full flex-col justify-between py-2 pb-5 text-left text-lg font-medium text-white text-[18px]',
                       open ? 'border-b border-white/[8%]' : '',
                     )}
                   >
@@ -551,10 +549,10 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       />
                     </div>
                   </DisclosureButton>
-                  <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
-                    <div className="mt-5 flex gap-x-3">
+                  <DisclosurePanel className="pt-5 pb-2 text-sm  text-white  rounded-b-lg">
+                    <div className=" mb-5 flex gap-x-3">
                       <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-semibold test-sm text-white">
+                        <Label className="font-bold test-sm text-white manrope-font">
                           Website
                         </Label>
                         <LinkInput
@@ -565,13 +563,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               website: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                           type="text"
                           placeholder="Enter your website link"
                         />
                       </div>
                       <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-semibold test-sm text-white">
+                        <Label className="font-bold test-sm text-white manrope-font">
                           X(Twitter)
                         </Label>
                         <LinkInput
@@ -582,7 +580,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               twitter: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                           type="text"
                           placeholder="Enter your twitter link"
                         />
@@ -590,7 +588,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     </div>
                     <div className="mt-2 flex gap-x-3">
                       <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-semibold test-sm text-white">
+                        <Label className="font-bold test-sm text-white manrope-font">
                           Facebook
                         </Label>
                         <LinkInput
@@ -601,13 +599,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               facebook: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                           type="text"
                           placeholder="Enter your facebook link"
                         />
                       </div>
                       <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-semibold test-sm text-white">
+                        <Label className="font-bold test-sm text-white manrope-font">
                           Instagram
                         </Label>
                         <LinkInput
@@ -618,7 +616,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               instagram: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                           type="text"
                           placeholder="Enter your instagram link"
                         />
@@ -629,14 +627,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               )}
             </Disclosure>
           </div>
-
           <div className="w-full rounded-[20px] px-[20px] py-[20px] bg-dark flex flex-col gap-y-2">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
                   <DisclosureButton
                     className={cn(
-                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      'flex w-full flex-col justify-between py-2 pb-5 text-left   text-lg font-medium text-white text-[18px]',
                       open ? 'border-b border-white/[8%]' : '',
                     )}
                   >
@@ -683,35 +680,35 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         />
                       </div>
                     </div>
-                    <p className="text-[#949494] text-xs font-AzeretMono mt-1">
+                    <p className="text-[#949494] text-xs azeret-mono-font mt-1">
                       You can add new fields by clicking the Add New button (up
                       to 2 total)
                     </p>
                   </DisclosureButton>
-                  <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                  <DisclosurePanel className="pt-5 pb-2 text-sm  text-white  rounded-b-lg">
                     {youtube.map((item, index) => {
                       return (
-                        <div key={index} className="mt-5 flex gap-x-3">
+                        <div key={index} className="flex gap-x-3">
                           <div className="flex flex-col gap-y-2 basis-1/2">
-                            <Label className="font-semibold test-sm text-white">
+                            <Label className="font-bold test-sm text-white manrope-font">
                               Title
                             </Label>
                             <Input
                               value={item.title ? item.title : ''}
                               onChange={(e) => handleVideo(index, e, 'title')}
-                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px]"
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px]"
                               type="text"
                               placeholder="Enter video title"
                             />
                           </div>
                           <div className="flex flex-col gap-y-2 basis-1/2">
-                            <Label className="font-semibold test-sm text-white">
+                            <Label className="font-bold test-sm text-white manrope-font">
                               Video Link
                             </Label>
                             <LinkInput
                               value={item.url ? item.url : ''}
                               onChange={(e) => handleVideo(index, e, 'link')}
-                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] font-AzeretMono placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                               type="text"
                               placeholder="Enter video link"
                             />
@@ -724,14 +721,13 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               )}
             </Disclosure>
           </div>
-
           <div className="w-full rounded-[20px] px-[20px] py-[20px]  bg-dark flex flex-col gap-y-2">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
                   <DisclosureButton
                     className={cn(
-                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      'flex w-full flex-col justify-between py-2 pb-5 text-left   text-lg font-medium text-white text-[18px]',
                       open ? 'border-b border-white/[8%]' : '',
                     )}
                   >
@@ -760,15 +756,18 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         />
                       </div>
                     </div>
-                    <p className="text-[#949494] text-xs font-AzeretMono mt-1">
+                    <p className="text-[#949494] text-xs azeret-mono-font mt-1">
                       You can add new fields by clicking the Add New button (up
                       to 2 total)
                     </p>
                   </DisclosureButton>
-                  <DisclosurePanel className="pb-2 text-sm text-white  rounded-b-lg">
-                    <div className="flex gap-x-4 items-center my-5">
+                  <DisclosurePanel className="pb-2 pt-5 text-sm text-white  rounded-b-lg">
+                    <div className="w-full mb-5">
                       <FileInput
                         title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                        titleStyles={
+                          'text-[#979797] text-sm font-normal azeret-mono-font'
+                        }
                         acceptedFormats={acceptedFormats}
                         maxSizeInBytes={maxFileSize}
                         onFileSelect={(file: any) =>
@@ -815,7 +814,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               />
             </div> */}
           </div>
-
           <div className="flex gap-x-4 justify-center my-5">
             <BaseButton
               title="Cancel"

@@ -45,14 +45,13 @@ export default function ConnectedCard() {
             <p className="text-white/[53%] font-normal">{activeChain?.name}</p>
           </div>
         </div>
-
         <div className="flex items-center gap-5">
           <div>
-            <button className="px-4 py-3 rounded-xl text-[#DDF247] bg-[#DDF247]/[0.09] font-bold">
+            <button className="px-4 py-3 rounded-xl text-sm text-[#DDF247] bg-[#DDF247]/[0.09] font-bold">
               Connected
             </button>
           </div>
-          <div>
+          {/* <div>
             <svg
               width="10"
               height="6"
@@ -67,7 +66,7 @@ export default function ConnectedCard() {
                 fill="white"
               />
             </svg>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

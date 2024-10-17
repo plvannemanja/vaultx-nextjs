@@ -84,7 +84,7 @@ export default function Page() {
             <div className="flex flex-col flex-wrap items-center justify-between md:flex-row ">
               <div className="flex flex-col gap-y-7 w-full">
                 <div
-                  className="cursor-pointer min-h-[131px] w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-[#FFFFFF2B] bg-white/5 hover:bg-[#DDF247]  hover:text-black text-white"
+                  className="cursor-pointer min-h-[131px] w-full max-w-[615px] flex flex-col gap-y-2 p-6 relative rounded-xl border border-white/[17%] bg-white/5 hover:bg-[#DDF247]  hover:text-black text-white"
                   onMouseEnter={() => setHovered('curation')}
                   onMouseLeave={() => setHovered(false)}
                   onClick={async () => await checkCurator('curation')}
@@ -121,12 +121,12 @@ export default function Page() {
                     />
                     <div className="flex flex-col gap-y-2">
                       <span
-                        className={`text-[22px] ${hovered === 'curation' ? 'font-bold ' : 'font-extrabold'}`}
+                        className={`text-[22px] ${hovered === 'curation' ? 'font-bold' : 'font-extrabold'}`}
                       >
                         Create Curation
                       </span>
                       <p
-                        className={`w-[100%] font-azeret-mono azeret-mono-font  text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
+                        className={`w-[100%] azeret-mono-font text-sm ${hovered === 'curation' ? 'text-black' : 'text-[#959595]'}`}
                       >
                         Create your own Curation for becoming a pioneering
                         curator in the Web3 world.
@@ -228,8 +228,6 @@ export default function Page() {
                       </span>
                       <p
                         className={`w-[100%] azeret-mono-font  text-sm ${hovered === 'mint' ? 'text-black' : 'text-[#959595]'}`}
-
-                        // className={`w-[80%] text-sm ${hovered === 'mint' ? 'text-black' : 'text-gray-500'}`}
                       >
                         Digitize physical assets to blockchain entries in
                         minutes.
