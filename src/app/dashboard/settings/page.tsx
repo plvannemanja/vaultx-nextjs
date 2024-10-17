@@ -1,26 +1,24 @@
 'use client';
-
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import FileInput from '@/app/components/ui/FileInput';
-import { useEffect, useState } from 'react';
-import { userServices } from '@/services/supplier';
-import BaseButton from '@/app/components/ui/BaseButton';
-import ContactInfo from '@/app/components/Modules/ContactInfo';
-import ShippingInfo from '@/app/components/Modules/ShippingInfo';
-import PropertiesInfo from '@/app/components/Modules/Properties';
-import { useToast } from '@/hooks/use-toast';
-import { checkUrl } from '@/utils/helpers';
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
-import { ChevronUpIcon } from 'lucide-react';
+import ContactInfo from '@/app/components/Modules/ContactInfo';
 import PropertiesTemplate from '@/app/components/Modules/create/PropertiesTemplate';
+import UserArtistSetting from '@/app/components/Modules/create/UserArtistSetting';
+import ShippingInfo from '@/app/components/Modules/ShippingInfo';
+import BaseButton from '@/app/components/ui/BaseButton';
+import FileInput from '@/app/components/ui/FileInput';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { userServices } from '@/services/supplier';
+import { checkUrl } from '@/utils/helpers';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
-import UserArtistSetting from '@/app/components/Modules/create/UserArtistSetting';
+import { ChevronUpIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const { toast } = useToast();

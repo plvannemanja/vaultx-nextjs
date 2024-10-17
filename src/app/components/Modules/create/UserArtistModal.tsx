@@ -21,7 +21,7 @@ const paymentSplitSchema = z.object({
 });
 
 const fileSchema = z.object({
-  file: z.instanceof(File),
+  file: z.any(),
 });
 
 const userArtistSchema = z

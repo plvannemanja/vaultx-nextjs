@@ -10,8 +10,8 @@ const ListIcon = () => {
       <path
         d="M2.33203 3.58496H11.6654M2.33203 5.91829H11.6654M2.33203 8.25163H11.6654M2.33203 10.585H11.6654"
         stroke="white"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
