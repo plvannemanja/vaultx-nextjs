@@ -1,10 +1,10 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
-import Link from 'next/link';
-import React, { useState } from 'react';
-import Image from 'next/image';
 import Logo from '@/components/Icon/Logo';
+import { Label } from '@/components/ui/label';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function BaseFooter() {
   const [imageHovered, setImageHovered] = useState({
@@ -16,18 +16,13 @@ export default function BaseFooter() {
   return (
     <div className="flex flex-col gap-y-6 text-white justify-around my-10">
       <div className="flex flex-wrap justify-between px-20 gap-10 container">
-        <Link href="/dashboard?appreciate">Appreciate</Link>
-        <Link href="/dashboard?curation">Curation</Link>
-        <Link href="https://artistvaultx.wpcomstaging.com/" target="_blank">
-          Magazine
-        </Link>
-        <Link href="https://www.monsterx.io" target="_blank">
-          Who We Are
-        </Link>
-
+        <Link href="/dashboard/appreciate">Appreciate</Link>
+        <Link href="/dashboard/curation">Curation</Link>
+        <Link href="https://magazinex.io">Magazine</Link>
+        <Link href="https://www.monsterx.io">Who We Are</Link>
         <div className="flex flex-col gap-y-2 justify-center mx-auto lg:m-0">
           <p className="text-center">Join Us Today!</p>
-          <div className="flex gap-x-3">
+          <div className="flex gap-x-3 mt-3">
             <Link
               target="_blank"
               href="https://www.instagram.com/magazinex_rwa/?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw%3D%3D"
