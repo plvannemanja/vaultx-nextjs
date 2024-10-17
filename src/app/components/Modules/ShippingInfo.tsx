@@ -9,6 +9,7 @@ import {
   upsertSellerInfo,
 } from '@/services/supplier';
 import { City, Country, State } from 'country-state-city';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import { useCreateNFT } from '../Context/CreateNFTContext';
@@ -94,7 +95,7 @@ export default function ShippingInfo() {
           phoneNumber: sellerInfo.phoneNumber,
         });
       }
-      console.log('response:', response);
+      // console.log('response:', response);
 
       if (response) {
         await fetchSellers();
@@ -306,6 +307,7 @@ export default function ShippingInfo() {
 
       return false;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedShipping, nftContext.sellerInfo.shipping],
   );
 
@@ -315,6 +317,7 @@ export default function ShippingInfo() {
       shippingId: selectedShipping?._id,
       shipping: selectedShipping,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedShipping]);
 
   useEffect(() => {
@@ -343,7 +346,7 @@ export default function ShippingInfo() {
                 >
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
-                      <span>{item.name}</span>
+                      <span className="text-xl font-semibold">{item.name}</span>
                       <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
                     </div>
                     <div className="text-[#A6A6A6]">{item.shippingAddr}</div>
@@ -360,21 +363,29 @@ export default function ShippingInfo() {
                           : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
                       </p>
                     ) : null}
-                    <span
-                      onClick={() => {
-                        preserveState(item);
-                        setIsUpdateModalOpen(true);
-                      }}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
-                    >
-                      Edit
-                    </span>
-                    <span
-                      onClick={() => handleDeleteSeller(item)}
-                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                    >
-                      <img src="/icons/trash.svg" className="w-4 h-4" />
-                    </span>
+                    <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                      <div
+                        className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                        onClick={() => {
+                          preserveState(item);
+                          setIsUpdateModalOpen(true);
+                        }}
+                      >
+                        Edit
+                      </div>
+                      <span
+                        onClick={() => handleDeleteSeller(item)}
+                        className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] text-[14px]"
+                      >
+                        <Image
+                          width={16}
+                          height={16}
+                          alt="delete"
+                          src="/icons/trash.svg"
+                          className="w-4 h-4"
+                        />
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex justify-end ">
@@ -386,7 +397,7 @@ export default function ShippingInfo() {
                       <div className="flex flex-col gap-y-5">
                         <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
                           <div className="flex flex-col gap-y-3">
-                            <Label className="text-lg font-medium">
+                            <Label className="text-lg font-semibold">
                               Shipping Address Name
                             </Label>
                             <Input
@@ -396,7 +407,7 @@ export default function ShippingInfo() {
                                   type: e.target.value,
                                 });
                               }}
-                              className="w-full border-none bg-[#161616]"
+                              className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                               type="text"
                               value={sellerInfo.type}
                               placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)"
@@ -404,13 +415,13 @@ export default function ShippingInfo() {
                           </div>
 
                           <div className="flex flex-col gap-y-3">
-                            <Label className="text-lg font-medium">
+                            <Label className="text-lg font-semibold">
                               Seller Information
                             </Label>
                             <hr />
                             <div className="flex flex-wrap gap-2">
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   Name*
                                 </Label>
                                 <Input
@@ -420,14 +431,14 @@ export default function ShippingInfo() {
                                       name: e.target.value,
                                     })
                                   }
-                                  className="w-full border-none bg-[#161616]"
+                                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                                   type="text"
                                   value={sellerInfo.name ?? ''}
                                   placeholder="Enter name"
                                 />
                               </div>
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   E-mail*
                                 </Label>
                                 <Input
@@ -437,33 +448,35 @@ export default function ShippingInfo() {
                                       email: e.target.value,
                                     })
                                   }
-                                  className="w-full border-none bg-[#161616]"
+                                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                                   type="text"
                                   value={sellerInfo.email ?? ''}
                                   placeholder="Enter email"
                                 />
                               </div>
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   Country*
                                 </Label>
-                                <select
-                                  aria-label="select curation"
-                                  className="h-10 rounded-md px-2"
-                                  name="country"
-                                  value={JSON.stringify(sellerInfo.country)}
-                                  onChange={handleUpdateSeller}
-                                >
-                                  <option value="">Select</option>
-                                  {countries.map((item: any) => (
-                                    <option
-                                      key={item.isoCode}
-                                      value={JSON.stringify(item)}
-                                    >
-                                      {item.name}
-                                    </option>
-                                  ))}
-                                </select>
+                                <div className="rounded-md bg-[#161616]">
+                                  <select
+                                    aria-label="select curation"
+                                    className="h-10 rounded-md px-2 bg-[#161616] text-xs font-AzeretMono focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none"
+                                    name="country"
+                                    value={JSON.stringify(sellerInfo.country)}
+                                    onChange={handleUpdateSeller}
+                                  >
+                                    <option value="">Select</option>
+                                    {countries.map((item: any) => (
+                                      <option
+                                        key={item.isoCode}
+                                        value={JSON.stringify(item)}
+                                      >
+                                        {item.name}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -471,13 +484,13 @@ export default function ShippingInfo() {
 
                         <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
                           <div className="flex flex-col gap-y-3">
-                            <Label className="text-lg font-medium">
+                            <Label className="text-lg font-semibold">
                               Shipping Address
                             </Label>
                             <hr />
                             <div className="flex flex-wrap justify-between">
                               <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   Address 1*
                                 </Label>
                                 <Input
@@ -487,14 +500,14 @@ export default function ShippingInfo() {
                                       line1: e.target.value,
                                     })
                                   }
-                                  className="w-full border-none bg-[#161616]"
+                                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                                   type="text"
                                   value={sellerInfo.line1 ?? ''}
                                   placeholder="Enter Address 1"
                                 />
                               </div>
                               <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   Address 2*
                                 </Label>
                                 <Input
@@ -505,7 +518,7 @@ export default function ShippingInfo() {
                                     })
                                   }
                                   value={sellerInfo.line2 ?? ''}
-                                  className="w-full border-none bg-[#161616]"
+                                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                                   type="text"
                                   placeholder="Enter Address 2"
                                 />
@@ -513,12 +526,12 @@ export default function ShippingInfo() {
                             </div>
                             <div className="flex flex-wrap justify-between">
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   State*
                                 </Label>
                                 <select
                                   aria-label="select curation"
-                                  className="h-10 rounded-md px-2"
+                                  className="h-10 rounded-md px-2 focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none"
                                   name="state"
                                   value={JSON.stringify(sellerInfo.state)}
                                   onChange={handleUpdateSeller}
@@ -535,12 +548,12 @@ export default function ShippingInfo() {
                                 </select>
                               </div>
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   City*
                                 </Label>
                                 <select
                                   aria-label="select curation"
-                                  className="h-10 rounded-md px-2"
+                                  className="h-10 rounded-md px-2 focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none"
                                   name="city"
                                   value={
                                     sellerInfo.city
@@ -561,7 +574,7 @@ export default function ShippingInfo() {
                                 </select>
                               </div>
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-lg font-medium">
+                                <Label className="text-lg font-semibold">
                                   Postal Code*
                                 </Label>
                                 <Input
@@ -572,7 +585,7 @@ export default function ShippingInfo() {
                                     })
                                   }
                                   value={sellerInfo.postalCode ?? ''}
-                                  className="w-full border-none bg-[#161616]"
+                                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                                   type="text"
                                   placeholder="Enter Zip Code"
                                 />
@@ -631,7 +644,13 @@ export default function ShippingInfo() {
         >
           <div className="flex flex-col gap-y-6 items-center">
             <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
-              <img src="/icons/plus.svg" className="w-5 h-5" />
+              <Image
+                src="/icons/plus.svg"
+                className="w-5 h-5"
+                alt="plus"
+                width={20}
+                height={20}
+              />
             </div>
             <p className="text-[#828282] font-medium text-lg">
               Add New Address
@@ -647,49 +666,49 @@ export default function ShippingInfo() {
           <div className="flex flex-col gap-y-5">
             <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
               <div className="flex flex-col gap-y-3">
-                <Label className="text-lg font-medium">
+                <Label className="text-lg font-semibold">
                   Shipping Address Name
                 </Label>
                 <Input
                   onChange={(e) =>
                     setSellerInfo({ ...sellerInfo, type: e.target.value })
                   }
-                  className="w-full border-none bg-[#161616]"
+                  className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                   type="text"
                   placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)"
                 />
               </div>
 
               <div className="flex flex-col gap-y-3">
-                <Label className="text-lg font-medium">
+                <Label className="text-lg font-semibold">
                   Seller Information
                 </Label>
                 <hr />
                 <div className="flex flex-wrap gap-2">
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">Name*</Label>
+                    <Label className="text-lg font-semibold">Name*</Label>
                     <Input
                       onChange={(e) =>
                         setSellerInfo({ ...sellerInfo, name: e.target.value })
                       }
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                       type="text"
                       placeholder="Enter name"
                     />
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">E-mail*</Label>
+                    <Label className="text-lg font-semibold">E-mail*</Label>
                     <Input
                       onChange={(e) =>
                         setSellerInfo({ ...sellerInfo, email: e.target.value })
                       }
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                       type="text"
                       placeholder="Enter email"
                     />
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">Country*</Label>
+                    <Label className="text-lg font-semibold">Country*</Label>
                     <select
                       aria-label="select curation"
                       className="h-10 rounded-md px-2"
@@ -711,11 +730,13 @@ export default function ShippingInfo() {
 
             <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
               <div className="flex flex-col gap-y-3">
-                <Label className="text-lg font-medium">Shipping Address</Label>
+                <Label className="text-lg font-semibold">
+                  Shipping Address
+                </Label>
                 <hr />
                 <div className="flex flex-wrap justify-between">
                   <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                    <Label className="text-lg font-medium">Address 1*</Label>
+                    <Label className="text-lg font-semibold">Address 1*</Label>
                     <Input
                       onChange={(e) =>
                         setSellerInfo({
@@ -723,13 +744,13 @@ export default function ShippingInfo() {
                           line1: e.target.value,
                         })
                       }
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                       type="text"
                       placeholder="Enter name"
                     />
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                    <Label className="text-lg font-medium">Address 2*</Label>
+                    <Label className="text-lg font-semibold">Address 2*</Label>
                     <Input
                       onChange={(e) =>
                         setSellerInfo({
@@ -737,7 +758,7 @@ export default function ShippingInfo() {
                           line2: e.target.value,
                         })
                       }
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                       type="text"
                       placeholder="Enter email"
                     />
@@ -745,7 +766,7 @@ export default function ShippingInfo() {
                 </div>
                 <div className="flex flex-wrap justify-between">
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">State*</Label>
+                    <Label className="text-lg font-semibold">State*</Label>
                     <select
                       aria-label="select curation"
                       className="h-10 rounded-md px-2"
@@ -762,7 +783,7 @@ export default function ShippingInfo() {
                     </select>
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">City*</Label>
+                    <Label className="text-lg font-semibold">City*</Label>
                     <select
                       aria-label="select curation"
                       className="h-10 rounded-md px-2"
@@ -781,7 +802,9 @@ export default function ShippingInfo() {
                     </select>
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                    <Label className="text-lg font-medium">Postal Code*</Label>
+                    <Label className="text-lg font-semibold">
+                      Postal Code*
+                    </Label>
                     <Input
                       onChange={(e) =>
                         setSellerInfo({
@@ -789,7 +812,7 @@ export default function ShippingInfo() {
                           postalCode: e.target.value,
                         })
                       }
-                      className="w-full border-none bg-[#161616]"
+                      className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                       type="text"
                       placeholder="Enter email"
                     />

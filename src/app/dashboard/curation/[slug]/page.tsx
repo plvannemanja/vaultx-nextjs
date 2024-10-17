@@ -1,19 +1,17 @@
 'use client';
 
-import { FavoriteService } from '@/services/FavoriteService';
-import { collectionServices } from '@/services/supplier';
-import { useEffect, useRef, useState } from 'react';
-import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
+import NftCard from '@/app/components/Cards/NftCard';
+import { useGlobalContext } from '@/app/components/Context/GlobalContext';
+import { BaseDialog } from '@/app/components/ui/BaseDialog';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -23,15 +21,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import SearchWithDropDown from '@/app/components/Filters/SearchWithDropDown';
-import NftCard from '@/app/components/Cards/NftCard';
-import Link from 'next/link';
-import { PencilIcon } from '@heroicons/react/20/solid';
-import Image from 'next/image';
-import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import { cn } from '@/lib/utils';
-import { BaseDialog } from '@/app/components/ui/BaseDialog';
-import { Badge } from '@/components/ui/badge';
+import { FavoriteService } from '@/services/FavoriteService';
+import { collectionServices } from '@/services/supplier';
+import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const badges = [
   {
@@ -183,6 +179,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
 
   if (!curation) return null;
@@ -244,7 +241,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => { }}
+                  onChange={() => {}}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -392,45 +389,41 @@ export default function Page({ params }: { params: { slug: string } }) {
               <div className="w-8 h-8 flex justify-center items-center relative">
                 <Link href={ensureValidUrl(curation?.twitter)}>
                   <Image
-                    layout='fill'
-                    alt='twitter'
+                    layout="fill"
+                    alt="twitter"
                     src="/icons/twitter-x.svg"
-                    objectFit='cover'
-                  >
-                  </Image>
+                    objectFit="cover"
+                  ></Image>
                 </Link>
               </div>
               <div className="w-8 h-8 flex justify-center items-center relative">
                 <Link href={ensureValidUrl(curation?.website)}>
                   <Image
-                    layout='fill'
-                    alt='twitter'
+                    layout="fill"
+                    alt="twitter"
                     src="/icons/discord.svg"
-                    objectFit='cover'
-                  >
-                  </Image>
+                    objectFit="cover"
+                  ></Image>
                 </Link>
               </div>
               <div className="w-8 h-8 flex justify-center items-center relative">
                 <Link href={ensureValidUrl(curation?.facebook)}>
                   <Image
-                    layout='fill'
-                    alt='twitter'
+                    layout="fill"
+                    alt="twitter"
                     src="/icons/telegram.svg"
-                    objectFit='cover'
-                  >
-                  </Image>
+                    objectFit="cover"
+                  ></Image>
                 </Link>
               </div>
               <div className="w-8 h-8 flex justify-center items-center relative">
                 <Link href={ensureValidUrl(curation?.instagram)}>
                   <Image
-                    layout='fill'
-                    alt='twitter'
+                    layout="fill"
+                    alt="twitter"
                     src="/icons/discord.svg"
-                    objectFit='cover'
-                  >
-                  </Image>
+                    objectFit="cover"
+                  ></Image>
                 </Link>
               </div>
             </div>
@@ -444,17 +437,15 @@ export default function Page({ params }: { params: { slug: string } }) {
           showLess ? 'h-[200px]' : 'h-[340px]',
         )}
       >
-        {
-          curation?.descriptionImage?.[0] && (
-            <Image
-              src={curation?.descriptionImage?.[0]}
-              alt="hero"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-xl"
-            />
-          )
-        }
+        {curation?.descriptionImage?.[0] && (
+          <Image
+            src={curation?.descriptionImage?.[0]}
+            alt="hero"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-xl"
+          />
+        )}
       </div>
 
       <div className="flex gap-x-3 flex-wrap mt-[6rem]">
@@ -463,10 +454,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${filterbadge === badge.value
-                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                : 'hover:bg-[#232323] bg-transparent text-white'
-                }`}
+              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${
+                filterbadge === badge.value
+                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                  : 'hover:bg-[#232323] bg-transparent text-white'
+              }`}
             >
               {badge.label}
             </Badge>
@@ -524,8 +516,8 @@ export default function Page({ params }: { params: { slug: string } }) {
               if (filteredProfile) {
                 setFilters({
                   ...filters,
-                  filter: profileFilters
-                })
+                  filter: profileFilters,
+                });
               }
             }}
             // value={profileFilters[0].label}
@@ -546,7 +538,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           </Select>
         </div>
         {/* User section */}
-        {tab === "items" && items.length ? (
+        {tab === 'items' && items.length ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {items.map((item: any, index: number) => {
               return (
@@ -559,7 +551,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         ) : null}
 
         {/* Activity section */}
-        {tab === "activity" && activities.length ? (
+        {tab === 'activity' && activities.length ? (
           <div>
             <Table>
               <TableCaption>A list of your recent activity.</TableCaption>
@@ -568,11 +560,19 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <TableHead className="w-[100px] text-[14px] text-[#fff]">
                     Event
                   </TableHead>
-                  <TableHead className="text-[14px] text-[#fff]">Item</TableHead>
-                  <TableHead className="text-[14px] text-[#fff]">Price</TableHead>
-                  <TableHead className="text-[14px] text-[#fff]">From</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">
+                    Item
+                  </TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">
+                    Price
+                  </TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">
+                    From
+                  </TableHead>
                   <TableHead className="text-[14px] text-[#fff]">To</TableHead>
-                  <TableHead className="text-[14px] text-[#fff]">Date</TableHead>
+                  <TableHead className="text-[14px] text-[#fff]">
+                    Date
+                  </TableHead>
                   <TableHead className="text-right text-[14px] text-[#fff]">
                     Time
                   </TableHead>
@@ -628,7 +628,6 @@ export default function Page({ params }: { params: { slug: string } }) {
             </Table>
           </div>
         ) : null}
-
       </div>
     </div>
   );

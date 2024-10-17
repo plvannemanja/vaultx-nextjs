@@ -31,7 +31,7 @@ export default function BaseButton({
 
   return (
     <div
-      className={`py-3 w-[20rem] rounded-lg text-black font-semibold 
+      className={`py-3 w-[20rem] rounded-lg text-black font-extrabold text-sm 
          ${isPrimary ? 'bg-neon ' : 'bg-[#dee8e8]'} 
           ${isSecondaryOutline ? '!bg-[#DDF24733] border-2 border-[#ddf247] !text-[#DDF24799]' : 'bg-[#dee8e8]'}
           ${loading ? 'opacity-50' : ''}

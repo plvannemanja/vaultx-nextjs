@@ -19,7 +19,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        manrope: ['Manrope', 'Helvetica', 'Arial', 'sans-serif'],
+        manrope: ['Manrope', 'sans-serif'],
         AzeretMono: ['Azeret Mono', 'sans-serif'],
       },
       colors: {

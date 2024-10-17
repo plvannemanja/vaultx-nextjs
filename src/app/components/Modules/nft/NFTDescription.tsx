@@ -15,7 +15,7 @@ export default function NFTDescription() {
   const maxAttachments = 4;
   return (
     <>
-      <div className="w-full flex gap-[27px] flex-wrap">
+      <div className="w-full flex gap-[27px] pt-7 flex-wrap">
         {[data.cloudinaryUrl, ...data.attachments.slice(0, maxAttachments)].map(
           (item, index) => {
             return (
@@ -115,7 +115,7 @@ export default function NFTDescription() {
                         <p className="text-xs capitalize font-medium text-center text-white">
                           {attr.type}
                         </p>
-                        <p className="font-medium text-[#888888] azeret-mono-font text-[14px] text-center">
+                        <p className="font-medium text-[#888888] azeret-mono-font text-sm text-center">
                           {attr.value}
                         </p>
                       </div>

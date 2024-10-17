@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -28,9 +29,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
         {showIcon && (
           <button onClick={props.onPressIcon}>
-            <img
+            <Image
               src="/icons/trash.svg"
-              alt=""
+              alt="image"
+              width={20}
+              height={20}
               className="absolute top-3 right-3 w-5 h-5"
             />
           </button>
@@ -46,7 +49,13 @@ const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full border-none pl-6 py-1 bg-[#161616] rounded-xl placeholder:text-white/[53%] justify-start items-center inline-flex font-AzeretMono placeholder:text-xs">
         <button onClick={props.onPressIcon}>
-          <img src="/icons/link-shape-white.svg" alt="" className="w-5 h-5" />
+          <Image
+            src="/icons/link-shape-white.svg"
+            alt="link"
+            className="w-5 h-5"
+            width={20}
+            height={20}
+          />
         </button>
         <input
           type={type}

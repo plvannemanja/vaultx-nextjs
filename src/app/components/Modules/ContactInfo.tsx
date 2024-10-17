@@ -9,6 +9,7 @@ import {
   getContactsInfo,
   upsertContactInfo,
 } from '@/services/supplier';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { useCreateNFT } from '../Context/CreateNFTContext';
 import BaseButton from '../ui/BaseButton';
@@ -65,6 +66,7 @@ export default function ContactInfo() {
 
       return false;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedContact, nftContext.sellerInfo.contact],
   );
 
@@ -74,6 +76,7 @@ export default function ContactInfo() {
       contactId: selectedContact?._id,
       contact: selectedContact,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedContact]);
 
   useEffect(() => {
@@ -124,38 +127,47 @@ export default function ContactInfo() {
                   setSelectedContact(item);
                 }}
               >
-                <span>{item.name ? item.name : `#${index + 1}`}</span>
+                <span className="text-xl font-semibold">
+                  {item.name ? item.name : `#${index + 1}`}
+                </span>
                 <div>
-                  <p className="text-[#A6A6A6] py-1 azeret-mono-font text-[12px]">
+                  <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
                     {item?.contactInfo?.length > 150
                       ? `${item.contactInfo.slice(0, 150)}...`
                       : item.contactInfo}
                     ...
                   </p>
                 </div>
-
-                <span
-                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-10 text-[14px]"
-                  onClick={() => {
-                    setIsUpdateModalOpen(true);
-                    setNewContact({
-                      ...newContact,
-                      id: item._id,
-                      name: item.name,
-                      contactInfo: item.contactInfo,
-                    });
-                  }}
-                >
-                  Edit
-                </span>
-                <span
-                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] absolute bottom-2 right-2 text-[14px]"
-                  onClick={() => {
-                    handleDeleteContact(item);
-                  }}
-                >
-                  <img src="/icons/trash.svg" className="w-4 h-4" />
-                </span>
+                <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                  <div
+                    className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                    onClick={() => {
+                      setIsUpdateModalOpen(true);
+                      setNewContact({
+                        ...newContact,
+                        id: item._id,
+                        name: item.name,
+                        contactInfo: item.contactInfo,
+                      });
+                    }}
+                  >
+                    Edit
+                  </div>
+                  <div
+                    className="text-[#DDF247] h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                    onClick={() => {
+                      handleDeleteContact(item);
+                    }}
+                  >
+                    <Image
+                      width={16}
+                      height={16}
+                      alt="delete"
+                      src="/icons/trash.svg"
+                      className="w-4 h-4"
+                    />
+                  </div>
+                </div>
 
                 <div className="flex justify-end">
                   <BaseDialog
@@ -176,7 +188,7 @@ export default function ContactInfo() {
                               name: e.target.value,
                             })
                           }
-                          className="w-full border-none bg-[#161616]"
+                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                           type="text"
                           placeholder="Enter contact name"
                         />
@@ -198,7 +210,7 @@ export default function ContactInfo() {
                               contactInfo: e.target.value,
                             })
                           }
-                          className="w-full border-none bg-[#161616]"
+                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                           placeholder="Please describe your product"
                         />
                       </div>
@@ -230,7 +242,13 @@ export default function ContactInfo() {
         >
           <div className="flex flex-col gap-y-6 items-center">
             <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
-              <img src="/icons/plus.svg" className="w-5 h-5" />
+              <Image
+                src="/icons/plus.svg"
+                className="w-5 h-5"
+                alt="plus"
+                width={20}
+                height={20}
+              />
             </div>
             <p className="text-[#828282] font-medium text-lg">
               Add New Information
@@ -251,7 +269,7 @@ export default function ContactInfo() {
                 onChange={(e) =>
                   setNewContact({ ...newContact, name: e.target.value })
                 }
-                className="w-full border-none bg-[#161616]"
+                className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                 type="text"
                 placeholder="Enter contact name"
               />
@@ -265,7 +283,7 @@ export default function ContactInfo() {
                 onChange={(e) =>
                   setNewContact({ ...newContact, contactInfo: e.target.value })
                 }
-                className="w-full border-none bg-[#161616]"
+                className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
                 placeholder="Please describe your product"
               />
             </div>

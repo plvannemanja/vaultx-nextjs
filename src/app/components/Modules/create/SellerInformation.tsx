@@ -59,7 +59,7 @@ export default function SellerInformation({
         <hr />
         <div className="grid grid-cols-12 gap-3">
           <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
-            <Label>Length(cm)</Label>
+            <Label className="font-medium">Length(cm)</Label>
             <Input
               value={sellerInfo.length}
               type="number"
@@ -74,7 +74,7 @@ export default function SellerInformation({
             />
           </div>
           <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
-            <Label>Width(cm)</Label>
+            <Label className="font-medium">Width(cm)</Label>
             <Input
               value={sellerInfo.width}
               type="number"
@@ -89,7 +89,7 @@ export default function SellerInformation({
             />
           </div>
           <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
-            <Label>Height(cm)</Label>
+            <Label className="font-medium">Height(cm)</Label>
             <Input
               value={sellerInfo.height}
               type="number"
@@ -104,7 +104,7 @@ export default function SellerInformation({
             />
           </div>
           <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
-            <Label>Weight(kg)</Label>
+            <Label className="font-medium">Weight(kg)</Label>
             <Input
               value={sellerInfo.weight}
               type="number"
@@ -122,15 +122,17 @@ export default function SellerInformation({
       </div>
 
       <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
-        <p>Consent for collection and usage of personal information</p>
-        <p className="text-gray-500 azeret-mono-font">
+        <p className="font-medium">
+          Consent for collection and usage of personal information
+        </p>
+        <p className="text-white/[53%] azeret-mono-font text-xs">
           Please read the following and check the appropriate boxes to indicate
           your consent:
         </p>
-        <hr />
+        <hr className="border-white/[8%]" />
         <Textarea
           disabled={true}
-          className="p-4 rounded-md azeret-mono-font overflow-hidden"
+          className="p-4 rounded-md azeret-mono-font overflow-hidden w-full border-none bg-[#161616] text-sm placeholder:text-xs font-AzeretMono"
           rows={4}
           placeholder={`We collect two types of information from you: 
 1. Personal Information: This includes your individual information such as Email, Phone Number, Username, Avatar, Profile Picture, Date of Birth, and more.  
