@@ -111,19 +111,21 @@ export default function Page() {
       ) : null}
       <>
         <CurationSearch setState={handleState} />
-        {loading ? (
-          <SkeletonCard />
-        ) : (
-          <div className="grid grid-cols-12 gap-[24px] mt-[36px]">
-            {collections.map((collection: any, index: number) => {
-              return (
-                <div className="col-span-4" key={index}>
-                  <CurationCard key={index} data={collection} />
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <div className="">
+          {loading ? (
+            <SkeletonCard />
+          ) : (
+            <div className="grid grid-cols-12 gap-4 2xl:gap-6">
+              {collections.map((collection: any, index: number) => {
+                return (
+                  <div className="col-span-4" key={index}>
+                    <CurationCard key={index} data={collection} />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </>
     </div>
   );

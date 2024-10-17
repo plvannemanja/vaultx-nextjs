@@ -11,6 +11,7 @@ import Quotes from '@/app/components/Modules/nft/Quotes';
 import BaseButton from '@/app/components/ui/BaseButton';
 import { BaseDialog } from '@/app/components/ui/BaseDialog';
 import { unlistAsset } from '@/lib/helper';
+import { formatNumberWithCommas } from '@/lib/utils';
 import { CreateSellService } from '@/services/createSellService';
 import NftServices from '@/services/nftService';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
@@ -27,10 +28,6 @@ import BasicLoadingModal from './BasicLoadingModal';
 import BurnModal from './BurnModal';
 import EditNFTModal from './EditNFTModal';
 import TransferModal from './TransferModal';
-
-function formatNumberWithCommas(number) {
-  return number.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',');
-}
 
 const style = {
   borderRadius: '10px',

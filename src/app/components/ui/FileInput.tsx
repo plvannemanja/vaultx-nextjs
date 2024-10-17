@@ -69,21 +69,23 @@ export default function FileInput({
       {title && <p className={`text-sm font-medium ${titleStyles}`}>{title}</p>}
       <input
         type="file"
-        className="file-input hidden font-AzeretMono file:font-AzeretMono"
+        className="file-input hidden "
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <div className="file-upload bg-[#161616] w-full rounded-xl justify-start items-center gap-[30px] inline-flex">
+      <div className="file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex">
         <BaseButton
           title="Upload"
           variant="secondary"
           onClick={handleButtonClick}
           displayIcon
           iconPath={'/icons/uploadBlack.svg'}
-          className={'w-[30%]'}
+          className={'w-[30%] p-0'}
           iconStyles={'stroke-black'}
         />{' '}
-        {editMode ? 'File Selected' : fileName ? fileName : 'No files selected'}
+        <p className="azeret-mono-font !text-sm">
+          {editMode ? 'File Selected' : fileName ? fileName : 'Choose File'}
+        </p>
       </div>
       {subtitle && (
         <p className="text-sm text-gray-500 font-medium">{subtitle}</p>

@@ -1,5 +1,10 @@
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
-export default function ConnectedCard() {
+
+type Props = {
+  isRwa?: boolean;
+};
+
+export default function ConnectedCard(props: Props) {
   const activeAccount = useActiveAccount();
 
   const activeChain = useActiveWalletChain();
@@ -45,29 +50,30 @@ export default function ConnectedCard() {
             <p className="text-white/[53%] font-normal">{activeChain?.name}</p>
           </div>
         </div>
-
         <div className="flex items-center gap-5">
           <div>
-            <button className="px-4 py-3 rounded-xl text-[#DDF247] bg-[#DDF247]/[0.09] font-bold">
+            <button className="px-4 py-3 rounded-xl text-sm text-[#DDF247] bg-[#DDF247]/[0.09] font-bold">
               Connected
             </button>
           </div>
-          <div>
-            <svg
-              width="10"
-              height="6"
-              viewBox="0 0 10 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M0.71967 0.59467C1.01256 0.301777 1.48744 0.301777 1.78033 0.59467L5 3.81434L8.21967 0.59467C8.51256 0.301777 8.98744 0.301777 9.28033 0.59467C9.57322 0.887563 9.57322 1.36244 9.28033 1.65533L5.53033 5.40533C5.23744 5.69822 4.76256 5.69822 4.46967 5.40533L0.71967 1.65533C0.426777 1.36244 0.426777 0.887563 0.71967 0.59467Z"
-                fill="white"
-              />
-            </svg>
-          </div>
+          {props?.isRwa && (
+            <div>
+              <svg
+                width="10"
+                height="6"
+                viewBox="0 0 10 6"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M0.71967 0.59467C1.01256 0.301777 1.48744 0.301777 1.78033 0.59467L5 3.81434L8.21967 0.59467C8.51256 0.301777 8.98744 0.301777 9.28033 0.59467C9.57322 0.887563 9.57322 1.36244 9.28033 1.65533L5.53033 5.40533C5.23744 5.69822 4.76256 5.69822 4.46967 5.40533L0.71967 1.65533C0.426777 1.36244 0.426777 0.887563 0.71967 0.59467Z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -21,7 +21,7 @@ const paymentSplitSchema = z.object({
 });
 
 const fileSchema = z.object({
-  file: z.instanceof(File),
+  file: z.any(),
 });
 
 const userArtistSchema = z
@@ -226,17 +226,16 @@ export default function UserArtistModal({
   return (
     <div className="grid grid-cols-12 gap-4 h-auto relative bg-dark-900">
       {/* Header Section */}
-      <div className="col-span-12 flex-col justify-center items-center gap-4 inline-flex pt-8">
-        <div className="text-center text-white text-[32px] font-extrabold">
+      <div className="col-span-12 text-[#DEE8E8] max-w-[1000px] mx-auto flex-col justify-center items-center gap-4 inline-flex pt-8">
+        <div className="text-center text-2xl font-extrabold">
           Registering affiliated artists
         </div>
-        <p className="self-stretch text-center text-white text-2xl font-medium leading-normal">
+        <p className="self-stretch text-center text-lg azeret-mono-font font-medium leading-normal">
           We use artist templates to avoid mistakes that can arise from
           repetitive artist information entry. Entering artist information can
           shorten the mint time.
         </p>
       </div>
-
       {/* Upload Artist Profile Image Section */}
       <div className="col-span-3 px-10 py-5 bg-dark-700 rounded-2xl border-2 border-dark-600 flex-col justify-center items-center gap-6 inline-flex border-dashed h-[450px]">
         {file || (editUser && imageSrc) ? (

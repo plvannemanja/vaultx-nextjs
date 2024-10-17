@@ -85,7 +85,7 @@ export default function BasicDetails({
         });
       }
       handler(null, JSON.stringify(message));
-      console.log(result.error.message);
+      // console.log(result.error.message);
       return;
     }
 
@@ -210,10 +210,10 @@ export default function BasicDetails({
                   Upload original RWA File
                 </p>
                 <div>
-                  <p className="mt-2 text-white/[53%] mb-[4px]">
+                  <p className="mt-2 text-white/[53%] mb-[4px] font-normal text-center text-sm azeret-mono-font">
                     Drag or choose your file to IPFS upload
                   </p>
-                  <p className="text-center text-white/30 text-xs font-normal leading-tight">
+                  <p className="text-center text-white/30 text-xs azeret-mono-font">
                     PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
                   </p>
                 </div>
@@ -261,9 +261,9 @@ export default function BasicDetails({
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-5 lg:w-[55%]">
+        <div className="flex flex-col gap-y-[30px] lg:w-[55%]">
           <div className="flex flex-col gap-y-2">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Product name*
             </Label>
             <Input
@@ -274,14 +274,14 @@ export default function BasicDetails({
                   productName: (e.target as any).value,
                 })
               }
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-xs font-AzeretMono justify-start items-center gap-[30px] inline-flex"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl font-AzeretMono justify-start items-center gap-[30px] inline-flex placeholder:text-sm"
               type="text"
               placeholder="Enter Product Name"
             />
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Description*
             </Label>
             <Textarea
@@ -296,14 +296,14 @@ export default function BasicDetails({
                   productDescription: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] font-AzeretMono rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+              className="w-full border-none bg-[#232323] font-AzeretMono rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-sm"
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               placeholder="Please describe your product"
             />
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Price(USD)*
             </Label>
             <Input
@@ -318,7 +318,7 @@ export default function BasicDetails({
                   });
                 }
               }}
-              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-xs font-AzeretMono justify-start items-center gap-[30px] inline-flex"
+              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-sm font-AzeretMono justify-start items-center gap-[30px] inline-flex"
               type="text" // Change to 'text' to allow decimals
               placeholder="Please write the selling price in USD($), not cryptocurrency."
             />
@@ -327,21 +327,19 @@ export default function BasicDetails({
           <div className="w-full rounded-[17px] px-5 py-[12px] bg-dark flex flex-col gap-y-2">
             <div className="flex flex-col gap-y-3">
               <div className="flex justify-between">
-                <Label className="font-bold text-[14px]">Marketplace Fee</Label>
+                <Label className="font-bold text-sm">Marketplace Fee</Label>
                 <Label className="font-bold">${fee}%</Label>
               </div>
               <hr className="border-t-[#ffffff]/[8%] opacity-[0.3]" />
               <div className="flex justify-between">
-                <Label className="font-bold text-[14px]">
-                  You will receive
-                </Label>
+                <Label className="font-bold text-sm">You will receive</Label>
                 <Label className="">${leftAmount}</Label>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Artist name*
             </Label>
             <div className="grid grid-cols-12 gap-x-2">
@@ -367,7 +365,7 @@ export default function BasicDetails({
           </div>
 
           <div className="flex flex-col gap-y-2">
-            <Label className="font-semibold test-sm text-white">
+            <Label className="font-bold test-sm text-white manrope-font">
               Curation*
             </Label>
             <div className="bg-[#232323] rounded-xl pr-4">
@@ -411,7 +409,7 @@ export default function BasicDetails({
                       <Label className="font-extrabold test-[20] text-white">
                         Attachment
                       </Label>
-                      {/* <Label className="font-semibold test-sm text-white">
+                      {/* <Label className="font-bold test-sm text-white manrope-font">
                         Your l÷inks
                       </Label> */}
                       <ChevronUpIcon

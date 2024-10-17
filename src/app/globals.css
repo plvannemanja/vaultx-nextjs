@@ -109,6 +109,10 @@
   font-style: normal; */
 }
 
+.font-monserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .manrope-font {
   font-family: 'Manrope', sans-serif;
 }
@@ -222,9 +226,9 @@ body {
   display: inline-flex;
   gap: 6px;
   border-radius: 12px;
+  font-family: 'Azeret Mono', sans-serif;
   background: var(--Main-color, #ddf247);
   padding: 10px;
-  font-family: 'Manrope', sans-serif;
 }
 
 .file-upload {
@@ -239,7 +243,6 @@ body {
   line-height: 160%;
   display: flex;
   align-items: center;
-  font-family: 'Manrope', sans-serif;
   gap: 10px;
   width: 460px;
 }

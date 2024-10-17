@@ -1,4 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
+import { formatNumberWithCommas } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -30,28 +31,30 @@ export default function NftCard({ data }: { data: INftCardProps }) {
           />
         </div>
         <div className="flex flex-col gap-y-2.5 bg-[#333] px-5 py-3 rounded-b-[20px]">
-          <p className="font-extrabold h-[22px]">
+          <p className="font-extrabold">
             {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
           </p>
           <div className="flex justify-between">
-            <span className="text-xs text-dark  azeret-mono-font">
+            <span className="text-xs text-white/30  azeret-mono-font">
               Created by:{' '}
             </span>
             <span className="text-[12px] leading-[160%] azeret-mono-font">
               {data.curation.name ? data.curation.name : data.artist}
             </span>
           </div>
-          <p className="text-[13px] text-[#fff] font-bold azeret-mono-font italic underline">
-            {' '}
-            <Link className="italic " href={`/nft/${data._id}`}>
-              {data.curation?.name}
-            </Link>
-          </p>
-          <hr className={'border-[#ffffff10] my-[6px]'} />
-
+          {data.curation?.name && (
+            <p className="text-[13px] text-[#fff] font-bold azeret-mono-font italic underline">
+              <Link className="italic " href={`/nft/${data._id}`}>
+                {data.curation?.name}
+              </Link>
+            </p>
+          )}
+          <hr className={'border-white/10 my-[6px]'} />
           <div className="flex justify-between items-center">
-            <span className="text-xs text-dark  azeret-mono-font">Price </span>
-            <div className="flex gap-x-2 items-center font-extrabold text-[16px]">
+            <span className="text-xs text-white/30 azeret-mono-font">
+              Price{' '}
+            </span>
+            <div className="flex gap-x-2 items-center font-extrabold">
               <Image
                 src="/icons/Base.svg"
                 height={20}
@@ -61,7 +64,7 @@ export default function NftCard({ data }: { data: INftCardProps }) {
                 blurDataURL={'/images/image_placeholder.png'}
                 quality={100}
               />
-              ${data.price}
+              ${formatNumberWithCommas(data.price)}
             </div>
           </div>
         </div>

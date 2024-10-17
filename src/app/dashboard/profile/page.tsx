@@ -1,13 +1,13 @@
 'use client';
 
+import Tabs from '@/app/components/Modules/profile/Tabs';
 import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { FavoriteService } from '@/services/FavoriteService';
+import { userServices } from '@/services/supplier';
 import { trimString } from '@/utils/helpers';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import Tabs from '@/app/components/Modules/profile/Tabs';
-import { userServices } from '@/services/supplier';
-import { FavoriteService } from '@/services/FavoriteService';
-import { toast, useToast } from '@/hooks/use-toast';
 
 const profileFilters = [
   {
@@ -139,9 +139,9 @@ export default function Page() {
       description: 'Please be patient',
       duration: 2000,
     });
-
     fetchData();
   }, []);
+
   return (
     <div className="flex flex-col gap-y-4 px-4">
       <div className="relative w-full h-[340px]">
@@ -169,9 +169,9 @@ export default function Page() {
               <path
                 d="M8.66732 7.58333V16.25C8.66732 17.4466 9.63737 18.4167 10.834 18.4167H17.334M8.66732 7.58333V5.41667C8.66732 4.22005 9.63737 3.25 10.834 3.25H15.8019C16.0892 3.25 16.3648 3.36414 16.568 3.5673L21.35 8.34937C21.5532 8.55253 21.6673 8.82808 21.6673 9.1154V16.25C21.6673 17.4466 20.6973 18.4167 19.5006 18.4167H17.334M8.66732 7.58333H7.22287C5.62738 7.58333 4.33398 8.87673 4.33398 10.4722V20.5833C4.33398 21.78 5.30403 22.75 6.50065 22.75H14.4451C16.0406 22.75 17.334 21.4566 17.334 19.8611V18.4167"
                 stroke="white"
-                stroke-width="2.16667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2.16667"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>

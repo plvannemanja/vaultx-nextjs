@@ -501,7 +501,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       {step === 1 && (
         <>
           <div className="flex mb-[30px]">
-            <ConnectedCard />
+            <ConnectedCard isRwa />
           </div>
           <BasicDetails handler={handleBasicDetails} nextStep={nextStep} />
         </>

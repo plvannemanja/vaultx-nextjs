@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Upload() {
   return (
     <svg
@@ -12,9 +10,9 @@ export default function Upload() {
       <path
         d="M11 44.5L11 47.25C11 51.8063 14.6937 55.5 19.25 55.5L46.75 55.5C51.3063 55.5 55 51.8063 55 47.25L55 44.5M44 22.5L33 11.5M33 11.5L22 22.5M33 11.5L33 44.5"
         stroke="#DDF247"
-        stroke-width="5.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="5.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

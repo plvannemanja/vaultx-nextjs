@@ -54,7 +54,7 @@ export default function NFTDescription() {
               </DisclosureButton>
               <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
                 <span
-                  className="text-white/[53%] text-[14px] font-normal azeret-mono-font"
+                  className="text-white/[53%] text-sm font-normal azeret-mono-font"
                   dangerouslySetInnerHTML={{
                     __html: data.description.replace(/\r\n|\n/g, '<br />'),
                   }}
@@ -67,13 +67,13 @@ export default function NFTDescription() {
           )}
         </Disclosure>
       </div>
-      <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+      <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-6 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
               <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left text-lg font-semibold text-white text-[18px] border-b border-white/[8%]">
                 <div className="flex w-full justify-between">
-                  <div className="text-[15px] font-semibold text-white flex items-center gap-2">
+                  <div className="text-sm font-extrabold text-white flex items-center gap-2">
                     <span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -104,13 +104,13 @@ export default function NFTDescription() {
                   />
                 </div>
               </DisclosureButton>
-              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white rounded-b-lg">
                 <div className="flex gap-4 flex-wrap">
                   {data.attributes.map((attr, index) => {
                     return (
                       <div
                         key={index}
-                        className="w-[153px] h-[93px] py-4 rounded-[12px] flex justify-center flex-col gap-y-2 border border-white/[8%]"
+                        className="w-[153px] h-[93px] py-4 rounded-[12px] flex justify-center flex-col gap-y-1 border border-white/[12%]"
                       >
                         <p className="text-xs capitalize font-medium text-center text-white">
                           {attr.type}

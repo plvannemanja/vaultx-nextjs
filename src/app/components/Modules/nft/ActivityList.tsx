@@ -143,7 +143,7 @@ export default function ActivityList() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex gap-x-2 items-center capitalize">
+                            <div className="flex gap-x-2 items-center capitalize text-[#DDF247]">
                               {item.fromWallet ? (
                                 <a
                                   target="_blank"
@@ -169,7 +169,7 @@ export default function ActivityList() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex gap-x-2 items-center">
+                            <div className="flex gap-x-2 items-center text-[#DDF247]">
                               {item.toWallet ? (
                                 <a
                                   target="_blank"

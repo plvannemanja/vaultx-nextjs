@@ -21,7 +21,7 @@ const OthersDetails = ({ data }: Props) => {
           <>
             <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left text-[18px] border-b border-white/[8%]">
               <div className="flex w-full justify-between">
-                <span className="text-white flex items-center text-[15px] gap-2 font-semibold content-center">
+                <span className="text-white flex items-center text-sm gap-2 font-extrabold content-center manrope-font">
                   <Info className="w-4 h-4" />
                   <span>Details</span>
                 </span>
@@ -32,7 +32,7 @@ const OthersDetails = ({ data }: Props) => {
                 />
               </div>
             </DisclosureButton>
-            <DisclosurePanel className="pb-2 text-sm rounded-b-lg">
+            <DisclosurePanel className="pb-2 rounded-b-lg">
               <div className="w-full flex flex-col gap-y-5">
                 <div className="w-full py-3 flex gap-x-2 items-center text-white">
                   <Image
