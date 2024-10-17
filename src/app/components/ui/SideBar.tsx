@@ -83,9 +83,12 @@ export default function SideBar({ className }: { className?: string }) {
     <div
       className={`bg-[#161616] fixed left-0 top-0 h-[100vh] z-20 w-[310px] ${className}`}
     >
-      <div className="px-10 flex items-center justify-center py-5 mx-auto ">
+      <Link
+        href="/"
+        className="px-10 flex items-center justify-center py-5 mx-auto "
+      >
         <Image src="/logo.svg" width={164} height={32} alt="logo" />
-      </div>
+      </Link>
       <div className="w-[80%] mx-auto">
         <hr className="border-[#353535]" />
       </div>
