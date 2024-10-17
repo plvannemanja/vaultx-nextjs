@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useGlobalContext } from './components/Context/GlobalContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ensureValidUrl } from '@/utils/helpers';
+import { ensureValidUrl, extractIdFromURL } from '@/utils/helpers';
 
 interface Isection1 {
   title: string;
@@ -111,7 +111,7 @@ export default function Home() {
         await data.section3.box.forEach(async (item: string) => {
           const {
             data: { collection },
-          } = await collectionServices.getCollectionById(item.split('/')[5]);
+          } = await collectionServices.getCollectionById(extractIdFromURL(item));
 
           if (collection) {
             curationsList.push(collection);
@@ -265,9 +265,10 @@ export default function Home() {
           />
         </div>
       ) : null}
-      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto bg-yellow-300">
+      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
         <Image
-          src={images.bottomBaner.image}
+          // src={images?.bottomBaner.image}
+          src="https://vaultx-backet.s3.ap-northeast-2.amazonaws.com/images/98c35f8f-b37e-404b-b896-ab919a428622"
           alt="bottom-banner"
           layout='fill'
           objectFit='cover'

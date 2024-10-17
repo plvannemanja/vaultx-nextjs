@@ -85,3 +85,9 @@ export const acceptedFormats = [
 
 // 1GB file size
 export const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
+
+export const extractIdFromURL = (url: string) => {
+  const segments = url.split("/");
+  const id = segments[segments.length - 1];
+  return id;
+}
