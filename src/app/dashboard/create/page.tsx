@@ -1,5 +1,4 @@
 'use client';
-
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import RestrictiveModal from '@/app/components/Modals/RestrictiveModal';

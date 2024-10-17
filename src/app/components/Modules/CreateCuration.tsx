@@ -341,14 +341,14 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               />
               <div className="flex flex-col gap-y-1 font-manrope">
                 <p className="text-center text-white text-lg font-extrabold">
-                  Upload original RWA File
+                  Upload Thumbnail file
                 </p>
                 <div>
                   <p className="mt-2 text-white/[53%] mb-[4px] font-normal text-center text-sm azeret-mono-font">
-                    Drag or choose your file to IPFS upload
+                    Drag or choose your file to upload
                   </p>
                   <p className="text-center text-white/30 text-xs azeret-mono-font">
-                    PNG, GIF, WEBP, MP4 or MP3. Max 50mb.
+                    PNG, GIF, WEBP, MP4 or MP3.
                   </p>
                 </div>
               </div>
