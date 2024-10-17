@@ -542,7 +542,7 @@ export default function NFTMain({
                       <p className="text-[32px] font-extrabold">Not For Sale</p>
                     ) : (
                       <p className="text-[32px] font-extrabold">
-                        ${formatNumberWithCommas(data.price)}
+                        $ {formatNumberWithCommas(data.price)}
                       </p>
                     )}
                     <div>

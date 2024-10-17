@@ -1,5 +1,6 @@
 'use client';
 
+import { truncate } from '@/lib/utils';
 import {
   Disclosure,
   DisclosureButton,
@@ -13,6 +14,10 @@ import DescriptionIcon from '../../Icons/description-icon';
 export default function NFTDescription() {
   const { NFTDetail: data, setMainImage } = useNFTDetail();
   const maxAttachments = 4;
+  const description = truncate(
+    data.description.replace(/\r\n|\n/g, '<br />'),
+    500,
+  );
   return (
     <>
       <div className="w-full flex gap-[27px] flex-wrap">
@@ -55,12 +60,15 @@ export default function NFTDescription() {
                 <span
                   className="text-white/[53%] text-sm font-normal azeret-mono-font"
                   dangerouslySetInnerHTML={{
-                    __html: data.description.replace(/\r\n|\n/g, '<br />'),
+                    // data.description.replace(/\r\n|\n/g, '<br />'),
+                    __html: truncate(description, 450),
                   }}
                 ></span>
-                <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
-                  See more
-                </span>
+                {description?.length > 450 && (
+                  <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
+                    See more
+                  </span>
+                )}
               </DisclosurePanel>
             </>
           )}
