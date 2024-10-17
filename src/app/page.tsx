@@ -266,26 +266,22 @@ export default function Home() {
         </div>
       ) : null}
       <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto bg-yellow-300">
-        {
-          images?.bottomBaner?.image && (
-            <Image
-              src={images.bottomBaner.image}
-              alt="bottom-banner"
-              layout='fill'
-              objectFit='cover'
-            ></Image>
-          )
-        }
+        <Image
+          src={images.bottomBaner.image}
+          alt="bottom-banner"
+          layout='fill'
+          objectFit='cover'
+        ></Image>
         {/* MonsterX Heading */}
-        <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
+        {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX
-        </div>
+        </div> */}
 
         {/* Title Section */}
-        <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
+        {/* <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
           Click it to enter the Real World Asset Era
-        </div>
-
+        </div> */}
+        {/* 
         <Link
           href={ensureValidUrl(images?.bottomBaner?.link)}
           target="_blank"
@@ -294,10 +290,10 @@ export default function Home() {
           <button className="w-full sm:w-40 h-14 px-5 py-3.5 bg-neutral-900 rounded-md border flex justify-center items-center text-white text-lg font-semibold font-['Manrope'] hover:bg-neutral-700 transition-colors duration-300">
             Join Us
           </button>
-        </Link>
+        </Link> */}
         {/* Rounded elements (half circles) */}
-        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
-        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -right-16 sm:-right-24 top-6" />
+        {/* <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
+        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -right-16 sm:-right-24 top-6" /> */}
       </div>
 
       <BaseFooter />
