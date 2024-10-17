@@ -1,4 +1,5 @@
 'use client';
+
 import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import RestrictiveModal from '@/app/components/Modals/RestrictiveModal';
@@ -58,6 +59,7 @@ export default function Page() {
       <RestrictiveModal
         closeButton={true}
         open={modal.active}
+        // open={true}
         onClose={() => setModal({ active: false, type: null })}
       >
         {modal.type === 'curation' && <Curation />}

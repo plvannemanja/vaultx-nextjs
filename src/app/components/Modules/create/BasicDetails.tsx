@@ -220,7 +220,7 @@ export default function BasicDetails({
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <button
               className="py-3 w-[20rem] h-[50px] text-black font-semibold bg-[#dee8e8]  p-2.5 rounded-[14px] justify-center items-center gap-2.5"
               onClick={handleButtonClick}
@@ -262,7 +262,7 @@ export default function BasicDetails({
         </div>
 
         <div className="flex flex-col gap-y-[30px] lg:w-[55%]">
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <Label className="font-bold test-sm text-white manrope-font">
               Product name*
             </Label>
@@ -274,13 +274,13 @@ export default function BasicDetails({
                   productName: (e.target as any).value,
                 })
               }
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl font-AzeretMono justify-start items-center gap-[30px] inline-flex placeholder:text-sm"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl azeret-mono-font justify-start items-center gap-[30px] inline-flex placeholder:text-sm"
               type="text"
               placeholder="Enter Product Name"
             />
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <Label className="font-bold test-sm text-white manrope-font">
               Description*
             </Label>
@@ -296,13 +296,13 @@ export default function BasicDetails({
                   productDescription: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] font-AzeretMono rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-sm"
+              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-sm"
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               placeholder="Please describe your product"
             />
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <Label className="font-bold test-sm text-white manrope-font">
               Price(USD)*
             </Label>
@@ -318,19 +318,19 @@ export default function BasicDetails({
                   });
                 }
               }}
-              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-sm font-AzeretMono justify-start items-center gap-[30px] inline-flex"
+              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-sm azeret-mono-font justify-start items-center gap-[30px] inline-flex"
               type="text" // Change to 'text' to allow decimals
               placeholder="Please write the selling price in USD($), not cryptocurrency."
             />
           </div>
 
-          <div className="w-full rounded-[17px] px-5 py-[12px] bg-dark flex flex-col gap-y-2">
+          <div className="w-full rounded-[17px] px-5 py-[12px] bg-[#232323] flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-3">
               <div className="flex justify-between">
                 <Label className="font-bold text-sm">Marketplace Fee</Label>
                 <Label className="font-bold">${fee}%</Label>
               </div>
-              <hr className="border-t-[#ffffff]/[8%] opacity-[0.3]" />
+              <hr className="border-white/[8%]" />
               <div className="flex justify-between">
                 <Label className="font-bold text-sm">You will receive</Label>
                 <Label className="">${leftAmount}</Label>
@@ -338,11 +338,11 @@ export default function BasicDetails({
             </div>
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <Label className="font-bold test-sm text-white manrope-font">
               Artist name*
             </Label>
-            <div className="grid grid-cols-12 gap-x-2">
+            <div className="grid grid-cols-12 gap-x-2 p-3 bg-[#232323] rounded-[17px]">
               <div className="col-span-9">
                 <UserArtist />
               </div>
@@ -364,14 +364,14 @@ export default function BasicDetails({
             </div>
           </div>
 
-          <div className="flex flex-col gap-y-2">
+          <div className="flex flex-col gap-y-4">
             <Label className="font-bold test-sm text-white manrope-font">
               Curation*
             </Label>
             <div className="bg-[#232323] rounded-xl pr-4">
               <select
                 aria-label="Select curation"
-                className="w-full border-none bg-[#232323] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs font-AzeretMono justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                className="w-full border-none bg-[#232323] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
                 name="curation"
                 onChange={(e) =>
                   setBasicDetail({
@@ -395,13 +395,13 @@ export default function BasicDetails({
             </div>
           </div>
 
-          <div className="flex flex-col gap-y-2 bg-dark px-[20px] py-3 rounded-lg">
+          <div className="flex flex-col gap-y-4 bg-dark px-[20px] py-3 rounded-lg">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
                   <DisclosureButton
                     className={cn(
-                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left text-lg font-medium text-white text-[18px]',
                       open ? 'border-b border-white/[8%]' : '',
                     )}
                   >
@@ -423,7 +423,7 @@ export default function BasicDetails({
                     <div className="flex gap-4 flex-wrap my-2">
                       {basicDetail?.attachments?.map((attachment, index) => {
                         return (
-                          <div key={index} className="flex flex-col gap-y-2">
+                          <div key={index} className="flex flex-col gap-y-4">
                             <input
                               type="file"
                               className="hidden"

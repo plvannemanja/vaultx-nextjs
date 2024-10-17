@@ -1,5 +1,6 @@
 'use client';
 
+import { truncate } from '@/lib/utils';
 import {
   Disclosure,
   DisclosureButton,
@@ -13,9 +14,13 @@ import DescriptionIcon from '../../Icons/description-icon';
 export default function NFTDescription() {
   const { NFTDetail: data, setMainImage } = useNFTDetail();
   const maxAttachments = 4;
+  const description = truncate(
+    data.description.replace(/\r\n|\n/g, '<br />'),
+    500,
+  );
   return (
     <>
-      <div className="w-full flex gap-[27px] pt-7 flex-wrap">
+      <div className="w-full flex gap-[27px] flex-wrap">
         {[data.cloudinaryUrl, ...data.attachments.slice(0, maxAttachments)].map(
           (item, index) => {
             return (
@@ -34,12 +39,11 @@ export default function NFTDescription() {
           },
         )}
       </div>
-
-      <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-6 bg-[#232323]">
+      <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left   text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
                 <div className="flex w-full justify-between">
                   <div className="text-sm font-extrabold text-white flex items-center gap-2">
                     <DescriptionIcon />
@@ -56,22 +60,25 @@ export default function NFTDescription() {
                 <span
                   className="text-white/[53%] text-sm font-normal azeret-mono-font"
                   dangerouslySetInnerHTML={{
-                    __html: data.description.replace(/\r\n|\n/g, '<br />'),
+                    // data.description.replace(/\r\n|\n/g, '<br />'),
+                    __html: truncate(description, 450),
                   }}
                 ></span>
-                <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
-                  See more
-                </span>
+                {description?.length > 450 && (
+                  <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
+                    See more
+                  </span>
+                )}
               </DisclosurePanel>
             </>
           )}
         </Disclosure>
       </div>
-      <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-6 bg-[#232323]">
+      <div className="w-full rounded-[20px] p-5 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left text-lg font-semibold text-white text-[18px] border-b border-white/[8%]">
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg font-semibold text-white text-[18px] border-b border-white/[8%]">
                 <div className="flex w-full justify-between">
                   <div className="text-sm font-extrabold text-white flex items-center gap-2">
                     <span>
@@ -104,18 +111,18 @@ export default function NFTDescription() {
                   />
                 </div>
               </DisclosureButton>
-              <DisclosurePanel className=" pt-4 pb-2 text-sm text-white rounded-b-lg">
+              <DisclosurePanel className="pt-3 pb-2 text-sm text-white rounded-b-lg">
                 <div className="flex gap-4 flex-wrap">
                   {data.attributes.map((attr, index) => {
                     return (
                       <div
                         key={index}
-                        className="w-[153px] h-[93px] py-4 rounded-[12px] flex justify-center flex-col gap-y-1 border border-white/[12%]"
+                        className="w-[155px] h-[93px] py-4 px-2 rounded-[12px] flex justify-center flex-col gap-y-1 border border-white/[12%]"
                       >
-                        <p className="text-xs capitalize font-medium text-center text-white">
+                        <p className="text-xs capitalize font-medium text-center text-[#888888]">
                           {attr.type}
                         </p>
-                        <p className="font-medium text-[#888888] azeret-mono-font text-sm text-center">
+                        <p className="font-medium text-white azeret-mono-font text-sm text-center break-words">
                           {attr.value}
                         </p>
                       </div>

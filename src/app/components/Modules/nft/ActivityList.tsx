@@ -70,11 +70,11 @@ export default function ActivityList() {
 
   return (
     <>
-      <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+      <div className="w-full rounded-[20px] p-5 bg-dark flex flex-col gap-y-6 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left text-lg text-white text-[18px] border-b border-white/[8%]">
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg text-white text-[18px] border-b border-white/[8%]">
                 <div className="flex w-full justify-between">
                   <div className="text-sm font-extrabold flex items-center gap-2">
                     <ArrowUpDown className="w-4 h-4" />

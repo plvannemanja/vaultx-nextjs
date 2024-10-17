@@ -124,11 +124,11 @@ export default function BidList() {
 
   return (
     <>
-      <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+      <div className="w-full rounded-[20px] p-5 bg-dark flex flex-col gap-y-6 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left border-b border-[#353535]">
+              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left border-b border-[#353535]">
                 <div className="flex w-full justify-between">
                   <div className="flex text-sm font-extrabold items-center gap-2">
                     <BidIcon />

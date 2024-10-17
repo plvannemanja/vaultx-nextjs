@@ -29,13 +29,13 @@ const marketPlaceLinks = [
   },
   {
     name: 'Magazine',
-    value: 'news',
+    value: 'magazine',
     icon: () => <PencilIcon />,
-    link: 'https://magazinex.io/',
+    link: 'https://magazinex.io',
   },
   {
     name: 'How to work',
-    value: 'howtowork',
+    value: 'how-to-work',
     icon: () => <CarbonBoard />,
   },
 ];
@@ -63,7 +63,7 @@ const accountLinks = [
   },
   {
     name: 'Help Center',
-    value: 'helpCenter',
+    value: 'help-center',
     icon: () => <HelpIcon />,
   },
 ];
@@ -83,9 +83,12 @@ export default function SideBar({ className }: { className?: string }) {
     <div
       className={`bg-[#161616] fixed left-0 top-0 h-[100vh] z-20 w-[310px] ${className}`}
     >
-      <div className="px-10 flex items-center justify-center py-5 mx-auto ">
+      <Link
+        href="/"
+        className="px-10 flex items-center justify-center py-5 mx-auto "
+      >
         <Image src="/logo.svg" width={164} height={32} alt="logo" />
-      </div>
+      </Link>
       <div className="w-[80%] mx-auto">
         <hr className="border-[#353535]" />
       </div>
@@ -106,7 +109,7 @@ export default function SideBar({ className }: { className?: string }) {
         {marketPlaceLinks.map((link, index) => {
           return (
             <Link
-              href={`/dashboard/${link.value}`}
+              href={link?.link ? link?.link : `/dashboard/${link.value}`}
               key={index}
               className={cn(
                 'flex items-center pl-7 gap-x-3 my-2 cursor-pointer hover:text-[#ddf247] relative transition-all duration-300',

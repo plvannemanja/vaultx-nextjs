@@ -207,7 +207,7 @@ export default function PropertiesTemplate({
           {editableProperties.map((item, index) => (
             <div
               key={index}
-              className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border border-[#ffffff12] rounded-md"
+              className="flex justify-center min-h-[93px] relative p-4 gap-y-1 flex-col w-[10rem] border border-[#ffffff12] rounded-md"
             >
               <input
                 type="text"
