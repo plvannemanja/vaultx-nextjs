@@ -429,7 +429,12 @@ export default function NFTMain({
                       )}
                     </div>
                   </div>
-                  <p className="text-[32px] font-extrabold">{data.name}</p>
+                  <p
+                    className="text-[32px] font-extrabold truncate"
+                    title={data?.name}
+                  >
+                    {data.name}
+                  </p>
                   <div className="flex justify-between">
                     <div className="flex gap-x-[10px] items-center">
                       {data?.owner?.avatar?.url ? (
