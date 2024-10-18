@@ -266,17 +266,21 @@ export default function Home() {
         </div>
       ) : null}
       <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
-        <Link
-          href={images?.bottomBaner.link}
-          target='_blank'
-        >
-          <Image
-            src={images?.bottomBaner.image}
-            alt="bottom-banner"
-            layout='fill'
-            objectFit='cover'
-          ></Image>
-        </Link>
+        {
+          images?.bottomBaner && (
+            <Link
+              href={images?.bottomBaner.link}
+              target='_blank'
+            >
+              <Image
+                src={images?.bottomBaner.image}
+                alt="bottom-banner"
+                layout='fill'
+                objectFit='cover'
+              ></Image>
+            </Link>
+          )
+        }
         {/* MonsterX Heading */}
         {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX
