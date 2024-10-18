@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 import { FavoriteService } from '@/services/FavoriteService';
 import { collectionServices } from '@/services/supplier';
 import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
+import { ChevronsDown, ChevronsUp, Edit } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -43,13 +44,13 @@ const badges = [
 
 const profileFilters = [
   {
-    label: 'Price: Low To High',
-    value: 1,
+    label: 'Price: high to low',
+    value: -1,
     param: 'price',
   },
   {
-    label: 'Price: High To Low',
-    value: -1,
+    label: 'Price: low to high',
+    value: 1,
     param: 'price',
   },
   {
@@ -79,6 +80,49 @@ const profileFilters = [
   },
 ];
 
+const activityFilters = [
+  {
+    label: 'All',
+    param: '',
+  },
+  {
+    label: 'Minted',
+    param: 'Minted',
+  },
+  {
+    label: 'Listed',
+    param: 'Listed',
+  },
+  {
+    label: 'Unlisted',
+    param: 'End Sale',
+  },
+  {
+    label: 'Purchased',
+    param: 'Purchased',
+  },
+  {
+    label: 'In Escrow',
+    param: 'In Escrow',
+  },
+  {
+    label: 'Transfer',
+    param: 'Transfer',
+  },
+  {
+    label: 'Burn',
+    param: 'Burn',
+  },
+  {
+    label: 'Royalties',
+    param: 'Royalties',
+  },
+  {
+    label: 'Split Payments',
+    param: 'Split Payments',
+  },
+];
+
 export default function Page({ params }: { params: { slug: string } }) {
   const [filterbadge, setFilterBadge] = useState(badges[0].value);
   const favoriteService = new FavoriteService();
@@ -90,7 +134,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [curation, setCuration] = useState<any>({});
   const [curationInfo, setCurationInfo] = useState<any>({});
   const [nfts, setNfts] = useState([]);
-  const [now, setNow] = useState(false);
   const [filters, setFilters] = useState<any>({
     filterString: '',
     filter: {
@@ -104,12 +147,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const [debouncedFilter] = useDebounce(filters, 1000);
 
+  const [debouncedLiked] = useDebounce(liked, 1000);
+
   const handleLike = async () => {
     try {
       setLiked(!liked);
       if (!liked === true) setLikes(likes + 1);
       else if (!liked === false) setLikes(likes - 1);
-      setNow(true);
     } catch (error) {
       console.log(error);
     }
@@ -125,6 +169,11 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   };
 
+  useEffect(() => {
+    if (debouncedLiked) {
+      setMyLike();
+    }
+  }, [debouncedLiked]);
   const copyAddr = () => {
     navigator.clipboard.writeText(user?.wallet);
   };
@@ -134,7 +183,8 @@ export default function Page({ params }: { params: { slug: string } }) {
       data: { activity },
     } = await collectionServices.getAllActivitiesCollection({
       collectionId: params.slug,
-      searchInput: filters?.filterString
+      searchInput: filters?.filterString,
+      filterInput: filters?.filter
     });
     setActivities(activity);
   };
@@ -211,7 +261,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         )}
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div
-            className="flex gap-x-3 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"
+            className="flex gap-x-3 h-12 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"
             onClick={() => copyAddr()}
           >
             {trimString(user?.wallet)}
@@ -241,7 +291,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </svg>
           </div>
           <div className="flex gap-4">
-            <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
+            <div className="flex w-[80px] pl-[15px] h-12 rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
               <span className="font-medium">{likes}</span>
               <div onClick={() => handleLike()}>
                 <input
@@ -291,26 +341,12 @@ export default function Page({ params }: { params: { slug: string } }) {
               </div>
             </div>
             {user?.wallet && user?.wallet === curation.owner?.wallet && (
-              <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
-                <Link href={`/dashboard/curation/edit/${params.slug}`}>
-                  <svg
-                    width="27"
-                    height="26"
-                    viewBox="0 0 27 26"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.9515 5.41667H6.53483C5.33821 5.41667 4.36816 6.38672 4.36816 7.58334V19.5C4.36816 20.6966 5.33821 21.6667 6.53483 21.6667H18.4515C19.6481 21.6667 20.6182 20.6966 20.6182 19.5V14.0833M19.0861 3.8846C19.9322 3.03847 21.3041 3.03847 22.1502 3.8846C22.9964 4.73074 22.9964 6.1026 22.1502 6.94873L12.849 16.25H9.78483L9.78483 13.1859L19.0861 3.8846Z"
-                      stroke="white"
-                      strokeWidth="2.16667"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+              <Link href={`/dashboard/curation/edit/${params.slug}`}>
+                <div className="flex min-w-[80px] h-12 pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
+                  <Edit size={26} />
                   <div className="text-white text-base font-medium">Edit</div>
-                </Link>
-              </div>
+                </div>
+              </Link>
             )}
           </div>
         </div>
@@ -384,7 +420,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             <hr />
             <div className="px-4 flex justify-between items-center">
               <span className="text-lg font-medium">Owner</span>
-              <span>{curationInfo?.ownerCount}</span>
+              <span>{curationInfo?.ownersCount}</span>
             </div>
             <hr />
             <div className="px-4 flex justify-between items-center">
@@ -439,21 +475,40 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
       </div>
 
-      <div
-        className={cn(
-          'relative w-full transition-all duration-500 ease-in-out',
-          showLess ? 'h-[200px]' : 'h-[340px]',
-        )}
-      >
-        {curation?.descriptionImage?.[0] && (
-          <Image
-            src={curation?.descriptionImage?.[0]}
-            alt="hero"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-xl"
-          />
-        )}
+      <div className="flex flex-col items-center">
+        <div
+          className={cn(
+            'w-full transition-all duration-500 ease-in-out',
+            showLess ? 'h-[200px]' : 'h-[340px]',
+            Array.isArray(curation?.descriptionImage) && curation?.descriptionImage.length === 2 && ("flex space-x-4")
+          )}
+        >
+          {
+            Array.isArray(curation?.descriptionImage) && curation?.descriptionImage.map((image, index) => (
+              <div className={cn("w-full h-full relative", curation?.descriptionImage?.length === 2 && ("md:w-1/2"))} key={index}>
+                <Image
+                  src={image}
+                  alt="hero"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-xl"
+                />
+              </div>
+            )
+            )
+          }
+        </div>
+        {
+          showLess ? (
+            <ChevronsDown size={48} className="mt-4 px-4 py-2" onClick={() => {
+              setShowLess(!showLess);
+            }} />
+          ) : (
+            <ChevronsUp size={48} className="mt-4 px-4 py-2" onClick={() => {
+              setShowLess(!showLess);
+            }} />
+          )
+        }
       </div>
 
       <div className="flex gap-x-3 flex-wrap mt-[6rem]">
@@ -514,35 +569,74 @@ export default function Page({ params }: { params: { slug: string } }) {
               }}
             />
           </div>
-
-          <Select
-            onValueChange={(value: string) => {
-              const filteredProfile = profileFilters.filter(
-                (profile) => profile.label === value,
-              )?.[0];
-              if (filteredProfile) {
-                setFilters({
-                  ...filters,
-                  filter: profileFilters,
-                });
-              }
-            }}
-            // value={profileFilters[0].label}
-            defaultValue={profileFilters?.[0].label}
-          >
-            <SelectTrigger className="relative flex rounded min-w-[18rem] max-w-[20rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
-              <SelectValue placeholder="" />
-            </SelectTrigger>
-            <SelectContent className="">
-              <SelectGroup>
-                {profileFilters.map((filter, index: number) => (
-                  <SelectItem value={filter.label} key={index}>
-                    {filter.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          {
+            filterbadge === "items" && (
+              <Select
+                onValueChange={(value: string) => {
+                  if (filterbadge === "items") {
+                    {
+                      const filteredProfile = profileFilters.filter(
+                        (profile) => profile.label === value,
+                      )?.[0];
+                      if (filteredProfile) {
+                        setFilters({
+                          ...filters,
+                          filter: filteredProfile,
+                        });
+                      }
+                    }
+                  }
+                }}
+                // value={profileFilters[0].label}
+                defaultValue={profileFilters?.[0].label}
+              >
+                <SelectTrigger className="relative flex rounded min-w-[18rem] max-w-[20rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent className="">
+                  <SelectGroup>
+                    {profileFilters.map((filter, index: number) => (
+                      <SelectItem value={filter.label} key={index}>
+                        {filter.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )
+          }
+          {
+            filterbadge === "activity" && (
+              <Select
+                onValueChange={(value: string) => {
+                  const filteredProfile = activityFilters.filter(
+                    (profile) => profile.label === value,
+                  )?.[0];
+                  if (filteredProfile) {
+                    setFilters({
+                      ...filters,
+                      filter: filteredProfile,
+                    });
+                  }
+                }}
+                // value={profileFilters[0].label}
+                defaultValue={activityFilters?.[0].label}
+              >
+                <SelectTrigger className="relative flex rounded min-w-[18rem] max-w-[20rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent className="">
+                  <SelectGroup>
+                    {activityFilters.map((filter, index: number) => (
+                      <SelectItem value={filter.label} key={index}>
+                        {filter.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )
+          }
         </div>
         {/* User section */}
         {filterbadge === 'items' && nfts.length ? (

@@ -13,6 +13,8 @@ export function getYouTubeVideoId(url: string) {
 }
 
 export function ensureValidUrl(url) {
+  if (!url)
+    return "";
   // Check if the URL already includes the protocol
   if (!/^https?:\/\//i.test(url)) {
     // If not, add "http://" or "https://"

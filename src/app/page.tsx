@@ -266,13 +266,17 @@ export default function Home() {
         </div>
       ) : null}
       <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
-        <Image
-          // src={images?.bottomBaner.image}
-          src="https://vaultx-backet.s3.ap-northeast-2.amazonaws.com/images/98c35f8f-b37e-404b-b896-ab919a428622"
-          alt="bottom-banner"
-          layout='fill'
-          objectFit='cover'
-        ></Image>
+        <Link
+          href={images?.bottomBaner.link}
+          target='_blank'
+        >
+          <Image
+            src={images?.bottomBaner.image}
+            alt="bottom-banner"
+            layout='fill'
+            objectFit='cover'
+          ></Image>
+        </Link>
         {/* MonsterX Heading */}
         {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX
