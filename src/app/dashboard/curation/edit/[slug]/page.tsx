@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { collectionServices } from '@/services/supplier';
 import CreateCuration from '@/app/components/Modules/CreateCuration';
+import { collectionServices } from '@/services/supplier';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -12,13 +12,11 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const fetchData = async () => {
     const collection = await collectionServices.getCollectionById(params.slug);
-
     if (collection.data.collection) {
       if (collection.data.collection._id === '') {
         router.push('/');
         return;
       }
-
       setFormData(collection.data.collection);
     }
   };
@@ -27,7 +25,9 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (!formData) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
+
   return (
     <div>
       <CreateCuration editMode={formData} />

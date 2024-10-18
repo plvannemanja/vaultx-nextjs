@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import NftCard from '@/app/components/Cards/NftCard';
@@ -25,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { FavoriteService } from '@/services/FavoriteService';
 import { collectionServices } from '@/services/supplier';
 import { ensureValidUrl, getYouTubeVideoId, trimString } from '@/utils/helpers';
+import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -244,7 +246,10 @@ export default function Page({ params }: { params: { slug: string } }) {
                   onChange={() => {}}
                 />
                 <div className="checkmark">
-                  {liked ? (
+                  <Heart
+                    className={cn(liked ? 'fill-white' : 'stroke-white')}
+                  />
+                  {/* {liked ? (
                     <svg
                       width="24px"
                       height="24px"
@@ -278,31 +283,32 @@ export default function Page({ params }: { params: { slug: string } }) {
                         strokeLinejoin="round"
                       ></path>
                     </svg>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
             {user?.wallet && user?.wallet === curation.owner?.wallet && (
-              <div className="flex w-[80px] pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
-                <Link href={`/dashboard/curation/edit/${params.slug}`}>
-                  <svg
-                    width="27"
-                    height="26"
-                    viewBox="0 0 27 26"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.9515 5.41667H6.53483C5.33821 5.41667 4.36816 6.38672 4.36816 7.58334V19.5C4.36816 20.6966 5.33821 21.6667 6.53483 21.6667H18.4515C19.6481 21.6667 20.6182 20.6966 20.6182 19.5V14.0833M19.0861 3.8846C19.9322 3.03847 21.3041 3.03847 22.1502 3.8846C22.9964 4.73074 22.9964 6.1026 22.1502 6.94873L12.849 16.25H9.78483L9.78483 13.1859L19.0861 3.8846Z"
-                      stroke="white"
-                      strokeWidth="2.16667"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="text-white text-base font-medium">Edit</div>
-                </Link>
-              </div>
+              <Link
+                href={`/dashboard/curation/edit/${params.slug}`}
+                className="flex pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer"
+              >
+                <svg
+                  width="27"
+                  height="26"
+                  viewBox="0 0 27 26"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.9515 5.41667H6.53483C5.33821 5.41667 4.36816 6.38672 4.36816 7.58334V19.5C4.36816 20.6966 5.33821 21.6667 6.53483 21.6667H18.4515C19.6481 21.6667 20.6182 20.6966 20.6182 19.5V14.0833M19.0861 3.8846C19.9322 3.03847 21.3041 3.03847 22.1502 3.8846C22.9964 4.73074 22.9964 6.1026 22.1502 6.94873L12.849 16.25H9.78483L9.78483 13.1859L19.0861 3.8846Z"
+                    stroke="white"
+                    strokeWidth="2.16667"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <div className="text-white text-base font-medium">Edit</div>
+              </Link>
             )}
           </div>
         </div>
@@ -324,7 +330,6 @@ export default function Page({ params }: { params: { slug: string } }) {
               {curation?.youtube?.length > 0 &&
                 curation?.youtube.map((item: any, index: number) => {
                   const imageId = getYouTubeVideoId(item.url);
-
                   return (
                     <div className="flex flex-col gap-y-3" key={index}>
                       <BaseDialog
@@ -333,10 +338,16 @@ export default function Page({ params }: { params: { slug: string } }) {
                             <img
                               src={`https://img.youtube.com/vi/${imageId}/0.jpg`}
                               className="w-full aspect-video rounded-2xl"
+                              alt="youtube"
+                              width={40}
+                              height={40}
                             />
-                            <img
+                            <Image
                               src="/icons/play.svg"
                               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                              alt="play"
+                              width={40}
+                              height={40}
                             />
                           </div>
                         }

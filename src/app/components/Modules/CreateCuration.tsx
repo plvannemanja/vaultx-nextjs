@@ -14,6 +14,7 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
@@ -227,6 +228,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         router.push(`/dashboard/curation/${successId}`);
       }, 200);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [successId, status]);
 
   const handleVideo = (index: number, e: any, type: string) => {
@@ -324,20 +326,24 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           {file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {imageSrc && (
-                <img
+                <Image
                   src={imageSrc}
                   alt="logo"
                   className="w-[90%] object-cover mx-auto"
+                  width={200}
+                  height={200}
                 />
               )}
               {file ? file.name : 'No files selected'}
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px]">
-              <img
+              <Image
                 src="/icons/upload.svg"
                 alt="upload"
                 className="w-[66px] h-[66px]"
+                width={66}
+                height={66}
               />
               <div className="flex flex-col gap-y-1 font-manrope">
                 <p className="text-center text-white text-lg font-extrabold">
@@ -360,15 +366,17 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
               onClick={handleButtonClick}
             >
               <span className="flex gap-x-[10px] items-center justify-center">
-                <p className="text-[#161616] text-sm font-extrabold capitalize">
+                <p className="text-[#161616] text-sm font-extrabold capitalize font-manrope">
                   Browse file
                 </p>
-                <img
+                <Image
                   src="/icons/arrow_ico.svg"
-                  alt=""
-                  className="w-[18px] h-[18px] "
+                  alt="icon-arrow"
+                  width={18}
+                  height={18}
+                  className="w-[18px] h-[18px]"
                 />
-              </span>{' '}
+              </span>
             </button>
             <input
               className="hidden"
@@ -384,7 +392,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 onClick={() => {
                   setFile(null);
                 }}
-                className={'rounded-[14px]'}
+                className={'rounded-[14px] font-manrope'}
               />
             )}
           </div>
@@ -393,7 +401,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           <div className="w-full rounded-md flex flex-col gap-y-2">
             <div className="flex gap-x-3">
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-bold test-sm text-white manrope-font">
+                <Label className="font-semibold text-sm text-white manrope-font">
                   Curation Title*
                 </Label>
                 <Input
@@ -407,7 +415,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 />
               </div>
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-bold test-sm text-white manrope-font">
+                <Label className="font-semibold text-sm text-white manrope-font">
                   Symbol*
                 </Label>
                 <Input
@@ -418,6 +426,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       symbol: (e.target as any).value,
                     })
                   }
+                  disabled={editMode ? true : false}
                   className="w-full border-none h-[48px] placeholder:text-xs azeret-mono-font bg-[#232323] gap-[30px] inline-flex"
                   type="text"
                   placeholder="i.e TAT"
@@ -436,7 +445,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     )}
                   >
                     <div className="flex w-full justify-between items-center">
-                      <Label className="text-[20px] font-semibold">
+                      <Label className="font-extrabold text-lg text-white">
                         Banner Image
                       </Label>
                       <div className="flex justify-center">
@@ -513,7 +522,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             </div> */}
           </div>
           <div className="flex flex-col gap-y-[16px]">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-semibold text-sm text-white manrope-font">
               Description*
             </Label>
             <Textarea
@@ -539,7 +548,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     )}
                   >
                     <div className="flex w-full justify-between items-center">
-                      <Label className="font-extrabold test-[20] text-white">
+                      <Label className="font-extrabold text-lg text-white">
                         Your links
                       </Label>
                       <ChevronUpIcon
@@ -551,8 +560,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   </DisclosureButton>
                   <DisclosurePanel className="pt-5 pb-2 text-sm  text-white  rounded-b-lg">
                     <div className=" mb-5 flex gap-x-3">
-                      <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-bold test-sm text-white manrope-font">
+                      <div className="flex flex-col gap-y-3 basis-1/2">
+                        <Label className="font-semibold text-sm text-white manrope-font">
                           Website
                         </Label>
                         <LinkInput
@@ -568,8 +577,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                           placeholder="Enter your website link"
                         />
                       </div>
-                      <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-bold test-sm text-white manrope-font">
+                      <div className="flex flex-col gap-y-3 basis-1/2">
+                        <Label className="font-semibold text-sm text-white manrope-font">
                           X(Twitter)
                         </Label>
                         <LinkInput
@@ -587,8 +596,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       </div>
                     </div>
                     <div className="mt-2 flex gap-x-3">
-                      <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-bold test-sm text-white manrope-font">
+                      <div className="flex flex-col gap-y-3 basis-1/2">
+                        <Label className="font-semibold text-sm text-white manrope-font">
                           Facebook
                         </Label>
                         <LinkInput
@@ -604,8 +613,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                           placeholder="Enter your facebook link"
                         />
                       </div>
-                      <div className="flex flex-col gap-y-2 basis-1/2">
-                        <Label className="font-bold test-sm text-white manrope-font">
+                      <div className="flex flex-col gap-y-3 basis-1/2">
+                        <Label className="font-semibold text-sm text-white manrope-font">
                           Instagram
                         </Label>
                         <LinkInput
@@ -638,7 +647,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     )}
                   >
                     <div className="flex w-full justify-between items-center">
-                      <Label className="font-extrabold test-[20] text-white">
+                      <Label className="font-extrabold text-lg text-white">
                         Youtube Video Link
                       </Label>
                       <div className="flex items-center gap-2">
@@ -689,8 +698,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     {youtube.map((item, index) => {
                       return (
                         <div key={index} className="flex gap-x-3">
-                          <div className="flex flex-col gap-y-2 basis-1/2">
-                            <Label className="font-bold test-sm text-white manrope-font">
+                          <div className="flex flex-col gap-y-3 basis-1/2">
+                            <Label className="font-semibold text-sm text-white manrope-font">
                               Title
                             </Label>
                             <Input
@@ -701,8 +710,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               placeholder="Enter video title"
                             />
                           </div>
-                          <div className="flex flex-col gap-y-2 basis-1/2">
-                            <Label className="font-bold test-sm text-white manrope-font">
+                          <div className="flex flex-col gap-y-3 basis-1/2">
+                            <Label className="font-semibold text-sm text-white manrope-font">
                               Video Link
                             </Label>
                             <LinkInput
@@ -732,7 +741,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     )}
                   >
                     <div className="flex w-full justify-between items-center">
-                      <Label className="text-[20px] font-extrabold">
+                      <Label className="font-extrabold text-lg text-white">
                         Custom Description Image
                       </Label>
                       <div className="flex items-center gap-2">
