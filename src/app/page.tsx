@@ -232,8 +232,8 @@ export default function Home() {
               </div>
             </div>
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
-              {curations.length > 0
-                ? curations.map((item: any, index: number) => {
+              {
+                curations.map((item: any, index: number) => {
                   return (
                     <ExceptionalCard
                       key={index}
@@ -242,7 +242,7 @@ export default function Home() {
                     />
                   );
                 })
-                : null}
+              }
             </div>
           </div>
         ) : null}
