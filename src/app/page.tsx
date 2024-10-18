@@ -104,25 +104,25 @@ export default function Home() {
         'https://api.vault-x.io/api/v2';
       const { data } = await axios.get(`${server_uri}/homepage/get-sections`);
 
-      console.log('this is data', data);
-      const curationsList: any[] = [];
-
-      if (data.section3 && data.section3.box.length > 0) {
-        await data.section3.box.forEach(async (item: string) => {
-          const {
-            data: { collection },
-          } = await collectionServices.getCollectionById(extractIdFromURL(item));
-
-          if (collection) {
-            curationsList.push(collection);
-          }
-        });
-      }
+      let curationsList: any[] = [];
 
       setSection1(data.section1);
       setSection2(data.section2);
       setSection3(data.section3);
       setSection4(data.section4);
+
+      if (data.section3 && data.section3.box.length > 0) {
+        curationsList = await Promise.all(
+          data.section3.box.map(async (item: string) => {
+            const {
+              data: { collection },
+            } = await collectionServices.getCollectionById(extractIdFromURL(item));
+
+            return collection ? collection : null;
+          })
+        );
+      }
+      curationsList = curationsList.filter(Boolean)
       setCurations(curationsList);
     };
 
@@ -246,7 +246,6 @@ export default function Home() {
             </div>
           </div>
         ) : null}
-
         <div className="flex justify-center lg:relative lg:bg-[url('/illustrations/wave-top-left-bottom-right.png')]">
           <img
             src="/illustrations/right-lines.png"
