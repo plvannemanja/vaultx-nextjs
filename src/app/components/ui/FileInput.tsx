@@ -6,6 +6,8 @@ import {
 } from '@/utils/helpers';
 import { useEffect, useRef, useState } from 'react';
 import BaseButton from './BaseButton';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface IFileInputProps {
   title?: string;
@@ -16,6 +18,8 @@ interface IFileInputProps {
   acceptedFormats?: string[];
   editMode?: any;
   titleStyles?: any;
+  showIcon?: boolean;
+  onPressIcon?: () => void;
 }
 
 export default function FileInput({
@@ -27,6 +31,8 @@ export default function FileInput({
   acceptedFormats = acceptedFileFormats,
   editMode,
   titleStyles,
+  showIcon,
+  onPressIcon,
 }: IFileInputProps) {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState<any>(null);
@@ -73,7 +79,9 @@ export default function FileInput({
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <div className="file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex">
+      <div className={cn("relative file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex",
+        showIcon && 'pr-10',
+      )}>
         <BaseButton
           title="Upload"
           variant="secondary"
@@ -84,8 +92,19 @@ export default function FileInput({
           iconStyles={'stroke-black'}
         />{' '}
         <p className="azeret-mono-font !text-sm">
-          {editMode ? 'File Selected' : fileName ? fileName : 'Choose File'}
+          {fileName ? fileName : editMode ? 'File Selected' : 'Choose File'}
         </p>
+        {showIcon && (
+          <button onClick={onPressIcon}>
+            <Image
+              src="/icons/trash.svg"
+              alt="image"
+              width={20}
+              height={20}
+              className="absolute top-3 right-3 w-5 h-5"
+            />
+          </button>
+        )}
       </div>
       {subtitle && (
         <p className="text-sm text-gray-500 font-medium">{subtitle}</p>

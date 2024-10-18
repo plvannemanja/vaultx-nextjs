@@ -13,6 +13,8 @@ export function getYouTubeVideoId(url: string) {
 }
 
 export function ensureValidUrl(url) {
+  if (!url)
+    return "";
   // Check if the URL already includes the protocol
   if (!/^https?:\/\//i.test(url)) {
     // If not, add "http://" or "https://"
@@ -85,3 +87,9 @@ export const acceptedFormats = [
 
 // 1GB file size
 export const maxFileSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
+
+export const extractIdFromURL = (url: string) => {
+  const segments = url.split("/");
+  const id = segments[segments.length - 1];
+  return id;
+}

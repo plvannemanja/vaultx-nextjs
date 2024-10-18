@@ -47,28 +47,38 @@ Input.displayName = 'Input';
 const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, value, onChange, showIcon, ...props }, ref) => {
     return (
-      <div className="w-full border-none pl-6 py-1 bg-[#161616] rounded-xl placeholder:text-white/[53%] justify-start items-center inline-flex font-AzeretMono placeholder:text-xs">
-        <button onClick={props.onPressIcon}>
-          <Image
-            src="/icons/link-shape-white.svg"
-            alt="link"
-            className="w-5 h-5"
-            width={20}
-            height={20}
-          />
-        </button>
+      <div className="relative w-full border-none pl-6 py-1 bg-[#161616] rounded-xl placeholder:text-white/[53%] justify-start items-center inline-flex font-AzeretMono placeholder:text-xs">
+        <Image
+          src="/icons/link-shape-white.svg"
+          alt="link"
+          className="w-5 h-5"
+          width={20}
+          height={20}
+        />
         <input
           type={type}
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
             className,
             'pl-10',
+            showIcon && 'pr-10',
           )}
           ref={ref}
           value={value}
           onChange={onChange}
           {...props}
         />
+        {showIcon && (
+          <button onClick={props.onPressIcon}>
+            <Image
+              src="/icons/trash.svg"
+              alt="image"
+              width={20}
+              height={20}
+              className="absolute top-3 right-3 w-5 h-5"
+            />
+          </button>
+        )}
       </div>
     );
   },

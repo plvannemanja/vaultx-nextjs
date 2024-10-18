@@ -28,9 +28,9 @@ import CurationLoader from './create/CurationLoader';
 import ErrorModal from './create/ErrorModal';
 
 const createCurationSchema = z.object({
-  name: z.string(),
-  symbol: z.string(),
-  description: z.string(),
+  name: z.string().nonempty("Name is invalid"),
+  symbol: z.string().nonempty("Symbol is invalid"),
+  description: z.string().nonempty("Descriptoin is invalid"),
 });
 
 export default function CreateCuration({ editMode }: { editMode?: any }) {
@@ -74,6 +74,12 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
     if (type === 'logo') setFormData({ ...formData, logo: file });
   };
 
+  const handleDescriptionImage = (file: any, index: number) => {
+    if (descriptionImages.length >= index + 1) {
+      descriptionImages[index] = file;
+      setDescriptionImages(descriptionImages);
+    }
+  }
   const cancelChanges = () => {
     setFormData({
       name: '',
@@ -96,35 +102,24 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
     },
   ]);
 
+  const [descriptionImages, setDescriptionImages] = useState<any[]>([null]);
+
   const create = async () => {
     try {
       const result = createCurationSchema.safeParse(formData);
       if (
         !result.success ||
-        !formData.logo ||
-        !formData.bannerImage ||
-        !formData.descriptionImage
+        !formData.logo
       ) {
         let data = [];
         if (!result.success) data = JSON.parse(result.error.message);
 
         if (!formData.logo) {
-          data.push({
+          data.unshift({
             path: ['Logo'],
           });
         }
 
-        if (!formData.bannerImage) {
-          data.push({
-            path: ['Banner image'],
-          });
-        }
-
-        if (!formData.descriptionImage) {
-          data.push({
-            path: ['Description image'],
-          });
-        }
         setErrors({
           active: true,
           data,
@@ -141,17 +136,26 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       //   : '';
 
       const data = new FormData();
-      data.append('name', formData.name);
-      data.append('symbol', formData.symbol);
-      data.append('discription', formData.description);
+      data.append('name', formData.name ?? "");
+      data.append('symbol', formData.symbol ?? "");
+      data.append('discription', formData.description ?? "");
       data.append('logo', formData.logo);
       data.append('bannerImage', formData.bannerImage);
-      data.append('descriptionImage', formData.descriptionImage);
-      data.append('website', ensureValidUrl(formData.website));
-      data.append('twitter', ensureValidUrl(formData.twitter));
-      data.append('facebook', ensureValidUrl(formData.facebook));
-      data.append('instagram', ensureValidUrl(formData.instagram));
+      data.append('website', ensureValidUrl(formData.website ?? ""));
+      data.append('twitter', ensureValidUrl(formData.twitter ?? ""));
+      data.append('facebook', ensureValidUrl(formData.facebook ?? ""));
+      data.append('instagram', ensureValidUrl(formData.instagram ?? ""));
       data.append('youtube', JSON.stringify(youtube));
+
+      let descriptionImageUrls = [];
+      descriptionImages.forEach(image => {
+        if (typeof image === 'string') {
+          descriptionImageUrls.push(image);
+        } else {
+          data.append('descriptionImage', image);
+        }
+      });
+      data.append('descriptionImageUrls', JSON.stringify(descriptionImageUrls));
 
       // let metaData = {
       //   name: formData.name,
@@ -272,14 +276,14 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         symbol: editMode.symbol,
         logo: editMode.logo,
         bannerImage: editMode.bannerImage,
-        descriptionImage: editMode.descriptionImage,
         description: editMode.description,
         website: editMode.website,
         twitter: editMode.twitter,
         facebook: editMode.facebook,
         instagram: editMode.instagram,
-        youtube: editMode.youtube,
       });
+      setYoutube(editMode.youtube);
+      setDescriptionImages(editMode.descriptionImage);
       setFile(editMode.logo);
       setImageSrc(editMode.logo);
     }
@@ -449,20 +453,20 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         Banner Image
                       </Label>
                       <div className="flex justify-center">
-                        {formData.bannerImage && (
+                        {/* {formData.bannerImage && (
                           <span
                             className="cursor-pointer"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setFormData({ ...formData, bannerImage: null });
                             }}
                           >
                             Remove
                           </span>
-                        )}
+                        )} */}
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white/[53%]`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -480,9 +484,6 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                           handleFileChange(file, 'banner')
                         }
                         deSelect={!formData.bannerImage}
-                        // editMode={
-                        //   formData.bannerImage != '' && formData.bannerImage != null
-                        // }
                         editMode={!!formData.bannerImage}
                       />
                     </div>
@@ -552,9 +553,8 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         Your links
                       </Label>
                       <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white/[53%]`}
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
                       />
                     </div>
                   </DisclosureButton>
@@ -650,42 +650,28 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       <Label className="font-extrabold text-lg text-white">
                         Youtube Video Link
                       </Label>
-                      <div className="flex items-center gap-2">
-                        {youtube.length == 2 ? (
-                          <p
-                            className="text-sm cursor-pointer"
-                            onClick={() => {
-                              if (youtube.length > 1) {
-                                setYoutube(
-                                  youtube.slice(0, youtube.length - 1),
-                                );
-                              }
-                            }}
+                      <div className="flex items-center gap-2" onClick={(e) => {
+                        e.stopPropagation(); // Prevents closing the disclosure
+                      }}>
+                        <div className="flex gap-x-2 items-center"
+                          onClick={() => {
+                            if (youtube.length < 2) {
+                              setYoutube([
+                                ...youtube,
+                                { title: '', url: '' },
+                              ]);
+                            }
+                          }}>
+                          <div
+                            className="h-6 w-6 cursor-pointer"
                           >
-                            Delete
-                          </p>
-                        ) : (
-                          <div className="flex gap-x-2 items-center">
-                            <div
-                              className="h-6 w-6 cursor-pointer"
-                              onClick={() => {
-                                if (youtube.length < 2) {
-                                  setYoutube([
-                                    ...youtube,
-                                    { title: '', url: '' },
-                                  ]);
-                                }
-                              }}
-                            >
-                              <AddNew />
-                            </div>
-                            <p className="text-sm">Add New</p>
+                            <AddNew />
                           </div>
-                        )}
+                          <p className="text-sm">Add New</p>
+                        </div>
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white/[53%]`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -708,6 +694,12 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px]"
                               type="text"
                               placeholder="Enter video title"
+                              showIcon={index > 0}
+                              onPressIcon={() => {
+                                if (youtube.length > 1) {
+                                  setYoutube(youtube.slice(0, youtube.length - 1));
+                                }
+                              }}
                             />
                           </div>
                           <div className="flex flex-col gap-y-3 basis-1/2">
@@ -720,6 +712,12 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
                               type="text"
                               placeholder="Enter video link"
+                              showIcon={index > 0}
+                              onPressIcon={() => {
+                                if (youtube.length > 1) {
+                                  setYoutube(youtube.slice(0, youtube.length - 1));
+                                }
+                              }}
                             />
                           </div>
                         </div>
@@ -744,24 +742,30 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       <Label className="font-extrabold text-lg text-white">
                         Custom Description Image
                       </Label>
-                      <div className="flex items-center gap-2">
-                        {formData.descriptionImage && (
-                          <span
-                            className="cursor-pointer"
-                            onClick={() => {
-                              setFormData({
-                                ...formData,
-                                descriptionImage: null,
-                              });
-                            }}
+                      <div className="flex items-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <div className="flex gap-x-2 items-center"
+                          onClick={() => {
+                            if (descriptionImages.length < 2) {
+                              setDescriptionImages([
+                                ...descriptionImages,
+                                null,
+                              ]);
+                            }
+                          }}>
+                          <div
+                            className="h-6 w-6 cursor-pointer"
                           >
-                            Remove
-                          </span>
-                        )}
+                            <AddNew />
+                          </div>
+                          <p className="text-sm">Add New</p>
+                        </div>
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white/[53%]`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -771,57 +775,34 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     </p>
                   </DisclosureButton>
                   <DisclosurePanel className="pb-2 pt-5 text-sm text-white  rounded-b-lg">
-                    <div className="w-full mb-5">
-                      <FileInput
-                        title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
-                        titleStyles={
-                          'text-[#979797] text-sm font-normal azeret-mono-font'
-                        }
-                        acceptedFormats={acceptedFormats}
-                        maxSizeInBytes={maxFileSize}
-                        onFileSelect={(file: any) =>
-                          handleFileChange(file, 'description')
-                        }
-                        // editMode={
-                        //   formData.bannerImage != '' && formData.bannerImage != null
-                        // }
-                        editMode={!!formData.descriptionImage}
-                      />
-                    </div>
+                    {
+                      descriptionImages.map((image, index) => (
+                        <div className="w-full mb-5" key={index}>
+                          <FileInput
+                            title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                            titleStyles={
+                              'text-[#979797] text-sm font-normal azeret-mono-font'
+                            }
+                            acceptedFormats={acceptedFormats}
+                            maxSizeInBytes={maxFileSize}
+                            onFileSelect={(file: any) =>
+                              handleDescriptionImage(file, index)
+                            }
+                            editMode={!!image}
+                            showIcon={index > 0}
+                            onPressIcon={() => {
+                              if (descriptionImages.length > 1) {
+                                setDescriptionImages(descriptionImages.slice(0, descriptionImages.length - 1));
+                              }
+                            }}
+                          />
+                        </div>
+                      ))
+                    }
                   </DisclosurePanel>
                 </>
               )}
             </Disclosure>
-            {/* <div className="flex justify-between items-center">
-              <Label className="text-[20px] font-extrabold">
-                Custom Description Image
-              </Label>
-              {formData.descriptionImage && (
-                <span
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFormData({ ...formData, descriptionImage: null });
-                  }}
-                >
-                  Remove
-                </span>
-              )}
-            </div>
-            <hr className="border-white opacity-[0.2] my-[10px]" />
-            <div className="flex gap-x-4 items-center my-5">
-              <FileInput
-                title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
-                acceptedFormats={acceptedFormats}
-                maxSizeInBytes={maxFileSize}
-                onFileSelect={(file: any) =>
-                  handleFileChange(file, 'description')
-                }
-                // editMode={
-                //   formData.bannerImage != '' && formData.bannerImage != null
-                // }
-                editMode={!!formData.descriptionImage}
-              />
-            </div> */}
           </div>
           <div className="flex gap-x-4 justify-center my-5">
             <BaseButton

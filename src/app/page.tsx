@@ -16,7 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useGlobalContext } from './components/Context/GlobalContext';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ensureValidUrl } from '@/utils/helpers';
+import { ensureValidUrl, extractIdFromURL } from '@/utils/helpers';
 
 interface Isection1 {
   title: string;
@@ -111,7 +111,7 @@ export default function Home() {
         await data.section3.box.forEach(async (item: string) => {
           const {
             data: { collection },
-          } = await collectionServices.getCollectionById(item.split('/')[5]);
+          } = await collectionServices.getCollectionById(extractIdFromURL(item));
 
           if (collection) {
             curationsList.push(collection);
@@ -169,16 +169,16 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
-                    return (
-                      <ArtistsCard
-                        key={index}
-                        image={item.image}
-                        title={item.title}
-                        subtitle1={item.subtitle1}
-                        subtitle2={item.subtitle2}
-                      />
-                    );
-                  })
+                  return (
+                    <ArtistsCard
+                      key={index}
+                      image={item.image}
+                      title={item.title}
+                      subtitle1={item.subtitle1}
+                      subtitle2={item.subtitle2}
+                    />
+                  );
+                })
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10 relative">
@@ -234,14 +234,14 @@ export default function Home() {
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.length > 0
                 ? curations.map((item: any, index: number) => {
-                    return (
-                      <ExceptionalCard
-                        key={index}
-                        logo={item.logo}
-                        name={item.name}
-                      />
-                    );
-                  })
+                  return (
+                    <ExceptionalCard
+                      key={index}
+                      logo={item.logo}
+                      name={item.name}
+                    />
+                  );
+                })
                 : null}
             </div>
           </div>
@@ -265,27 +265,32 @@ export default function Home() {
           />
         </div>
       ) : null}
-      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto bg-yellow-300">
+      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
         {
-          // images?.bottomBaner?.image && (
-          //   <Image
-          //     src={images.bottomBaner.image}
-          //     alt="bottom-banner"
-          //     layout='fill'
-          //     objectFit='cover'
-          //   ></Image>
-          // )
+          images?.bottomBaner && (
+            <Link
+              href={images?.bottomBaner.link}
+              target='_blank'
+            >
+              <Image
+                src={images?.bottomBaner.image}
+                alt="bottom-banner"
+                layout='fill'
+                objectFit='cover'
+              ></Image>
+            </Link>
+          )
         }
         {/* MonsterX Heading */}
-        <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
+        {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX
-        </div>
+        </div> */}
 
         {/* Title Section */}
-        <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
+        {/* <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
           Click it to enter the Real World Asset Era
-        </div>
-
+        </div> */}
+        {/* 
         <Link
           href={ensureValidUrl(images?.bottomBaner?.link)}
           target="_blank"
@@ -294,10 +299,10 @@ export default function Home() {
           <button className="w-full sm:w-40 h-14 px-5 py-3.5 bg-neutral-900 rounded-md border flex justify-center items-center text-white text-lg font-semibold font-['Manrope'] hover:bg-neutral-700 transition-colors duration-300">
             Join Us
           </button>
-        </Link>
+        </Link> */}
         {/* Rounded elements (half circles) */}
-        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
-        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -right-16 sm:-right-24 top-6" />
+        {/* <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
+        <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -right-16 sm:-right-24 top-6" /> */}
       </div>
 
       <BaseFooter />

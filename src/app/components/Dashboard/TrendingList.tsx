@@ -3,6 +3,7 @@
 import NftServices from '@/services/nftService';
 import { useEffect, useState } from 'react';
 import { BaseCarousel } from '../Carousels/BaseCarousel';
+import { extractIdFromURL } from '@/utils/helpers';
 
 interface TrendingProps {
   data: any;
@@ -18,7 +19,7 @@ export default function TrendingList({ data }: TrendingProps) {
         const nftService = new NftServices();
         const {
           data: { nft },
-        } = await nftService.getNftById(data?.box[i]?.split('/')[5]);
+        } = await nftService.getNftById(extractIdFromURL(data?.box[i]));
         tempNfts.push(nft);
       } catch (error) {
         console.log({ error });
