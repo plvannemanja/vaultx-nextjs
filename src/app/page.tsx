@@ -253,7 +253,7 @@ export default function Home() {
             className="hidden lg:block absolute w-24 right-0 top-[15rem]"
           />
 
-          <NFTList />
+          <NFTList color={section2?.color} />
         </div>
       </div>
       {section4 ? (
