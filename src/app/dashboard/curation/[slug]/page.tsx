@@ -373,9 +373,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="flex  justify-between gap-4">
               {curation?.youtube?.length > 0 &&
                 curation?.youtube.map((item: any, index: number) => {
-                  if (!item.title)
-                    return null;
                   const imageId = getYouTubeVideoId(item.url);
+                  if (!imageId)
+                    return null;
                   return (
                     <div className="flex flex-col gap-y-3" key={index}>
                       <BaseDialog
@@ -543,8 +543,8 @@ export default function Page({ params }: { params: { slug: string } }) {
               key={index}
               onClick={() => setFilterBadge(badge.value)}
               className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${filterbadge === badge.value
-                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                  : 'hover:bg-[#232323] bg-transparent text-white'
+                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                : 'hover:bg-[#232323] bg-transparent text-white'
                 }`}
             >
               {badge.label}
