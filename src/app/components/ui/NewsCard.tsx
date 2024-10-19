@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 
 interface INewsCardProps {
@@ -7,6 +8,7 @@ interface INewsCardProps {
   data: Array<{
     image: string;
     title: string;
+    subtitle2: string;
   }>;
 }
 
@@ -37,24 +39,29 @@ export default function NewsCard({
 
       <div className="flex gap-3 lg:gap-6 max-w-[1582px] flex-wrap mx-auto justify-center">
         <div className="w-[800px] h-[753px] relative">
-          <Image
-            src="/images/news-big.png"
-            alt="news"
-            layout="fill"
-            objectFit="cover"
-            className="rounded"
-          />
+          <Link href={data?.[0].subtitle2} target="_blank">
+            <Image
+              src={data?.[0].image}
+              alt="news"
+              layout="fill"
+              objectFit="cover"
+              className="rounded"
+            />
+          </Link>
+
         </div>
         <div className="grid grid-cols-2 grid-rows-3 gap-3 lg:gap-6">
           {data.slice(1).map((item, index) => (
             <div key={index} className="w-[234px] h-[234px] relative">
-              <Image
-                src={item.image}
-                alt="news"
-                width={100}
-                height={100}
-                className="rounded aspect-square w-full h-full object-cover"
-              />
+              <Link href={item.subtitle2} target='_blank'>
+                <Image
+                  src={item.image}
+                  alt="news"
+                  width={100}
+                  height={100}
+                  className="rounded aspect-square w-full h-full object-cover"
+                />
+              </Link>
               <p className="text-light-gray p-5 absolute bottom-0 font-semibold">
                 {item.title}
               </p>

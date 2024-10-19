@@ -15,7 +15,6 @@ interface INftCardProps {
 }
 
 export default function NftCard({ data }: { data: INftCardProps }) {
-  // console.log('data', data);
   return (
     <Card className="bg-transparent text-white border-none w-full bg-[#232323]">
       <CardContent className="aspect-square p-0 rounded-[20px]">

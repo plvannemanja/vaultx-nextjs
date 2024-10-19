@@ -8,6 +8,7 @@ import {
 import { Label } from '@/components/ui/label';
 import NftCard from '../Cards/NftCard';
 import React from 'react';
+import Link from 'next/link';
 
 interface IBaseCarouselProps {
   heading: React.ReactNode;
@@ -48,13 +49,15 @@ export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
         <CarouselContent>
           {data.length > 0
             ? data.map((item: any, index) => (
-                <CarouselItem
-                  key={index}
-                  className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-                >
+              <CarouselItem
+                key={index}
+                className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+              >
+                <Link href={`/nft/${item._id}`} target="_blank">
                   <NftCard data={item} />
-                </CarouselItem>
-              ))
+                </Link>
+              </CarouselItem>
+            ))
             : null}
         </CarouselContent>
 

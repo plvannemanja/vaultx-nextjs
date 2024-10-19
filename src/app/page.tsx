@@ -239,6 +239,7 @@ export default function Home() {
                       key={index}
                       logo={item.logo}
                       name={item.name}
+                      id={item._id}
                     />
                   );
                 })

@@ -32,7 +32,7 @@ export default function TrendingList({ data }: TrendingProps) {
     getTrendingNfts();
   }, [data]);
 
-  const heading = <h3 className="m-0">Weekly Trending</h3>;
+  const heading = <h3 className="m-0">{data?.title}</h3>;
 
   return <BaseCarousel heading={heading} data={icafNfts} />;
 }
