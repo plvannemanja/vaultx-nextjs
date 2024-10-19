@@ -101,17 +101,17 @@ const curationFilters = [
   {
     label: 'Number of Artworks',
     value: -1,
-    param: 'artworks',
+    param: 'nftCount',
   },
   {
     label: 'Number of Artists',
     value: -1,
-    param: 'artists',
+    param: 'artistCount',
   },
   {
     label: 'Highest Volume',
     value: -1,
-    param: 'volume',
+    param: 'totalVolume',
   },
   {
     label: 'New Curation',
@@ -119,6 +119,50 @@ const curationFilters = [
     param: 'createdAt',
   },
 ];
+
+const activityFilters = [
+  {
+    label: 'All',
+    param: '',
+  },
+  {
+    label: 'Minted',
+    param: 'Minted',
+  },
+  {
+    label: 'Listed',
+    param: 'Listed',
+  },
+  {
+    label: 'Unlisted',
+    param: 'End Sale',
+  },
+  {
+    label: 'Purchased',
+    param: 'Purchased',
+  },
+  {
+    label: 'In Escrow',
+    param: 'In Escrow',
+  },
+  {
+    label: 'Transfer',
+    param: 'Transfer',
+  },
+  {
+    label: 'Burn',
+    param: 'Burn',
+  },
+  {
+    label: 'Royalties',
+    param: 'Royalties',
+  },
+  {
+    label: 'Split Payments',
+    param: 'Split Payments',
+  },
+];
+
 export enum ProfileTabs {
   All = 'all',
   Own = 'owned',
@@ -154,6 +198,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       label: curationFilters[0].label,
       value: curationFilters[0].value,
     },
+    activityFilter: activityFilters[0]
   });
 
   const [data, setData] = useState<any>({
@@ -178,16 +223,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const categoryTab = useMemo(() => {
     if (tab == ProfileTabs.Earn) return 'earnFilter';
     else if (tab == ProfileTabs.Curation) return 'curationFilter';
-
+    else if (tab == ProfileTabs.Activity) return 'activityFilter';
+    else if (tab == ProfileTabs.Favorite) {
+      if (favType == 'artist' || favType == 'nft') {
+        return 'filter';
+      } else return 'curationFilter';
+    }
     return 'filter';
-  }, [tab]);
+  }, [tab, favType]);
 
   const categoryList = useMemo(() => {
     if (tab == ProfileTabs.Earn) return earnFilters;
     else if (tab == ProfileTabs.Curation) return curationFilters;
-
+    else if (tab == ProfileTabs.Activity) return activityFilters;
+    else if (tab == ProfileTabs.Favorite) {
+      if (favType == 'artist' || favType == 'nft') {
+        return profileFilters;
+      } else return curationFilters;
+    }
     return profileFilters;
-  }, [tab]);
+  }, [tab, favType]);
 
   const [debouncedFilter] = useDebounce(filters, 1000);
 
@@ -254,7 +309,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       const response = await collectionServices.getUserCollections({
         searchInput: filters.searchInput,
         filter: {
-          [filters.filter.param]: filters.filter.value,
+          [filters.curationFilter.param]: filters.curationFilter.value,
         },
       });
 
@@ -263,21 +318,10 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
         collections
           .filter((item: any) => item.active)
           .map(async (collection: any) => {
-            const info = await collectionServices.getCollectionInfo(
-              collection._id,
-            );
-
-            const extra = {
-              nftCount: info.data.collection.nftCount,
-              totalVolume: info.data.collection.totalVolume,
-              artistCount: info.data.collection.artistCount,
-            };
 
             return {
-              ...extra,
-              name: collection.name,
+              ...collection,
               image: collection.bannerImage,
-              _id: collection._id,
             };
           }),
       );
@@ -293,7 +337,10 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
   const fetchActivity = async () => {
     try {
-      const response = await getAllUsersActivity();
+      const response = await getAllUsersActivity({
+        searchInput: filters?.searchInput,
+        filterInput: filters?.activityFilter,
+      });
 
       if (response.data) {
         setData({
@@ -323,26 +370,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-            return {
-              ...item.nftId,
-            };
-          })
+          return {
+            ...item.nftId,
+          };
+        })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-            return {
-              ...item.artistId,
-            };
-          })
+          return {
+            ...item.artistId,
+          };
+        })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-            return {
-              ...item.collectionId,
-            };
-          })
+          return {
+            ...item.collectionId,
+          };
+        })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -461,6 +508,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     fetchData();
   }, [tab, debouncedFilter]);
 
+
   return (
     <div className="flex flex-col gap-y-4">
       {/* Filters logic */}
@@ -504,73 +552,73 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           />
         </div>
 
-        <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
-          <Popover
-            open={categoryActive}
-            onOpenChange={(val) => {
-              setCategoryActive(val);
-            }}
+        <Popover
+          open={categoryActive}
+          onOpenChange={(val) => {
+            setCategoryActive(val);
+          }}
+        >
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]"
+            >
+              {filters[categoryTab]?.label}
+              <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0"
+            style={{ width: 'var(--radix-popover-trigger-width)' }}
           >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                className="w-full bg-dark justify-between"
-              >
-                {filters[categoryTab]?.label}
-                <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command className="w-full">
-                <CommandList>
-                  <CommandGroup>
-                    {categoryList &&
-                      categoryList.map((item, index) => (
-                        <CommandItem
-                          key={index}
-                          value={item.label}
-                          onSelect={() => {
-                            setCategoryActive(false);
-                            if (isEarn) {
-                              setFilters({
-                                ...filters,
-                                earnFilter: {
-                                  label: item.label,
-                                  value: item.value,
-                                  param: item.param,
-                                },
-                              });
-                            } else {
-                              setFilters({
-                                ...filters,
-                                [categoryTab]: {
-                                  label: item.label,
-                                  value: item.value,
-                                  param: item.param,
-                                },
-                              });
-                            }
-                          }}
-                          className="text-sm cursor-pointer"
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              filters[categoryTab]?.label === item.label
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {item.label}
-                        </CommandItem>
-                      ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-        </div>
+            <Command className="w-full">
+              <CommandList>
+                <CommandGroup>
+                  {categoryList &&
+                    categoryList.map((item, index) => (
+                      <CommandItem
+                        key={index}
+                        value={item.label}
+                        onSelect={() => {
+                          setCategoryActive(false);
+                          if (isEarn) {
+                            setFilters({
+                              ...filters,
+                              earnFilter: {
+                                label: item.label,
+                                value: item.value,
+                                param: item.param,
+                              },
+                            });
+                          } else {
+                            setFilters({
+                              ...filters,
+                              [categoryTab]: {
+                                label: item.label,
+                                value: item.value,
+                                param: item.param,
+                              },
+                            });
+                          }
+                        }}
+                        className="text-sm cursor-pointer"
+                      >
+                        <Check
+                          className={cn(
+                            'mr-2 h-4 w-4',
+                            filters[categoryTab]?.label === item.label
+                              ? 'opacity-100'
+                              : 'opacity-0',
+                          )}
+                        />
+                        {item.label}
+                      </CommandItem>
+                    ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
       </div>
       {/* User section */}
       {tab === ProfileTabs.All && data[ProfileTabs.All] ? (
@@ -734,32 +782,32 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           <div className="flex gap-5 flex-wrap">
             {favType === 'nft' && data[ProfileTabs.Favorite].likedNft
               ? data[ProfileTabs.Favorite].likedNft.map(
-                  (item: any, index: number) => {
-                    return <NftCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <NftCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'curation' && data[ProfileTabs.Favorite].likedCuration
               ? data[ProfileTabs.Favorite].likedCuration.map(
-                  (item: any, index: number) => {
-                    return <CurationCard key={index} data={item} />;
-                  },
-                )
+                (item: any, index: number) => {
+                  return <CurationCard key={index} data={item} />;
+                },
+              )
               : null}
 
             {favType === 'artist' && data[ProfileTabs.Favorite]
               ? data[ProfileTabs.Favorite].likedArtist.map(
-                  (item: any, index: number) => {
-                    return (
-                      <ArtistsCard
-                        key={index}
-                        image={item.avatar ? item.avatar.url : ''}
-                        title={item.username}
-                      />
-                    );
-                  },
-                )
+                (item: any, index: number) => {
+                  return (
+                    <ArtistsCard
+                      key={index}
+                      image={item.avatar ? item.avatar.url : ''}
+                      title={item.username}
+                    />
+                  );
+                },
+              )
               : null}
           </div>
         </div>
@@ -817,8 +865,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
                         {item?.saleId?.ItemPurchasedOn
                           ? new Date(item?.saleId?.ItemPurchasedOn)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell className="font-medium azeret-mono-font text-[14px] text-[#fff]">
@@ -903,8 +951,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                       <TableCell>
                         {item?.createdAt
                           ? new Date(item?.createdAt)
-                              .toLocaleString()
-                              .slice(0, 10)
+                            .toLocaleString()
+                            .slice(0, 10)
                           : '-/-'}
                       </TableCell>
                       <TableCell>{item?.state}</TableCell>

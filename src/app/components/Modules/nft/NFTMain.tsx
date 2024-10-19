@@ -28,6 +28,8 @@ import BasicLoadingModal from './BasicLoadingModal';
 import BurnModal from './BurnModal';
 import EditNFTModal from './EditNFTModal';
 import TransferModal from './TransferModal';
+import { useDebounce } from 'use-debounce';
+import { FavoriteService } from '@/services/FavoriteService';
 
 const style = {
   borderRadius: '10px',
@@ -96,7 +98,9 @@ export default function NFTMain({
 
   const nftService = new NftServices();
   const createSellService = new CreateSellService();
+  const favoriteService = new FavoriteService();
   const handleLike = async () => {
+    debugger;
     try {
       setLiked(!liked);
       if (!liked === true) setLikes(likes + 1);
@@ -105,6 +109,22 @@ export default function NFTMain({
       console.log(error);
     }
   };
+
+  const [debouncedLiked] = useDebounce(liked, 1000);
+
+  const setMyLike = async () => {
+    try {
+      await favoriteService.handleLikeNfts({ nftId });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (debouncedLiked) {
+      setMyLike();
+    }
+  }, [debouncedLiked]);
 
   const handleView = async () => {
     try {
@@ -234,7 +254,7 @@ export default function NFTMain({
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => handleLike()}
+                  onChange={() => { debugger; handleLike() }}
                 />
                 <div className="checkmark">
                   {liked ? (
@@ -602,7 +622,7 @@ export default function NFTMain({
                         >
                           <BidModal
                             title={data.name}
-                            update={() => {}}
+                            update={() => { }}
                             onClose={() => {
                               setModalStatus({ ...modalStatus, bid: false });
                             }}
@@ -615,7 +635,7 @@ export default function NFTMain({
                               title="Buy Now"
                               className={'!rounded-[14px] w-full'}
                               variant="primary"
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -642,7 +662,7 @@ export default function NFTMain({
                               title="Release Escrow"
                               variant="primary"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           isOpen={modalStatus.release}
@@ -667,7 +687,7 @@ export default function NFTMain({
                               title="Cancel Order"
                               variant="secondaryOutline"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           isOpen={modalStatus.cancel}
@@ -696,7 +716,7 @@ export default function NFTMain({
                               title="Put On Sale"
                               variant="primary"
                               className={'rounded-[14px]'}
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           isOpen={modalStatus.resell}
@@ -745,7 +765,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Cancel Requested"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                           className={'!rounded-[14px]'}
                         />
                       </div>
@@ -759,7 +779,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -783,7 +803,7 @@ export default function NFTMain({
                               title="Escrow Release Request"
                               variant="primary"
                               className={'!rounded-[14px]'}
-                              onClick={() => {}}
+                              onClick={() => { }}
                             />
                           }
                           isOpen={modalStatus.escrowRelease}
@@ -812,7 +832,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Release Requested"
                           variant="primary"
-                          onClick={() => {}}
+                          onClick={() => { }}
                           className={'!rounded-[14px]'}
                         />
                       </div>
