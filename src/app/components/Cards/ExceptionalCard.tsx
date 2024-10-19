@@ -8,12 +8,11 @@ export default function ExceptionalCard({
   name: string;
 }) {
   return (
-    <div className="bg-dark p-3 w-full h-full lg:w-[48%] aspect-square">
+    <div className="bg-dark p-3 w-full h-full lg:w-[48%] aspect-square relative max-w-[696px] max-h-[696px]">
       <Image
         src={logo}
-        width={100}
-        height={100}
-        className="w-full h-full object-cover"
+        layout='fill'
+        objectFit='cover'
         alt="curation"
       />
 
