@@ -302,7 +302,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                   type="checkbox"
                   className="sr-only"
                   checked={liked}
-                  onChange={() => {}}
+                  onChange={() => { }}
                 />
                 <div className="checkmark">
                   <Heart
@@ -373,6 +373,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             <div className="flex  justify-between gap-4">
               {curation?.youtube?.length > 0 &&
                 curation?.youtube.map((item: any, index: number) => {
+                  if (!item.title)
+                    return null;
                   const imageId = getYouTubeVideoId(item.url);
                   return (
                     <div className="flex flex-col gap-y-3" key={index}>
@@ -492,8 +494,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             'w-full transition-all duration-500 ease-in-out',
             showLess ? 'h-[200px]' : 'h-[340px]',
             Array.isArray(curation?.descriptionImage) &&
-              curation?.descriptionImage.length === 2 &&
-              'flex space-x-4',
+            curation?.descriptionImage.length === 2 &&
+            'flex space-x-4',
           )}
         >
           {Array.isArray(curation?.descriptionImage) &&
@@ -540,11 +542,10 @@ export default function Page({ params }: { params: { slug: string } }) {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${
-                filterbadge === badge.value
+              className={`px-[12px] py-[12px] rounded-[12px] font-extrabold text-[14px] border border-[#FFFFFF1F] cursor-pointer ${filterbadge === badge.value
                   ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
                   : 'hover:bg-[#232323] bg-transparent text-white'
-              }`}
+                }`}
             >
               {badge.label}
             </Badge>
