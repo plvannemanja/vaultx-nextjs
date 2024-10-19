@@ -312,8 +312,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
             {user?.wallet && user?.wallet === curation.owner?.wallet && (
               <Link href={`/dashboard/curation/edit/${params.slug}`}>
-                <div className="flex min-w-[80px] h-12 pl-[15px] rounded-[30px] gap-x-3 p-3 border-2 items-center border-white bg-gray-600 cursor-pointer">
-                  <Edit size={26} />
+                <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
+                  <Edit className="w-5 h-5" />
                   <div className="text-white text-base font-medium">Edit</div>
                 </div>
               </Link>
