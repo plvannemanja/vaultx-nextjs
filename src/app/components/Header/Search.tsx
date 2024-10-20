@@ -1,12 +1,12 @@
-import { SearchIcon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Image from 'next/image';
-import { useDebounce } from 'use-debounce';
 import { collectionServices, IGetSearchResponse } from '@/services/supplier';
 import { CurationType, NFTItemType, UserType } from '@/types';
-import { shortenAddress } from 'thirdweb/utils';
+import { SearchIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
+import { shortenAddress } from 'thirdweb/utils';
+import { useDebounce } from 'use-debounce';
 
 interface ISearchDropDownProps {
   searchText: string;
@@ -205,17 +205,17 @@ export function Search() {
   }, []);
 
   return (
-    <div className="w-[500px] relative hidden xl:block" ref={searchRef}>
-      <div className="min-w-[500px] h-[52px] px-6 py-4 bg-neutral-800 rounded-xl justify-start items-center gap-7 inline-flex text-white">
+    <div className="relative hidden h-full xl:block" ref={searchRef}>
+      <div className="min-w-[450px] h-full px-[26px] py-3 bg-[#232323] rounded-xl justify-start items-center gap-7 inline-flex text-white">
         <input
           ref={inputRef}
-          className="flex-1 w-full bg-neutral-800 text-opacity-50 rounded-lg px-4 py-2 leading-snug azeret-mono-font focus:outline-none focus:border-bg-neutral-800"
+          className="flex-1 w-full bg-[#232323] text-opacity-50 rounded-lg py-2 azeret-mono-font focus:outline-none focus:border-bg-neutral-800 placeholder:text-sm placeholder:text-white/[53%] text-white/[53%] font-normal"
           type="text"
           placeholder="Search artwork, collection..."
           onChange={(e) => setSearchText(e.target.value)}
           onFocus={toggle}
           onClick={toggle}
-        ></input>
+        />
         <SearchIcon size={16} className="cursor-pointer" />
       </div>
       {open && <SearchDropDown searchText={debouncedText} />}

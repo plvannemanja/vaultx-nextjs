@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
-import { useGlobalContext } from '../Context/GlobalContext';
-import { BaseDialog } from '../ui/BaseDialog';
-import { z } from 'zod';
 import { LoadingButton } from '@/components/ui/loading-button';
 import { userServices } from '@/services/supplier';
 import { AxiosError } from 'axios';
+import { MoveUpRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
+import { z } from 'zod';
+import { useGlobalContext } from '../Context/GlobalContext';
+import { BaseDialog } from '../ui/BaseDialog';
 
 const signUpSchema = z.object({
   nickname: z
@@ -89,129 +90,99 @@ export function SignUpModal() {
       onClose={(val) => {
         setOpen(val);
       }}
-      className="w-[494px] h-[347px] mx-auto overflow-y-auto overflow-x-hidden bg-[#161616] rounded-[20px] shadow"
+      className="max-w-[494px] mx-auto overflow-y-auto border-0 overflow-x-hidden bg-[#161616] rounded-xl shadow"
     >
       {step === 1 && (
-        <div className="items-center justify-center">
-          <div className="pr-[129px] pb-[62px] left-[29.50px] top-[31px] absolute justify-start items-center inline-flex">
-            <div className="self-stretch justify-start items-center gap-3.5 inline-flex">
-              <div className="text-center text-white text-3xl font-extrabold font-['Manrope'] capitalize">
-                Enter your Nickname
-              </div>
-            </div>
+        <div className="w-full flex flex-col gap-y-5">
+          <div className="text-white text-3xl font-extrabold mb-6 manrope-font capitalize">
+            Enter your Nickname
           </div>
-
-          <div className="w-[436px] h-[52px] px-4 py-[15px] left-[29px] top-[104px] absolute bg-[#232323] rounded-xl justify-start items-center gap-[13px] inline-flex">
-            <div className="w-[26px] h-[26px] px-[5.42px] py-[3.25px] justify-center items-center flex">
-              <svg
-                width="26"
-                height="26"
-                viewBox="0 0 26 26"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M17.3332 7.58333C17.3332 9.97657 15.3931 11.9167 12.9998 11.9167C10.6066 11.9167 8.6665 9.97657 8.6665 7.58333C8.6665 5.1901 10.6066 3.25 12.9998 3.25C15.3931 3.25 17.3332 5.1901 17.3332 7.58333Z"
-                  stroke="#DDF247"
-                  strokeWidth="2.16667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M12.9998 15.1667C8.81168 15.1667 5.4165 18.5618 5.4165 22.75H20.5832C20.5832 18.5618 17.188 15.1667 12.9998 15.1667Z"
-                  stroke="#DDF247"
-                  strokeWidth="2.16667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+          <div className="w-full p-4 bg-[#232323] rounded-xl justify-start items-center gap-[13px] inline-flex">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 26 26"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M17.3332 7.58333C17.3332 9.97657 15.3931 11.9167 12.9998 11.9167C10.6066 11.9167 8.6665 9.97657 8.6665 7.58333C8.6665 5.1901 10.6066 3.25 12.9998 3.25C15.3931 3.25 17.3332 5.1901 17.3332 7.58333Z"
+                stroke="#DDF247"
+                stroke-width="2.16667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M12.9998 15.1667C8.81168 15.1667 5.4165 18.5618 5.4165 22.75H20.5832C20.5832 18.5618 17.188 15.1667 12.9998 15.1667Z"
+                stroke="#DDF247"
+                stroke-width="2.16667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
             <input
               name="nickname"
               type="text"
               value={formData.nickname}
               onChange={handleChange}
               placeholder="Enter nickname..."
-              className="grow shrink basis-0 text-white/50 text-sm font-normal font-['Azeret Mono'] leading-snug focus:outline-none"
+              className="grow shrink basis-0 placeholder:text-white/50 placeholder:font-normal placeholder:text-sm text-white/50 text-sm font-normal azeret-mono-font leading-snug focus:outline-none bg-[#232323]"
             />
           </div>
-
-          <div className="w-[436px] h-[52px] px-4 py-[15px] left-[29px] top-[171px] absolute bg-[#232323] rounded-xl justify-start items-center gap-[13px] inline-flex">
-            <div className="w-[26px] h-[26px] px-[3.25px] py-[5.42px] justify-center items-center flex">
-              <svg
-                width="26"
-                height="26"
-                viewBox="0 0 26 26"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.25 8.66602L11.7982 14.3648C12.5259 14.85 13.4741 14.85 14.2019 14.3648L22.75 8.66602M5.41667 20.5827H20.5833C21.78 20.5827 22.75 19.6126 22.75 18.416V7.58268C22.75 6.38607 21.78 5.41602 20.5833 5.41602H5.41667C4.22005 5.41602 3.25 6.38607 3.25 7.58268V18.416C3.25 19.6126 4.22005 20.5827 5.41667 20.5827Z"
-                  stroke="#DDF247"
-                  strokeWidth="2.16667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+          <div className="w-full p-4 bg-[#232323] rounded-xl justify-start items-center gap-[13px] inline-flex">
+            <svg
+              width="26"
+              height="26"
+              viewBox="0 0 26 26"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.25 8.66602L11.7982 14.3648C12.5259 14.85 13.4741 14.85 14.2019 14.3648L22.75 8.66602M5.41667 20.5827H20.5833C21.78 20.5827 22.75 19.6126 22.75 18.416V7.58268C22.75 6.38607 21.78 5.41602 20.5833 5.41602H5.41667C4.22005 5.41602 3.25 6.38607 3.25 7.58268V18.416C3.25 19.6126 4.22005 20.5827 5.41667 20.5827Z"
+                stroke="#DDF247"
+                stroke-width="2.16667"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
             <input
               name="email"
               type="text"
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter Email..."
-              className="grow shrink basis-0 text-white/50 text-sm font-normal font-['Azeret Mono'] leading-snug focus:outline-none"
+              className="grow shrink basis-0 placeholder:text-white/50 placeholder:font-normal placeholder:text-sm text-white/50 text-sm font-normal azeret-mono-font leading-snug focus:outline-none bg-[#232323]"
             />
           </div>
-
-          <div className="w-[454px] left-[29px] top-[235px] absolute text-[#ff0000] text-sm font-normal font-['Azeret Mono'] leading-snug">
+          <div className="w-full text-[#DDF247] text-sm font-normal azeret-mono-font leading-snug">
             {(errors.nickname || errors.email) && (
-              <p className="text-red-500">*All fields are required.</p>
+              <p>*All fields are required.</p>
             )}
-            {errors.axios && <p className="text-red-500">{errors.axios}</p>}
+            {errors.axios && <p className="text-[#DDF247]">{errors.axios}</p>}
           </div>
-
           <LoadingButton
             loading={loading}
-            className="w-[436px] h-[50px] p-2.5 left-[29px] top-[274px] absolute bg-[#ddf247] rounded-[14px] justify-center items-center gap-2.5 inline-flex"
+            className="bg-[#ddf247] hover:bg-[#ddf247] w-full py-6 rounded-xl justify-center items-center gap-x-2 flex"
             onClick={handleSubmit}
           >
-            <span className="text-[#161616] text-base font-extrabold font-['Manrope'] capitalize">
+            <span className="text-[#161616] text-base font-extrabold manrope-font capitalize">
               Next
             </span>
-            <div className="w-[18px] h-[18px] relative">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M3.375 14.625L14.625 3.375M14.625 3.375H6.1875M14.625 3.375V11.8125"
-                  stroke="black"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+            <MoveUpRight className="w-5 h-5" />
           </LoadingButton>
         </div>
       )}
 
       {step === 2 && (
-        <div className="items-center justify-center">
-          <div className="w-[438px] h-[236px] left-[28px] top-[57px] absolute">
-            <div className="left-[144px] top-[151px] absolute text-center text-white text-3xl font-extrabold font-['Manrope'] capitalize">
-              Congrats!
-            </div>
-            <div className="left-[158px] top-0 absolute text-center text-white text-[121px] font-extrabold font-['Manrope'] capitalize">
-              🎉
-            </div>
-            <div className="w-[438px] left-0 top-[214px] absolute text-center text-white/50 text-sm font-normal font-['Azeret Mono'] leading-snug">
-              You have successfully created an account.
-            </div>
+        <div className="items-center justify-center flex flex-col gap-y-3">
+          <div className="text-center text-white text-[121px] font-extrabold manrope-font capitalize">
+            🎉
+          </div>
+          <div className="text-center mb-3 text-white text-3xl font-extrabold manrope-font capitalize">
+            Congrats!
+          </div>
+          <div className="text-center placeholder:text-white/50 placeholder:font-normal placeholder:text-sm text-white/50 text-sm font-normal azeret-mono-font">
+            You have successfully created an account.
           </div>
         </div>
       )}

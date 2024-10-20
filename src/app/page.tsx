@@ -193,13 +193,19 @@ export default function Home() {
         </div>
         {section3 ? (
           <div className="py-20 lg:relative">
-            <img
+            <Image
               src="/illustrations/left-lines.png"
               className="hidden lg:block absolute w-24 left-0 top-[30rem]"
+              alt="circle-half-translucent"
+              width={10}
+              height={10}
             />
-            <img
+            <Image
               src="/illustrations/circle-half-translucent.png"
               className="hidden lg:block absolute w-24 right-0"
+              alt="circle-half-translucent"
+              width={10}
+              height={10}
             />
 
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
@@ -213,7 +219,7 @@ export default function Home() {
               ) : null}
 
               <div className="absolute top-20 w-[36rem]">
-                <img
+                <Image
                   height={100}
                   width={100}
                   src="/illustrations/important.png"
@@ -236,11 +242,13 @@ export default function Home() {
           </div>
         ) : null}
         <div className="flex justify-center lg:relative lg:bg-[url('/illustrations/wave-top-left-bottom-right.png')]">
-          <img
+          <Image
             src="/illustrations/right-lines.png"
+            alt="illustration"
             className="hidden lg:block absolute w-24 right-0 top-[15rem]"
+            width={96}
+            height={96}
           />
-
           <NFTList />
         </div>
       </div>

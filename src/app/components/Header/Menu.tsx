@@ -1,6 +1,5 @@
 'use client';
 
-import { client } from '@/lib/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import {
   DropdownMenu,
@@ -10,8 +9,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { client } from '@/lib/client';
+import { chain } from '@/lib/contract';
 import { Copy, Power } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   useActiveAccount,
   useActiveWallet,
@@ -21,17 +31,7 @@ import {
   useWalletImage,
 } from 'thirdweb/react';
 import { WalletId } from 'thirdweb/wallets';
-import { useEffect, useState } from 'react';
-import { chain } from '@/lib/contract';
 import { useGlobalContext } from '../Context/GlobalContext';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface WalletDetailProps {
   walletId: WalletId;

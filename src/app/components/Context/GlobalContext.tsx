@@ -64,10 +64,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   const fetchUser = async () => {
     if (!activeAccount) return;
-
     try {
       const address = checksumAddress(activeAccount?.address) as Address;
-
       const { data } = await authenticationServices.connectWallet({
         wallet: address,
       });
@@ -105,6 +103,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChain]);
+
   return (
     <globalContext.Provider
       value={{

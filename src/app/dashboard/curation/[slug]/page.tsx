@@ -292,22 +292,13 @@ export default function Page({ params }: { params: { slug: string } }) {
           <div className="flex gap-4">
             <div className="flex px-5 py-3 backdrop-blur-sm h-12 rounded-full gap-x-3 p-3 border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
               <span className="font-medium">{likes}</span>
-              <div onClick={() => handleLike()}>
-                <input
-                  title="like"
-                  type="checkbox"
-                  className="sr-only"
-                  checked={liked}
-                  onChange={() => {}}
+              <div className="checkmark" onClick={() => handleLike()}>
+                <Heart
+                  className={cn(
+                    'w-5 h-5',
+                    liked ? 'fill-white' : 'stroke-white',
+                  )}
                 />
-                <div className="checkmark">
-                  <Heart
-                    className={cn(
-                      'w-5 h-5',
-                      liked ? 'fill-white' : 'stroke-white',
-                    )}
-                  />
-                </div>
               </div>
             </div>
             {user?.wallet && user?.wallet === curation.owner?.wallet && (
@@ -772,7 +763,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                     <TableCell className="flex items-center gap-x-3">
                       <img
                         src={item.nftId.cloudinaryUrl}
-                        className="w-12 h-12 object-contain rounded aspect-square "
+                        alt={item.nftId.name}
+                        className="w-12 h-12 object-contain rounded aspect-square"
                       />
                       <span className="azeret-mono-font text-sm font-semibold">
                         {item.nftId.name}
