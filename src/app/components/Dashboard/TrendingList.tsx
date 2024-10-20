@@ -1,9 +1,9 @@
 'use client';
 
 import NftServices from '@/services/nftService';
+import { extractIdFromURL } from '@/utils/helpers';
 import { useEffect, useState } from 'react';
 import { BaseCarousel } from '../Carousels/BaseCarousel';
-import { extractIdFromURL } from '@/utils/helpers';
 
 interface TrendingProps {
   data: any;
@@ -32,7 +32,11 @@ export default function TrendingList({ data }: TrendingProps) {
     getTrendingNfts();
   }, [data]);
 
-  const heading = <h3 className="m-0">Weekly Trending</h3>;
+  const heading = (
+    <h3 className="font-extrabold text-[40px] text-[#DDF247]">
+      Weekly Trending
+    </h3>
+  );
 
   return <BaseCarousel heading={heading} data={icafNfts} />;
 }

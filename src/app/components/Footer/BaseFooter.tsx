@@ -14,7 +14,7 @@ export default function BaseFooter() {
   });
 
   return (
-    <div className="flex flex-col gap-y-6 text-white justify-around my-10">
+    <div className="flex flex-col gap-y-6 text-white justify-around my-10 mt-16">
       <div className="flex flex-wrap justify-between px-20 gap-10 container">
         <Link href="/dashboard/appreciate">Appreciate</Link>
         <Link href="/dashboard/curation">Curation</Link>
@@ -85,27 +85,20 @@ export default function BaseFooter() {
           </div>
         </div>
       </div>
-
-      <hr />
-
-      <div className="flex flex-col gap-y-4 justify-center items-center relative px-20 container">
+      <hr className="border-white/[13%] mt-[50px]" />
+      <div className="flex flex-col gap-y-6 pt-4 pb-0 justify-center items-center relative px-20 container text-[#878787]">
         <Link href="/">
           <Logo />
         </Link>
-        <div className="md:flex gap-x-4 flex-wrap gap-y-2">
-          <Label className="text-sm block text-center text-gray-500">
+        <div className="md:flex gap-x-4 flex-wrap gap-y-2 manrope-font font-medium">
+          <Label className="text-sm block text-center">
             2024 VaultX. All right reserved.
           </Label>
-          <Label className="text-sm block text-center text-gray-500">
-            Privacy Policy
-          </Label>
-          <Label className="text-sm block text-center text-gray-500">
-            Terms of Service
-          </Label>
+          <Label className="text-sm block text-center">Privacy Policy</Label>
+          <Label className="text-sm block text-center">Terms of Service</Label>
         </div>
-
         <div className="md:absolute right-20 bottom-0">
-          <a className="text-gray-500 text-sm" href="mailto:info@monsterx.io">
+          <a className="text-sm font-medium" href="mailto:info@monsterx.io">
             info@monsterx.io
           </a>
         </div>

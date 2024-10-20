@@ -138,7 +138,7 @@ export default function Home() {
       ) : (
         <Skeleton className="w-full h-[400px]" />
       )}
-      <div className="py-20 w-full px-10 lg:px-20 lg:relative">
+      <div className="py-10 w-full px-10 lg:px-20 lg:relative">
         <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] border-l-transparent border-t-transparent -rotate-45 hidden lg:block absolute -left-4 top-[28.5rem]"></div>
         <div className="w-7 h-7 border-2 rounded-full border-[#DDF247] hidden lg:block absolute left-24"></div>
         <div className="w-4 h-4 rounded-full bg-[#DDF247] hidden lg:block absolute right-12 top-[10rem]"></div>
@@ -174,7 +174,7 @@ export default function Home() {
               <button className="px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300">
                 Discover Artist
               </button>
-              <div className="absolute top-[1rem] w-[68rem] lg:flex justify-center hidden">
+              <div className="absolute -top-[2rem] w-[68rem] lg:flex justify-center hidden">
                 <Image
                   src="/illustrations/neon-grid.png"
                   alt="neon-grid"
@@ -187,19 +187,40 @@ export default function Home() {
           </>
         ) : null}
       </div>
-      <div className="py-20">
-        <div className="flex justify-center">
-          <TrendingList data={section2} />
-        </div>
+      <div className="py-10">
+        <TrendingList data={section2} />
         {section3 ? (
-          <div className="py-20 lg:relative">
-            <Image
-              src="/illustrations/left-lines.png"
-              className="hidden lg:block absolute w-24 left-0 top-[30rem]"
-              alt="circle-half-translucent"
-              width={10}
-              height={10}
-            />
+          <div className="py-[60px] lg:relative">
+            <div className="hidden lg:block absolute left-0 top-[30rem]">
+              <svg
+                width="202"
+                height="292"
+                viewBox="0 0 202 292"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M134.42 89.3691L133.836 224.467L-1.26188 223.882"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M112.299 67.0547L111.715 202.152L-23.383 201.568"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M90.1758 44.7402L89.5915 179.838L-45.506 179.254"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M68.0547 22.4277L67.4705 157.525L-67.6271 156.941"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M45.9336 0.113281L45.3494 135.211L-89.7482 134.627"
+                  stroke="#DDF247"
+                />
+              </svg>
+            </div>
             <Image
               src="/illustrations/circle-half-translucent.png"
               className="hidden lg:block absolute w-24 right-0"
@@ -207,7 +228,6 @@ export default function Home() {
               width={10}
               height={10}
             />
-
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
                 ? createTitleComp(section3.title, section3.color)
@@ -217,8 +237,7 @@ export default function Home() {
                   {section3.description}
                 </Label>
               ) : null}
-
-              <div className="absolute top-20 w-[36rem]">
+              {/* <div className="absolute top-20 w-[36rem]">
                 <Image
                   height={100}
                   width={100}
@@ -226,7 +245,7 @@ export default function Home() {
                   alt="neon-grid"
                   className="w-[36rem] pl-7 mt-4"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
               {curations.map((item: any, index: number) => {
@@ -253,7 +272,7 @@ export default function Home() {
         </div>
       </div>
       {section4 ? (
-        <div className="py-20 lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')]">
+        <div className="py-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')]">
           <NewsCard
             heading={createTitleComp(section4.title, section4.color)}
             description={section4.description}
@@ -261,7 +280,7 @@ export default function Home() {
           />
         </div>
       ) : null}
-      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
+      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
         {images?.bottomBaner && (
           <Link href={images?.bottomBaner.link} target="_blank">
             <Image

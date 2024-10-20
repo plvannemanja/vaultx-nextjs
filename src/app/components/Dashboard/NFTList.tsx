@@ -31,7 +31,11 @@ export default function NFTList() {
     getNfts();
   }, []);
 
-  const heading = <h3 className="m-0">Appreciate & Explore</h3>;
+  const heading = (
+    <h3 className="font-extrabold text-[40px] text-[#DDF247]">
+      Appreciate & Explore
+    </h3>
+  );
 
   return <BaseCarousel heading={heading} data={nfts} />;
 }
