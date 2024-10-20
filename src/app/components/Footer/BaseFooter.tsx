@@ -25,6 +25,7 @@ export default function BaseFooter() {
           <div className="flex gap-x-3 mt-3">
             <Link
               target="_blank"
+              className="w-[40px] h-[40px]"
               href="https://www.instagram.com/magazinex_rwa/?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw%3D%3D"
             >
               <Image
@@ -47,7 +48,11 @@ export default function BaseFooter() {
               />
             </Link>
 
-            <Link target="_blank" href="https://x.com/MonsterX_RWA">
+            <Link
+              target="_blank"
+              className="w-[40px] h-[40px]"
+              href="https://x.com/MonsterX_RWA"
+            >
               <Image
                 alt="instagram"
                 src={imageHovered.X}
@@ -62,7 +67,11 @@ export default function BaseFooter() {
               />
             </Link>
 
-            <Link target="_blank" href="https://www.monsterx.io/">
+            <Link
+              target="_blank"
+              className="w-[40px] h-[40px]"
+              href="https://www.monsterx.io/"
+            >
               <Image
                 alt="instagram"
                 src={imageHovered.monsterx}
