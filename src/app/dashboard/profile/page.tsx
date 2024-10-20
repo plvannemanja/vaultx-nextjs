@@ -9,6 +9,7 @@ import { userServices } from '@/services/supplier';
 import { trimString } from '@/utils/helpers';
 import { Copy, Heart } from 'lucide-react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 const profileFilters = [
@@ -82,6 +83,7 @@ const badges = [
 const desc = `Tellus est commodo nunc a montes. Tempus dolor convallis cras orci turpis sit aenean. Mi enim vitae proin facilisi. Sed tincidunt ullamcorper sed semper a. Rhoncus eu cras vel venenatis vel. Accumsan elit elementum viverra tellus lectus fermentum sapien. Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin. Porttitor tortor tristique cras sem leo in lacus. Etiam amet etiam at proin.`;
 
 export default function Page() {
+  const searchParams = useSearchParams();
   const favoriteService = new FavoriteService();
   const [loadMore, setLoadMore] = useState(false);
   const [likes, setLikes] = useState(0);
@@ -90,6 +92,11 @@ export default function Page() {
   const [filterbadge, setFilterBadge] = useState(badges[0].value);
   const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const getTab = searchParams.get('tab');
+    if (getTab) setFilterBadge(getTab);
+  }, [searchParams]);
 
   const handleLike = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {

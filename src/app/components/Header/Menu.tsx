@@ -146,10 +146,10 @@ export default function Menu() {
           <Link href="/dashboard/profile">My Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
-          <Link href="/dashboard/favourite">My Favorite</Link>
+          <Link href="/dashboard/profile?tab=fav">My Favorite</Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
-          <Link href="/dashboard/order">My Order</Link>
+          <Link href="/dashboard/profile?tab=order">My Order</Link>
         </DropdownMenuItem>
         {/* <DropdownMenuSub>
           <DropdownMenuSubTrigger>
@@ -178,10 +178,10 @@ export default function Menu() {
           </DropdownMenuPortal>
         </DropdownMenuSub> */}
         <div className="py-4 flex justify-between items-center px-2 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
-          <p>Language</p>
+          <p className="text-sm">Language</p>
           <div className="justify-start items-center gap-14 inline-flex">
-            <Select>
-              <SelectTrigger className="w-[100px] border-0 shadow-none focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none bg-[#161616] focus:ring-0">
+            <Select defaultValue="en">
+              <SelectTrigger className="w-[100px] border-0 py-0 shadow-none focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none bg-[#161616] focus:ring-0">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
               <SelectContent className="bg-[#161616] border-white/10">
