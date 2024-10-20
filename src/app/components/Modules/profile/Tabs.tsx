@@ -1,17 +1,18 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import { Button } from '@/components/ui/button';
 import {
-  collectionServices,
-  getAllUsersActivity,
-  saleServices,
-  userServices,
-} from '@/services/supplier';
-import { FavoriteService } from '@/services/FavoriteService';
-import NftServices from '@/services/nftService';
-import NftCard from '../../Cards/NftCard';
-import CurationCard from '../../Cards/CurationCard';
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { Label } from '@/components/ui/label';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popOver';
 import {
   Table,
   TableBody,
@@ -21,28 +22,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { trimString } from '@/utils/helpers';
-import { Label } from '@/components/ui/label';
-import { CreateSellService } from '@/services/createSellService';
-import Link from 'next/link';
-import ArtistsCard from '../../Cards/ArtistsCard';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popOver';
-import { Button } from '@/components/ui/button';
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useDebounce } from 'use-debounce';
+import { CreateSellService } from '@/services/createSellService';
+import { FavoriteService } from '@/services/FavoriteService';
+import NftServices from '@/services/nftService';
+import { collectionServices, getAllUsersActivity } from '@/services/supplier';
+import { trimString } from '@/utils/helpers';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { Check, Search } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import ArtistsCard from '../../Cards/ArtistsCard';
+import CurationCard from '../../Cards/CurationCard';
+import NftCard from '../../Cards/NftCard';
 
 const profileFilters = [
   {
@@ -465,35 +460,11 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
     <div className="flex flex-col gap-y-4">
       {/* Filters logic */}
       <div className="flex gap-4 my-4">
-        <div className="flex gap-x-2 items-center border border-[#FFFFFF1F] rounded-xl px-2 w-full">
-          <svg
-            width="20px"
-            height="20px"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            color="#fff"
-          >
-            <path
-              d="M17 17L21 21"
-              stroke="#fff"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-            <path
-              d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z"
-              stroke="#fff"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            ></path>
-          </svg>
-
+        <div className="flex gap-x-2 px-5 py-3 items-center border border-white/[12%] bg-[#232323]/[14%] rounded-xl w-full">
+          <Search className="w-5 h-5 text-white" />
           <input
             placeholder="Search by name or trait..."
-            className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font"
+            className="w-full bg-transparent border-none outline-none focus:outline-none azeret-mono-font placeholder:text-sm placeholder:text-white/50 text-white/50"
             value={filters.searchInput}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setFilters({
@@ -503,8 +474,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             }}
           />
         </div>
-
-        <div className="relative flex rounded min-w-[18rem] justify-between items-center px-3 py-2 bg-transparent text-white pl-[37px] border border-[#FFFFFF1F]">
+        <div className="relative flex bg-[#232323]/[14%] rounded-xl min-w-[18rem] justify-between items-center border border-white/10">
           <Popover
             open={categoryActive}
             onOpenChange={(val) => {
@@ -515,13 +485,13 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               <Button
                 variant="outline"
                 role="combobox"
-                className="w-full bg-dark justify-between"
+                className="w-full font-extrabold text-sm justify-between bg-transparent m-0 border-0 hover:bg-transparent"
               >
                 {filters[categoryTab]?.label}
                 <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
+            <PopoverContent className="min-w-[18rem] p-0">
               <Command className="w-full">
                 <CommandList>
                   <CommandGroup>

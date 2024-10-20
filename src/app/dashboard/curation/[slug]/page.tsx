@@ -282,13 +282,15 @@ export default function Page({ params }: { params: { slug: string } }) {
           />
         )}
         <div className="w-full absolute bottom-4 flex items-center justify-between px-5 z-20">
-          <div
-            className="flex gap-x-3 h-10 text-sm backdrop-blur-sm items-center p-3 rounded-xl text-white border border-white/[29%] cursor-pointer"
-            onClick={() => copyAddr()}
-          >
-            {trimString(user?.wallet)}
-            <Copy className="w-5 h-5" />
-          </div>
+          {user?.wallet && (
+            <div
+              className="flex gap-x-3 h-10 text-sm backdrop-blur-sm items-center p-3 rounded-xl text-white border border-white/[29%] cursor-pointer"
+              onClick={() => copyAddr()}
+            >
+              {trimString(user?.wallet)}
+              <Copy className="w-5 h-5" />
+            </div>
+          )}
           <div className="flex gap-4">
             <div className="flex px-5 py-3 backdrop-blur-sm h-12 rounded-full gap-x-3 p-3 border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
               <span className="font-medium">{likes}</span>
