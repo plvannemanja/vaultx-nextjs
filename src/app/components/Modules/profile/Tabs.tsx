@@ -93,11 +93,11 @@ const earnFilters = [
   },
   {
     label: 'Royalties',
-    value: 'Royalty Received',
+    value: 'Royalties',
   },
   {
     label: 'Split Payment',
-    value: 'Payment Received',
+    value: 'Split Payments',
   },
 ];
 
@@ -373,26 +373,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-            return {
-              ...item.nftId,
-            };
-          })
+          return {
+            ...item.nftId,
+          };
+        })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-            return {
-              ...item.artistId,
-            };
-          })
+          return {
+            ...item.artistId,
+          };
+        })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-            return {
-              ...item.collectionId,
-            };
-          })
+          return {
+            ...item.collectionId,
+          };
+        })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -440,6 +440,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
         filters: {
           [filters.filter.param]: filters.filter.value,
         },
+        searchInput: filters.searchInput
       });
 
       if (response.data) {
@@ -456,7 +457,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const fetchEarnings = async () => {
     try {
       const response = await createAndSellService.getEarnings({
-        filter: filters.filter.value,
+        filter: filters.earnFilter.value,
       });
 
       if (response.data) {
@@ -873,7 +874,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             ) : null}
 
             {favType === 'curation' &&
-            data?.[ProfileTabs.Favorite]?.likedCuration ? (
+              data?.[ProfileTabs.Favorite]?.likedCuration ? (
               data?.[ProfileTabs.Favorite]?.likedCuration?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedCuration?.map(
                   (item: any, index: number) => {
@@ -888,7 +889,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             ) : null}
 
             {favType === 'artist' &&
-            data?.[ProfileTabs.Favorite]?.likedArtist ? (
+              data?.[ProfileTabs.Favorite]?.likedArtist ? (
               data?.[ProfileTabs.Favorite]?.likedArtist?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedArtist?.map(
                   (item: any, index: number) => {
@@ -946,18 +947,18 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         </TableCell>
                         <TableCell className="flex items-center gap-x-3">
                           <img
-                            src={item.nftId.cloudinaryUrl}
+                            src={item.cloudinaryUrl}
                             className="w-12 h-12 object-contain  aspect-square rounded"
                           />
                           <span className="font-medium azeret-mono-font text-sm text-white">
-                            {item.nftId.name}
+                            {item.name}
                           </span>
                         </TableCell>
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
                           {item?.saleId?.ItemPurchasedOn
                             ? new Date(item?.saleId?.ItemPurchasedOn)
-                                .toLocaleString()
-                                .slice(0, 10)
+                              .toLocaleString()
+                              .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
@@ -1006,8 +1007,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                   Transaction Number (ID)
                 </TableHead>
                 <TableHead className="text-sm text-white">Title</TableHead>
-                <TableHead className="text-sm text-white">Earnings</TableHead>
-                <TableHead className="text-sm text-white">Date</TableHead>
+                <TableHead className="text-sm text-white"></TableHead>
+                <TableHead className="text-sm text-white"></TableHead>
                 <TableHead className="text-sm text-white">Status</TableHead>
                 <TableHead className="text-sm text-white">
                   View Details
@@ -1021,16 +1022,16 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                     return (
                       <TableRow className="border-white/[8%]" key={index}>
                         <TableCell className="font-medium text-[18px] text-white">
-                          #{item._id}
+                          {item._id}
                         </TableCell>
-                        <TableCell className="flex items-center gap-x-3">
+                        <TableCell>
                           <img
                             src={item.nftId.cloudinaryUrl}
                             className="w-10 aspect-square rounded"
                           />
                           <span>{item.nftId.name}</span>
                         </TableCell>
-                        <TableCell className="flex gap-x-2">
+                        <TableCell>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -1052,8 +1053,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         <TableCell>
                           {item?.createdAt
                             ? new Date(item?.createdAt)
-                                .toLocaleString()
-                                .slice(0, 10)
+                              .toLocaleString()
+                              .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell>{item?.state}</TableCell>
