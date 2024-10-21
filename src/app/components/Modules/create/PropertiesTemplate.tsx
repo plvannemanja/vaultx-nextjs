@@ -40,6 +40,10 @@ export default function PropertiesTemplate({
     fetchProperties();
     if (advancedDetails.propertyTemplateId) {
     }
+    setAdvancedDetails({
+      ...advancedDetails,
+      propertyTemplateId: "basic",
+    });
   }, []);
 
   const updateTemplate = (updatedProperties) => {
@@ -150,13 +154,13 @@ export default function PropertiesTemplate({
               handleTemplateSelect({
                 name: 'Basic Template',
                 attributes: defaultAttributes,
+                _id: "basic"
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-              !advancedDetails.propertyTemplateId
-                ? 'border-neon'
-                : 'border-none'
-            }`}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === "basic"
+              ? 'border-neon'
+              : 'border-none'
+              }`}
           >
             <p>Basic Template</p>
           </div>
@@ -165,11 +169,10 @@ export default function PropertiesTemplate({
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
-                advancedDetails.propertyTemplateId === item._id
-                  ? 'border-neon'
-                  : 'border-none'
-              }`}
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${advancedDetails.propertyTemplateId === item._id
+                ? 'border-neon'
+                : 'border-none'
+                }`}
             >
               <p>{item.name}</p>
               <button

@@ -320,7 +320,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 hidden">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   <img src="/icons/add-new.svg" className="w-6 h-6" />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
