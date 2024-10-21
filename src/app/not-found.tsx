@@ -1,6 +1,6 @@
 import NotFoundAll from '@/components/sections/not-found-all';
 
-const NotFoundPage = (props) => {
+const NotFoundPage = () => {
   return (
     <div className="">
       <NotFoundAll />

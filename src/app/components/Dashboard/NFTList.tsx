@@ -8,8 +8,7 @@ const createTitleComp = (
   title: string,
   color: Array<{ word: number; color: string }>,
 ) => {
-  if (!title || !color)
-    return null;
+  if (!title || !color) return null;
   return (
     <h3 className="m-0">
       {title.split(' ').map((word, index) => {
@@ -44,8 +43,7 @@ export default function NFTList({ color }: { color: any }) {
         //     !nft.ownerInfo?.[0]?.active &&
         //     !nft.curationInfo?.[0].active,
         // )
-        ?.slice(0, 4)
-        ;
+        ?.slice(0, 4);
       setNfts(filterNFTs);
     } catch (error) {
       setNfts([]);
@@ -57,6 +55,10 @@ export default function NFTList({ color }: { color: any }) {
     getNfts();
   }, []);
 
-
-  return <BaseCarousel heading={createTitleComp("Appreciate & Explore", color)} data={nfts} />;
+  return (
+    <BaseCarousel
+      heading={createTitleComp('Appreciate & Explore', color)}
+      data={nfts}
+    />
+  );
 }

@@ -1,7 +1,9 @@
 'use client';
 
 import { chain } from '@/lib/contract';
+import { createCookie } from '@/lib/cookie';
 import { protocolFee } from '@/lib/helper';
+import { authenticationServices, getMedia } from '@/services/supplier';
 import {
   createContext,
   ReactNode,
@@ -9,16 +11,14 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { Address } from 'thirdweb';
 import {
   useActiveAccount,
   useActiveWalletChain,
   useSwitchActiveWalletChain,
 } from 'thirdweb/react';
-import { SignUpModal } from '../Modules/SignUp';
-import { Address } from 'thirdweb';
-import { authenticationServices, getMedia } from '@/services/supplier';
-import { createCookie } from '@/lib/cookie';
 import { checksumAddress } from 'viem';
+import { SignUpModal } from '../Modules/SignUp';
 
 export interface Iimages {
   homeAutority: Array<{ image: string; link: string }>;
@@ -64,10 +64,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   const fetchUser = async () => {
     if (!activeAccount) return;
-
     try {
       const address = checksumAddress(activeAccount?.address) as Address;
-
       const { data } = await authenticationServices.connectWallet({
         wallet: address,
       });
@@ -87,6 +85,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     } else {
       setUser(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeAccount]);
 
   useEffect(() => {
@@ -95,13 +94,16 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     if (activeAccount?.address) {
       fetchUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (activeChain && activeChain.id !== chain.id) {
       switchChain(chain);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeChain]);
+
   return (
     <globalContext.Provider
       value={{

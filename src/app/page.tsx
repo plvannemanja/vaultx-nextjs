@@ -1,22 +1,22 @@
 'use client';
 
-import { BaseHeader } from './components/Header/BaseHeader';
-import BaseFooter from './components/Footer/BaseFooter';
-import NFTList from './components/Dashboard/NFTList';
-import { collectionServices, getMedia } from '@/services/supplier';
-import TrendingList from './components/Dashboard/TrendingList';
-import axios from 'axios';
-import NewsCard from './components/ui/NewsCard';
-import ArtistsCard from './components/Cards/ArtistsCard';
 import { Label } from '@/components/ui/label';
-import ExceptionalCard from './components/Cards/ExceptionalCard';
-import { useEffect, useState } from 'react';
-import { AutoCarousel } from './components/Carousels/AutoCarousel';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGlobalContext } from './components/Context/GlobalContext';
+import { collectionServices } from '@/services/supplier';
+import { extractIdFromURL } from '@/utils/helpers';
+import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ensureValidUrl, extractIdFromURL } from '@/utils/helpers';
+import { useEffect, useState } from 'react';
+import ArtistsCard from './components/Cards/ArtistsCard';
+import ExceptionalCard from './components/Cards/ExceptionalCard';
+import { AutoCarousel } from './components/Carousels/AutoCarousel';
+import { useGlobalContext } from './components/Context/GlobalContext';
+import NFTList from './components/Dashboard/NFTList';
+import TrendingList from './components/Dashboard/TrendingList';
+import BaseFooter from './components/Footer/BaseFooter';
+import { BaseHeader } from './components/Header/BaseHeader';
+import NewsCard from './components/ui/NewsCard';
 
 interface Isection1 {
   title: string;
@@ -71,7 +71,7 @@ const createTitleComp = (
   color: Array<{ word: number; color: string }>,
 ) => {
   return (
-    <h1 className="text-2xl font-medium lg:text-4xl lg:font-bold text-center">
+    <h1 className="text-[35px] font-extrabold manrope-font lg:text-[40px] lg:font-extrabold text-center">
       {title.split(' ').map((word, index) => {
         const colorIndex = color.findIndex((item) => item.word === index + 1);
         return (
@@ -116,13 +116,15 @@ export default function Home() {
           data.section3.box.map(async (item: string) => {
             const {
               data: { collection },
-            } = await collectionServices.getCollectionById(extractIdFromURL(item));
+            } = await collectionServices.getCollectionById(
+              extractIdFromURL(item),
+            );
 
             return collection ? collection : null;
-          })
+          }),
         );
       }
-      curationsList = curationsList.filter(Boolean)
+      curationsList = curationsList.filter(Boolean);
       setCurations(curationsList);
     };
 
@@ -136,24 +138,11 @@ export default function Home() {
       ) : (
         <Skeleton className="w-full h-[400px]" />
       )}
-      <div className="py-20 w-full px-10 lg:px-20 lg:relative">
-        <img
-          src="/illustrations/circle-outline-half.png"
-          className="hidden lg:block absolute left-0 top-[28.5rem]"
-        />
-        <img
-          src="/illustrations/circle-outline.png"
-          className="hidden lg:block absolute left-24"
-        />
-        <img
-          src="/illustrations/circle-outline.png"
-          className="hidden lg:block absolute right-16 bottom-[10rem]"
-        />
-        <img
-          src="/illustrations/circle-filled.png"
-          className="hidden lg:block absolute right-12 top-[10rem]"
-        />
-
+      <div className="py-10 w-full px-10 lg:px-20 lg:relative">
+        <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] border-l-transparent border-t-transparent -rotate-45 hidden lg:block absolute -left-4 top-[28.5rem]"></div>
+        <div className="w-7 h-7 border-2 rounded-full border-[#DDF247] hidden lg:block absolute left-24"></div>
+        <div className="w-4 h-4 rounded-full bg-[#DDF247] hidden lg:block absolute right-12 top-[10rem]"></div>
+        <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] hidden lg:block absolute right-16 bottom-[10rem]"></div>
         {section1 ? (
           <>
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap">
@@ -161,7 +150,7 @@ export default function Home() {
                 ? createTitleComp(section1.title, section1.color)
                 : null}
               {section1.description ? (
-                <Label className="text-sm md:text-lg">
+                <Label className="text-lg font-monserrat text-[#D2D2D2] font-normal">
                   {section1.description}
                 </Label>
               ) : null}
@@ -169,48 +158,76 @@ export default function Home() {
             <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
-                  return (
-                    <ArtistsCard
-                      key={index}
-                      image={item.image}
-                      title={item.title}
-                      subtitle1={item.subtitle1}
-                      subtitle2={item.subtitle2}
-                    />
-                  );
-                })
+                    return (
+                      <ArtistsCard
+                        key={index}
+                        image={item.image}
+                        title={item.title}
+                        subtitle1={item.subtitle1}
+                        subtitle2={item.subtitle2}
+                      />
+                    );
+                  })
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10 relative">
               <button className="px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300">
                 Discover Artist
               </button>
-              <div className="absolute top-[1rem] w-[68rem] lg:flex justify-center hidden">
-                <img
+              <div className="absolute -top-[2rem] w-[68rem] lg:flex justify-center hidden">
+                <Image
                   src="/illustrations/neon-grid.png"
                   alt="neon-grid"
                   className="w-[60rem]"
+                  width={960}
+                  height={960}
                 />
               </div>
             </div>
           </>
         ) : null}
       </div>
-      <div className="py-20">
-        <div className="flex justify-center">
-          <TrendingList data={section2} />
-        </div>
+      <div className="py-10">
+        <TrendingList data={section2} />
         {section3 ? (
-          <div className="py-20 lg:relative">
-            <img
-              src="/illustrations/left-lines.png"
-              className="hidden lg:block absolute w-24 left-0 top-[30rem]"
-            />
-            <img
+          <div className="py-[60px] lg:relative">
+            <div className="hidden lg:block absolute left-0 top-[30rem]">
+              <svg
+                width="202"
+                height="292"
+                viewBox="0 0 202 292"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M134.42 89.3691L133.836 224.467L-1.26188 223.882"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M112.299 67.0547L111.715 202.152L-23.383 201.568"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M90.1758 44.7402L89.5915 179.838L-45.506 179.254"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M68.0547 22.4277L67.4705 157.525L-67.6271 156.941"
+                  stroke="#DDF247"
+                />
+                <path
+                  d="M45.9336 0.113281L45.3494 135.211L-89.7482 134.627"
+                  stroke="#DDF247"
+                />
+              </svg>
+            </div>
+            <Image
               src="/illustrations/circle-half-translucent.png"
               className="hidden lg:block absolute w-24 right-0"
+              alt="circle-half-translucent"
+              width={10}
+              height={10}
             />
-
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
                 ? createTitleComp(section3.title, section3.color)
@@ -220,44 +237,44 @@ export default function Home() {
                   {section3.description}
                 </Label>
               ) : null}
-
-              <div className="absolute top-20 w-[36rem]">
-                <img
+              {/* <div className="absolute top-20 w-[36rem]">
+                <Image
                   height={100}
                   width={100}
                   src="/illustrations/important.png"
                   alt="neon-grid"
                   className="w-[36rem] pl-7 mt-4"
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
-              {
-                curations.map((item: any, index: number) => {
-                  return (
-                    <ExceptionalCard
-                      key={index}
-                      logo={item.logo}
-                      name={item.name}
-                      id={item._id}
-                    />
-                  );
-                })
-              }
+              {curations.map((item: any, index: number) => {
+                return (
+                  <ExceptionalCard
+                    key={index}
+                    logo={item.logo}
+                    name={item.name}
+                    id={item._id}
+                  />
+                );
+              })}
             </div>
           </div>
         ) : null}
         <div className="flex justify-center lg:relative lg:bg-[url('/illustrations/wave-top-left-bottom-right.png')]">
-          <img
+          <Image
             src="/illustrations/right-lines.png"
+            alt="illustration"
             className="hidden lg:block absolute w-24 right-0 top-[15rem]"
+            width={96}
+            height={96}
           />
 
           <NFTList color={section2?.color} />
         </div>
       </div>
       {section4 ? (
-        <div className="py-20 lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')]">
+        <div className="py-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')]">
           <NewsCard
             heading={createTitleComp(section4.title, section4.color)}
             description={section4.description}
@@ -265,22 +282,17 @@ export default function Home() {
           />
         </div>
       ) : null}
-      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto ">
-        {
-          images?.bottomBaner && (
-            <Link
-              href={images?.bottomBaner.link}
-              target='_blank'
-            >
-              <Image
-                src={images?.bottomBaner.image}
-                alt="bottom-banner"
-                layout='fill'
-                objectFit='cover'
-              ></Image>
-            </Link>
-          )
-        }
+      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
+        {images?.bottomBaner && (
+          <Link href={images?.bottomBaner.link} target="_blank">
+            <Image
+              src={images?.bottomBaner.image}
+              alt="bottom-banner"
+              layout="fill"
+              objectFit="cover"
+            ></Image>
+          </Link>
+        )}
         {/* MonsterX Heading */}
         {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX

@@ -1,6 +1,5 @@
 'use client';
 
-import { client } from '@/lib/client';
 import { DropdownIcon } from '@/components/Icon/ProfileIcon';
 import {
   DropdownMenu,
@@ -10,8 +9,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { client } from '@/lib/client';
+import { chain } from '@/lib/contract';
 import { Copy, Power } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import {
   useActiveAccount,
   useActiveWallet,
@@ -21,17 +40,7 @@ import {
   useWalletImage,
 } from 'thirdweb/react';
 import { WalletId } from 'thirdweb/wallets';
-import { useEffect, useState } from 'react';
-import { chain } from '@/lib/contract';
 import { useGlobalContext } from '../Context/GlobalContext';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 interface WalletDetailProps {
   walletId: WalletId;
@@ -97,7 +106,7 @@ export default function Menu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
+        <div className="max-w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
           <Image
             className="shrink-0 rounded-full object-cover w-10 h-10"
             width={40}
@@ -113,9 +122,9 @@ export default function Menu() {
           </div>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[325px] p-4 relative bg-neutral-900 rounded-[20px] shadow !text-base">
+      <DropdownMenuContent className="w-[325px] border-0 p-4 relative bg-[#161616] rounded-[20px] shadow !text-base">
         <DropdownMenuLabel>
-          <div className="w-[109px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
+          <div className="justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
               className="shrink-0 rounded-full object-cover h-10 w-10"
               width={40}
@@ -132,31 +141,72 @@ export default function Menu() {
             </div>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="my-1">
+        <DropdownMenuSeparator className="m-0 border-white/[4%]" />
+        <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
           <Link href="/dashboard/profile">My Profile</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="my-1">
-          <Link href="/dashboard/favourite">My Favorite</Link>
+        <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
+          <Link href="/dashboard/profile?tab=fav">My Favorite</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="my-1">
-          <Link href="/dashboard/order">My Order</Link>
+        <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
+          <Link href="/dashboard/profile?tab=order">My Order</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="my-1">
-          Language
-          <div className="w-[109px] h-8 absolute right-0 justify-start items-center gap-14 inline-flex">
-            <div className="text-center text-white font-extrabold capitalize">
+        {/* <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            Language
+            <div className="w-[109px] h-8 absolute right-0 justify-start items-center gap-14 inline-flex">
+              <div className="text-center text-white font-extrabold capitalize">
+                En
+              </div>
+              <div className="relative w-4">
+                <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
+              </div>
+            </div>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem>
+                <span>English</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <span>China</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <span>Germany</span>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub> */}
+        <div className="py-4 flex justify-between items-center px-2 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
+          <p className="text-sm">Language</p>
+          <div className="justify-start items-center gap-14 inline-flex">
+            <Select defaultValue="en">
+              <SelectTrigger className="w-[100px] border-0 py-0 shadow-none focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none bg-[#161616] focus:ring-0">
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#161616] border-white/10">
+                <SelectGroup>
+                  <SelectLabel>Language</SelectLabel>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="cn">China</SelectItem>
+                  <SelectItem value="gr">Germany</SelectItem>
+                  <SelectItem value="fr">France</SelectItem>
+                  <SelectItem value="it">Italy</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {/* <div className="text-center text-white font-extrabold capitalize">
               En
             </div>
             <div className="relative w-4">
               <DropdownIcon className="shrink-0 my-auto w-3 aspect-square" />
-            </div>
+            </div> */}
           </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
+        </div>
+        <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
           <Link href="/dashboard/settings">Settings</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem className="py-4 border-b border-white/[4%] bg-transparent hover:bg-transparent font-extrabold">
           <Link href="/dashboard/helpCenter">Help Center</Link>
         </DropdownMenuItem>
         <div className="w-full mt-4">

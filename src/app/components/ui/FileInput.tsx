@@ -79,9 +79,12 @@ export default function FileInput({
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <div className={cn("relative file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex",
-        showIcon && 'pr-10',
-      )}>
+      <div
+        className={cn(
+          'relative file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex',
+          showIcon && 'pr-10',
+        )}
+      >
         <BaseButton
           title="Upload"
           variant="secondary"

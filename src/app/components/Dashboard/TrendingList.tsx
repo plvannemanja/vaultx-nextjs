@@ -1,9 +1,9 @@
 'use client';
 
 import NftServices from '@/services/nftService';
+import { extractIdFromURL } from '@/utils/helpers';
 import { useEffect, useState } from 'react';
 import { BaseCarousel } from '../Carousels/BaseCarousel';
-import { extractIdFromURL } from '@/utils/helpers';
 
 interface TrendingProps {
   data: any;
@@ -13,8 +13,7 @@ const createTitleComp = (
   title: string,
   color: Array<{ word: number; color: string }>,
 ) => {
-  if (!title)
-    return null;
+  if (!title) return null;
   return (
     <h3 className="m-0">
       {title.split(' ').map((word, index) => {
@@ -58,5 +57,10 @@ export default function TrendingList({ data }: TrendingProps) {
     getTrendingNfts();
   }, [data]);
 
-  return <BaseCarousel heading={createTitleComp(data?.title, data?.color)} data={icafNfts} />;
+  return (
+    <BaseCarousel
+      heading={createTitleComp(data?.title, data?.color)}
+      data={icafNfts}
+    />
+  );
 }

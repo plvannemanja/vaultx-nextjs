@@ -1,27 +1,28 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@headlessui/react';
-import BaseButton from '../../ui/BaseButton';
-import {
-  CreateNFTProvider,
-  useCreateNFT,
-} from '../../Context/CreateNFTContext';
-import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
+import { useToast } from '@/hooks/use-toast';
+import { CategoryService } from '@/services/catergoryService';
 import { CreateNftServices } from '@/services/createNftService';
+import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Textarea,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
-import ShippingInfo from '../ShippingInfo';
-import ContactInfo from '../ContactInfo';
-import { acceptedFormats, maxFileSize } from '@/utils/helpers';
-import { CategoryService } from '@/services/catergoryService';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+import {
+  CreateNFTProvider,
+  useCreateNFT,
+} from '../../Context/CreateNFTContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { useToast } from '@/hooks/use-toast';
+import BaseButton from '../../ui/BaseButton';
+import ContactInfo from '../ContactInfo';
+import ShippingInfo from '../ShippingInfo';
 
 interface IEditNFT {
   category: any;
@@ -162,26 +163,29 @@ const Modal = ({
       });
       setAttachments([...NFTDetail.attachments, null]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <div className="flex flex-col gap-y-6 w-full p-[30px]">
-        <h2 className="text-[30px] font-bold pb-[2px]"> Edit RWA </h2>
-        <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+      <div className="flex flex-col gap-y-6 w-full p-2">
+        <h2 className="text-[30px] manrope-font font-bold pb-[2px]">
+          Edit RWA
+        </h2>
+        <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-2 bg-[#232323]">
           <Disclosure as="div" defaultOpen={true}>
             {({ open }) => (
               <>
-                <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                  <span>Attachment</span>
+                <DisclosureButton className="flex w-full justify-between pb-5 text-left text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
+                  <span className="font-semibold">Attachment</span>
                   <ChevronUpIcon
                     className={`${
                       open ? 'rotate-180 transform' : ''
                     } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
-                <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                  <div className="flex gap-4 flex-wrap my-2">
+                <DisclosurePanel className="pt-5 text-sm text-white rounded-b-lg">
+                  <div className="flex gap-4 flex-wrap">
                     <input
                       type="file"
                       className="hidden"
@@ -213,10 +217,12 @@ const Modal = ({
                               >
                                 Change
                               </span>
-                              <img
+                              <Image
                                 src="/icons/trash.svg"
                                 alt="attachment"
                                 className="w-5 h-5"
+                                width={20}
+                                height={20}
                                 onClick={() => removeAttachment(index)}
                               />
                             </div>
@@ -228,10 +234,12 @@ const Modal = ({
                               <span className="text-neon  font-bold text-[13px]">
                                 Upload
                               </span>
-                              <img
+                              <Image
                                 src="/icons/upload.svg"
                                 alt="attachment"
                                 className="w-5 h-5"
+                                width={20}
+                                height={20}
                               />
                             </div>
                           )}
@@ -246,23 +254,25 @@ const Modal = ({
         </div>
         <div className="flex flex-col gap-y-2">
           <Label className="text-lg font-medium">Category</Label>
-          <select
-            aria-label="Select category"
-            // className="h-10 rounded-md px-2 w-full"
-            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl justify-start items-center gap-[30px] inline-flex"
-            name="country"
-            onChange={(e) => {
-              setFormData({ ...formData, category: (e.target as any).value });
-            }}
-            value={formData.category}
-          >
-            <option value="">Select</option>
-            {categories.map((item: any) => (
-              <option key={item._id} value={item._id}>
-                {item.name}
-              </option>
-            ))}
-          </select>
+          <div className="bg-[#232323] rounded-xl pr-4">
+            <select
+              aria-label="Select category"
+              // className="h-10 rounded-md px-2 w-full"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+              name="country"
+              onChange={(e) => {
+                setFormData({ ...formData, category: (e.target as any).value });
+              }}
+              value={formData.category}
+            >
+              <option value="">Select</option>
+              {categories.map((item: any) => (
+                <option key={item._id} value={item._id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <div className="flex w-full flex-col">
           <h2 className="font-bold text-[#ffffff] text-[14px] mb-[15px]">

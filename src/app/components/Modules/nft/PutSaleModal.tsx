@@ -26,22 +26,22 @@ import { CreateNftServices } from '@/services/createNftService';
 import { z } from 'zod';
 
 const addressSchema = z.object({
-  username: z.string().nonempty("User name is invalid"),
+  username: z.string().nonempty('User name is invalid'),
   email: z.string().email({ message: 'Email is invalid' }),
   description: z.string(),
   accepted: z.boolean().refine((val) => val === true, {
-    message: "The value must be true.",
+    message: 'The value must be true.',
   }),
   country: z.object({
-    name: z.string().nonempty("country name is invalid"),
+    name: z.string().nonempty('country name is invalid'),
   }),
   city: z.object({
-    name: z.string().nonempty("city name is invalid"),
+    name: z.string().nonempty('city name is invalid'),
   }),
   state: z.object({
-    name: z.string().nonempty("state name is invalid"),
+    name: z.string().nonempty('state name is invalid'),
   }),
-  address1: z.string().nonempty("address 1 is invalid"),
+  address1: z.string().nonempty('address 1 is invalid'),
   postalCode: z.string(),
   phoneNumber: z.string().nonempty(),
 });
@@ -93,11 +93,11 @@ export default function PutSaleModal({
     price: nft.price,
   });
   const [sellerInfo, setSellerInfo] = useState({
-    country: '',
+    country: null,
     address1: '',
     address2: '',
-    state: '',
-    city: '',
+    state: null,
+    city: null,
     postalCode: '',
     phoneNumber: '',
   });
@@ -250,7 +250,7 @@ export default function PutSaleModal({
     //TODO validate Form Data
     const result = addressSchema.safeParse({
       ...formData,
-      ...sellerInfo
+      ...sellerInfo,
     });
 
     if (!result.success) {
@@ -371,8 +371,9 @@ export default function PutSaleModal({
                             Give a new price to put this asset for sale.
                           </span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -402,8 +403,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Buyer Information</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -427,7 +429,9 @@ export default function PutSaleModal({
                                 placeholder="Enter your username"
                               />
                               {addressError?.username && (
-                                <p className="text-red-500 text-sm">{addressError.username}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.username}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-y-2 w-[32%]">
@@ -447,7 +451,9 @@ export default function PutSaleModal({
                                 placeholder="Enter your email"
                               />
                               {addressError?.email && (
-                                <p className="text-red-500 text-sm">{addressError.email}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.email}
+                                </p>
                               )}
                             </div>
 
@@ -473,7 +479,9 @@ export default function PutSaleModal({
                                 ))}
                               </select>
                               {addressError?.country && (
-                                <p className="text-red-500 text-sm">{addressError.country}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.country}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -490,8 +498,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Shipping Address*</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -510,7 +519,9 @@ export default function PutSaleModal({
                                 placeholder="Enter address"
                               />
                               {addressError?.address1 && (
-                                <p className="text-red-500 text-sm">{addressError.address1}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.address1}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-y-2 lg:w-[48%]">
@@ -562,7 +573,9 @@ export default function PutSaleModal({
                                 ))}
                               </select>
                               {addressError?.state && (
-                                <p className="text-red-500 text-sm">{addressError.state}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.state}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-y-2 lg:w-[32%]">
@@ -592,7 +605,9 @@ export default function PutSaleModal({
                                 ))}
                               </select>
                               {addressError?.city && (
-                                <p className="text-red-500 text-sm">{addressError.city}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.city}
+                                </p>
                               )}
                             </div>
                             <div className="flex flex-col gap-y-2 lg:w-[32%]">
@@ -617,7 +632,9 @@ export default function PutSaleModal({
                                 placeholder="Enter postcode"
                               />
                               {addressError?.postalCode && (
-                                <p className="text-red-500 text-sm">{addressError.postalCode}</p>
+                                <p className="text-red-500 text-sm">
+                                  {addressError.postalCode}
+                                </p>
                               )}
                             </div>
                           </div>
@@ -647,7 +664,9 @@ export default function PutSaleModal({
                               }
                             />
                             {addressError?.phoneNumber && (
-                              <p className="text-red-500 text-sm">{addressError.phoneNumber}</p>
+                              <p className="text-red-500 text-sm">
+                                {addressError.phoneNumber}
+                              </p>
                             )}
                           </div>
                         </DisclosurePanel>
@@ -662,8 +681,9 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Contact Information For Seller</span>
                           <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -697,8 +717,9 @@ export default function PutSaleModal({
                               information
                             </span>
                             <ChevronUpIcon
-                              className={`${open ? 'rotate-180 transform' : ''
-                                } h-5 w-5 text-white`}
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                             />
                           </div>
                           <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
@@ -751,7 +772,9 @@ export default function PutSaleModal({
                   </div>
 
                   {addressError?.accepted && (
-                    <p className="text-red-500 text-sm">{addressError.accepted}</p>
+                    <p className="text-red-500 text-sm">
+                      {addressError.accepted}
+                    </p>
                   )}
                 </div>
 

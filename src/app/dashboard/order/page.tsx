@@ -1,5 +1,6 @@
 'use client';
 
+import SelectMenu, { prices } from '@/app/components/ui/SelectMenu';
 import {
   Table,
   TableBody,
@@ -9,12 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CreateSellService } from '@/services/createSellService';
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import moment from 'moment';
-import SelectMenu, { prices } from '@/app/components/ui/SelectMenu';
 import { useToast } from '@/hooks/use-toast';
+import { CreateSellService } from '@/services/createSellService';
+import moment from 'moment';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const { toast } = useToast();
@@ -91,7 +91,6 @@ export default function Page() {
           <SelectMenu data={prices} />
         </div>
       </div>
-
       <Table>
         <TableCaption>A list of your recent orders.</TableCaption>
         <TableHeader>

@@ -48,12 +48,12 @@ const accountLinks = [
   },
   {
     name: 'My favorite',
-    value: 'favourite',
+    value: 'profile?tab=fav',
     icon: () => <FavoriteIcon />,
   },
   {
     name: 'My Order',
-    value: 'order',
+    value: 'profile?tab=order',
     icon: () => <MyOrderIcon />,
   },
   {

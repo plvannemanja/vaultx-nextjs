@@ -10,7 +10,7 @@ interface INftCardProps {
   curation: {
     name: string;
   };
-  curationInfo?: any[],
+  curationInfo?: any[];
   price: string;
   artist?: string;
 }

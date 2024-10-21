@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,7 @@ import {
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { z } from 'zod';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
@@ -65,6 +67,7 @@ export default function BasicDetails({
   const leftAmount = useMemo(() => {
     if (isNaN(basicDetail.price)) return 0;
     return Number(basicDetail.price) - (Number(basicDetail.price) * fee) / 100;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basicDetail.price]);
 
   const create = async () => {
@@ -181,6 +184,7 @@ export default function BasicDetails({
     if (curations.length === 0) {
       fetchUserCollections();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -200,10 +204,12 @@ export default function BasicDetails({
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px] ">
-              <img
+              <Image
                 src="/icons/upload.svg"
                 alt="upload"
                 className="w-[66px] h-[66px]"
+                width={66}
+                height={66}
               />
               <div className="flex flex-col gap-y-1 font-manrope">
                 <p className="text-center text-white text-lg font-extrabold">
@@ -229,10 +235,12 @@ export default function BasicDetails({
                 <p className="text-[#161616] text-sm font-extrabold font-Manrope capitalize">
                   Browse file
                 </p>
-                <img
+                <Image
                   src="/icons/arrow_ico.svg"
                   alt=""
                   className="w-[18px] h-[18px] "
+                  width={18}
+                  height={18}
                 />
               </span>{' '}
             </button>
@@ -351,7 +359,13 @@ export default function BasicDetails({
                   className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
                   trigger={
                     <div className="flex cursor-pointer justify-center relative gap-x-2 items-center w-full h-full bg-[#DDF247]/[9%] rounded-md">
-                      <img src="/icons/add-new.svg" className="w-5 h-5" />
+                      <Image
+                        width={20}
+                        height={20}
+                        alt="icon"
+                        src="/icons/add-new.svg"
+                        className="w-5 h-5"
+                      />
                       <p className="text-center text-sm text-[#DDF247]">
                         Add Artist
                       </p>
