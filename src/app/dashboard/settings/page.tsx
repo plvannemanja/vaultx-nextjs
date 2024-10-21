@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import { userServices } from '@/services/supplier';
 import { checkUrl } from '@/utils/helpers';
 import {
@@ -140,22 +141,50 @@ export default function Page() {
   }, []);
   return (
     <CreateNFTProvider>
-      <div className="flex flex-col gap-y-4 px-4">
-        <div className="w-full justify-center items-center">
-          <p className="text text-[32px] font-extrabold">Edit Profile</p>
+      <div className="flex flex-col px-4">
+        <div className="w-full justify-center items-center mb-[40px]">
+          <p className="text-center text-[32px] font-extrabold">Edit Profile</p>
         </div>
-        <div className="flex flex-col gap-y-6 w-full">
-          <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+        <div className="w-full flex flex-col gap-y-5">
+          <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
                 <>
-                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                    <span>Edit your avatar</span>
+                  <DisclosureButton
+                    className={cn(
+                      'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                      open ? 'border-b border-white/[8%]' : '',
+                    )}
+                  >
+                    <div className="flex w-full justify-between items-center">
+                      <Label className="font-extrabold text-xl text-white">
+                        Edit your avatar
+                      </Label>
+                      <div className="flex justify-center">
+                        {/* {formData.bannerImage && (
+                          <span
+                            className="cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFormData({ ...formData, bannerImage: null });
+                            }}
+                          >
+                            Remove
+                          </span>
+                        )} */}
+                        <ChevronUpIcon
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
+                        />
+                      </div>
+                    </div>
+                    {/* <span>Edit your avatar</span>
                     <ChevronUpIcon
                       className={`${
                         open ? 'rotate-180 transform' : ''
                       } h-5 w-5 text-white`}
-                    />
+                    /> */}
                   </DisclosureButton>
                   <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
                     <div className="flex gap-x-4 items-center my-5">
@@ -187,224 +216,217 @@ export default function Page() {
               )}
             </Disclosure>
           </div>
-        </div>
 
-        <div className="w-full flex flex-col gap-y-5 mt-5">
-          <div className="flex flex-col gap-y-6 w-full">
-            <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-              <Disclosure as="div" defaultOpen={true}>
-                {({ open }) => (
-                  <>
-                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                      <span>Edit your cover image</span>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
-                      />
-                    </DisclosureButton>
-                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                      <div className="flex gap-x-4 items-center my-5">
-                        {formData.cover ? (
-                          <img
-                            src={
-                              typeof formData.cover === 'string'
-                                ? formData.cover
-                                : URL.createObjectURL(formData.cover)
-                            }
-                            alt="cover"
-                            className="w-28 h-28 object-cover rounded-full"
-                          />
-                        ) : (
-                          <div className="w-28 h-28 rounded-full bg-black"></div>
-                        )}
-                        <div className="w-6/12">
-                          <FileInput
-                            title="Upload a new banner"
-                            subtitle="JPEG 100x100"
-                            onFileSelect={(file: any) =>
-                              handleFileChange(file, 'cover')
-                            }
-                          />
-                        </div>
+          <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Edit your cover image</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="flex gap-x-4 items-center my-5">
+                      {formData.cover ? (
+                        <img
+                          src={
+                            typeof formData.cover === 'string'
+                              ? formData.cover
+                              : URL.createObjectURL(formData.cover)
+                          }
+                          alt="cover"
+                          className="w-28 h-28 object-cover rounded-full"
+                        />
+                      ) : (
+                        <div className="w-28 h-28 rounded-full bg-black"></div>
+                      )}
+                      <div className="w-6/12">
+                        <FileInput
+                          title="Upload a new banner"
+                          subtitle="JPEG 100x100"
+                          onFileSelect={(file: any) =>
+                            handleFileChange(file, 'cover')
+                          }
+                        />
                       </div>
-                    </DisclosurePanel>
-                  </>
-                )}
-              </Disclosure>
-            </div>
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="flex flex-col gap-y-6 w-full">
-            <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-              <Disclosure as="div" defaultOpen={true}>
-                {({ open }) => (
-                  <>
-                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                      <span>Basic Information</span>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
-                      />
-                    </DisclosureButton>
-                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                      <div className="mt-5 flex gap-x-3">
-                        <div className="flex flex-col gap-y-2 basis-1/2 mb-4">
-                          <Label className="fo mb-4 font-bold">Username</Label>
-                          <Input
-                            value={formData.username ? formData.username : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                username: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                            type="text"
-                            placeholder="Enter your username"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-y-2 basis-1/2 mb-4">
-                          <Label className="font-medium mb-4">
-                            Email Address
-                          </Label>
-                          <Input
-                            value={formData.email ? formData.email : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                email: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] "
-                            type="text"
-                            placeholder="Enter your email"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-y-2 mt-2">
-                        <Label className="font-medium mb-4">Your Bio</Label>
-                        <Textarea
-                          value={formData.bio ? formData.bio : ''}
+          <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Basic Information</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="mt-5 flex gap-x-3">
+                      <div className="flex flex-col gap-y-2 basis-1/2 mb-4">
+                        <Label className="fo mb-4 font-bold">Username</Label>
+                        <Input
+                          value={formData.username ? formData.username : ''}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
-                              bio: (e.target as any).value,
+                              username: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
-                          placeholder="Say something about yourself"
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your username"
                         />
                       </div>
-                    </DisclosurePanel>
-                  </>
-                )}
-              </Disclosure>
-            </div>
+                      <div className="flex flex-col gap-y-2 basis-1/2 mb-4">
+                        <Label className="font-medium mb-4">
+                          Email Address
+                        </Label>
+                        <Input
+                          value={formData.email ? formData.email : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              email: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] "
+                          type="text"
+                          placeholder="Enter your email"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-y-2 mt-2">
+                      <Label className="font-medium mb-4">Your Bio</Label>
+                      <Textarea
+                        value={formData.bio ? formData.bio : ''}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            bio: (e.target as any).value,
+                          })
+                        }
+                        className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
+                        placeholder="Say something about yourself"
+                      />
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
-          <div className="flex flex-col gap-y-6 w-full">
-            <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-              <Disclosure as="div" defaultOpen={true}>
-                {({ open }) => (
-                  <>
-                    <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                      <span>Your links</span>
-                      <ChevronUpIcon
-                        className={`${
-                          open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white`}
-                      />
-                    </DisclosureButton>
-                    <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                      <div className="mt-5 flex gap-x-3">
-                        <div className="flex flex-col gap-y-2 basis-1/2">
-                          <Label className="font-medium text-[14px]">
-                            Website
-                          </Label>
-                          <Input
-                            value={formData.website ? formData.website : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                website: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
-                            type="text"
-                            placeholder="Enter your website link"
-                            showIcon
-                          />
-                        </div>
-                        <div className="flex flex-col gap-y-2 basis-1/2">
-                          <Label className="font-medium text-[14px]">
-                            X(Twitter)
-                          </Label>
-                          <Input
-                            value={formData.twitter ? formData.twitter : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                twitter: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
-                            type="text"
-                            placeholder="Enter your twitter link"
-                            showIcon
-                          />
-                        </div>
+          <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
+                    <span>Your links</span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
+                    />
+                  </DisclosureButton>
+                  <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                    <div className="mt-5 flex gap-x-3">
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-medium text-[14px]">
+                          Website
+                        </Label>
+                        <Input
+                          value={formData.website ? formData.website : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              website: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your website link"
+                          showIcon
+                        />
                       </div>
-                      <div className="mt-2 flex gap-x-3">
-                        <div className="flex flex-col gap-y-2 basis-1/2">
-                          <Label className="font-medium text-[14px]">
-                            Facebook
-                          </Label>
-                          <Input
-                            value={formData.facebook ? formData.facebook : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                facebook: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
-                            type="text"
-                            placeholder="Enter your facebook link"
-                            showIcon
-                          />
-                        </div>
-                        <div className="flex flex-col gap-y-2 basis-1/2">
-                          <Label className="font-medium text-[14px]">
-                            Instagram
-                          </Label>
-                          <Input
-                            value={formData.instagram ? formData.instagram : ''}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                instagram: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
-                            type="text"
-                            placeholder="Enter your instagram link"
-                            showIcon
-                          />
-                        </div>
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-medium text-[14px]">
+                          X(Twitter)
+                        </Label>
+                        <Input
+                          value={formData.twitter ? formData.twitter : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              twitter: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your twitter link"
+                          showIcon
+                        />
                       </div>
-                    </DisclosurePanel>
-                  </>
-                )}
-              </Disclosure>
-            </div>
+                    </div>
+                    <div className="mt-2 flex gap-x-3">
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-medium text-[14px]">
+                          Facebook
+                        </Label>
+                        <Input
+                          value={formData.facebook ? formData.facebook : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              facebook: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your facebook link"
+                          showIcon
+                        />
+                      </div>
+                      <div className="flex flex-col gap-y-2 basis-1/2">
+                        <Label className="font-medium text-[14px]">
+                          Instagram
+                        </Label>
+                        <Input
+                          value={formData.instagram ? formData.instagram : ''}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              instagram: (e.target as any).value,
+                            })
+                          }
+                          className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#161616] rounded-xl justify-start items-center gap-[30px] inline-flex placeholder:text-[#ffffff53]"
+                          type="text"
+                          placeholder="Enter your instagram link"
+                          showIcon
+                        />
+                      </div>
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
           </div>
 
           <ShippingInfo />
           <ContactInfo />
           <PropertiesTemplate addStatus={true} />
           <UserArtistSetting />
+
           <div className="flex gap-x-4 justify-center my-10">
             <BaseButton
               title="Cancel"

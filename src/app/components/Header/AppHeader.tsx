@@ -27,7 +27,7 @@ export default function AppHeader() {
   };
 
   return (
-    <div className="flex justify-between lg:justify-end mt-6 px-3 items-center">
+    <div className="flex justify-between lg:justify-end px-3 py-4 items-center">
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>

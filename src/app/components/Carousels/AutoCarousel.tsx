@@ -3,9 +3,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
-import React from 'react';
-import Autoplay from 'embla-carousel-autoplay';
 import { ensureValidUrl } from '@/utils/helpers';
+import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
 interface IBaseCarouselProps {
   data: any[];
@@ -54,8 +53,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
             : null}
         </CarouselContent>
       </Carousel>
-
-      <div className="h-1/4 bg-gradient-to-b from-transparent via-[#2a2a2a] to-[#181818] absolute bottom-0 left-0 right-0 z-10"></div>
+      <div className="h-1/4 bg-gradient-to-b from-[#BCBCBC]/0 to-[#181818] absolute bottom-0 left-0 right-0 z-10"></div>
     </div>
   );
 }
