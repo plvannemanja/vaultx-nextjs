@@ -122,7 +122,7 @@ export default function ContactInfo() {
           ? data.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`w-[18rem] h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
+                className={`w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
                 onClick={() => {
                   setSelectedContact(item);
                 }}
