@@ -46,7 +46,6 @@ export function SignUpModal() {
       const data = new FormData();
       data.append('username', formData.nickname);
       data.append('email', formData.email);
-      debugger;
       await userServices.updateProfile(data);
       await fetchUser();
       setLoading(false);

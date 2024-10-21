@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { formatNumberWithCommas } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useGlobalContext } from '../Context/GlobalContext';
 
 interface ICurationCard {
   name: string;
@@ -14,18 +15,19 @@ interface ICurationCard {
 }
 
 export default function CurationCard({ data }: { data: ICurationCard }) {
+  const { mediaImages } = useGlobalContext();
   return (
     <Link href={`/dashboard/curation/${data.id}`}>
       <Card className="text-white border-none max-w-[100%] rounded-none bg-[#232323]">
         <CardContent className="aspect-square p-3 flex flex-col gap-y-[20px]">
           <div className="w-full overflow-hidden">
             <Image
-              src={data.image ? data.image : ''}
+              src={data.image ? data.image : mediaImages?.curationTop.image}
               height={368}
               width={482}
               className="w-full h-[368px] aspect-[4/3] object-cover hover:scale-110 transition-transform duration-300"
               alt="nft-image"
-              blurDataURL={data.image ? data.image : ''}
+              blurDataURL={data.image ? data.image : mediaImages?.curationTop.image}
               placeholder="blur"
             />
           </div>

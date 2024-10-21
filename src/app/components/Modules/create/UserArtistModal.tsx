@@ -205,7 +205,6 @@ export default function UserArtistModal({
 
   useEffect(() => {
     if (editUser) {
-      debugger;
       setFormData({
         ...formData,
         _id: editUser._id,

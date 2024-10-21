@@ -245,6 +245,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, [debouncedFilter, filterbadge]);
   if (!curation) return null;
 
+  const { mediaImages } = useGlobalContext();
   return (
     <div className="flex flex-col gap-y-4 px-4 mx-4 my-4">
       <div
@@ -253,15 +254,13 @@ export default function Page({ params }: { params: { slug: string } }) {
           'h-[340px]',
         )}
       >
-        {curation?.bannerImage && (
-          <Image
-            src={curation?.bannerImage}
-            alt="hero"
-            layout="fill"
-            objectFit="cover"
-            className="rounded-xl"
-          />
-        )}
+        <Image
+          src={curation?.bannerImage ?? mediaImages?.curationTop.image}
+          alt="hero"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-xl"
+        />
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div
             className="flex gap-x-3 h-12 items-center p-3 rounded-xl text-white border border-[#FFFFFF4A] cursor-pointer"

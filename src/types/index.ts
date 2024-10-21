@@ -131,7 +131,9 @@ export type NFTItemType = {
   artist: string;
   attachments: Array<string>;
   basicDetailsFilled: boolean;
+  unlockableContent: string;
   certificates: Array<string>;
+  certificateNames: Array<string>;
   freeMinting: boolean;
   onSale: boolean;
   saleId: Omit<SaleType, 'nftId'> & { nftId: string };
