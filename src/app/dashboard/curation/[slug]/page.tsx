@@ -139,7 +139,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [loadMore, setLoadMore] = useState(false);
   const [filterbadge, setFilterBadge] = useState(badges[0].value);
   const favoriteService = new FavoriteService();
-  const { user } = useGlobalContext();
+  const { user, mediaImages } = useGlobalContext();
 
   const [showLess, setShowLess] = useState(true);
   const [likes, setLikes] = useState(0);
@@ -274,7 +274,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       >
         {curation?.bannerImage && (
           <Image
-            src={curation?.bannerImage}
+            src={curation?.bannerImage ?? mediaImages?.curationTop.image}
             alt="hero"
             layout="fill"
             objectFit="cover"

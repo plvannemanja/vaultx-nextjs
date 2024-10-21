@@ -31,6 +31,41 @@ import {
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import ConnectedCard from '../../Cards/ConnectedCard';
 import ErrorModal from '../create/ErrorModal';
+import { z } from 'zod';
+
+const addressSchema = z.object({
+  username: z.string().nonempty('User name is invalid'),
+  email: z.string().email({ message: 'Email is invalid' }),
+  description: z.string(),
+  accepted: z.boolean().refine((val) => val === true, {
+    message: 'The value must be true.',
+  }),
+  country: z.object({
+    name: z.string().nonempty('country name is invalid'),
+  }),
+  city: z.object({
+    name: z.string().nonempty('city name is invalid'),
+  }),
+  state: z.object({
+    name: z.string().nonempty('state name is invalid'),
+  }),
+  address1: z.string().nonempty('address 1 is invalid'),
+  postalCode: z.string(),
+  phoneNumber: z.string().nonempty(),
+});
+
+interface addressErrorType {
+  username?: string;
+  email?: string;
+  description?: string;
+  accepted?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  address1?: string;
+  postalCode?: string;
+  phoneNumber?: string;
+}
 
 export default function BuyModal({
   onClose,
@@ -44,7 +79,7 @@ export default function BuyModal({
   const [tokenAmount, setTokenAmount] = useState<string | null>(null);
   const [expectedAmount, setExpectedAmount] = useState<number | null>(null);
   const [error, setError] = useState(null);
-
+  const [addressError, setAddressError] = useState<addressErrorType>({});
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
 
@@ -200,6 +235,27 @@ export default function BuyModal({
     if (NFTDetail.minted) await buyNFT();
     else await buyFreeMint();
   };
+
+  const handleAddress = async () => {
+    const result = addressSchema.safeParse({
+      ...formData,
+      ...sellerInfo,
+    });
+
+    if (!result.success) {
+      const addressErrors = result.error.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+
+      setAddressError(addressErrors);
+    } else {
+      setAddressError({});
+      // Handle valid submission
+      setStep(2);
+    }
+  };
+
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;
     if (name === 'country') {
@@ -289,6 +345,11 @@ export default function BuyModal({
                               type="text"
                               placeholder="Enter your username"
                             />
+                            {addressError?.username && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.username}
+                              </p>
+                            )}
                           </div>
                           <div className="flex flex-col gap-y-2 w-[32%]">
                             <h2 className="font-bold text-[#fff] text-[14px]">
@@ -307,6 +368,11 @@ export default function BuyModal({
                               type="text"
                               placeholder="Enter your email"
                             />
+                            {addressError?.email && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.email}
+                              </p>
+                            )}
                           </div>
 
                           <div className="flex flex-col gap-y-2 w-[32%]">
@@ -331,6 +397,11 @@ export default function BuyModal({
                                 </option>
                               ))}
                             </select>
+                            {addressError?.country && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.country}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </DisclosurePanel>
@@ -372,6 +443,11 @@ export default function BuyModal({
                               type="text"
                               placeholder="Enter address"
                             />
+                            {addressError?.address1 && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.address1}
+                              </p>
+                            )}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[48%]">
                             <h2 className="font-bold text-[#fff] text-[14px]">
@@ -421,6 +497,11 @@ export default function BuyModal({
                                 </option>
                               ))}
                             </select>
+                            {addressError?.state && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.state}
+                              </p>
+                            )}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
                             <h2 className="font-bold text-[#fff] text-[14px]">
@@ -448,6 +529,11 @@ export default function BuyModal({
                                 </option>
                               ))}
                             </select>
+                            {addressError?.city && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.city}
+                              </p>
+                            )}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
                             <h2 className="font-bold text-[#fff] text-[14px]">
@@ -470,6 +556,11 @@ export default function BuyModal({
                               type="text"
                               placeholder="Enter postcode"
                             />
+                            {addressError?.postalCode && (
+                              <p className="text-red-500 text-sm">
+                                {addressError.postalCode}
+                              </p>
+                            )}
                           </div>
                         </div>
                         <div className="flex flex-col mb-4 gap-y-3">
@@ -497,6 +588,11 @@ export default function BuyModal({
                               setSellerInfo({ ...sellerInfo, phoneNumber: e })
                             }
                           />
+                          {addressError?.phoneNumber && (
+                            <p className="text-red-500 text-sm">
+                              {addressError.phoneNumber}
+                            </p>
+                          )}
                         </div>
                       </DisclosurePanel>
                     </>
@@ -578,26 +674,33 @@ export default function BuyModal({
                 </Disclosure>
               </div>
 
-              <div className="flex items-center space-x-2 p-4 ">
-                <input
-                  id="terms"
-                  type="checkbox"
-                  checked={formData.accepted}
-                  onChange={() =>
-                    setFormData({
-                      ...formData,
-                      accepted: !formData.accepted,
-                    })
-                  }
-                />
-                <label
-                  htmlFor="terms"
-                  className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
-                >
-                  I agree to all terms, privacy policy and fees
-                </label>
-              </div>
+              <div className="flex flex-col space-y-2 p-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    id="terms"
+                    type="checkbox"
+                    checked={formData.accepted}
+                    onChange={() =>
+                      setFormData({
+                        ...formData,
+                        accepted: !formData.accepted,
+                      })
+                    }
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
+                  >
+                    I agree to all terms, privacy policy and fees
+                  </label>
+                </div>
 
+                {addressError?.accepted && (
+                  <p className="text-red-500 text-sm">
+                    {addressError.accepted}
+                  </p>
+                )}
+              </div>
               <div className="bg-dark p-5 gap-y-4 rounded-lg flex flex-col ">
                 <p className="text-[20px] font-extrabold text-[#fff] ">
                   Order Summary
@@ -634,7 +737,7 @@ export default function BuyModal({
                   title="Submit"
                   variant="primary"
                   onClick={() => {
-                    setStep(2);
+                    handleAddress();
                   }}
                   className="w-full"
                   displayIcon

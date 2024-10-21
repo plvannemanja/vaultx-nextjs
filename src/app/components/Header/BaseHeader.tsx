@@ -61,7 +61,9 @@ export function BaseHeader({ isNFT = false }: Props) {
   }
 
   return (
-    <header className="sticky top-0 z-50 left-0 w-full bg-[#161616]/95 backdrop-blur supports-[backdrop-filter]:bg-[#161616]/60">
+    <header
+    // className="sticky top-0 z-50 left-0 w-full bg-[#161616]/95 backdrop-blur supports-[backdrop-filter]:bg-[#161616]/60"
+    >
       <div className="container h-[84px] w-full py-4 justify-between items-center flex">
         <div className="flex gap-x-4 items-center">
           <div className="h-8 relative inline-flex gap-1.5 top-1">

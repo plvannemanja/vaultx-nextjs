@@ -12,7 +12,7 @@ export default function ArtistsCard({
   subtitle2?: string;
 }) {
   return (
-    <div className="w-[420px] h-[470px] relative">
+    <div className="relative w-full min-h-[661px] col-span-4">
       <a className="w-full" href={subtitle2 ? subtitle2 : ''}>
         <Image
           src={image}
@@ -21,7 +21,6 @@ export default function ArtistsCard({
           alt="artist-pic"
           className="rounded"
         />
-
         <div className="absolute bottom-8 w-[90%] mx-auto ml-4 flex flex-col gap-y-4 text-white font-bold">
           <hr className="h-[0.15rem] bg-gradient-to-r from-blue-500 via-green-400 to-orange-400" />
           <p>{title}</p>

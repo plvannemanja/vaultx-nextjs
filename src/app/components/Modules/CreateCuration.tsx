@@ -28,9 +28,9 @@ import CurationLoader from './create/CurationLoader';
 import ErrorModal from './create/ErrorModal';
 
 const createCurationSchema = z.object({
-  name: z.string().nonempty("Name is invalid"),
-  symbol: z.string().nonempty("Symbol is invalid"),
-  description: z.string().nonempty("Descriptoin is invalid"),
+  name: z.string().nonempty('Name is invalid'),
+  symbol: z.string().nonempty('Symbol is invalid'),
+  description: z.string().nonempty('Descriptoin is invalid'),
 });
 
 export default function CreateCuration({ editMode }: { editMode?: any }) {
@@ -79,7 +79,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       descriptionImages[index] = file;
       setDescriptionImages(descriptionImages);
     }
-  }
+  };
   const cancelChanges = () => {
     setFormData({
       name: '',
@@ -107,10 +107,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
   const create = async () => {
     try {
       const result = createCurationSchema.safeParse(formData);
-      if (
-        !result.success ||
-        !formData.logo
-      ) {
+      if (!result.success || !formData.logo) {
         let data = [];
         if (!result.success) data = JSON.parse(result.error.message);
 
@@ -136,19 +133,19 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       //   : '';
 
       const data = new FormData();
-      data.append('name', formData.name ?? "");
-      data.append('symbol', formData.symbol ?? "");
-      data.append('discription', formData.description ?? "");
+      data.append('name', formData.name ?? '');
+      data.append('symbol', formData.symbol ?? '');
+      data.append('discription', formData.description ?? '');
       data.append('logo', formData.logo);
       data.append('bannerImage', formData.bannerImage);
-      data.append('website', ensureValidUrl(formData.website ?? ""));
-      data.append('twitter', ensureValidUrl(formData.twitter ?? ""));
-      data.append('facebook', ensureValidUrl(formData.facebook ?? ""));
-      data.append('instagram', ensureValidUrl(formData.instagram ?? ""));
+      data.append('website', ensureValidUrl(formData.website ?? ''));
+      data.append('twitter', ensureValidUrl(formData.twitter ?? ''));
+      data.append('facebook', ensureValidUrl(formData.facebook ?? ''));
+      data.append('instagram', ensureValidUrl(formData.instagram ?? ''));
       data.append('youtube', JSON.stringify(youtube));
 
       let descriptionImageUrls = [];
-      descriptionImages.forEach(image => {
+      descriptionImages.forEach((image) => {
         if (typeof image === 'string') {
           descriptionImageUrls.push(image);
         } else {
@@ -465,8 +462,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                           </span>
                         )} */}
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white/[53%]`}
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -553,8 +551,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         Your links
                       </Label>
                       <ChevronUpIcon
-                        className={`${open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white/[53%]`}
+                        className={`${
+                          open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white/[53%]`}
                       />
                     </div>
                   </DisclosureButton>
@@ -650,28 +649,29 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       <Label className="font-extrabold text-lg text-white">
                         Youtube Video Link
                       </Label>
-                      <div className="flex items-center gap-2" onClick={(e) => {
-                        e.stopPropagation(); // Prevents closing the disclosure
-                      }}>
-                        <div className="flex gap-x-2 items-center"
+                      <div
+                        className="flex items-center gap-2"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents closing the disclosure
+                        }}
+                      >
+                        <div
+                          className="flex gap-x-2 items-center"
                           onClick={() => {
                             if (youtube.length < 2) {
-                              setYoutube([
-                                ...youtube,
-                                { title: '', url: '' },
-                              ]);
+                              setYoutube([...youtube, { title: '', url: '' }]);
                             }
-                          }}>
-                          <div
-                            className="h-6 w-6 cursor-pointer"
-                          >
+                          }}
+                        >
+                          <div className="h-6 w-6 cursor-pointer">
                             <AddNew />
                           </div>
                           <p className="text-sm">Add New</p>
                         </div>
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white/[53%]`}
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -697,7 +697,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               showIcon={index > 0}
                               onPressIcon={() => {
                                 if (youtube.length > 1) {
-                                  setYoutube(youtube.slice(0, youtube.length - 1));
+                                  setYoutube(
+                                    youtube.slice(0, youtube.length - 1),
+                                  );
                                 }
                               }}
                             />
@@ -715,7 +717,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               showIcon={index > 0}
                               onPressIcon={() => {
                                 if (youtube.length > 1) {
-                                  setYoutube(youtube.slice(0, youtube.length - 1));
+                                  setYoutube(
+                                    youtube.slice(0, youtube.length - 1),
+                                  );
                                 }
                               }}
                             />
@@ -742,12 +746,14 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       <Label className="font-extrabold text-lg text-white">
                         Custom Description Image
                       </Label>
-                      <div className="flex items-center gap-2"
+                      <div
+                        className="flex items-center gap-2"
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
                       >
-                        <div className="flex gap-x-2 items-center"
+                        <div
+                          className="flex gap-x-2 items-center"
                           onClick={() => {
                             if (descriptionImages.length < 2) {
                               setDescriptionImages([
@@ -755,17 +761,17 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                                 null,
                               ]);
                             }
-                          }}>
-                          <div
-                            className="h-6 w-6 cursor-pointer"
-                          >
+                          }}
+                        >
+                          <div className="h-6 w-6 cursor-pointer">
                             <AddNew />
                           </div>
                           <p className="text-sm">Add New</p>
                         </div>
                         <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white/[53%]`}
+                          className={`${
+                            open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
                         />
                       </div>
                     </div>
@@ -775,30 +781,33 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     </p>
                   </DisclosureButton>
                   <DisclosurePanel className="pb-2 pt-5 text-sm text-white  rounded-b-lg">
-                    {
-                      descriptionImages.map((image, index) => (
-                        <div className="w-full mb-5" key={index}>
-                          <FileInput
-                            title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
-                            titleStyles={
-                              'text-[#979797] text-sm font-normal azeret-mono-font'
+                    {descriptionImages.map((image, index) => (
+                      <div className="w-full mb-5" key={index}>
+                        <FileInput
+                          title="PNG, GIF, WEBP, JPG, or JPEG. Max 1Gb."
+                          titleStyles={
+                            'text-[#979797] text-sm font-normal azeret-mono-font'
+                          }
+                          acceptedFormats={acceptedFormats}
+                          maxSizeInBytes={maxFileSize}
+                          onFileSelect={(file: any) =>
+                            handleDescriptionImage(file, index)
+                          }
+                          editMode={!!image}
+                          showIcon={index > 0}
+                          onPressIcon={() => {
+                            if (descriptionImages.length > 1) {
+                              setDescriptionImages(
+                                descriptionImages.slice(
+                                  0,
+                                  descriptionImages.length - 1,
+                                ),
+                              );
                             }
-                            acceptedFormats={acceptedFormats}
-                            maxSizeInBytes={maxFileSize}
-                            onFileSelect={(file: any) =>
-                              handleDescriptionImage(file, index)
-                            }
-                            editMode={!!image}
-                            showIcon={index > 0}
-                            onPressIcon={() => {
-                              if (descriptionImages.length > 1) {
-                                setDescriptionImages(descriptionImages.slice(0, descriptionImages.length - 1));
-                              }
-                            }}
-                          />
-                        </div>
-                      ))
-                    }
+                          }}
+                        />
+                      </div>
+                    ))}
                   </DisclosurePanel>
                 </>
               )}

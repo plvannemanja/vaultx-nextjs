@@ -28,6 +28,8 @@ import BasicLoadingModal from './BasicLoadingModal';
 import BurnModal from './BurnModal';
 import EditNFTModal from './EditNFTModal';
 import TransferModal from './TransferModal';
+import { useDebounce } from 'use-debounce';
+import { FavoriteService } from '@/services/FavoriteService';
 
 const style = {
   borderRadius: '10px',
@@ -96,7 +98,7 @@ export default function NFTMain({
 
   const nftService = new NftServices();
   const createSellService = new CreateSellService();
-
+  const favoriteService = new FavoriteService();
   const handleLike = async () => {
     try {
       setLiked(!liked);
@@ -106,6 +108,22 @@ export default function NFTMain({
       console.log(error);
     }
   };
+
+  const [debouncedLiked] = useDebounce(liked, 1000);
+
+  const setMyLike = async () => {
+    try {
+      await favoriteService.handleLikeNfts({ nftId });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedLiked) {
+      setMyLike();
+    }
+  }, [debouncedLiked]);
 
   const handleView = async () => {
     try {

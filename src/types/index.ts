@@ -27,7 +27,7 @@ type YoutubeType = {
   url: string;
 };
 
-type ShippingAddressType = {
+export type ShippingAddressType = {
   _id: string;
   name: string;
   email: string;
@@ -131,7 +131,9 @@ export type NFTItemType = {
   artist: string;
   attachments: Array<string>;
   basicDetailsFilled: boolean;
+  unlockableContent: string;
   certificates: Array<string>;
+  certificateNames: Array<string>;
   freeMinting: boolean;
   onSale: boolean;
   saleId: Omit<SaleType, 'nftId'> & { nftId: string };

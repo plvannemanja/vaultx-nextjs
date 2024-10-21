@@ -18,6 +18,116 @@ import BaseFooter from './components/Footer/BaseFooter';
 import { BaseHeader } from './components/Header/BaseHeader';
 import NewsCard from './components/ui/NewsCard';
 
+const icon = (
+  <svg
+    width="177"
+    height="424"
+    viewBox="0 0 177 424"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g opacity="0.2">
+      <rect
+        x="-39.7812"
+        y="103.727"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="10.0195"
+        y="45.6094"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="28.0156"
+        y="173.387"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="77.8164"
+        y="0.5"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="-6.68359"
+        y="217.613"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="-6.68359"
+        y="21.6094"
+        width="98.6027"
+        height="126.227"
+        stroke="#DDF247"
+      />
+    </g>
+  </svg>
+);
+
+const icon2 = (
+  <svg
+    width="137"
+    height="425"
+    viewBox="0 0 137 425"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g opacity="0.2">
+      <rect
+        x="0.986328"
+        y="104.227"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="50.7871"
+        y="46.1094"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="68.7832"
+        y="173.885"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="118.584"
+        y="1"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="34.0859"
+        y="218.113"
+        width="98.6027"
+        height="205.454"
+        stroke="#DDF247"
+      />
+      <rect
+        x="34.0859"
+        y="22.1094"
+        width="98.6027"
+        height="126.227"
+        stroke="#DDF247"
+      />
+    </g>
+  </svg>
+);
+
 interface Isection1 {
   title: string;
   description: string;
@@ -138,13 +248,13 @@ export default function Home() {
       ) : (
         <Skeleton className="w-full h-[400px]" />
       )}
-      <div className="py-10 w-full px-10 lg:px-20 lg:relative">
+      <div className="py-10 pt-[100px] w-full px-10 lg:px-20 lg:relative">
         <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] border-l-transparent border-t-transparent -rotate-45 hidden lg:block absolute -left-4 top-[28.5rem]"></div>
         <div className="w-7 h-7 border-2 rounded-full border-[#DDF247] hidden lg:block absolute left-24"></div>
         <div className="w-4 h-4 rounded-full bg-[#DDF247] hidden lg:block absolute right-12 top-[10rem]"></div>
         <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] hidden lg:block absolute right-16 bottom-[10rem]"></div>
         {section1 ? (
-          <>
+          <div className="container">
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap">
               {section1.title
                 ? createTitleComp(section1.title, section1.color)
@@ -155,7 +265,7 @@ export default function Home() {
                 </Label>
               ) : null}
             </div>
-            <div className="flex md:gap-8 flex-wrap gap-5 justify-center">
+            <div className="grid grid-cols-12 md:gap-8 gap-5 justify-center">
               {section1.box.length > 0
                 ? section1.box.map((item: any, index: number) => {
                     return (
@@ -184,7 +294,7 @@ export default function Home() {
                 />
               </div>
             </div>
-          </>
+          </div>
         ) : null}
       </div>
       <div className="py-10">
@@ -254,6 +364,7 @@ export default function Home() {
                     key={index}
                     logo={item.logo}
                     name={item.name}
+                    id={item._id}
                   />
                 );
               })}
@@ -268,53 +379,62 @@ export default function Home() {
             width={96}
             height={96}
           />
-          <NFTList />
+          <NFTList color={section2?.color} />
         </div>
       </div>
       {section4 ? (
-        <div className="py-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')]">
-          <NewsCard
-            heading={createTitleComp(section4.title, section4.color)}
-            description={section4.description}
-            data={section4.box}
-          />
+        <div className="mt-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')] relative">
+          <div className="absolute hidden lg:block top-[-9rem] left-0">
+            {icon}
+          </div>
+          <div className="absolute hidden lg:block bottom-[-9rem] right-0">
+            {icon2}
+          </div>
+          <div className="container">
+            <NewsCard
+              heading={createTitleComp(section4.title, section4.color)}
+              description={section4.description}
+              data={section4.box}
+            />
+          </div>
         </div>
       ) : null}
-      <div className="w-full max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
-        {images?.bottomBaner && (
-          <Link href={images?.bottomBaner.link} target="_blank">
-            <Image
-              src={images?.bottomBaner.image}
-              alt="bottom-banner"
-              layout="fill"
-              objectFit="cover"
-            ></Image>
-          </Link>
-        )}
-        {/* MonsterX Heading */}
-        {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
+      <div className="pt-[120px]">
+        <div className="w-full  max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
+          {images?.bottomBaner && (
+            <Link href={images?.bottomBaner.link} target="_blank">
+              <Image
+                src={images?.bottomBaner.image}
+                alt="bottom-banner"
+                layout="fill"
+                objectFit="cover"
+              ></Image>
+            </Link>
+          )}
+          {/* MonsterX Heading */}
+          {/* <div className="text-center text-black text-3xl sm:text-4xl font-extrabold font-['Montserrat'] leading-tight z-[1]">
           MonsterX
-        </div> */}
+          </div> */}
 
-        {/* Title Section */}
-        {/* <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
+          {/* Title Section */}
+          {/* <div className="text-neutral-900 text-xl sm:text-3xl font-bold font-['Manrope'] text-center z-[1]">
           Click it to enter the Real World Asset Era
-        </div> */}
-        {/* 
+          </div> */}
+          {/* 
         <Link
-          href={ensureValidUrl(images?.bottomBaner?.link)}
-          target="_blank"
-          className="z-[1]"
+        href={ensureValidUrl(images?.bottomBaner?.link)}
+        target="_blank"
+        className="z-[1]"
         >
-          <button className="w-full sm:w-40 h-14 px-5 py-3.5 bg-neutral-900 rounded-md border flex justify-center items-center text-white text-lg font-semibold font-['Manrope'] hover:bg-neutral-700 transition-colors duration-300">
-            Join Us
-          </button>
+        <button className="w-full sm:w-40 h-14 px-5 py-3.5 bg-neutral-900 rounded-md border flex justify-center items-center text-white text-lg font-semibold font-['Manrope'] hover:bg-neutral-700 transition-colors duration-300">
+        Join Us
+        </button>
         </Link> */}
-        {/* Rounded elements (half circles) */}
-        {/* <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
+          {/* Rounded elements (half circles) */}
+          {/* <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -left-16 sm:-left-24 top-6" />
         <div className="w-32 sm:w-48 h-32 sm:h-48 bg-white rounded-full absolute -right-16 sm:-right-24 top-6" /> */}
+        </div>
       </div>
-
       <BaseFooter />
     </main>
   );

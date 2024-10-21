@@ -390,8 +390,8 @@ export const getAllNftActivitys = async (data: any) => {
   return await axios.post(`${server_uri}/nft/getAllNftActivity`, data);
 };
 
-export const getAllUsersActivity = async () => {
-  return await axios.get(`${server_uri}/user/getAllUsersActivity`, {
+export const getAllUsersActivity = async (data: any) => {
+  return await axios.post(`${server_uri}/user/getAllUsersActivity`, data, {
     headers: {
       authorization: 'Bearer ' + getCookie('token'),
     },

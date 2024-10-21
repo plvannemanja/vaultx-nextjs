@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/carousel';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 import NftCard from '../Cards/NftCard';
 
@@ -17,7 +18,7 @@ interface IBaseCarouselProps {
 
 export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
   return (
-    <div className="w-full px-10 lg:px-20">
+    <div className="w-full container">
       <div className="flex justify-between items-center my-10 text-white flex-wrap">
         {heading}
         <div className="flex items-center gap-x-3 text-lg font-medium cursor-pointer">
@@ -42,7 +43,9 @@ export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
                   key={index}
                   className="md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
                 >
-                  <NftCard data={item} />
+                  <Link href={`/nft/${item._id}`} target="_blank">
+                    <NftCard data={item} />
+                  </Link>
                 </CarouselItem>
               ))
             : null}

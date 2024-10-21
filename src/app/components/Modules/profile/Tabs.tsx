@@ -93,11 +93,11 @@ const earnFilters = [
   },
   {
     label: 'Royalties',
-    value: 'Royalty Received',
+    value: 'Royalties',
   },
   {
     label: 'Split Payment',
-    value: 'Payment Received',
+    value: 'Split Payments',
   },
 ];
 
@@ -105,17 +105,17 @@ const curationFilters = [
   {
     label: 'Number of Artworks',
     value: -1,
-    param: 'artworks',
+    param: 'nftCount',
   },
   {
     label: 'Number of Artists',
     value: -1,
-    param: 'artists',
+    param: 'artistCount',
   },
   {
     label: 'Highest Volume',
     value: -1,
-    param: 'volume',
+    param: 'totalVolume',
   },
   {
     label: 'New Curation',
@@ -123,6 +123,50 @@ const curationFilters = [
     param: 'createdAt',
   },
 ];
+
+const activityFilters = [
+  {
+    label: 'All',
+    param: '',
+  },
+  {
+    label: 'Minted',
+    param: 'Minted',
+  },
+  {
+    label: 'Listed',
+    param: 'Listed',
+  },
+  {
+    label: 'Unlisted',
+    param: 'End Sale',
+  },
+  {
+    label: 'Purchased',
+    param: 'Purchased',
+  },
+  {
+    label: 'In Escrow',
+    param: 'In Escrow',
+  },
+  {
+    label: 'Transfer',
+    param: 'Transfer',
+  },
+  {
+    label: 'Burn',
+    param: 'Burn',
+  },
+  {
+    label: 'Royalties',
+    param: 'Royalties',
+  },
+  {
+    label: 'Split Payments',
+    param: 'Split Payments',
+  },
+];
+
 export enum ProfileTabs {
   All = 'all',
   Own = 'owned',
@@ -158,6 +202,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       label: curationFilters[0].label,
       value: curationFilters[0].value,
     },
+    activityFilter: activityFilters[0],
   });
 
   const [data, setData] = useState<any>({
@@ -182,16 +227,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const categoryTab = useMemo(() => {
     if (tab == ProfileTabs.Earn) return 'earnFilter';
     else if (tab == ProfileTabs.Curation) return 'curationFilter';
-
+    else if (tab == ProfileTabs.Activity) return 'activityFilter';
+    else if (tab == ProfileTabs.Favorite) {
+      if (favType == 'artist' || favType == 'nft') {
+        return 'filter';
+      } else return 'curationFilter';
+    }
     return 'filter';
-  }, [tab]);
+  }, [tab, favType]);
 
   const categoryList = useMemo(() => {
     if (tab == ProfileTabs.Earn) return earnFilters;
     else if (tab == ProfileTabs.Curation) return curationFilters;
-
+    else if (tab == ProfileTabs.Activity) return activityFilters;
+    else if (tab == ProfileTabs.Favorite) {
+      if (favType == 'artist' || favType == 'nft') {
+        return profileFilters;
+      } else return curationFilters;
+    }
     return profileFilters;
-  }, [tab]);
+  }, [tab, favType]);
 
   const [debouncedFilter] = useDebounce(filters, 1000);
 
@@ -258,7 +313,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       const response = await collectionServices.getUserCollections({
         searchInput: filters.searchInput,
         filter: {
-          [filters.filter.param]: filters.filter.value,
+          [filters.curationFilter.param]: filters.curationFilter.value,
         },
       });
 
@@ -267,21 +322,9 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
         collections
           .filter((item: any) => item.active)
           .map(async (collection: any) => {
-            const info = await collectionServices.getCollectionInfo(
-              collection._id,
-            );
-
-            const extra = {
-              nftCount: info.data.collection.nftCount,
-              totalVolume: info.data.collection.totalVolume,
-              artistCount: info.data.collection.artistCount,
-            };
-
             return {
-              ...extra,
-              name: collection.name,
+              ...collection,
               image: collection.bannerImage,
-              _id: collection._id,
             };
           }),
       );
@@ -297,7 +340,10 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
   const fetchActivity = async () => {
     try {
-      const response = await getAllUsersActivity();
+      const response = await getAllUsersActivity({
+        searchInput: filters?.searchInput,
+        filterInput: filters?.activityFilter,
+      });
 
       if (response.data) {
         setData({
@@ -327,26 +373,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-            return {
-              ...item.nftId,
-            };
-          })
+          return {
+            ...item.nftId,
+          };
+        })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-            return {
-              ...item.artistId,
-            };
-          })
+          return {
+            ...item.artistId,
+          };
+        })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-            return {
-              ...item.collectionId,
-            };
-          })
+          return {
+            ...item.collectionId,
+          };
+        })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -394,6 +440,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
         filters: {
           [filters.filter.param]: filters.filter.value,
         },
+        searchInput: filters.searchInput
       });
 
       if (response.data) {
@@ -410,7 +457,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
   const fetchEarnings = async () => {
     try {
       const response = await createAndSellService.getEarnings({
-        filter: filters.filter.value,
+        filter: filters.earnFilter.value,
       });
 
       if (response.data) {
@@ -827,7 +874,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             ) : null}
 
             {favType === 'curation' &&
-            data?.[ProfileTabs.Favorite]?.likedCuration ? (
+              data?.[ProfileTabs.Favorite]?.likedCuration ? (
               data?.[ProfileTabs.Favorite]?.likedCuration?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedCuration?.map(
                   (item: any, index: number) => {
@@ -842,7 +889,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             ) : null}
 
             {favType === 'artist' &&
-            data?.[ProfileTabs.Favorite]?.likedArtist ? (
+              data?.[ProfileTabs.Favorite]?.likedArtist ? (
               data?.[ProfileTabs.Favorite]?.likedArtist?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedArtist?.map(
                   (item: any, index: number) => {
@@ -900,18 +947,18 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         </TableCell>
                         <TableCell className="flex items-center gap-x-3">
                           <img
-                            src={item.nftId.cloudinaryUrl}
+                            src={item.cloudinaryUrl}
                             className="w-12 h-12 object-contain  aspect-square rounded"
                           />
                           <span className="font-medium azeret-mono-font text-sm text-white">
-                            {item.nftId.name}
+                            {item.name}
                           </span>
                         </TableCell>
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
                           {item?.saleId?.ItemPurchasedOn
                             ? new Date(item?.saleId?.ItemPurchasedOn)
-                                .toLocaleString()
-                                .slice(0, 10)
+                              .toLocaleString()
+                              .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
@@ -960,8 +1007,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                   Transaction Number (ID)
                 </TableHead>
                 <TableHead className="text-sm text-white">Title</TableHead>
-                <TableHead className="text-sm text-white">Earnings</TableHead>
-                <TableHead className="text-sm text-white">Date</TableHead>
+                <TableHead className="text-sm text-white"></TableHead>
+                <TableHead className="text-sm text-white"></TableHead>
                 <TableHead className="text-sm text-white">Status</TableHead>
                 <TableHead className="text-sm text-white">
                   View Details
@@ -975,16 +1022,16 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                     return (
                       <TableRow className="border-white/[8%]" key={index}>
                         <TableCell className="font-medium text-[18px] text-white">
-                          #{item._id}
+                          {item._id}
                         </TableCell>
-                        <TableCell className="flex items-center gap-x-3">
+                        <TableCell>
                           <img
                             src={item.nftId.cloudinaryUrl}
                             className="w-10 aspect-square rounded"
                           />
                           <span>{item.nftId.name}</span>
                         </TableCell>
-                        <TableCell className="flex gap-x-2">
+                        <TableCell>
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -1006,8 +1053,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         <TableCell>
                           {item?.createdAt
                             ? new Date(item?.createdAt)
-                                .toLocaleString()
-                                .slice(0, 10)
+                              .toLocaleString()
+                              .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell>{item?.state}</TableCell>

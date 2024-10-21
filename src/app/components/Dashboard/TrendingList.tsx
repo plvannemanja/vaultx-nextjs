@@ -8,6 +8,31 @@ import { BaseCarousel } from '../Carousels/BaseCarousel';
 interface TrendingProps {
   data: any;
 }
+
+const createTitleComp = (
+  title: string,
+  color: Array<{ word: number; color: string }>,
+) => {
+  if (!title) return null;
+  return (
+    <h3 className="font-extrabold text-[40px]">
+      {title.split(' ').map((word, index) => {
+        const colorIndex = color.findIndex((item) => item.word === index + 1);
+        return (
+          <span
+            key={index}
+            style={{
+              color: colorIndex !== -1 ? color[colorIndex].color : 'white',
+            }}
+          >
+            {word}{' '}
+          </span>
+        );
+      })}
+    </h3>
+  );
+};
+
 export default function TrendingList({ data }: TrendingProps) {
   const [icafNfts, setICAFNfts] = useState<any[]>([]);
 
@@ -30,13 +55,19 @@ export default function TrendingList({ data }: TrendingProps) {
 
   useEffect(() => {
     getTrendingNfts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const heading = (
-    <h3 className="font-extrabold text-[40px] text-[#DDF247]">
-      Weekly Trending
-    </h3>
-  );
+  // const heading = (
+  //   <h3 className="font-extrabold text-[40px] text-[#DDF247]">
+  //     Weekly Trending
+  //   </h3>
+  // );
 
-  return <BaseCarousel heading={heading} data={icafNfts} />;
+  return (
+    <BaseCarousel
+      heading={createTitleComp(data?.title, data?.color)}
+      data={icafNfts}
+    />
+  );
 }
