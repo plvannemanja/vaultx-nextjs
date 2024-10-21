@@ -43,12 +43,13 @@ const addressSchema = z.object({
   country: z.object({
     name: z.string().nonempty("country name is invalid"),
   }),
-  city: z.string().nonempty("City is invalid"),
+  city: z.object({
+    name: z.string().nonempty("city name is invalid"),
+  }),
   state: z.object({
     name: z.string().nonempty("state name is invalid"),
   }),
   address1: z.string().nonempty("address 1 is invalid"),
-  address2: z.string(),
   postalCode: z.string(),
   phoneNumber: z.string().nonempty(),
 });
@@ -62,7 +63,6 @@ interface addressErrorType {
   state?: string;
   city?: string;
   address1?: string;
-  address2?: string;
   postalCode?: string;
   phoneNumber?: string;
 }

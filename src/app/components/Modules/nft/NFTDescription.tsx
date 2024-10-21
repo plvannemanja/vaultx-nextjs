@@ -10,14 +10,57 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import Image from 'next/image';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import DescriptionIcon from '../../Icons/description-icon';
+import { DownloadIcon } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { ShippingAddressType } from '@/types';
 
 export default function NFTDescription() {
-  const { NFTDetail: data, setMainImage } = useNFTDetail();
+  const { NFTDetail: data, setMainImage, type } = useNFTDetail();
+  const [shippingData, setShippingData] = useState<Omit<ShippingAddressType, "nftId"> | null>(null);
   const maxAttachments = 4;
   const description = truncate(
     data.description.replace(/\r\n|\n/g, '<br />'),
     500,
   );
+
+  useEffect(() => {
+    if (type === "inEscrow") {
+      setShippingData(data.saleId?.buyerShippingId);
+    } else if (type === "release") {
+      setShippingData(data.saleId?.sellerShippingId);
+    } else {
+      setShippingData(null);
+    }
+  }, [type]);
+  const handleDownload = async (url: string, fileName: string) => {
+    try {
+      // Make an API request to download the file
+      const response = await fetch(url); // Change to your API route
+      const blob = await response.blob();
+
+      // // Extract the original file name from the response headers (if available)
+      // const contentDisposition = response.headers.get('content-disposition');
+
+      // if (contentDisposition) {
+      //   const matches = /filename="(.+)"/.exec(contentDisposition);
+      //   if (matches != null && matches[1]) {
+      //     fileName = matches[1]; // Extract original file name from headers
+      //   }
+      // }
+
+      // Create a link element, set the href to the blob URL, and trigger the download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;  // Use the original file name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Clean up
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
   return (
     <>
       <div className="w-full flex gap-[27px] flex-wrap">
@@ -50,9 +93,8 @@ export default function NFTDescription() {
                     <span>Description</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white/[53%]`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
@@ -74,6 +116,128 @@ export default function NFTDescription() {
           )}
         </Disclosure>
       </div>
+      {shippingData &&
+        (
+          <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
+                    <div className="flex w-full justify-between">
+                      <div className="text-sm font-extrabold text-white flex items-center gap-2">
+                        <span>{type === 'inEscrow' ? 'Buyer' : 'Seller'} Information</span>
+                      </div>
+                      <ChevronUpIcon
+                        className={`${open ? 'rotate-180 transform' : ''
+                          } h-5 w-5 text-white/[53%]`}
+                      />
+                    </div>
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
+                    {/* Buyer Information */}
+                    <div className="space-y-4">
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Name</div>
+                        <div className="text-right text-yellow-300 font-['Azeret Mono']">{shippingData.name}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Email</div>
+                        <div className="text-right text-yellow-300 font-['Azeret Mono']">{shippingData.email}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Phone</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.phoneNumber}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Street Address</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.address.line1}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Postal Address</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.address.postalCode}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">City</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.address.city}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">State</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.address.state}</div>
+                      </div>
+                      <div className="flex justify-between">
+                        <div className="text-sm text-white font-['Azeret Mono']">Country</div>
+                        <div className="text-right text-white font-['Azeret Mono']">{shippingData.country}</div>
+                      </div>
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+
+            {/* Buyer’s Message Section */}
+            <div className="w-full flex justify-between pt-4 text-white border-t border-white/[8%]">
+              <span className="text-yellow-300 text-sm font-extrabold capitalize">{type === "inEscrow" ? "Buyer" : "Seller"}’s message</span>
+            </div>
+            <div className="pt-4 text-white/[53%] text-sm font-normal azeret-mono-font">
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: truncate(shippingData.contactInformation, 450),
+                }}
+              ></span>
+              {description.length > 450 && (
+                <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
+                  See more
+                </span>
+              )}
+            </div>
+          </div>
+        )
+      }
+      {
+        data.unlockableContent && (
+          <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
+                    <div className="flex w-full justify-between">
+                      <div className="text-sm font-extrabold text-white flex items-center gap-2">
+                        <Image src="/icons/lockable.svg" width={16} height={16} alt="lockable" />
+                        <span>Unlockable Content</span>
+                      </div>
+                      <ChevronUpIcon
+                        className={`${open ? 'rotate-180 transform' : ''} h-5 w-5 text-white/[53%]`}
+                      />
+                    </div>
+                  </DisclosureButton>
+
+                  <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
+                    <div className="text-white/[53%] text-sm font-normal mb-4">
+                      {data.unlockableContent}
+                    </div>
+
+                    <div className="flex justify-start items-center gap-6">
+                      {
+                        data.certificates.map((item, index) => (
+                          <div className="flex items-center gap-4 border-r border-white/20 pr-6" key="item">
+                            <span className="text-white">{data.certificateNames?.[index]}</span>
+                            <a href={item} download={data.certificateNames?.[index]}>
+                              <DownloadIcon className="w-4 h-4 text-yellow-400" />
+                            </a>
+                          </div>
+                        ))
+                      }
+
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+          </div>
+        )
+      }
+
+
       <div className="w-full rounded-[20px] p-5 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
@@ -105,9 +269,8 @@ export default function NFTDescription() {
                     Properties
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white/[53%]`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
@@ -137,6 +300,7 @@ export default function NFTDescription() {
           )}
         </Disclosure>
       </div>
+
     </>
   );
 }

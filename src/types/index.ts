@@ -27,7 +27,7 @@ type YoutubeType = {
   url: string;
 };
 
-type ShippingAddressType = {
+export type ShippingAddressType = {
   _id: string;
   name: string;
   email: string;

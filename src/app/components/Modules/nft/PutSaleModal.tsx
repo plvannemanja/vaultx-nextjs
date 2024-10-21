@@ -35,12 +35,13 @@ const addressSchema = z.object({
   country: z.object({
     name: z.string().nonempty("country name is invalid"),
   }),
-  city: z.string().nonempty("City is invalid"),
+  city: z.object({
+    name: z.string().nonempty("city name is invalid"),
+  }),
   state: z.object({
     name: z.string().nonempty("state name is invalid"),
   }),
   address1: z.string().nonempty("address 1 is invalid"),
-  address2: z.string(),
   postalCode: z.string(),
   phoneNumber: z.string().nonempty(),
 });
@@ -54,7 +55,6 @@ interface addressErrorType {
   state?: string;
   city?: string;
   address1?: string;
-  address2?: string;
   postalCode?: string;
   phoneNumber?: string;
 }
@@ -162,13 +162,19 @@ export default function PutSaleModal({
       );
       const data = {
         nftId: nftId,
-        name: nft.saleId.sellerShippingId.name,
-        email: nft.saleId.sellerShippingId.email,
-        country: nft.saleId.sellerShippingId.country,
-        address: nft.saleId.sellerShippingId.address,
-        phoneNumber: nft.saleId.sellerShippingId.phoneNumber,
-        contactInformation: nft.saleId.sellerShippingId.contactInformation,
-        concent: nft.saleId.sellerShippingId.concent,
+        name: formData.username,
+        email: formData.email,
+        country: sellerInfo.country ? sellerInfo.country.name : '',
+        address: {
+          line1: sellerInfo.address1,
+          line2: sellerInfo.address2,
+          city: sellerInfo.city ? sellerInfo.city.name : '',
+          state: sellerInfo.state ? sellerInfo.state.name : '',
+          postalCode: sellerInfo.postalCode,
+        },
+        phoneNumber: sellerInfo.phoneNumber,
+        contactInformation: formData.description,
+        concent: formData.accepted,
         saleHash: transactionHash,
         price: formData.price,
       };
