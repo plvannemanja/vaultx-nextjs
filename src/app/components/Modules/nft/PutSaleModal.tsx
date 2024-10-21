@@ -371,9 +371,8 @@ export default function PutSaleModal({
                             Give a new price to put this asset for sale.
                           </span>
                           <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                            className={`${open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -403,9 +402,8 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Buyer Information</span>
                           <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                            className={`${open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -498,9 +496,8 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Shipping Address*</span>
                           <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                            className={`${open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -513,6 +510,12 @@ export default function PutSaleModal({
                               <Input
                                 value={
                                   sellerInfo.address1 ? sellerInfo.address1 : ''
+                                }
+                                onChange={(e) =>
+                                  setSellerInfo({
+                                    ...sellerInfo,
+                                    address1: e.target.value,
+                                  })
                                 }
                                 className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
                                 type="text"
@@ -681,9 +684,8 @@ export default function PutSaleModal({
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>Contact Information For Seller</span>
                           <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                            className={`${open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                           />
                         </DisclosureButton>
                         <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -717,9 +719,8 @@ export default function PutSaleModal({
                               information
                             </span>
                             <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
+                              className={`${open ? 'rotate-180 transform' : ''
+                                } h-5 w-5 text-white`}
                             />
                           </div>
                           <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
