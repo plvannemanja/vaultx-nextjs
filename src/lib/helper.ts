@@ -27,6 +27,7 @@ import {
 } from '@/types';
 import { formatEther, parseEther } from 'viem';
 import { bigint } from 'zod';
+import { checksumAddress } from 'thirdweb/utils';
 
 export const createCollection = async (
   // name: string,
@@ -263,7 +264,7 @@ export const getVoucherSignature = async (
       'function _verify((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) view returns (address)',
     params: [{ ...NFTVoucher, signature }],
   });
-  if (signerAddr !== account.address)
+  if (signerAddr !== checksumAddress(account?.address))
     throw new Error('signature is not valid.');
 
   return signature;
