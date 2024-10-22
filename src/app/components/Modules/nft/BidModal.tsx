@@ -772,8 +772,7 @@ export default function BidModal({
         </p>
 
         <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-          If the seller accepts your bid, the transaction will automatically proceed to the purchase stage. Once the purchase is confirmed, you will be granted access to the seller's contact information, allowing you to directly communicate with the seller to discuss shipping details
-
+          {`If the seller accepts your bid, the transaction will automatically proceed to the purchase stage. Once the purchase is confirmed, you will be granted access to the seller's contact information, allowing you to directly communicate with the seller to discuss shipping details`}
           <br />
           <br />
           Bid Cancellation
