@@ -37,7 +37,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
             ? data.map((item: any, index) => (
                 <CarouselItem key={index}>
                   <a href={ensureValidUrl(item.link)} target="_blank">
-                    <div className="hero__content__blk md:p-20 p-8 h-full relative min-h-[500px] md:min-h-[600px] lg:min-h-[700px]">
+                    <div className="md:p-20 p-8 h-full relative min-h-screen">
                       <img
                         src={item.image}
                         alt={item.name}
