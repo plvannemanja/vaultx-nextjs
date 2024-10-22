@@ -18,7 +18,7 @@ interface IBaseCarouselProps {
 
 export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
   return (
-    <div className="w-full container">
+    <div className="w-full container !px-3 xs:!px-5 sm:!px-0">
       <div className="flex justify-between items-center my-10 text-white flex-wrap">
         {heading}
         <div className="flex items-center gap-x-3 text-lg font-medium cursor-pointer">

@@ -88,24 +88,26 @@ export default function Page() {
     });
 
     fetchCollection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     fetchCollection();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedFilter]);
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
       {mediaImages?.curationTop?.image && mediaImages?.curationTop.link ? (
         <a href={ensureValidUrl(mediaImages?.curationTop.link)} target="_blank">
-          <div className="w-full max-w-[1550px] h-[300px] sm:h-[350px] md:h-[370px] mx-auto relative">
+          <div className="w-full">
             <Image
               src={mediaImages?.curationTop.image}
               alt="hero"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-xl mb-4"
-            ></Image>
+              className="rounded-xl w-full mb-4 h-[300px] sm:h-[350px] md:h-[370px] object-fill"
+              width={1000}
+              height={370}
+            />
           </div>
         </a>
       ) : null}
@@ -115,10 +117,13 @@ export default function Page() {
           {loading ? (
             <SkeletonCard />
           ) : (
-            <div className="grid grid-cols-12 gap-4 2xl:gap-6">
+            <div className="grid grid-cols-12 gap-2 sm:gap-3 xl:gap-4 2xl:gap-8">
               {collections.map((collection: any, index: number) => {
                 return (
-                  <div className="col-span-4" key={index}>
+                  <div
+                    className="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3"
+                    key={index}
+                  >
                     <CurationCard key={index} data={collection} />
                   </div>
                 );

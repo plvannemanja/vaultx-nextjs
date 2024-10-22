@@ -26,7 +26,7 @@ export default function NewsCard({
         </p>
       </div>
       <div className="grid grid-cols-12 gap-4 container justify-center">
-        <div className="relative col-span-7 min-h-[934px]">
+        <div className="relative col-span-12 xl:col-span-7 min-h-[934px]">
           <Link href={data?.[0]?.subtitle2} target="_blank">
             <Image
               src={data?.[0]?.image}
@@ -37,7 +37,7 @@ export default function NewsCard({
             />
           </Link>
         </div>
-        <div className="grid grid-cols-2 grid-rows-3 gap-4 col-span-5">
+        <div className="grid grid-cols-2 grid-rows-3 gap-4 col-span-12 xl:col-span-5">
           {data.slice(1).map((item, index) => (
             <div key={index} className="min-h-[298px] relative">
               <Link href={item.subtitle2} target="_blank" className="h-full">

@@ -1,31 +1,27 @@
 'use client';
 
 import { truncate } from '@/lib/utils';
+import { ShippingAddressType } from '@/types';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
+import { DownloadIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import DescriptionIcon from '../../Icons/description-icon';
-import { DownloadIcon } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { ShippingAddressType } from '@/types';
 
 export default function NFTDescription() {
+  const [loadMore, setLoadMore] = useState(false);
   const { NFTDetail: data, setMainImage, type } = useNFTDetail();
   const [shippingData, setShippingData] = useState<Omit<
     ShippingAddressType,
     'nftId'
   > | null>(null);
   const maxAttachments = 4;
-  const description = truncate(
-    data.description.replace(/\r\n|\n/g, '<br />'),
-    500,
-  );
 
   useEffect(() => {
     if (type === 'inEscrow') {
@@ -35,7 +31,9 @@ export default function NFTDescription() {
     } else {
       setShippingData(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
+
   const handleDownload = async (url: string, fileName: string) => {
     try {
       // Make an API request to download the file
@@ -63,6 +61,11 @@ export default function NFTDescription() {
       console.error('Download failed:', error);
     }
   };
+
+  const description = truncate(
+    data?.description?.replace(/\r\n|\n/g, '<br />'),
+    320,
+  );
 
   return (
     <>
@@ -107,12 +110,17 @@ export default function NFTDescription() {
                   className="text-white/[53%] text-sm font-normal azeret-mono-font"
                   dangerouslySetInnerHTML={{
                     // data.description.replace(/\r\n|\n/g, '<br />'),
-                    __html: truncate(description, 450),
+                    __html: loadMore
+                      ? data?.description?.replace(/\r\n|\n/g, '<br />')
+                      : description,
                   }}
                 ></span>
-                {description?.length > 450 && (
-                  <span className="text-[#DDF247] inline-block ml-2 text-sm cursor-pointer hover:underline">
-                    See more
+                {description?.length > 320 && (
+                  <span
+                    className="text-[#DDF247] inline-block ml-2 cursor-pointer font-normal azeret-mono-font"
+                    onClick={() => setLoadMore((prev) => !prev)}
+                  >
+                    {loadMore ? 'View less' : 'View More'}
                   </span>
                 )}
               </DisclosurePanel>

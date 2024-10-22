@@ -1,4 +1,4 @@
-import Image from 'next/image';
+/* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 
 export default function ExceptionalCard({
@@ -11,13 +11,19 @@ export default function ExceptionalCard({
   id: string;
 }) {
   return (
-    <div className="bg-dark p-3 w-full h-full lg:w-[48%] max-w-[696px] max-h-[696px]">
-      <div className="w-full aspect-square relative">
+    <div className="bg-dark pt-3 pb-5 px-3 col-span-12 lg:col-span-6">
+      <div className="w-full h-full">
         <Link href={`/dashboard/curation/${id}`} target="_blank">
-          <Image src={logo} layout="fill" objectFit="cover" alt="curation" />
+          <img
+            src={logo}
+            className="exceptinal_curation__image w-full aspect-square object-cover"
+            alt="curation"
+          />
         </Link>
       </div>
-      <p className="text-lg text-white text-center mt-2">{name}</p>
+      <p className="text-[30px] font-semibold text-white text-center mt-5">
+        {name}
+      </p>
     </div>
   );
 }

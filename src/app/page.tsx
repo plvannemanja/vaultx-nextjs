@@ -248,7 +248,7 @@ export default function Home() {
       ) : (
         <Skeleton className="w-full h-[400px]" />
       )}
-      <div className="py-10 pt-[100px] w-full px-10 lg:px-20 lg:relative">
+      <div className="py-5 sm:py-10 pt-10 sm:pt-[100px] w-full px-5 sm:px-10 lg:px-20 lg:relative">
         <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] border-l-transparent border-t-transparent -rotate-45 hidden lg:block absolute -left-4 top-[28.5rem]"></div>
         <div className="w-7 h-7 border-2 rounded-full border-[#DDF247] hidden lg:block absolute left-24"></div>
         <div className="w-4 h-4 rounded-full bg-[#DDF247] hidden lg:block absolute right-12 top-[10rem]"></div>
@@ -357,7 +357,7 @@ export default function Home() {
                 />
               </div> */}
             </div>
-            <div className="flex mt-20 md:gap-8 flex-wrap gap-5 justify-start container items-center self-center px-5 w-full max-md:flex-wrap max-md:max-w-full">
+            <div className="mt-20 md:gap-8 gap-5 justify-start container !px-3 xs:!px-5 items-center self-center w-full grid grid-cols-12">
               {curations.map((item: any, index: number) => {
                 return (
                   <ExceptionalCard
@@ -383,14 +383,14 @@ export default function Home() {
         </div>
       </div>
       {section4 ? (
-        <div className="mt-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')] relative">
+        <div className="mt-4 sm:mt-8 md:mt-12 lg:mt-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')] relative">
           <div className="absolute hidden lg:block top-[-9rem] left-0">
             {icon}
           </div>
           <div className="absolute hidden lg:block bottom-[-9rem] right-0">
             {icon2}
           </div>
-          <div className="container">
+          <div className="container !px-3 xs:!px-5">
             <NewsCard
               heading={createTitleComp(section4.title, section4.color)}
               description={section4.description}
@@ -399,8 +399,8 @@ export default function Home() {
           </div>
         </div>
       ) : null}
-      <div className="pt-[120px]">
-        <div className="w-full  max-w-[1204px] h-64 rounded-lg shadow p-4 flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
+      <div className="pt-8 xs:pt-10 sm:pt-16 md:pt-24 lg:pt-[120px] p-4">
+        <div className="w-full max-w-[1204px] h-64 rounded-lg shadow  flex flex-col justify-center items-center space-y-4 relative overflow-hidden mx-auto">
           {images?.bottomBaner && (
             <Link href={images?.bottomBaner.link} target="_blank">
               <Image

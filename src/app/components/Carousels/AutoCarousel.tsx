@@ -12,7 +12,7 @@ interface IBaseCarouselProps {
 
 export function AutoCarousel({ data }: IBaseCarouselProps) {
   return (
-    <div className="w-full relative pb-12">
+    <div className="w-full relative pb-6 sm:pb-10 md:pb-12">
       {/* <Carousel
         plugins={[
           Autoplay({

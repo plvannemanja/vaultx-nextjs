@@ -15,7 +15,7 @@ export default function DashboardLayout({
     pathName?.includes('how-to-work') || pathName?.includes('help-center');
   return (
     <section className="flex gap-x-2 relative">
-      <div className="hidden lg:block xl:w-[310px] shrink-0">
+      <div className="hidden lg:block lg:w-[280px] shrink-0">
         <SideBar />
       </div>
       <div className="w-full lg:w-[100%] flex flex-col gap-y-2 px-2">
