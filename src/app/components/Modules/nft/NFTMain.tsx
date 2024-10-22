@@ -13,6 +13,7 @@ import { BaseDialog } from '@/app/components/ui/BaseDialog';
 import { unlistAsset } from '@/lib/helper';
 import { cn, formatNumberWithCommas } from '@/lib/utils';
 import { CreateSellService } from '@/services/createSellService';
+import { FavoriteService } from '@/services/FavoriteService';
 import NftServices from '@/services/nftService';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import Box from '@mui/material/Box';
@@ -21,6 +22,7 @@ import { EyeIcon, Heart, Share2, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
+import { useDebounce } from 'use-debounce';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import ErrorModal from '../create/ErrorModal';
@@ -28,8 +30,6 @@ import BasicLoadingModal from './BasicLoadingModal';
 import BurnModal from './BurnModal';
 import EditNFTModal from './EditNFTModal';
 import TransferModal from './TransferModal';
-import { useDebounce } from 'use-debounce';
-import { FavoriteService } from '@/services/FavoriteService';
 
 const style = {
   borderRadius: '10px',
@@ -408,15 +408,13 @@ export default function NFTMain({
                   </p>
                   <div className="flex justify-between">
                     <div className="flex gap-x-[10px] items-center">
-                      {data?.owner?.avatar?.url ? (
-                        <Image
-                          width={32}
-                          height={32}
-                          src={data?.owner?.avatar?.url}
-                          alt="avatar"
-                          className="w-8 h-8 rounded-full"
-                        />
-                      ) : null}
+                      <Image
+                        width={32}
+                        height={32}
+                        src={data?.owner?.avatar?.url || '/default-logo.png'}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
                       <div className="flex flex-col gap-y-1 text-sm">
                         <p className="text-[12px] text-white/30 azeret-mono-font">
                           Owned by:
@@ -427,15 +425,14 @@ export default function NFTMain({
                       </div>
                     </div>
                     <div className="flex gap-x-[10px] items-center">
-                      {data?.mintedBy?.avatar?.url ? (
-                        <Image
-                          width={32}
-                          height={32}
-                          src={data?.mintedBy?.avatar?.url}
-                          alt="avatar"
-                          className="w-8 h-8 rounded-full"
-                        />
-                      ) : null}
+                      <Image
+                        width={32}
+                        height={32}
+                        src={data?.mintedBy?.avatar?.url || '/default-logo.png'}
+                        alt="avatar"
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+
                       <div className="flex flex-col gap-y-1 text-sm">
                         <p className="text-[12px] text-white/30 azeret-mono-font">
                           Created by:
