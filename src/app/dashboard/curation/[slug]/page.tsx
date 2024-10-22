@@ -272,9 +272,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           'h-[340px]',
         )}
       >
-        {curation?.bannerImage && (
+        {curation?.logo && (
           <Image
-            src={curation?.bannerImage}
+            src={curation?.logo}
             alt="hero"
             layout="fill"
             objectFit="cover"
@@ -557,8 +557,8 @@ export default function Page({ params }: { params: { slug: string } }) {
               key={index}
               onClick={() => setFilterBadge(badge.value)}
               className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${filterbadge === badge.value
-                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                  : 'hover:bg-[#232323] bg-transparent text-white'
+                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                : 'hover:bg-[#232323] bg-transparent text-white'
                 }`}
             >
               {badge.label}
