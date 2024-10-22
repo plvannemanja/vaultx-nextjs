@@ -21,19 +21,19 @@ export default function NftCard({ data }: { data: INftCardProps }) {
   }
   return (
     <Card className="bg-transparent text-white border-none w-full bg-[#232323]">
-      <CardContent className="aspect-square p-0 rounded-[20px]">
-        <div className="w-full h-[336px] overflow-hidden p-[20px] rounded-t-[20px]">
+      <CardContent className="rounded-[20px] p-0">
+        <div className="w-full overflow-hidden rounded-[8px] p-5">
           <Image
             width={296}
             height={296}
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
-            className="rounded w-full object-cover hover:scale-110 transition-transform duration-300 min-h-[296px] max-h-[296px]"
+            className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
             blurDataURL={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
             placeholder="blur"
           />
         </div>
-        <div className="flex flex-col gap-y-2.5 bg-[#333] px-5 py-3 rounded-b-[20px]">
+        <div className="flex flex-col px-5 py-3 gap-y-2.5 rounded-b-[20px]">
           <p className="font-extrabold">
             {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
           </p>

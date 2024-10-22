@@ -287,8 +287,20 @@ body {
 }
 
 @media (min-width: 1024px) {
+  .curation_text {
+    font-size: 14px;
+  }
   .container {
     max-width: 1024px;
+  }
+}
+
+@media ((min-width: 1020px) and (max-width: 1400px)) {
+  .curation_text {
+    font-size: 12px !important;
+  }
+  .curation_value {
+    font-size: 12px !important;
   }
 }
 
@@ -309,3 +321,9 @@ body {
     max-width: 1536px;
   }
 }
+
+/* @media (min-width: 1792px) {
+  .container {
+    max-width: 1792px;
+  }
+} */

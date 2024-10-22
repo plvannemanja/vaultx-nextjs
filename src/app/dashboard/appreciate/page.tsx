@@ -76,7 +76,16 @@ export default function Page() {
           href={ensureValidUrl(mediaImages?.appreciateTop.link)}
           target="_blank"
         >
-          <div className="w-full max-w-[1582px] h-[300px] sm:h-[350px] md:h-[370px] mx-auto relative">
+          <div className="w-full">
+            <Image
+              src={mediaImages?.appreciateTop.image}
+              alt="hero"
+              className="rounded-xl w-full mb-4 h-[300px] sm:h-[350px] md:h-[370px] object-fill"
+              width={1000}
+              height={370}
+            />
+          </div>
+          {/* <div className="w-full max-w-[1582px] h-[300px] sm:h-[350px] md:h-[370px] mx-auto relative">
             <Image
               src={mediaImages?.appreciateTop.image}
               alt="hero"
@@ -84,11 +93,11 @@ export default function Page() {
               objectFit="cover"
               className="rounded-lg mb-3.5"
             ></Image>
-          </div>
+          </div> */}
         </a>
       ) : null}
       <Filters setState={handleFilters} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 lg:gap-4 xl:gap-5 2xl:gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 lg:gap-4 xl:gap-5 2xl:gap-6">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
               return (

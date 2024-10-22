@@ -502,7 +502,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div
           data-aos={showLess ? 'fade-up' : 'fade-down'}
           className={cn(
-            'w-full transition-all duration-500 ease-in-out relative data-[aos="fade-up"]:h-[200px] data-[aos="fade-down"]:h-full data-[aos="fade-up"]:before:absolute data-[aos="fade-up"]:before:top-0 data-[aos="fade-up"]:before:left-0 data-[aos="fade-up"]:before:w-full data-[aos="fade-up"]:before:h-full data-[aos="fade-up"]:before:z-10 data-[aos="fade-up"]:before:bg-gradient-to-b data-[aos="fade-up"]:before:to-[#111] data-[aos="fade-up"]:before:from-[#111]/[23%] data-[aos="fade-up"]:before:content-[""]',
+            'w-full transition-all duration-500 ease-in-out relative data-[aos="fade-up"]:h-[200px] data-[aos="fade-down"]:h-full data-[aos="fade-up"]:before:absolute data-[aos="fade-up"]:before:top-0 data-[aos="fade-up"]:before:left-0 data-[aos="fade-up"]:before:w-full data-[aos="fade-up"]:before:h-full data-[aos="fade-up"]:before:z-10 data-[aos="fade-up"]:before:bg-gradient-to-b data-[aos="fade-up"]:before:to-[#111] data-[aos="fade-up"]:before:from-[#111]/[23%] data-[aos="fade-up"]:before:content-[""] overflow-hidden',
             // showLess
             //   ? 'h-[200px] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:z-10 before:bg-gradient-to-b before:to-[#111] before:from-[#111]/[23%] before:content-[""]'
             //   : '',
@@ -526,9 +526,9 @@ export default function Page({ params }: { params: { slug: string } }) {
                   <Image
                     src={image}
                     alt="hero"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-xl"
+                    className="rounded-xl w-full h-full"
+                    width={960}
+                    height={960}
                   />
                 </div>
               ))}

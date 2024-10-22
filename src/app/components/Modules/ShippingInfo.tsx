@@ -296,15 +296,12 @@ export default function ShippingInfo() {
   const isSelected = useMemo(
     () => (item: any) => {
       const id = nftContext.sellerInfo.shippingId;
-
       if (id !== null && item !== null) {
         return id === item._id;
       }
-
       if (selectedShipping !== null && item !== null) {
         return selectedShipping._id === item._id;
       }
-
       return false;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -325,9 +322,9 @@ export default function ShippingInfo() {
   }, []);
   const fetchSellers = async () => {
     const response = await getSellerInfo();
-
     setData(response);
   };
+
   return (
     <div className="flex flex-col gap-y-5">
       <p className="text-lg font-semibold text-white font-manrope">
@@ -339,10 +336,10 @@ export default function ShippingInfo() {
               return (
                 <div
                   key={index}
+                  className={`w-[18rem] cursor-pointer h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
                   onClick={() => {
                     setSelectedShipping(item);
                   }}
-                  className={`w-[18rem] h-[15rem] bg-[#232323] relative flex flex-col justify-between p-4 rounded-md ${isSelected(item) ? 'border-transparent' : 'border-[#DDF247]'}`}
                 >
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">

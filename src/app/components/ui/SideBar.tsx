@@ -81,7 +81,7 @@ export default function SideBar({ className }: { className?: string }) {
 
   return (
     <div
-      className={`bg-[#161616] fixed left-0 top-0 h-[100vh] z-20 w-[310px] ${className}`}
+      className={`bg-[#161616] fixed left-0 top-0 h-[100vh] z-20 w-[280px] ${className}`}
     >
       <Link
         href="/"
