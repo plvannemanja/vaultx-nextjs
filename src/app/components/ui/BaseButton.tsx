@@ -11,6 +11,7 @@ interface IBaseButtonProps {
   iconPath?: any;
   iconStyles?: any;
   loading?: boolean;
+  buttonStyles?: any;
 }
 
 export default function BaseButton({
@@ -21,6 +22,7 @@ export default function BaseButton({
   displayIcon,
   iconPath,
   iconStyles,
+  buttonStyles,
   loading,
 }: IBaseButtonProps) {
   const isPrimary = useMemo(() => variant === 'primary', [variant]);
@@ -40,7 +42,7 @@ export default function BaseButton({
       <button
         className={cn(
           'w-full h-full gap-[10px] flex items-center justify-center relative',
-          '',
+          buttonStyles,
         )}
         onClick={onClick}
         disabled={loading}

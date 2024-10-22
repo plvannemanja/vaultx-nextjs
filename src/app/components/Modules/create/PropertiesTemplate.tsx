@@ -4,6 +4,7 @@ import {
   getProperties,
   upsertProperty,
 } from '@/services/supplier';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import PropertiesInfo from '../Properties';
@@ -19,8 +20,10 @@ const defaultAttributes = [
 
 export default function PropertiesTemplate({
   addStatus,
+  isSetting,
 }: {
   addStatus: boolean;
+  isSetting?: boolean;
 }) {
   const { toast } = useToast();
   const { advancedDetails, setAdvancedDetails } = useCreateNFT();
@@ -42,7 +45,7 @@ export default function PropertiesTemplate({
     }
     setAdvancedDetails({
       ...advancedDetails,
-      propertyTemplateId: "basic",
+      propertyTemplateId: 'basic',
     });
   }, []);
 
@@ -154,13 +157,14 @@ export default function PropertiesTemplate({
               handleTemplateSelect({
                 name: 'Basic Template',
                 attributes: defaultAttributes,
-                _id: "basic"
+                _id: 'basic',
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === "basic"
-              ? 'border-neon'
-              : 'border-none'
-              }`}
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              advancedDetails.propertyTemplateId === 'basic'
+                ? 'border-neon'
+                : 'border-none'
+            }`}
           >
             <p>Basic Template</p>
           </div>
@@ -169,10 +173,11 @@ export default function PropertiesTemplate({
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${advancedDetails.propertyTemplateId === item._id
-                ? 'border-neon'
-                : 'border-none'
-                }`}
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
+                advancedDetails.propertyTemplateId === item._id
+                  ? 'border-neon'
+                  : 'border-none'
+              }`}
             >
               <p>{item.name}</p>
               <button
@@ -198,7 +203,13 @@ export default function PropertiesTemplate({
             className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
           >
             <div className="w-12 h-12 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
-              <img src="/icons/plus.svg" />
+              <Image
+                src="/icons/plus.svg"
+                className="w-5 h-5"
+                alt="plus"
+                width={20}
+                height={20}
+              />
             </div>
             <p className="text-[#828282] font-medium text-lg">
               Add new template

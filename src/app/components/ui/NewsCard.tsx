@@ -27,8 +27,10 @@ export default function NewsCard({
       </div>
       <div className="grid grid-cols-12 gap-4 container justify-center">
         <div className="relative col-span-12 xl:col-span-7 min-h-[934px] group">
-          <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-black/40 flex items-end">
-            <p className="text-white p-5 font-semibold">{data?.[0]?.title}</p>
+          <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-gradient-to-b from-[#666666]/0 via-[#131313]/[48%] to-black flex items-end">
+            <p className="text-white p-5 font-extrabold text-[22px] w-10/12 mx-auto">
+              {data?.[0]?.title}
+            </p>
           </div>
           <Link href={data?.[0]?.subtitle2} target="_blank">
             <Image
@@ -43,8 +45,10 @@ export default function NewsCard({
         <div className="grid grid-cols-2 grid-rows-3 gap-4 col-span-12 xl:col-span-5">
           {data.slice(1).map((item, index) => (
             <div key={index} className="min-h-[298px] relative group">
-              <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-black/40 flex items-end">
-                <p className="text-white p-5 font-semibold">{item.title}</p>
+              <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-gradient-to-b from-[#666666]/0 via-[#131313]/[48%] to-black flex items-end">
+                <p className="text-white p-5 font-extrabold text-[22px]">
+                  {item.title}
+                </p>
               </div>
               <Link href={item.subtitle2} target="_blank" className="h-full">
                 <Image

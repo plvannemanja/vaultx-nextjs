@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import {
   deleteContactInfo,
   getContactsInfo,
@@ -14,7 +15,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCreateNFT } from '../Context/CreateNFTContext';
 import BaseButton from '../ui/BaseButton';
 import { BaseDialog } from '../ui/BaseDialog';
-export default function ContactInfo() {
+
+export default function ContactInfo({ isSetting }: any) {
   const { toast } = useToast();
   const [data, setData] = useState<null | any[]>(null);
   const [newContact, setNewContact] = useState({
@@ -114,15 +116,20 @@ export default function ContactInfo() {
 
   return (
     <div className="flex flex-col gap-y-5">
-      <p className="text-lg font-semibold text-white font-manrope">
-        Contact Information
-      </p>
+      {isSetting ? null : (
+        <p className="text-lg font-semibold text-white font-manrope">
+          Contact Information
+        </p>
+      )}
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`}
+                className={cn(
+                  `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
+                  isSetting ? ' bg-[#161616]' : '',
+                )}
                 onClick={() => setSelectedContact(item)}
               >
                 <span className="text-xl font-semibold">
@@ -235,7 +242,10 @@ export default function ContactInfo() {
             ))
           : null}
         <div
-          className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
+          className={cn(
+            'w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative',
+            isSetting ? 'bg-[#161616]' : '',
+          )}
           onClick={() => setIsModalOpen(true)}
         >
           <div className="flex flex-col gap-y-6 items-center">
@@ -248,7 +258,12 @@ export default function ContactInfo() {
                 height={20}
               />
             </div>
-            <p className="text-[#828282] font-medium text-lg">
+            <p
+              className={cn(
+                'text-[#828282] font-medium text-lg',
+                isSetting ? 'text-[#7C8282]' : '',
+              )}
+            >
               Add New Information
             </p>
           </div>

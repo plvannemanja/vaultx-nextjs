@@ -1,13 +1,13 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import {
   acceptedFormats as acceptedFileFormats,
   maxFileSize,
 } from '@/utils/helpers';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import BaseButton from './BaseButton';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
 
 interface IFileInputProps {
   title?: string;
@@ -20,6 +20,7 @@ interface IFileInputProps {
   titleStyles?: any;
   showIcon?: boolean;
   onPressIcon?: () => void;
+  isProfile?: boolean;
 }
 
 export default function FileInput({
@@ -33,6 +34,7 @@ export default function FileInput({
   titleStyles,
   showIcon,
   onPressIcon,
+  isProfile,
 }: IFileInputProps) {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState<any>(null);
@@ -81,17 +83,22 @@ export default function FileInput({
       />
       <div
         className={cn(
-          'relative file-upload !p-0 !bg-[#161616]  !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex',
+          'relative file-upload !p-0 !bg-[#161616] !w-full !rounded-xl justify-start items-center gap-[30px] inline-flex',
           showIcon && 'pr-10',
+          isProfile ? '!py-1.5 !px-2 !bg-transparent' : '',
         )}
       >
         <BaseButton
-          title="Upload"
+          title={isProfile ? 'Choose File' : 'Upload'}
           variant="secondary"
           onClick={handleButtonClick}
           displayIcon
-          iconPath={'/icons/uploadBlack.svg'}
-          className={'w-[30%] p-0'}
+          iconPath={isProfile ? '/icons/galary.svg' : '/icons/uploadBlack.svg'}
+          className={cn(
+            'w-[30%] p-0',
+            isProfile ? '!bg-[#ddf247] text-black' : '',
+          )}
+          buttonStyles={cn(isProfile ? 'flex-row-reverse' : 'flex-row')}
           iconStyles={'stroke-black'}
         />{' '}
         <p className="azeret-mono-font !text-sm">
@@ -110,7 +117,14 @@ export default function FileInput({
         )}
       </div>
       {subtitle && (
-        <p className="text-sm text-gray-500 font-medium">{subtitle}</p>
+        <p
+          className={cn(
+            'text-sm text-white/50 font-medium azeret-mono-font',
+            isProfile ? 'font-normal' : '',
+          )}
+        >
+          {subtitle}
+        </p>
       )}
     </div>
   );
