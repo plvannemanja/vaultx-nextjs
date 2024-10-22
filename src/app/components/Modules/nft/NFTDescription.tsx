@@ -13,9 +13,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import DescriptionIcon from '../../Icons/description-icon';
+import { useGlobalContext } from '../../Context/GlobalContext';
 
 export default function NFTDescription() {
   const [loadMore, setLoadMore] = useState(false);
+  const { user } = useGlobalContext();
   const { NFTDetail: data, setMainImage, type } = useNFTDetail();
   const [shippingData, setShippingData] = useState<Omit<
     ShippingAddressType,
@@ -99,9 +101,8 @@ export default function NFTDescription() {
                     <span>Description</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white/[53%]`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
@@ -141,9 +142,8 @@ export default function NFTDescription() {
                       </span>
                     </div>
                     <ChevronUpIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white/[53%]`}
+                      className={`${open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white/[53%]`}
                     />
                   </div>
                 </Disclosure.Button>
@@ -240,57 +240,58 @@ export default function NFTDescription() {
           </div>
         </div>
       )}
-      {data.unlockableContent && (
-        <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
-          <Disclosure as="div" defaultOpen={true}>
-            {({ open }) => (
-              <>
-                <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
-                  <div className="flex w-full justify-between">
-                    <div className="text-sm font-extrabold text-white flex items-center gap-2">
-                      <Image
-                        src="/icons/lockable.svg"
-                        width={16}
-                        height={16}
-                        alt="lockable"
-                      />
-                      <span>Unlockable Content</span>
-                    </div>
-                    <ChevronUpIcon
-                      className={`${open ? 'rotate-180 transform' : ''} h-5 w-5 text-white/[53%]`}
-                    />
-                  </div>
-                </DisclosureButton>
-
-                <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
-                  <div className="text-white/[53%] text-sm font-normal mb-4">
-                    {data.unlockableContent}
-                  </div>
-
-                  <div className="flex justify-start items-center gap-6">
-                    {data.certificates.map((item, index) => (
-                      <div
-                        className="flex items-center gap-4 border-r border-white/20 pr-6"
-                        key="item"
-                      >
-                        <span className="text-white">
-                          {data.certificateNames?.[index]}
-                        </span>
-                        <a
-                          href={item}
-                          download={data.certificateNames?.[index]}
-                        >
-                          <DownloadIcon className="w-4 h-4 text-yellow-400" />
-                        </a>
+      {(data?.owner?.wallet?.toLowerCase() === user?.wallet?.toLowerCase() || type === "release")
+        && data.unlockableContent && (
+          <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
+            <Disclosure as="div" defaultOpen={true}>
+              {({ open }) => (
+                <>
+                  <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg font-medium text-white text-[18px] border-b border-white/[8%]">
+                    <div className="flex w-full justify-between">
+                      <div className="text-sm font-extrabold text-white flex items-center gap-2">
+                        <Image
+                          src="/icons/lockable.svg"
+                          width={16}
+                          height={16}
+                          alt="lockable"
+                        />
+                        <span>Unlockable Content</span>
                       </div>
-                    ))}
-                  </div>
-                </DisclosurePanel>
-              </>
-            )}
-          </Disclosure>
-        </div>
-      )}
+                      <ChevronUpIcon
+                        className={`${open ? 'rotate-180 transform' : ''} h-5 w-5 text-white/[53%]`}
+                      />
+                    </div>
+                  </DisclosureButton>
+
+                  <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
+                    <div className="text-white/[53%] text-sm font-normal mb-4">
+                      {data.unlockableContent}
+                    </div>
+
+                    <div className="flex justify-start items-center gap-6">
+                      {data.certificates.map((item, index) => (
+                        <div
+                          className="flex items-center gap-4 border-r border-white/20 pr-6"
+                          key="item"
+                        >
+                          <span className="text-white">
+                            {data.certificateNames?.[index]}
+                          </span>
+                          <a
+                            href={item}
+                            download={data.certificateNames?.[index]}
+                          >
+                            <DownloadIcon className="w-4 h-4 text-yellow-400" />
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  </DisclosurePanel>
+                </>
+              )}
+            </Disclosure>
+          </div>
+        )}
 
       <div className="w-full rounded-[20px] p-5 bg-[#232323]">
         <Disclosure as="div" defaultOpen={true}>
@@ -323,9 +324,8 @@ export default function NFTDescription() {
                     Properties
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white/[53%]`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
