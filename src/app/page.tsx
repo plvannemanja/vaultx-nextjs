@@ -241,7 +241,7 @@ export default function Home() {
     getData();
   }, []);
   return (
-    <main className="flex flex-col bg-neutral-900">
+    <main className="flex flex-col bg-[#161616]">
       <BaseHeader />
       {images?.homeAutority ? (
         <AutoCarousel data={images.homeAutority} />

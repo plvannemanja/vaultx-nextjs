@@ -38,7 +38,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
             ? data.map((item: any, index) => (
                 <CarouselItem key={index}>
                   <a href={ensureValidUrl(item.link)} target="_blank">
-                    <div className="w-full sm:w-[640px] md:w-[768px] lg:w-[1024px] xl:w-[1320px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] xl:h-[658px] mx-auto relative">
+                    <div className="hero__content__blk md:p-20 p-8 h-full relative min-h-[500px] md:min-h-[600px] mmd:min-h-[700px]">
                       <Image
                         src={item.image}
                         alt={item.name}
@@ -46,6 +46,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
                         objectFit="cover"
                         className="rounded-3xl"
                       ></Image>
+                      <div className="h-1/4 bg-gradient-to-b from-transparent to-[#181818] absolute bottom-0 left-0 right-0 z-10"></div>
                     </div>
                   </a>
                 </CarouselItem>
@@ -53,7 +54,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
             : null}
         </CarouselContent>
       </Carousel>
-      <div className="h-1/4 bg-gradient-to-b from-[#BCBCBC]/0 to-[#181818] absolute bottom-0 left-0 right-0 z-10"></div>
+      {/* <div className="h-1/4 bg-gradient-to-b from-[#BCBCBC]/0 to-[#181818] absolute bottom-0 left-0 right-0 z-10"></div> */}
     </div>
   );
 }
