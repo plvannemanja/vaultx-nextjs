@@ -36,16 +36,15 @@ import { z } from 'zod';
 const addressSchema = z.object({
   username: z.string().nonempty('User name is invalid'),
   email: z.string().email({ message: 'Email is invalid' }),
-  description: z.string(),
   accepted: z.boolean().refine((val) => val === true, {
     message: 'The value must be true.',
   }),
   country: z.object({
     name: z.string().nonempty('country name is invalid'),
   }),
-  city: z.object({
-    name: z.string().nonempty('city name is invalid'),
-  }),
+  // city: z.object({
+  //   name: z.string().nonempty('city name is invalid'),
+  // }),
   state: z.object({
     name: z.string().nonempty('state name is invalid'),
   }),
@@ -61,7 +60,7 @@ interface addressErrorType {
   accepted?: string;
   country?: string;
   state?: string;
-  city?: string;
+  // city?: string;
   address1?: string;
   postalCode?: string;
   phoneNumber?: string;
@@ -93,7 +92,7 @@ export default function BuyModal({
   const [sellerInfo, setSellerInfo] = useState<any>({
     country: null,
     state: null,
-    city: null,
+    // city: null,
     address1: null,
     address2: null,
     postalCode: null,
@@ -105,8 +104,8 @@ export default function BuyModal({
 
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-      '...' +
-      activeAccount?.address.slice(-4)
+    '...' +
+    activeAccount?.address.slice(-4)
     : 'Connect Wallet';
 
   const countries = Country.getAllCountries();
@@ -321,9 +320,8 @@ export default function BuyModal({
                       <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                         <span>Buyer Information</span>
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                         />
                       </DisclosureButton>
                       <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -417,9 +415,8 @@ export default function BuyModal({
                       <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                         <span>Shipping Address*</span>
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                         />
                       </DisclosureButton>
                       <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -529,11 +526,11 @@ export default function BuyModal({
                                 </option>
                               ))}
                             </select>
-                            {addressError?.city && (
+                            {/* {addressError?.city && (
                               <p className="text-red-500 text-sm">
                                 {addressError.city}
                               </p>
-                            )}
+                            )} */}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
                             <h2 className="font-bold text-[#fff] text-[14px]">
@@ -607,9 +604,8 @@ export default function BuyModal({
                       <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                         <span>Contact Information For Seller</span>
                         <ChevronUpIcon
-                          className={`${
-                            open ? 'rotate-180 transform' : ''
-                          } h-5 w-5 text-white`}
+                          className={`${open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white`}
                         />
                       </DisclosureButton>
                       <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -643,9 +639,8 @@ export default function BuyModal({
                             information
                           </span>
                           <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
+                            className={`${open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white`}
                           />
                         </div>
                         <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
@@ -911,39 +906,6 @@ export default function BuyModal({
                   close
                 </button>
               </div>
-            </div>
-          )}
-
-          {step === 6 && (
-            <div className="flex flex-col gap-y-4 w-full">
-              <div className="flex gap-x-3 items-center">
-                <img src="/icons/info.svg" className="w-12" />
-                <p className="text-[30px] text-[#fff] font-extrabold">
-                  Bid Information
-                </p>
-              </div>
-
-              <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
-                Bid Success
-                <br />
-                If a seller accepts your bid, this bid will be converted to the
-                BuyNow stage.
-                <br />
-                <br />
-                Bid Cancellation
-                <br />
-                If the seller does not accept the bid request within the period
-                set by the buyer in the place bid, the bid will be canceled.
-                Alternatively, if the buyer who applied for a bid cancels the
-                bid application, the transaction will be cancelled.
-                <br />
-                <br />
-                <br />
-                If you have any questions regarding Bid, please contact us.
-                <br />
-                <br />
-                <span className="text-[#fff] font-extrabold"> Thank You</span>
-              </p>
             </div>
           )}
         </>

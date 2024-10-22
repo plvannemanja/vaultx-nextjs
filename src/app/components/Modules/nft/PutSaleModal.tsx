@@ -28,16 +28,15 @@ import { z } from 'zod';
 const addressSchema = z.object({
   username: z.string().nonempty('User name is invalid'),
   email: z.string().email({ message: 'Email is invalid' }),
-  description: z.string(),
   accepted: z.boolean().refine((val) => val === true, {
     message: 'The value must be true.',
   }),
   country: z.object({
     name: z.string().nonempty('country name is invalid'),
   }),
-  city: z.object({
-    name: z.string().nonempty('city name is invalid'),
-  }),
+  // city: z.object({
+  //   name: z.string().nonempty('city name is invalid'),
+  // }),
   state: z.object({
     name: z.string().nonempty('state name is invalid'),
   }),
@@ -53,7 +52,7 @@ interface addressErrorType {
   accepted?: string;
   country?: string;
   state?: string;
-  city?: string;
+  // city?: string;
   address1?: string;
   postalCode?: string;
   phoneNumber?: string;
@@ -607,11 +606,11 @@ export default function PutSaleModal({
                                   </option>
                                 ))}
                               </select>
-                              {addressError?.city && (
+                              {/* {addressError?.city && (
                                 <p className="text-red-500 text-sm">
                                   {addressError.city}
                                 </p>
-                              )}
+                              )} */}
                             </div>
                             <div className="flex flex-col gap-y-2 lg:w-[32%]">
                               <h2 className="font-bold text-[#fff] text-[14px]">

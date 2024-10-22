@@ -12,6 +12,7 @@ import NFTMain from '@/app/components/Modules/nft/NFTMain';
 import OthersDetails from '@/app/components/Modules/nft/others-details';
 import { useToast } from '@/hooks/use-toast';
 import { deliveryTime } from '@/lib/helper';
+import { CreateSellService } from '@/services/createSellService';
 import { FavoriteService } from '@/services/FavoriteService';
 import NftServices from '@/services/nftService';
 import { getAllNftActivitys } from '@/services/supplier';
@@ -21,6 +22,7 @@ import { useEffect } from 'react';
 function PageDetail({ params }: { params: { slug: string } }) {
   const nftService = new NftServices();
   const favoriteService = new FavoriteService();
+  const createSellService = new CreateSellService();
   const { toast } = useToast();
   const { user } = useGlobalContext();
   const {
@@ -32,6 +34,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
     setType,
     setBurnable,
     setActivityList,
+    setBids,
   } = useNFTDetail();
 
   const getArtitsLikes = async () => {
@@ -89,6 +92,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
         setType('remove');
       }
     } else if (user?.wallet) {
+      debugger;
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||
@@ -121,6 +125,17 @@ function PageDetail({ params }: { params: { slug: string } }) {
     }
   };
 
+  const getBids = async () => {
+    try {
+      const {
+        data: { bids },
+      } = await createSellService.getNftBids({ nftId: params.slug });
+      setBids(bids);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const fetchNftData = async () => {
     try {
       // set NFT ID
@@ -128,6 +143,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
       getArtitsLikes();
       userReaction();
       getAllNftActivity();
+      getBids();
       const response = await nftService.getNftById(params.slug);
       setData(response.data.nft);
       if (response.data.nft) {
@@ -158,7 +174,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
           <div className="flex flex-col gap-y-6">
             <NFTMain fetchNftData={fetchNftData} />
             <NFTDescription />
-            <BidList />
+            <BidList fetchNftData={fetchNftData} />
             <ActivityList />
             <OthersDetails data={data} />
           </div>

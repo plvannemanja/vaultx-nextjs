@@ -135,9 +135,9 @@ export const listAsset = async ({
   });
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -218,9 +218,9 @@ export const purchaseAsset = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 
@@ -305,9 +305,9 @@ export const purchaseAssetBeforeMint = async (
 
   return events
     ? {
-        ...events[0].args,
-        transactionHash,
-      }
+      ...events[0].args,
+      transactionHash,
+    }
     : null;
 };
 export const getExplorerURL = (
@@ -484,9 +484,9 @@ export const releaseEscrow = async (tokenId: number, account: Account) => {
 
   return events
     ? {
-        events,
-        transactionHash,
-      }
+      events,
+      transactionHash,
+    }
     : null;
 };
 

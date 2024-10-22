@@ -1,6 +1,6 @@
 'use client';
 
-import { INFTActivity, NFTItemType } from '@/types';
+import { IBid, INFTActivity, NFTItemType } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
 
 interface INFTDetailContext {
@@ -20,6 +20,8 @@ interface INFTDetailContext {
   setBurnable: (data: boolean) => void;
   activityList: INFTActivity[];
   setActivityList: (data: INFTActivity[]) => void;
+  bids: IBid[];
+  setBids: (data: IBid[]) => void;
 }
 
 interface NFTDetailProviderProps {
@@ -43,6 +45,7 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
   const [type, setType] = useState('');
   const [burnable, setBurnable] = useState(false);
   const [activityList, setActivityList] = useState<INFTActivity[]>([]);
+  const [bids, setBids] = useState<IBid[]>([]);
 
   return (
     <NFTDetailContext.Provider
@@ -63,6 +66,8 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
         setBurnable,
         activityList,
         setActivityList,
+        bids,
+        setBids,
       }}
     >
       {children}

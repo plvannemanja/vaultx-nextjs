@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { cancelBid } from '@/lib/helper';
+import { acceptBid, cancelBid } from '@/lib/helper';
 import { CreateSellService } from '@/services/createSellService';
 import { IBid } from '@/types';
 import { trimString } from '@/utils/helpers';
@@ -28,16 +28,21 @@ import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BidIcon from '../../Icons/bid-icon';
 import BaseButton from '../../ui/BaseButton';
 
-export default function BidList() {
+export default function BidList({
+  fetchNftData,
+}: {
+  fetchNftData: () => void;
+}) {
   const [loading, setLoading] = useState(false);
-  const { nftId, NFTDetail } = useNFTDetail();
+  const { nftId, NFTDetail, bids, setBids, } = useNFTDetail();
   const { user } = useGlobalContext();
   const { toast } = useToast();
-  const [bids, setBids] = useState<IBid[]>([]);
   const activeAccount = useActiveAccount();
   const createSellService = new CreateSellService();
 
   const cancel = async (bidInfo: IBid) => {
+    if (bidInfo.bidCanceled || bidInfo.bidSuccess)
+      return;
     toast({
       title: 'Cancelling Bid',
       duration: 5000,
@@ -50,12 +55,14 @@ export default function BidList() {
         activeAccount,
       );
       const data = {
+        id: bidInfo._id,
         bidId: bidInfo.bidId.toString(),
+        nftId,
         transactionHash,
       };
 
       await createSellService.cancelBidOnNft(data);
-      await getBids();
+      await fetchNftData();
 
       toast({
         title: 'Bid Cancelled',
@@ -73,17 +80,26 @@ export default function BidList() {
   };
 
   const accept = async (bidInfo: IBid) => {
+    if (bidInfo.bidCanceled || bidInfo.bidSuccess)
+      return;
     toast({
-      title: 'Cancelling Bid',
+      title: 'Accepting Bid',
       duration: 5000,
     });
 
     try {
       // blockchain response
+      const { transactionHash } = await acceptBid(
+        NFTDetail?.tokenId,
+        bidInfo.bidId,
+        activeAccount,
+      )
+
       const data = {
+        id: bidInfo._id,
         bidId: bidInfo.bidId,
         nftId,
-        transactionHash: '',
+        transactionHash,
       };
 
       await createSellService.acceptBid(data);
@@ -135,9 +151,8 @@ export default function BidList() {
                     <span>Bid Offers</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-[#989898]`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-[#989898]`}
                   />
                 </div>
               </DisclosureButton>
@@ -178,8 +193,8 @@ export default function BidList() {
                           <TableCell>
                             {item?.createdAt
                               ? new Date(item?.createdAt)
-                                  .toLocaleString()
-                                  .slice(0, 10)
+                                .toLocaleString()
+                                .slice(0, 10)
                               : '-/-'}
                           </TableCell>
                           <TableCell>
@@ -201,22 +216,19 @@ export default function BidList() {
                                 </button>
                               </div>
                             ) : user?._id === NFTDetail?.owner?._id ? (
-                              <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light justify-between">
-                                <BaseButton
-                                  title="Accept"
-                                  variant="primary"
-                                  onClick={() => {
-                                    setLoading(true);
-                                    accept(item);
-                                  }}
-                                  loading={loading}
-                                />
+                              <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-neon">
+                                <button
+                                  className="w-full h-full"
+                                  onClick={async () => await accept(item)}
+                                >
+                                  {item.bidSuccess ? 'Accepted' : 'Accept'}
+                                </button>
                               </div>
                             ) : (
                               <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
                                 <button
                                   className="w-full h-full"
-                                  onClick={() => {}}
+                                  onClick={() => { }}
                                 >
                                   Bidded
                                 </button>

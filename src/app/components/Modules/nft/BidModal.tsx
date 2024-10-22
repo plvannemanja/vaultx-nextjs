@@ -23,6 +23,37 @@ import { useGlobalContext } from '../../Context/GlobalContext';
 import { roundToDecimals, trimString } from '@/utils/helpers';
 import moment from 'moment';
 import { CreateNftServices } from '@/services/createNftService';
+import { z } from 'zod';
+
+const addressSchema = z.object({
+  username: z.string().nonempty('User name is invalid'),
+  email: z.string().email({ message: 'Email is invalid' }),
+  accepted: z.boolean().refine((val) => val === true, {
+    message: 'The value must be true.',
+  }),
+  country: z.object({
+    name: z.string().nonempty('country name is invalid'),
+  }),
+  state: z.object({
+    name: z.string().nonempty('state name is invalid'),
+  }),
+  address1: z.string().nonempty('address 1 is invalid'),
+  postalCode: z.string(),
+  phoneNumber: z.string().nonempty(),
+});
+
+interface addressErrorType {
+  username?: string;
+  email?: string;
+  description?: string;
+  accepted?: string;
+  country?: string;
+  state?: string;
+  // city?: string;
+  address1?: string;
+  postalCode?: string;
+  phoneNumber?: string;
+}
 
 export default function BidModal({
   title,
@@ -43,6 +74,7 @@ export default function BidModal({
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
   const [error, setError] = useState(null);
+  const [addressError, setAddressError] = useState<addressErrorType>({});
   const [formData, setFormData] = useState({
     username: null,
     email: null,
@@ -76,6 +108,27 @@ export default function BidModal({
   }, [activeAccount]);
   const countries = Country.getAllCountries();
   const saleService = new CreateSellService();
+
+  const handleAddress = async () => {
+    const result = addressSchema.safeParse({
+      ...formData,
+      ...sellerInfo,
+    });
+
+    if (!result.success) {
+      const addressErrors = result.error.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+
+      setAddressError(addressErrors);
+    } else {
+      setAddressError({});
+      // Handle valid submission
+      checkAmount();
+      setStep(3);
+    }
+  };
 
   const cancelChanges = () => {
     onClose();
@@ -241,8 +294,9 @@ export default function BidModal({
   if (step == 1)
     return (
       <div className="flex flex-col gap-y-5 w-full">
-        <Label className="text-lg font-medium">Place Bid</Label>
-        <p>You are about to bid on {title}</p>
+        <Label className="text-lg font-medium">Place a bid</Label>
+        <ConnectedCard />
+
 
         {/* Wallet part */}
 
@@ -298,9 +352,8 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Buyer Information</span>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -322,6 +375,11 @@ export default function BidModal({
                         type="text"
                         placeholder="Enter your username"
                       />
+                      {addressError?.username && (
+                        <p className="text-red-500 text-sm">
+                          {addressError.username}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-y-2 w-[32%]">
                       <h2 className="font-bold text-[#fff] text-[14px]">
@@ -340,6 +398,11 @@ export default function BidModal({
                         type="text"
                         placeholder="Enter your email"
                       />
+                      {addressError?.email && (
+                        <p className="text-red-500 text-sm">
+                          {addressError.email}
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex flex-col gap-y-2 w-[32%]">
@@ -364,6 +427,11 @@ export default function BidModal({
                           </option>
                         ))}
                       </select>
+                      {addressError?.country && (
+                        <p className="text-red-500 text-sm">
+                          {addressError.country}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </DisclosurePanel>
@@ -379,9 +447,8 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Shipping Address*</span>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -403,6 +470,11 @@ export default function BidModal({
                         type="text"
                         placeholder="Enter address"
                       />
+                      {addressError?.address1 && (
+                        <p className="text-red-500 text-sm">
+                          {addressError.address1}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-y-2 lg:w-[48%]">
                       <h2 className="font-bold text-[#fff] text-[14px]">
@@ -450,6 +522,11 @@ export default function BidModal({
                           </option>
                         ))}
                       </select>
+                      {addressError?.state && (
+                        <p className="text-red-500 text-sm">
+                          {addressError.state}
+                        </p>
+                      )}
                     </div>
                     <div className="flex flex-col gap-y-2 lg:w-[32%]">
                       <h2 className="font-bold text-[#fff] text-[14px]">
@@ -496,6 +573,11 @@ export default function BidModal({
                         placeholder="Enter postcode"
                       />
                     </div>
+                    {addressError?.postalCode && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.postalCode}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col mb-4 gap-y-3">
                     <PhoneInput
@@ -520,6 +602,11 @@ export default function BidModal({
                         setSellerInfo({ ...sellerInfo, phoneNumber: e })
                       }
                     />
+                    {addressError?.phoneNumber && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.phoneNumber}
+                      </p>
+                    )}
                   </div>
                 </DisclosurePanel>
               </>
@@ -534,9 +621,8 @@ export default function BidModal({
                 <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                   <span>Contact Information For Seller</span>
                   <ChevronUpIcon
-                    className={`${
-                      open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white`}
+                    className={`${open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white`}
                   />
                 </DisclosureButton>
                 <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
@@ -567,9 +653,8 @@ export default function BidModal({
                       Consent for collection and usage of personal information
                     </span>
                     <ChevronUpIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white`}
+                      className={`${open ? 'rotate-180 transform' : ''
+                        } h-5 w-5 text-white`}
                     />
                   </div>
                   <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
@@ -598,24 +683,32 @@ export default function BidModal({
           </Disclosure>
         </div>
 
-        <div className="flex items-center space-x-2 p-4 ">
-          <input
-            id="terms"
-            type="checkbox"
-            checked={formData.accepted}
-            onChange={() =>
-              setFormData({
-                ...formData,
-                accepted: !formData.accepted,
-              })
-            }
-          />
-          <label
-            htmlFor="terms"
-            className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
-          >
-            I agree to all terms, privacy policy and fees
-          </label>
+        <div className="flex flex-col space-y-2 p-4">
+          <div className="flex items-center space-x-2">
+            <input
+              id="terms"
+              type="checkbox"
+              checked={formData.accepted}
+              onChange={() =>
+                setFormData({
+                  ...formData,
+                  accepted: !formData.accepted,
+                })
+              }
+            />
+            <label
+              htmlFor="terms"
+              className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
+            >
+              I agree to all terms, privacy policy and fees
+            </label>
+          </div>
+
+          {addressError?.accepted && (
+            <p className="text-red-500 text-sm">
+              {addressError.accepted}
+            </p>
+          )}
         </div>
 
         <div className="bg-dark p-5 gap-y-4 rounded-lg flex flex-col ">
@@ -655,7 +748,7 @@ export default function BidModal({
             title="Submit"
             variant="primary"
             onClick={() => {
-              setStep(3);
+              handleAddress();
             }}
             className="w-full"
             displayIcon
@@ -669,44 +762,49 @@ export default function BidModal({
       <div className="flex flex-col gap-y-4 w-full">
         <div className="flex gap-x-3 items-center">
           <img src="/icons/info.svg" className="w-12" />
-          <p className="text-[30px] text-[#fff] font-extrabold">Caution</p>
+          <p className="text-[30px] text-[#fff] font-extrabold">Bid Information</p>
         </div>
 
         <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
-          Do not disclose buyer shipping information to third parties!
+          Bid Success
           <br />
           <br />
         </p>
 
         <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-          To maintain the confidentiality of buyer information and ensure smooth
-          transactions, please pay close attention to the following points:
+          If the seller accepts your bid, the transaction will automatically proceed to the purchase stage. Once the purchase is confirmed, you will be granted access to the seller's contact information, allowing you to directly communicate with the seller to discuss shipping details
+
           <br />
           <br />
-          1. Confidentiality of Shipping Information: Buyer shipping information
-          should remain confidential to sellers. Be cautious to prevent any
-          external disclosures.
+          Bid Cancellation
           <br />
           <br />
-          2. Tips for Safe Transactions: Handle buyer shipping information
-          securely to sustain safe and transparent transactions.
+          Your bid will be automatically cancelled if the seller does not accept your bid within the period set during the bid registration, or if another bidder offers a higher amount for the item than your bid. Additionally, you may cancel your bid at any time before the seller accepts it. In the event of a cancellation, the amount you deposited at the time of bidding will be fully refunded, excluding the Gas fee.
           <br />
           <br />
-          3. Protection of Personal Information: As a seller, it is imperative
-          to treat buyer personal information with utmost care. Avoid disclosing
-          it to third parties.We kindly request your strict adherence to these
-          guidelines to uphold transparency and trust in your transactions.
-          Ensuring a secure transaction environment benefits everyone involved.
+          If you have any questions regarding Bid, please contact us.
           <br />
           <br />
           <br />
           <span className="text-[#fff] font-extrabold">Thank You</span>
         </p>
 
-        <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-          <button className="w-full h-full" onClick={() => setStep(4)}>
-            I Agree
-          </button>
+        <div className="flex justify-between">
+          <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+            <button
+              className="w-full h-full"
+              onClick={() => {
+                setStep(2);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+          <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+            <button className="w-full h-full" onClick={() => setStep(4)}>
+              Next
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -738,6 +836,9 @@ export default function BidModal({
           <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
             <span>You will pay</span>
             <span>{expectedAmount} ETH</span>
+          </div>
+          <div className="flex justify-between items-center text-[14px] azeret-mono-font text-[#FFFFFF]">
+            <p>Gas fee is not included in this statement.</p>
           </div>
         </div>
 
@@ -777,9 +878,9 @@ export default function BidModal({
             src="/icons/success.svg"
             className="w-[115px] h-[115px] mx-auto"
           />
-          <p className="text-[30px] text-[#fff] font-extrabold ">Bid Success</p>
+          <p className="text-[30px] text-[#fff] font-extrabold ">Bid Deposit Success</p>
           <p className=" azeret-mono-font text-[#FFFFFF87]">
-            Your payment is completed successfully.
+            Your bid amount has been successfully deposited.
           </p>
         </div>
 
@@ -828,36 +929,43 @@ export default function BidModal({
     );
 
   if (step == 7) {
-    <div className="flex flex-col gap-y-4 w-full">
-      <div className="flex gap-x-3 items-center">
-        <img src="/icons/info.svg" className="w-12" />
-        <p className="text-[30px] text-[#fff] font-extrabold">
-          Bid Information
+    return (<div className="flex flex-col gap-y-4 w-full">
+      <div className="flex flex-col items-center justify-center text-center">
+        <img src="/icons/triangle-alert.svg" className="w-28" />
+
+        <p className="text-[30px] text-[#fff] font-extrabold mt-4">
+          Do not disclose buyer shipping information to third parties!
         </p>
       </div>
 
+
       <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
-        Bid Success
-        <br />
-        If a seller accepts your bid, this bid will be converted to the BuyNow
-        stage.
+        To maintain the confidentiality of buyer information and ensure smooth transactions, please pay close attention to the following points:
         <br />
         <br />
-        Bid Cancellation
-        <br />
-        If the seller does not accept the bid request within the period set by
-        the buyer in the place bid, the bid will be canceled. Alternatively, if
-        the buyer who applied for a bid cancels the bid application, the
-        transaction will be cancelled.
+        1. Confidentiality of Shipping Information: Buyer shipping information should remain confidential to sellers. Be cautious to prevent any external disclosures.
         <br />
         <br />
+        2. Tips for Safe Transactions: Handle buyer shipping information securely to sustain safe and transparent transactions.
         <br />
-        If you have any questions regarding Bid, please contact us.
+        <br />
+        3. Protection of Personal Information: As a seller, it is imperative to treat buyer personal information with utmost care. Avoid disclosing it to third parties. We kindly request your strict adherence to these guidelines to uphold transparency and trust in your transactions. Ensuring a secure transaction environment benefits everyone involved.
+        <br />
         <br />
         <br />
         <span className="text-[#fff] font-extrabold"> Thank You</span>
       </p>
-    </div>;
+      <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon px-20">
+        <button
+          className="w-full h-full bg-neon"
+          onClick={() => {
+            onClose();
+          }}
+        >
+          I Agree
+        </button>
+      </div>
+    </div>);
   }
 
   return null;
