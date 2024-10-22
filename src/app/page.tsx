@@ -221,6 +221,8 @@ export default function Home() {
       setSection3(data.section3);
       setSection4(data.section4);
 
+      console.log(data);
+
       if (data.section3 && data.section3.box.length > 0) {
         curationsList = await Promise.all(
           data.section3.box.map(async (item: string) => {
@@ -248,7 +250,7 @@ export default function Home() {
       ) : (
         <Skeleton className="w-full h-[400px]" />
       )}
-      <div className="py-5 sm:py-10 pt-10 sm:pt-[100px] w-full px-5 sm:px-10 lg:px-20 lg:relative">
+      <div className="py-5 sm:py-10 pt-10 sm:pt-[20px] w-full px-5 sm:px-10 lg:px-20 lg:relative">
         <div className="w-8 h-8 border-2 rounded-full border-[#DDF247] border-l-transparent border-t-transparent -rotate-45 hidden lg:block absolute -left-4 top-[28.5rem]"></div>
         <div className="w-7 h-7 border-2 rounded-full border-[#DDF247] hidden lg:block absolute left-24"></div>
         <div className="w-4 h-4 rounded-full bg-[#DDF247] hidden lg:block absolute right-12 top-[10rem]"></div>

@@ -4,7 +4,7 @@ import * as React from 'react';
 interface LogoProps extends React.SVGProps<SVGSVGElement> {}
 
 const Logo: React.FC<LogoProps> = (props) => (
-  <Image src="/logo.svg" width={130} height={32} alt="logo" />
+  <Image src="/logo.svg" width={130} height={32} className="h-8" alt="logo" />
   // <svg
   //   xmlns="http://www.w3.org/2000/svg"
   //   width={135}
