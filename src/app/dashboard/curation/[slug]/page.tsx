@@ -190,7 +190,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   }, [debouncedLiked]);
 
   const copyAddr = () => {
-    navigator.clipboard.writeText(user?.wallet);
+    navigator.clipboard.writeText(curation.owner?.wallet);
   };
 
   const fetchActivities = async () => {
@@ -282,12 +282,12 @@ export default function Page({ params }: { params: { slug: string } }) {
           />
         )}
         <div className="w-full absolute bottom-4 flex items-center justify-between px-5 z-20">
-          {user?.wallet && (
+          {curation.owner?.wallet && (
             <div
               className="flex gap-x-3 h-10 text-sm backdrop-blur-sm items-center p-3 rounded-xl text-white border border-white/[29%] cursor-pointer"
               onClick={() => copyAddr()}
             >
-              {trimString(user?.wallet)}
+              {trimString(curation.owner?.wallet)}
               <Copy className="w-5 h-5" />
             </div>
           )}
