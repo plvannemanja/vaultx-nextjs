@@ -272,9 +272,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           'h-[340px]',
         )}
       >
-        {curation?.logo && (
+        {curation?.bannerImage && (
           <Image
-            src={curation?.logo}
+            src={curation?.bannerImage}
             alt="hero"
             layout="fill"
             objectFit="cover"
