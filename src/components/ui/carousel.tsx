@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import * as React from 'react';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -28,6 +28,9 @@ type CarouselContextProps = {
   scrollNext: () => void;
   canScrollPrev: boolean;
   canScrollNext: boolean;
+  scrollSnaps: number[];
+  selectedIndex: number;
+  scrollTo: (index: number) => void;
 } & CarouselProps;
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null);
@@ -67,15 +70,24 @@ const Carousel = React.forwardRef<
     );
     const [canScrollPrev, setCanScrollPrev] = React.useState(false);
     const [canScrollNext, setCanScrollNext] = React.useState(false);
+    const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const scrollTo = React.useCallback(
+      (index: number) => api && api.scrollTo(index),
+      [api],
+    );
 
-    const onSelect = React.useCallback((api: CarouselApi) => {
-      if (!api) {
-        return;
-      }
-
-      setCanScrollPrev(api.canScrollPrev());
-      setCanScrollNext(api.canScrollNext());
-    }, []);
+    const onSelect = React.useCallback(
+      (api: CarouselApi) => {
+        if (!api) {
+          return;
+        }
+        setSelectedIndex(api.selectedScrollSnap());
+        setCanScrollPrev(api.canScrollPrev());
+        setCanScrollNext(api.canScrollNext());
+      },
+      [setSelectedIndex],
+    );
 
     const scrollPrev = React.useCallback(() => {
       api?.scrollPrev();
@@ -110,11 +122,10 @@ const Carousel = React.forwardRef<
       if (!api) {
         return;
       }
-
       onSelect(api);
       api.on('reInit', onSelect);
       api.on('select', onSelect);
-
+      setScrollSnaps(api?.scrollSnapList());
       return () => {
         api?.off('select', onSelect);
       };
@@ -132,6 +143,9 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          scrollTo,
+          selectedIndex,
+          scrollSnaps,
         }}
       >
         <div
@@ -252,12 +266,55 @@ const CarouselNext = React.forwardRef<
 });
 CarouselNext.displayName = 'CarouselNext';
 
+const CarouselDot = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button>
+>(
+  (
+    { className, variant = 'outline', size = 'icon', onClick, ...props },
+    ref,
+  ) => {
+    const { scrollSnaps, selectedIndex, scrollTo } = useCarousel();
+    return (
+      <div
+        // className="absolute bottom-0 left-1/2 flex -translate-x-1/2 transform items-center justify-center"
+        className="flex items-center justify-center"
+      >
+        {scrollSnaps.map((_, index) => (
+          <button
+            key={index}
+            ref={ref}
+            className={cn(
+              // 'relative mx-1 flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-transparent p-0 outline-0 after:h-1 after:w-full after:rounded-[2px] after:bg-carousel-gray',
+              'relative mx-1 flex cursor-pointer items-center justify-center border-0 bg-transparent p-0 outline-0',
+              className,
+              // index === selectedIndex ? 'after:bg-primary' : '',
+              index === selectedIndex ? 'text-neon' : '',
+            )}
+            onClick={() => scrollTo(index)}
+            {...props}
+          >
+            <span
+            // className={index === 2 ? 'text-neon' : 'text-dark'}
+            >
+              +
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+  },
+);
+
+CarouselDot.displayName = 'CarouselDot';
+
 export {
-  type CarouselApi,
   Carousel,
   CarouselContent,
+  CarouselDot,
   CarouselItem,
-  CarouselPrevious,
   CarouselNext,
+  CarouselPrevious,
   useCarousel,
+  type CarouselApi,
 };

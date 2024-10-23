@@ -1,6 +1,7 @@
 import {
   Carousel,
   CarouselContent,
+  CarouselDot,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
@@ -54,7 +55,8 @@ export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
         {data.length > 0 ? (
           <div className="w-[20rem] mx-auto flex justify-center gap-x-4 items-center my-8 relative">
             <CarouselPrevious className="absolute left-8" />
-            <div className="flex items-center gap-x-1 font-medium text-dark">
+            <CarouselDot />
+            {/* <div className="flex items-center gap-x-1 font-medium text-dark">
               {Array.from({ length: 5 }).map((_, index) => (
                 <span
                   key={index}
@@ -63,7 +65,7 @@ export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
                   +
                 </span>
               ))}
-            </div>
+            </div> */}
             <CarouselNext className="absolute right-8" />
           </div>
         ) : null}

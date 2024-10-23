@@ -1,4 +1,4 @@
-import React from 'react';
+import Image from 'next/image';
 import BaseButton from '../../ui/BaseButton';
 
 export default function ErrorModal({
@@ -11,18 +11,23 @@ export default function ErrorModal({
   title: string;
 }) {
   return (
-    <div className="flex flex-col gap-y-6 items-center content-center w-[100%] p-10">
+    <div className="flex flex-col gap-y-6 items-center content-center w-[100%] p-3">
       <div className="flex gap-x-3 items-center">
-        <img src="/icons/info.svg" className="w-10" />
-        <p className="text-[28px] font-medium">{title}</p>
+        <Image
+          src="/icons/info.svg"
+          className="w-10"
+          width={40}
+          height={40}
+          alt="icon"
+        />
+        <p className="text-[28px] font-extrabold">{title}</p>
       </div>
-
       <div className="flex flex-col gap-y-2 mb-[56px]">
         {Array.isArray(data) ? (
           data.map((item: any, index: number) => {
             return (
               <div key={index}>
-                <p className="font-medium text-[#ffffff53] azeret-mono-font text-[22px]">
+                <p className="text-white/[53%] azeret-mono-font text-lg">
                   {index + 1}.{' '}
                   {item.path[0].slice(0, 1).toUpperCase() +
                     item.path[0].slice(1)}{' '}
@@ -32,9 +37,7 @@ export default function ErrorModal({
             );
           })
         ) : (
-          <p className="font-medium text-[#ffffff53] azeret-mono-font text-[22px]">
-            {data}
-          </p>
+          <p className="text-white/[53%] azeret-mono-font text-lg">{data}</p>
         )}
       </div>
       <BaseButton

@@ -5,7 +5,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import React from 'react';
 
@@ -19,6 +18,7 @@ interface IBaseDialogProps {
   isOpen?: boolean;
   onClose?: (value: boolean) => void; // Function to close the dialog
   modal?: boolean;
+  isClose?: boolean;
 }
 
 export function BaseDialog({
@@ -31,17 +31,19 @@ export function BaseDialog({
   isOpen,
   onClose,
   modal,
+  isClose = true,
 }: IBaseDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose} modal={modal}>
-      {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      {/* {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>} */}
       <DialogContent
-        className={`max-w-5xl ${className}`}
+        className={`max-w-5xl focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none ${className}`}
         onInteractOutside={(e: Event) => {
           if (modal) {
             e.preventDefault();
           }
         }}
+        isClose={isClose}
       >
         <DialogHeader>
           {title ? (

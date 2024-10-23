@@ -1,5 +1,4 @@
 'use client';
-
 import NftServices from '@/services/nftService';
 import { useEffect, useState } from 'react';
 import { BaseCarousel } from '../Carousels/BaseCarousel';
@@ -55,9 +54,14 @@ export default function NFTList({ color }: { color: any }) {
     getNfts();
   }, []);
 
+  const heading = (
+    <h3 className="font-extrabold text-[40px] ">Appreciate & Explore</h3>
+  );
+
   return (
     <BaseCarousel
-      heading={createTitleComp('Appreciate & Explore', color)}
+      // heading={createTitleComp('Appreciate & Explore', color)}
+      heading={heading}
       data={nfts}
     />
   );
