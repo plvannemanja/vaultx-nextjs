@@ -71,7 +71,7 @@ export default function Page() {
           return {
             ...extra,
             name: collection.name,
-            image: collection.bannerImage,
+            image: collection.logo,
             id: collection._id,
           };
         }),

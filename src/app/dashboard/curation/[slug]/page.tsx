@@ -272,9 +272,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           'h-[340px]',
         )}
       >
-        {curation?.logo && (
+        {curation?.bannerImage && (
           <Image
-            src={curation?.logo}
+            src={curation?.bannerImage}
             alt="hero"
             layout="fill"
             objectFit="cover"
@@ -303,7 +303,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 />
               </div>
             </div>
-            {user?.wallet && user?.wallet === curation.owner?.wallet && (
+            {user?.wallet && String(user?.wallet).toLowerCase() === String(curation.owner?.wallet)?.toLowerCase() && (
               <Link href={`/dashboard/curation/edit/${params.slug}`}>
                 <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
                   <Edit className="w-5 h-5" />
