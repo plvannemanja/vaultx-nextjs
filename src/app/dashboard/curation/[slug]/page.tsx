@@ -303,14 +303,16 @@ export default function Page({ params }: { params: { slug: string } }) {
                 />
               </div>
             </div>
-            {user?.wallet && String(user?.wallet).toLowerCase() === String(curation.owner?.wallet)?.toLowerCase() && (
-              <Link href={`/dashboard/curation/edit/${params.slug}`}>
-                <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
-                  <Edit className="w-5 h-5" />
-                  <div className="text-white text-base font-medium">Edit</div>
-                </div>
-              </Link>
-            )}
+            {user?.wallet &&
+              String(user?.wallet).toLowerCase() ===
+                String(curation.owner?.wallet)?.toLowerCase() && (
+                <Link href={`/dashboard/curation/edit/${params.slug}`}>
+                  <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
+                    <Edit className="w-5 h-5" />
+                    <div className="text-white text-base font-medium">Edit</div>
+                  </div>
+                </Link>
+              )}
           </div>
         </div>
       </div>
@@ -523,13 +525,13 @@ export default function Page({ params }: { params: { slug: string } }) {
                   )}
                   key={index}
                 >
-                  <Image
+                  <img
                     src={image}
                     alt="hero"
                     className="rounded-xl w-full h-full"
                     width={960}
                     height={960}
-                    quality={100}
+                    // quality={100}
                   />
                 </div>
               ))}
