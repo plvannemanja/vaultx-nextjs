@@ -5,11 +5,11 @@ interface LogoProps extends React.SVGProps<SVGSVGElement> {}
 
 const Logo: React.FC<LogoProps> = (props) => (
   <Image
-    quality={100}
-    src="/logo.svg"
+    src="/logo.png"
     width={130}
     height={32}
-    className="h-8"
+    quality={100}
+    // className="h-8"
     alt="logo"
   />
   // <svg
