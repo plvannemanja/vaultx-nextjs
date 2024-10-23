@@ -298,18 +298,17 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
         <BaseDialog
           isOpen={status.active}
           onClose={(val) => setStatus({ ...status, active: val })}
-          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
+          className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
           modal={status.loading}
         >
           <CurationLoader status={status} edit={editMode ? true : false} />
         </BaseDialog>
       )}
-
       {errors.active && (
         <BaseDialog
           isOpen={errors.active}
           onClose={(val) => setErrors({ active: val, data: [] })}
-          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
+          className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
         >
           <ErrorModal
             title={'Error in creation found'}

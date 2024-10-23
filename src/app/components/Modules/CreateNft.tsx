@@ -1,7 +1,7 @@
 'use client';
-
 import { useToast } from '@/hooks/use-toast';
 import { getVoucherSignature, IListAsset, listAsset } from '@/lib/helper';
+import { cn } from '@/lib/utils';
 import { CreateNftServices } from '@/services/createNftService';
 import { INFTVoucher } from '@/types';
 import { useState } from 'react';
@@ -10,8 +10,7 @@ import { useActiveAccount } from 'thirdweb/react';
 import { parseEther, zeroAddress } from 'viem';
 import ConnectedCard from '../Cards/ConnectedCard';
 import { useCreateNFT } from '../Context/CreateNFTContext';
-import RestrictiveModal from '../Modals/RestrictiveModal';
-import TriggerModal from '../ui/TriggerModal';
+import { BaseDialog } from '../ui/BaseDialog';
 import AdvanceDetails from './create/AdvanceDetails';
 import BasicDetails from './create/BasicDetails';
 import ErrorModal from './create/ErrorModal';
@@ -385,13 +384,23 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <RestrictiveModal open={modal} onClose={() => setModal(false)}>
+      <BaseDialog
+        isOpen={modal}
+        onClose={() => setModal(false)}
+        isClose={false}
+        className={cn(
+          'bg-[#161616] max-h-[80%] min-w-[617px] max-w-[817px] border-0 p-0 mx-auto overflow-y-auto overflow-x-hidden ',
+          mintLoaderStep === 1 && 'max-h-[80%] min-w-[617px] max-w-[617px]',
+          mintLoaderStep === 2 && 'max-h-[80%] min-w-[617px] max-w-[817px]',
+          mintLoaderStep === 3 && 'max-h-[80%] min-w-[617px] max-w-[617px]',
+        )}
+      >
         <MintLoader
           progress={mintLoaderStep}
           nftId={nftId}
           subStep={mintSubStep}
         />
-      </RestrictiveModal>
+      </BaseDialog>
 
       <p className="text-[32px] text-white font-extrabold">Create RWA</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
@@ -460,42 +469,49 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </div>
       </div>
       {basicDetails.error && (
-        <TriggerModal
+        <BaseDialog
           isOpen={basicDetails.error ? true : false}
-          close={() => setBasicDetails({ ...basicDetails, error: null })}
+          onClose={() => setBasicDetails({ ...basicDetails, error: null })}
+          className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
         >
+          {/* <TriggerModal
+            isOpen={basicDetails.error ? true : false}
+            close={() => setBasicDetails({ ...basicDetails, error: null })}
+          > */}
           <ErrorModal
             title={'Error in creation found'}
             data={JSON.parse(basicDetails.error)}
             close={() => setBasicDetails({ ...basicDetails, error: null })}
           />
-        </TriggerModal>
+          {/* </TriggerModal> */}
+        </BaseDialog>
       )}
-
       {advanceDetails.error && (
-        <TriggerModal
+        <BaseDialog
           isOpen={advanceDetails.error ? true : false}
-          close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+          onClose={() => setAdvanceDetails({ ...advanceDetails, error: null })}
+          className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
         >
           <ErrorModal
             title={'Error in creation found'}
             data={JSON.parse(advanceDetails.error)}
             close={() => setAdvanceDetails({ ...advanceDetails, error: null })}
           />
-        </TriggerModal>
+        </BaseDialog>
       )}
 
       {sellerInfo.error && (
-        <TriggerModal
+        <BaseDialog
           isOpen={sellerInfo.error ? true : false}
-          close={() => setSellerInfo({ ...sellerInfo, error: null })}
+          onClose={() => setSellerInfo({ ...sellerInfo, error: null })}
+          className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
         >
           <ErrorModal
             title={'Error in creation found'}
             data={JSON.parse(sellerInfo.error)}
             close={() => setSellerInfo({ ...sellerInfo, error: null })}
           />
-        </TriggerModal>
+        </BaseDialog>
       )}
 
       {step === 1 && (

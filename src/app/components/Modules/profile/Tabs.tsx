@@ -373,26 +373,26 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       const nfts = likedNft.data
         ? likedNft.data.nfts.map((item: any) => {
-          return {
-            ...item.nftId,
-          };
-        })
+            return {
+              ...item.nftId,
+            };
+          })
         : [];
 
       const artists = likedArtist.data
         ? likedArtist.data.artists.map((item: any) => {
-          return {
-            ...item.artistId,
-          };
-        })
+            return {
+              ...item.artistId,
+            };
+          })
         : [];
 
       let collections = likedCuration.data
         ? likedCuration.data.curations.map((item: any) => {
-          return {
-            ...item.collectionId,
-          };
-        })
+            return {
+              ...item.collectionId,
+            };
+          })
         : [];
 
       const detailedInfo = await Promise.all(
@@ -440,7 +440,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
         filters: {
           [filters.filter.param]: filters.filter.value,
         },
-        searchInput: filters.searchInput
+        searchInput: filters.searchInput,
       });
 
       if (response.data) {
@@ -643,7 +643,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               );
             })
           ) : (
-            <div className="min-h-screen flex justify-center items-center">
+            <div className="min-h-[70vh] flex justify-center items-center col-span-12 w-full">
               <span>No items to display</span>
             </div>
           )}
@@ -666,7 +666,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               );
             })
           ) : (
-            <div className="min-h-screen flex justify-center items-center">
+            <div className="min-h-[70vh] flex justify-center items-center col-span-12 w-full">
               <span>No items to display</span>
             </div>
           )}
@@ -689,7 +689,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               );
             })
           ) : (
-            <div className="min-h-screen flex justify-center items-center">
+            <div className="min-h-[70vh] flex justify-center items-center col-span-12 w-full">
               <span>No items to display</span>
             </div>
           )}
@@ -712,7 +712,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               );
             })
           ) : (
-            <div className="min-h-screen flex justify-center items-center">
+            <div className="min-h-[70vh] flex justify-center items-center col-span-12 w-full">
               <span>No items to display</span>
             </div>
           )}
@@ -814,7 +814,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
               ) : (
                 <TableRow className="border-white/[8%] hover:bg-transparent">
                   <TableCell className="text-white text-center " colSpan={7}>
-                    <div className="min-h-screen flex justify-center items-center">
+                    <div className="min-h-[70vh] flex justify-center items-center w-full">
                       <span>No items to display</span>
                     </div>
                   </TableCell>
@@ -867,14 +867,14 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                   },
                 )
               ) : (
-                <div className="min-h-screen flex justify-center items-center">
+                <div className="min-h-[70vh] flex justify-center items-center w-full">
                   <span>No items to display</span>
                 </div>
               )
             ) : null}
 
             {favType === 'curation' &&
-              data?.[ProfileTabs.Favorite]?.likedCuration ? (
+            data?.[ProfileTabs.Favorite]?.likedCuration ? (
               data?.[ProfileTabs.Favorite]?.likedCuration?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedCuration?.map(
                   (item: any, index: number) => {
@@ -882,14 +882,14 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                   },
                 )
               ) : (
-                <div className="min-h-screen flex justify-center items-center">
+                <div className="min-h-[70vh] flex justify-center items-center w-full">
                   <span>No items to display</span>
                 </div>
               )
             ) : null}
 
             {favType === 'artist' &&
-              data?.[ProfileTabs.Favorite]?.likedArtist ? (
+            data?.[ProfileTabs.Favorite]?.likedArtist ? (
               data?.[ProfileTabs.Favorite]?.likedArtist?.length > 0 ? (
                 data?.[ProfileTabs.Favorite]?.likedArtist?.map(
                   (item: any, index: number) => {
@@ -903,7 +903,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                   },
                 )
               ) : (
-                <div className="min-h-screen flex justify-center items-center">
+                <div className="min-h-[70vh] flex justify-center items-center w-full">
                   <span>No items to display</span>
                 </div>
               )
@@ -957,8 +957,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
                           {item?.saleId?.ItemPurchasedOn
                             ? new Date(item?.saleId?.ItemPurchasedOn)
-                              .toLocaleString()
-                              .slice(0, 10)
+                                .toLocaleString()
+                                .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell className="font-medium azeret-mono-font text-sm text-white">
@@ -976,7 +976,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                 ) : (
                   <TableRow className="border-white/[8%] hover:bg-transparent">
                     <TableCell className="text-white text-center " colSpan={6}>
-                      <div className="min-h-screen flex justify-center items-center">
+                      <div className="min-h-[70vh] flex justify-center items-center w-full">
                         <span>No items to display</span>
                       </div>
                     </TableCell>
@@ -1053,8 +1053,8 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                         <TableCell>
                           {item?.createdAt
                             ? new Date(item?.createdAt)
-                              .toLocaleString()
-                              .slice(0, 10)
+                                .toLocaleString()
+                                .slice(0, 10)
                             : '-/-'}
                         </TableCell>
                         <TableCell>{item?.state}</TableCell>
@@ -1067,7 +1067,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
                 ) : (
                   <TableRow className="border-white/[8%] hover:bg-transparent">
                     <TableCell className="text-white text-center " colSpan={6}>
-                      <div className="min-h-screen flex justify-center items-center">
+                      <div className="min-h-[70vh] flex justify-center items-center w-full">
                         <span>No items to display</span>
                       </div>
                     </TableCell>

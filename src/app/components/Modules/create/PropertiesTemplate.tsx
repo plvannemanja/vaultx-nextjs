@@ -259,8 +259,8 @@ export default function PropertiesTemplate({
         </div>
 
         <div className="flex gap-x-3 item-center">
-          <img src="/icons/dot.svg" className="w-5 h-5" />
-          <span className="tex-sm">
+          <img src="/icons/dot.svg" className="w-4 h-4" />
+          <span className="text-sm">
             You can freely change properties values by clicking on the title and
             content.
           </span>

@@ -16,6 +16,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { BaseDialog } from '../../ui/BaseDialog';
@@ -33,6 +34,7 @@ const UserArtistSetting = ({ isSetting }: any) => {
 
   const totalPages = useMemo(() => {
     return Math.ceil(data.length / itemsPerPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const currentItems = useMemo(
@@ -55,6 +57,7 @@ const UserArtistSetting = ({ isSetting }: any) => {
 
   useEffect(() => {
     fetchUserArtists();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle items per page change
@@ -104,7 +107,13 @@ const UserArtistSetting = ({ isSetting }: any) => {
                       }, 200);
                     }}
                   >
-                    <img src="/icons/add-new.svg" className="w-6 h-6" />
+                    <Image
+                      src="/icons/add-new.svg"
+                      className="w-6 h-6"
+                      alt="icon"
+                      width={24}
+                      height={24}
+                    />
                     <h2 className="text-white text-sm font-extrabold font-manrope">
                       Add New template
                     </h2>
@@ -164,7 +173,13 @@ const UserArtistSetting = ({ isSetting }: any) => {
                                 }, 200);
                               }}
                             >
-                              <img src="/icons/edit.svg" className="w-6 h-6" />
+                              <Image
+                                src="/icons/edit.svg"
+                                className="w-6 h-6"
+                                alt="icon"
+                                width={24}
+                                height={24}
+                              />
                             </div>
                           </div>
                         </TableCell>
@@ -175,7 +190,13 @@ const UserArtistSetting = ({ isSetting }: any) => {
                               handleDelete(item);
                             }}
                           >
-                            <img src="/icons/trash.svg" className="w-6 h-6" />
+                            <Image
+                              src="/icons/trash.svg"
+                              className="w-6 h-6"
+                              alt="icon"
+                              width={24}
+                              height={24}
+                            />
                           </div>
                         </TableCell>
                       </TableRow>
