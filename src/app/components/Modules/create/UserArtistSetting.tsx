@@ -108,6 +108,7 @@ const UserArtistSetting = ({ isSetting }: any) => {
                     }}
                   >
                     <Image
+                      quality={100}
                       src="/icons/add-new.svg"
                       className="w-6 h-6"
                       alt="icon"
@@ -174,6 +175,7 @@ const UserArtistSetting = ({ isSetting }: any) => {
                               }}
                             >
                               <Image
+                                quality={100}
                                 src="/icons/edit.svg"
                                 className="w-6 h-6"
                                 alt="icon"
@@ -191,6 +193,7 @@ const UserArtistSetting = ({ isSetting }: any) => {
                             }}
                           >
                             <Image
+                              quality={100}
                               src="/icons/trash.svg"
                               className="w-6 h-6"
                               alt="icon"

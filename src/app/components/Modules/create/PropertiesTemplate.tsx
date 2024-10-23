@@ -204,6 +204,7 @@ export default function PropertiesTemplate({
           >
             <div className="w-12 h-12 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <Image
+                quality={100}
                 src="/icons/plus.svg"
                 className="w-5 h-5"
                 alt="plus"

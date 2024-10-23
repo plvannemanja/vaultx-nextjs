@@ -15,6 +15,7 @@ export default function ArtistsCard({
     <div className="relative w-full min-h-[558px] sm:min-h-[400px] md:min-h-[480px] lg:min-h-[558px] 2xl:min-h-[661px] col-span-12 sm:col-span-6 lg:col-span-4">
       <a className="w-full" href={subtitle2 ? subtitle2 : ''}>
         <Image
+          quality={100}
           src={image}
           layout="fill"
           objectFit="cover"

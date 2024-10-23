@@ -102,6 +102,7 @@ export default function Page() {
         <a href={ensureValidUrl(mediaImages?.curationTop.link)} target="_blank">
           <div className="w-full rounded-xl mb-4 h-[200px] sm:h-[350px] md:h-[370px] relative">
             <Image
+              quality={100}
               src={mediaImages?.curationTop.image}
               alt="hero"
               layout="fill"
@@ -110,7 +111,8 @@ export default function Page() {
             />
           </div>
           {/* <div className="w-full">
-            <Image
+            <Image 
+quality={100}
               src={mediaImages?.curationTop.image}
               alt="hero"
               className="rounded-xl w-full mb-4 h-[300px] sm:h-[350px] md:h-[370px] object-fill"

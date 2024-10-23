@@ -8,6 +8,7 @@ const NotFoundAll = () => {
   return (
     <div className="w-full h-screen flex flex-col gap-y-2 px-2 relative">
       <Image
+        quality={100}
         src="/images/not-found-bg.png"
         layout="fill"
         alt="not-found-bg"

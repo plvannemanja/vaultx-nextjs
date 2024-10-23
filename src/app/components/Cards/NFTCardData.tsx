@@ -20,6 +20,7 @@ export default function NFTCardData({ data }: { data: INftCardProps }) {
       <CardContent className="aspect-square p-0 rounded-[20px]">
         <div className="w-full h-[336px] overflow-hidden p-[20px] bg-[#232323] rounded-t-[20px]">
           <Image
+            quality={100}
             width={296}
             height={296}
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
@@ -52,14 +53,12 @@ export default function NFTCardData({ data }: { data: INftCardProps }) {
           <div className="flex justify-between items-center">
             <span className="text-xs text-dark  azeret-mono-font">Price </span>
             <div className="flex gap-x-2 items-center font-extrabold text-[16px]">
-              <Image
+              <img
                 src="/icons/Base.svg"
                 height={20}
                 width={20}
                 alt="matic"
                 loading="lazy"
-                blurDataURL={'/images/image_placeholder.png'}
-                quality={100}
               />
               ${data.price}
             </div>

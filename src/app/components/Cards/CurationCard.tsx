@@ -22,6 +22,7 @@ export default function CurationCard({ data }: { data: ICurationCard }) {
         <CardContent className="p-3 flex flex-col gap-y-4">
           <div className="w-full overflow-hidden">
             <Image
+              quality={100}
               src={data.image ? data.image : mediaImages?.curationTop.image}
               height={368}
               width={482}

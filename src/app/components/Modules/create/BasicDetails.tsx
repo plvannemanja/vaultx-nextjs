@@ -205,6 +205,7 @@ export default function BasicDetails({
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px] ">
               <Image
+                quality={100}
                 src="/icons/upload.svg"
                 alt="upload"
                 className="w-[66px] h-[66px]"
@@ -236,6 +237,7 @@ export default function BasicDetails({
                   Browse file
                 </p>
                 <Image
+                  quality={100}
                   src="/icons/arrow_ico.svg"
                   alt=""
                   className="w-[18px] h-[18px] "
@@ -360,6 +362,7 @@ export default function BasicDetails({
                   trigger={
                     <div className="flex cursor-pointer justify-center relative gap-x-2 items-center w-full h-full bg-[#DDF247]/[9%] rounded-md">
                       <Image
+                        quality={100}
                         width={20}
                         height={20}
                         alt="icon"

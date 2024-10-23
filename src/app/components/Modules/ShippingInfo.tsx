@@ -381,6 +381,7 @@ export default function ShippingInfo({ isSetting }: any) {
                         className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12] text-[14px]"
                       >
                         <Image
+                          quality={100}
                           width={16}
                           height={16}
                           alt="delete"
@@ -651,6 +652,7 @@ export default function ShippingInfo({ isSetting }: any) {
           <div className="flex flex-col gap-y-6 items-center">
             <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <Image
+                quality={100}
                 src="/icons/plus.svg"
                 className="w-5 h-5"
                 alt="plus"

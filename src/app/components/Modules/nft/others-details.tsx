@@ -36,6 +36,7 @@ const OthersDetails = ({ data }: Props) => {
               <div className="w-full flex flex-col gap-y-5">
                 <div className="w-full py-3 flex gap-x-2 items-center text-white">
                   <Image
+                    quality={100}
                     src="/icons/Base.svg"
                     alt="matic"
                     width={20}
@@ -49,6 +50,7 @@ const OthersDetails = ({ data }: Props) => {
               <div className="w-full flex flex-col gap-y-5">
                 <div className="w-full py-3 flex gap-x-2 items-center text-white">
                   <Image
+                    quality={100}
                     src="/icons/Base.svg"
                     alt="matic"
                     width={20}

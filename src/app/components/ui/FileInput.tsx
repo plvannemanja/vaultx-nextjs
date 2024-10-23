@@ -107,6 +107,7 @@ export default function FileInput({
         {showIcon && (
           <button onClick={onPressIcon}>
             <Image
+              quality={100}
               src="/icons/trash.svg"
               alt="image"
               width={20}

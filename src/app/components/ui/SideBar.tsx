@@ -87,7 +87,13 @@ export default function SideBar({ className }: { className?: string }) {
         href="/"
         className="px-10 flex items-center justify-center py-5 mx-auto "
       >
-        <Image src="/logo.svg" width={164} height={32} alt="logo" />
+        <Image
+          quality={100}
+          src="/logo.svg"
+          width={164}
+          height={32}
+          alt="logo"
+        />
       </Link>
       <div className="w-[80%] mx-auto">
         <hr className="border-[#353535]" />
@@ -119,7 +125,8 @@ export default function SideBar({ className }: { className?: string }) {
               )}
             >
               {<link.icon />}
-              {/* <Image
+              {/* <Image 
+quality={100}
                 src={link.icon}
                 width={20}
                 height={20}
@@ -132,7 +139,8 @@ export default function SideBar({ className }: { className?: string }) {
               /> */}
               <span>{link.name}</span>
               {/* {hovered === link.value ? (
-                <Image
+                <Image 
+quality={100}
                   src="/icons/line_shape.svg"
                   height={10}
                   width={5}
@@ -162,7 +170,8 @@ export default function SideBar({ className }: { className?: string }) {
               //     window.location.href = `/dashboard/${link.value}`;
               // }}
             >
-              {/* <Image
+              {/* <Image 
+quality={100}
                 src={link.icon}
                 width={20}
                 height={20}
@@ -176,7 +185,8 @@ export default function SideBar({ className }: { className?: string }) {
               <span>{link.name}</span>
 
               {/* {hovered === link.value ? (
-                <Image
+                <Image 
+quality={100}
                   src="/icons/line_shape.svg"
                   height={10}
                   width={5}

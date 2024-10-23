@@ -327,6 +327,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {imageSrc && (
                 <Image
+                  quality={100}
                   src={imageSrc}
                   alt="logo"
                   className="w-[90%] object-cover mx-auto"
@@ -339,6 +340,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px]">
               <Image
+                quality={100}
                 src="/icons/upload.svg"
                 alt="upload"
                 className="w-[66px] h-[66px]"
@@ -370,6 +372,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   Browse file
                 </p>
                 <Image
+                  quality={100}
                   src="/icons/arrow_ico.svg"
                   alt="icon-arrow"
                   width={18}

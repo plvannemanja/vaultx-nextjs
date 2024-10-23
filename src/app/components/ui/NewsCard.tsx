@@ -34,6 +34,7 @@ export default function NewsCard({
           </div>
           <Link href={data?.[0]?.subtitle2} target="_blank">
             <Image
+              quality={100}
               src={data?.[0]?.image}
               alt="news"
               layout="fill"
@@ -52,6 +53,7 @@ export default function NewsCard({
               </div>
               <Link href={item.subtitle2} target="_blank" className="h-full">
                 <Image
+                  quality={100}
                   src={item.image}
                   alt="news"
                   // width={298}
