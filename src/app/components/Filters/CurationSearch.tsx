@@ -54,7 +54,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
         <Label className="font-extrabold text-xs">Filter:</Label>
       </div>
       <DropdownMenu>
-        <DropdownMenuTrigger className="relative flex gap-x-1 rounded-[12px] min-w-[14rem] max-w-[16rem] h-full items-center p-3 py-[10px] bg-transparent text-white border border-white/[12%]">
+        <DropdownMenuTrigger className="relative flex gap-x-1 rounded-[12px] min-w-[14rem] max-w-[16rem] h-full items-center p-3 py-[10px] min-h-[52px] bg-transparent text-white border border-white/[12%]">
           <div className="flex items-center flex-1 gap-x-2">
             <Archive className="w-4 h-4" />
             <span className="font-extrabold text-xs">
@@ -172,7 +172,7 @@ export default function CurationSearch({ setState }: { setState: any }) {
           </div>
         )}
       </div> */}
-      <div className="flex gap-x-2 items-center border bg-[#232323]/[14%] border-white/[12%] rounded-xl p-3 py-[10px] w-full">
+      <div className="flex gap-x-2 items-center border bg-[#232323]/[14%] border-white/[12%] rounded-xl p-3 py-[10px] min-h-[52px] w-full">
         <Search className="w-4 h-4" />
         <input
           placeholder="Search by name or trait..."

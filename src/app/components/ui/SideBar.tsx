@@ -89,7 +89,7 @@ export default function SideBar({ className }: { className?: string }) {
       >
         <Image
           quality={100}
-          src="/logo.svg"
+          src="/logo.png"
           width={164}
           height={32}
           alt="logo"
