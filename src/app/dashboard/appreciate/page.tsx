@@ -86,14 +86,14 @@ quality={100}
               height={370}
             />
           </div> */}
-          <div className="w-full rounded-xl mb-4 h-[300px] sm:h-[350px] md:h-[370px] relative">
+          <div className="w-full rounded-xl  h-[300px] sm:h-[350px] md:h-[370px] relative">
             <Image
               quality={100}
               src={mediaImages?.appreciateTop.image}
               alt="hero"
               layout="fill"
               objectFit="cover"
-              className="rounded-lg mb-3.5"
+              className="rounded-lg "
             />
           </div>
         </a>

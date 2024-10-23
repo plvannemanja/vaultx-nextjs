@@ -421,7 +421,7 @@ export default function NFTMain({
                         height={32}
                         src={data?.owner?.avatar?.url || '/default-logo.png'}
                         alt="avatar"
-                        className="w-8 h-8 rounded-full object-cover"
+                        className="w-10 h-10 rounded-full object-cover"
                       />
                       <div className="flex flex-col gap-y-1 text-sm">
                         <p className="text-[12px] text-white/30 azeret-mono-font">
@@ -439,7 +439,7 @@ export default function NFTMain({
                         height={32}
                         src={data?.mintedBy?.avatar?.url || '/default-logo.png'}
                         alt="avatar"
-                        className="w-8 h-8 rounded-full object-cover"
+                        className="w-10 h-10 rounded-full object-cover"
                       />
 
                       <div className="flex flex-col gap-y-1 text-sm">
@@ -877,8 +877,8 @@ export default function NFTMain({
                       <p className="font-extrabold text-sm">Size</p>
                       <div className="mt-2 text-sm font-AzeretMono text-white/60">
                         <p className="flex mb-[11px]">
-                          <span className="inline-block flex-1">Length</span>
-                          <span className="text-center w-[20px] inline-block">
+                          <span className="inline-block w-[60px]">Length</span>
+                          <span className="text-center w-[30px] inline-block">
                             :
                           </span>
                           <span className="flex-1">
@@ -886,8 +886,8 @@ export default function NFTMain({
                           </span>
                         </p>
                         <p className="flex mb-[11px]">
-                          <span className="inline-block flex-1">Height</span>
-                          <span className="text-center w-[20px] inline-block">
+                          <span className="inline-block w-[60px]">Height</span>
+                          <span className="text-center w-[30px] inline-block">
                             :
                           </span>
                           <span className="flex-1">
@@ -895,8 +895,8 @@ export default function NFTMain({
                           </span>
                         </p>
                         <p className="flex mb-[11px]">
-                          <span className="inline-block flex-1">Width</span>
-                          <span className="text-center w-[20px] inline-block ">
+                          <span className="inline-block w-[60px]">Width</span>
+                          <span className="text-center w-[30px] inline-block ">
                             :
                           </span>
                           <span className="flex-1">
@@ -904,8 +904,8 @@ export default function NFTMain({
                           </span>
                         </p>
                         <p className="flex mb-[11px]">
-                          <span className="inline-block flex-1">Weight</span>{' '}
-                          <span className="text-center w-[20px] inline-block ">
+                          <span className="inline-block w-[60px]">Weight</span>{' '}
+                          <span className="text-center w-[30px] inline-block ">
                             :
                           </span>
                           <span className="flex-1">

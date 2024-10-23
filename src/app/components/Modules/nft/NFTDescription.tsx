@@ -76,6 +76,7 @@ export default function NFTDescription() {
           (item, index) => {
             return (
               <div
+                // className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 h-[242px] aspect-square relative w-full"
                 className="w-[242px] h-[242px] aspect-square relative"
                 key={index}
               >

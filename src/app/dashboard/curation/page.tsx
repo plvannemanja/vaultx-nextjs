@@ -100,14 +100,14 @@ export default function Page() {
     <div className="flex flex-col gap-y-4 px-4">
       {mediaImages?.curationTop?.image && mediaImages?.curationTop.link ? (
         <a href={ensureValidUrl(mediaImages?.curationTop.link)} target="_blank">
-          <div className="w-full rounded-xl mb-4 h-[200px] sm:h-[350px] md:h-[370px] relative">
+          <div className="w-full rounded-xl h-[200px] sm:h-[350px] md:h-[370px] relative">
             <Image
               quality={100}
               src={mediaImages?.curationTop.image}
               alt="hero"
               layout="fill"
               objectFit="cover"
-              className="rounded-lg mb-3.5"
+              className="rounded-lg"
             />
           </div>
           {/* <div className="w-full">
@@ -132,7 +132,7 @@ quality={100}
               {collections.map((collection: any, index: number) => {
                 return (
                   <div
-                    className="col-span-12 md:col-span-6 lg:col-span-4 2xl:col-span-3"
+                    className="col-span-12 md:col-span-6 lg:col-span-4"
                     key={index}
                   >
                     <CurationCard key={index} data={collection} />
