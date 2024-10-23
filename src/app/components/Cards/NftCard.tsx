@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { formatNumberWithCommas } from '@/lib/utils';
+import { cn, formatNumberWithCommas } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,12 +15,23 @@ interface INftCardProps {
   artist?: string;
 }
 
-export default function NftCard({ data }: { data: INftCardProps }) {
+export default function NftCard({
+  data,
+  className,
+}: {
+  data: INftCardProps;
+  className?: string;
+}) {
   if (data.curationInfo?.length) {
     data.curation = data.curationInfo[0];
   }
   return (
-    <Card className="bg-transparent text-white border-none w-full bg-[#232323]">
+    <Card
+      className={cn(
+        'bg-transparent text-white border-none w-full bg-[#232323]',
+        className,
+      )}
+    >
       <CardContent className="rounded-[20px] p-0">
         <div className="w-full overflow-hidden rounded-[8px] p-5">
           <Image

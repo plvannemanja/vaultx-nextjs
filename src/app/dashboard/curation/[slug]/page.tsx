@@ -730,11 +730,15 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
         {/* User section */}
         {filterbadge === 'items' && nfts.length ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-12 gap-4">
             {nfts.map((item: any, index: number) => {
               return (
-                <Link key={index} href={`/nft/${item._id}`}>
-                  <NftCard data={item} />
+                <Link
+                  key={index}
+                  href={`/nft/${item._id}`}
+                  className="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3"
+                >
+                  <NftCard data={item} className="w-full" />
                 </Link>
               );
             })}
