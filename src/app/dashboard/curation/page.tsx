@@ -100,7 +100,16 @@ export default function Page() {
     <div className="flex flex-col gap-y-4 px-4">
       {mediaImages?.curationTop?.image && mediaImages?.curationTop.link ? (
         <a href={ensureValidUrl(mediaImages?.curationTop.link)} target="_blank">
-          <div className="w-full">
+          <div className="w-full rounded-xl mb-4 h-[200px] sm:h-[350px] md:h-[370px] relative">
+            <Image
+              src={mediaImages?.curationTop.image}
+              alt="hero"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg mb-3.5"
+            />
+          </div>
+          {/* <div className="w-full">
             <Image
               src={mediaImages?.curationTop.image}
               alt="hero"
@@ -108,12 +117,12 @@ export default function Page() {
               width={1000}
               height={370}
             />
-          </div>
+          </div> */}
         </a>
       ) : null}
       <>
         <CurationSearch setState={handleState} />
-        <div className="">
+        <div className="mb-5">
           {loading ? (
             <SkeletonCard />
           ) : (

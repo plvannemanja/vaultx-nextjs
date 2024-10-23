@@ -291,6 +291,7 @@ export default function Home() {
                   src="/illustrations/neon-grid.png"
                   alt="neon-grid"
                   className="w-[60rem]"
+                  quality={100}
                   width={960}
                   height={960}
                 />
@@ -339,6 +340,7 @@ export default function Home() {
               alt="circle-half-translucent"
               width={10}
               height={10}
+              quality={100}
             />
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
@@ -380,6 +382,7 @@ export default function Home() {
             className="hidden lg:block absolute w-24 right-0 top-[15rem]"
             width={96}
             height={96}
+            quality={100}
           />
           <NFTList color={section2?.color} />
         </div>
@@ -410,6 +413,7 @@ export default function Home() {
                 alt="bottom-banner"
                 layout="fill"
                 objectFit="cover"
+                quality={100}
               ></Image>
             </Link>
           )}

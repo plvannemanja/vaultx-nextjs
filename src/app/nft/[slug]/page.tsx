@@ -92,7 +92,6 @@ function PageDetail({ params }: { params: { slug: string } }) {
         setType('remove');
       }
     } else if (user?.wallet) {
-      debugger;
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||

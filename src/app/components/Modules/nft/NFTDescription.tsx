@@ -11,9 +11,9 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import { DownloadIcon } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import DescriptionIcon from '../../Icons/description-icon';
-import { useGlobalContext } from '../../Context/GlobalContext';
 
 export default function NFTDescription() {
   const [loadMore, setLoadMore] = useState(false);
@@ -75,17 +75,24 @@ export default function NFTDescription() {
         {[data.cloudinaryUrl, ...data.attachments.slice(0, maxAttachments)].map(
           (item, index) => {
             return (
-              <Image
-                alt={data.name}
-                width={242}
-                height={242}
+              <div
+                className="w-[242px] h-[242px] aspect-square relative"
                 key={index}
-                onClick={() => {
-                  setMainImage(item);
-                }}
-                src={item}
-                className="w-[242px] h-[242px] opacity-60 hover:opacity-100 tra rounded aspect-square object-cover"
-              />
+              >
+                <Image
+                  alt={data.name}
+                  // width={242}
+                  // height={242}
+                  layout="fill"
+                  objectFit="cover"
+                  key={index}
+                  onClick={() => {
+                    setMainImage(item);
+                  }}
+                  src={item}
+                  className="opacity-60 hover:opacity-100 rounded"
+                />
+              </div>
             );
           },
         )}
@@ -101,8 +108,9 @@ export default function NFTDescription() {
                     <span>Description</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white/[53%]`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>
@@ -142,8 +150,9 @@ export default function NFTDescription() {
                       </span>
                     </div>
                     <ChevronUpIcon
-                      className={`${open ? 'rotate-180 transform' : ''
-                        } h-5 w-5 text-white/[53%]`}
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-white/[53%]`}
                     />
                   </div>
                 </Disclosure.Button>
@@ -240,8 +249,9 @@ export default function NFTDescription() {
           </div>
         </div>
       )}
-      {(data?.owner?.wallet?.toLowerCase() === user?.wallet?.toLowerCase() || type === "release")
-        && data.unlockableContent && (
+      {(data?.owner?.wallet?.toLowerCase() === user?.wallet?.toLowerCase() ||
+        type === 'release') &&
+        data.unlockableContent && (
           <div className="w-full rounded-[20px] p-5 flex flex-col gap-y-6 bg-[#232323]">
             <Disclosure as="div" defaultOpen={true}>
               {({ open }) => (
@@ -324,8 +334,9 @@ export default function NFTDescription() {
                     Properties
                   </div>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-white/[53%]`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white/[53%]`}
                   />
                 </div>
               </DisclosureButton>

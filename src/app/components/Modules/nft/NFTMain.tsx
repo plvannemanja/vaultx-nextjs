@@ -233,15 +233,17 @@ export default function NFTMain({
           </Box>
         </Modal>
         <div className="grid grid-cols-12 gap-4">
-          <div className="w-full relative lg:col-span-6 col-span-12">
+          <div className="w-full relative lg:col-span-6 col-span-12 max-h-[620px] lg:min-h-[683px] aspect-square">
             <Image
               onClick={() => setModal(true)}
               src={mainImage ? mainImage : data.cloudinaryUrl}
-              height={683}
-              width={620}
-              quality={100}
+              // height={683}
+              // width={620}
+              // quality={100}
+              layout="fill"
+              objectFit="cover"
               alt="hero"
-              className="cursor-zoom-in rounded-[20px] object-cover aspect-square w-full max-h-[620px] lg:min-h-[683px]"
+              className="cursor-zoom-in rounded-[20px] object-cover "
             />
             <div
               onClick={() => handleLike()}
@@ -576,7 +578,7 @@ export default function NFTMain({
                         >
                           <BidModal
                             title={data.name}
-                            update={() => { }}
+                            update={() => {}}
                             onClose={() => {
                               setModalStatus({ ...modalStatus, bid: false });
                             }}
@@ -589,7 +591,7 @@ export default function NFTMain({
                               title="Buy Now"
                               className={'!rounded-[14px] w-full'}
                               variant="primary"
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
@@ -617,7 +619,7 @@ export default function NFTMain({
                               title="Release Escrow"
                               variant="primary"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.release}
@@ -643,7 +645,7 @@ export default function NFTMain({
                               title="Cancel Order"
                               variant="secondaryOutline"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.cancel}
@@ -673,7 +675,7 @@ export default function NFTMain({
                               title="Put On Sale"
                               variant="primary"
                               className={'rounded-[14px]'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.resell}
@@ -719,47 +721,45 @@ export default function NFTMain({
                       </div>
                     )}
 
-                    {
-                      type === 'NotForSale' && (
-                        <div className="flex flex-col gap-x-2 items-center">
-                          <BaseDialog
-                            isOpen={modalStatus.bid}
-                            onClose={(val) => {
-                              setModalStatus({ ...modalStatus, bid: val });
-                            }}
-                            trigger={
-                              <BaseButton
-                                title="Place a Bid"
-                                variant="secondaryOutline"
-                                className={
-                                  '!rounded-[14px] w-full bg-[#DDF24733] !border-0'
-                                }
-                                onClick={() => {
-                                  setModalStatus({ ...modalStatus, bid: true });
-                                }}
-                              />
-                            }
-                            className="bg-black max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
-                            modal={true}
-                          >
-                            <BidModal
-                              title={data.name}
-                              update={() => { }}
-                              onClose={() => {
-                                setModalStatus({ ...modalStatus, bid: false });
+                    {type === 'NotForSale' && (
+                      <div className="flex flex-col gap-x-2 items-center">
+                        <BaseDialog
+                          isOpen={modalStatus.bid}
+                          onClose={(val) => {
+                            setModalStatus({ ...modalStatus, bid: val });
+                          }}
+                          trigger={
+                            <BaseButton
+                              title="Place a Bid"
+                              variant="secondaryOutline"
+                              className={
+                                '!rounded-[14px] w-full bg-[#DDF24733] !border-0'
+                              }
+                              onClick={() => {
+                                setModalStatus({ ...modalStatus, bid: true });
                               }}
-                              fetchNftData={fetchNftData}
                             />
-                          </BaseDialog>
-                        </div>
-                      )
-                    }
+                          }
+                          className="bg-black max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
+                          modal={true}
+                        >
+                          <BidModal
+                            title={data.name}
+                            update={() => {}}
+                            onClose={() => {
+                              setModalStatus({ ...modalStatus, bid: false });
+                            }}
+                            fetchNftData={fetchNftData}
+                          />
+                        </BaseDialog>
+                      </div>
+                    )}
                     {type === 'CancelRequested' ? (
                       <div className="flex flex-col gap-x-2 items-center">
                         <BaseButton
                           title="Cancel Requested"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                           className={'!rounded-[14px]'}
                         />
                       </div>
@@ -773,7 +773,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -798,7 +798,7 @@ export default function NFTMain({
                               title="Escrow Release Request"
                               variant="primary"
                               className={'!rounded-[14px]'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.escrowRelease}
@@ -828,7 +828,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Release Requested"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                           className={'!rounded-[14px]'}
                         />
                       </div>

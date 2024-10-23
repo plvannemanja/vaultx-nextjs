@@ -507,8 +507,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             //   ? 'h-[200px] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:z-10 before:bg-gradient-to-b before:to-[#111] before:from-[#111]/[23%] before:content-[""]'
             //   : '',
             Array.isArray(curation?.descriptionImage) &&
-            curation?.descriptionImage.length === 2 &&
-            'flex space-x-4',
+              curation?.descriptionImage.length === 2 &&
+              'flex space-x-4',
           )}
         >
           <div
@@ -529,6 +529,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     className="rounded-xl w-full h-full"
                     width={960}
                     height={960}
+                    quality={100}
                   />
                 </div>
               ))}
@@ -556,10 +557,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${filterbadge === badge.value
-                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                : 'hover:bg-[#232323] bg-transparent text-white'
-                }`}
+              className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${
+                filterbadge === badge.value
+                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                  : 'hover:bg-[#232323] bg-transparent text-white'
+              }`}
             >
               {badge.label}
             </Badge>
