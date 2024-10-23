@@ -529,8 +529,8 @@ export default function Page({ params }: { params: { slug: string } }) {
                     src={image}
                     alt="hero"
                     className="rounded-xl w-full h-full"
-                    width={960}
-                    height={960}
+                    width={'100%'}
+                    height={'100%'}
                     // quality={100}
                   />
                 </div>
