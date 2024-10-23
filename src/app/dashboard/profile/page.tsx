@@ -159,13 +159,13 @@ export default function Page() {
     <div className="flex flex-col gap-y-4 px-4">
       <div className="relative w-full h-[340px]">
         <Image
+          quality={100}
           src="/images/work-default.png"
           alt="hero"
           layout="fill"
           objectFit="cover"
           className="rounded-xl"
         />
-
         <div className="w-full absolute bottom-4 flex justify-between px-5 z-20">
           <div>
             {user?.wallet && (
@@ -205,6 +205,7 @@ export default function Page() {
         >
           <div className="rounded-full w-28 h-28 border-[3px] border-[#DDF247] flex items-center justify-center">
             <Image
+              quality={100}
               src={
                 user?.avatar?.url ? user.avatar.url : '/images/work-default.png'
               }

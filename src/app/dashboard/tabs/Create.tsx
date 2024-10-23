@@ -61,6 +61,7 @@ export default function Create({
           <div className="flex flex-col gap-y-10 w-full lg:w-[48%]">
             <div className="flex gap-x-2 items-center">
               <Image
+                quality={100}
                 alt="add"
                 height={100}
                 width={100}
@@ -95,6 +96,7 @@ export default function Create({
 
                 <div className="flex gap-x-4 w-10/12">
                   <Image
+                    quality={100}
                     alt="add"
                     height={100}
                     width={100}
@@ -138,6 +140,7 @@ export default function Create({
 
                 <div className="flex gap-x-4 w-10/12">
                   <Image
+                    quality={100}
                     alt="add"
                     height={100}
                     width={100}
@@ -178,6 +181,7 @@ export default function Create({
 
                 <div className="flex gap-x-4 w-10/12">
                   <Image
+                    quality={100}
                     alt="add"
                     height={100}
                     width={100}

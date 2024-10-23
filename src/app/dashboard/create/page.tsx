@@ -71,6 +71,7 @@ export default function Page() {
           <div className="flex flex-col gap-y-10 w-full lg:w-[48%]">
             <div className="flex gap-x-4 items-center">
               <Image
+                quality={100}
                 alt="add"
                 height={100}
                 width={100}
@@ -109,6 +110,7 @@ export default function Page() {
                   </svg>
                   <div className="flex gap-x-4 w-11/12">
                     <Image
+                      quality={100}
                       alt="add"
                       height={100}
                       width={100}
@@ -160,6 +162,7 @@ export default function Page() {
                   </svg>
                   <div className="flex gap-x-4 w-11/12">
                     <Image
+                      quality={100}
                       alt="add"
                       height={100}
                       width={100}
@@ -210,6 +213,7 @@ export default function Page() {
 
                   <div className="flex gap-x-4 w-11/12">
                     <Image
+                      quality={100}
                       alt="add"
                       height={100}
                       width={100}
@@ -245,6 +249,7 @@ export default function Page() {
                 target="_blank"
               >
                 <Image
+                  quality={100}
                   src={mediaImages?.mintingBanner.image}
                   alt="hero"
                   layout="fill"

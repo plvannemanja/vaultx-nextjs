@@ -5,6 +5,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import React from 'react';
 
@@ -35,7 +36,7 @@ export function BaseDialog({
 }: IBaseDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose} modal={modal}>
-      {/* {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>} */}
+      {!isOpen && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
         className={`max-w-5xl focus-visible:ring-0 focus-visible:border-0 focus-visible:outline-none ${className}`}
         onInteractOutside={(e: Event) => {

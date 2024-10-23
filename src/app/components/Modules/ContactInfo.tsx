@@ -165,6 +165,7 @@ export default function ContactInfo({ isSetting }: any) {
                     }}
                   >
                     <Image
+                      quality={100}
                       width={16}
                       height={16}
                       alt="delete"
@@ -251,6 +252,7 @@ export default function ContactInfo({ isSetting }: any) {
           <div className="flex flex-col gap-y-6 items-center">
             <div className="w-14 h-14 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <Image
+                quality={100}
                 src="/icons/plus.svg"
                 className="w-5 h-5"
                 alt="plus"

@@ -218,6 +218,7 @@ const Modal = ({
                                 Change
                               </span>
                               <Image
+                                quality={100}
                                 src="/icons/trash.svg"
                                 alt="attachment"
                                 className="w-5 h-5"
@@ -235,6 +236,7 @@ const Modal = ({
                                 Upload
                               </span>
                               <Image
+                                quality={100}
                                 src="/icons/upload.svg"
                                 alt="attachment"
                                 className="w-5 h-5"

@@ -14,6 +14,7 @@ export default function ErrorModal({
     <div className="flex flex-col gap-y-6 items-center content-center w-[100%] p-3">
       <div className="flex gap-x-3 items-center">
         <Image
+          quality={100}
           src="/icons/info.svg"
           className="w-10"
           width={40}

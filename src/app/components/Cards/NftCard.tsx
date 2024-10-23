@@ -29,9 +29,9 @@ export default function NftCard({ data }: { data: INftCardProps }) {
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
             className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
-            // quality={100}
             blurDataURL={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
             placeholder="blur"
+            quality={100}
           />
         </div>
         <div className="flex flex-col px-5 py-3 gap-y-2.5 rounded-b-[20px]">

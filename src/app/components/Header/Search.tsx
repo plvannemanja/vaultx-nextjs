@@ -54,6 +54,7 @@ const SearchDropDown = ({ searchText }: ISearchDropDownProps) => {
             <div className="left-1 top-0 justify-start items-center gap-3.5 flex">
               <div className="w-[66px] h-[66px] relative rounded-xl">
                 <Image
+                  quality={100}
                   width={66}
                   height={66}
                   className="shrink-0 aspect-square"

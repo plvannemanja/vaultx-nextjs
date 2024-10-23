@@ -30,6 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {showIcon && (
           <button onClick={props.onPressIcon}>
             <Image
+              quality={100}
               src="/icons/trash.svg"
               alt="image"
               width={20}
@@ -49,6 +50,7 @@ const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="relative w-full border-none pl-6 py-1 bg-[#161616] rounded-xl placeholder:text-white/[53%] justify-start items-center inline-flex font-AzeretMono placeholder:text-xs">
         <Image
+          quality={100}
           src="/icons/link-shape-white.svg"
           alt="link"
           className="w-5 h-5"
@@ -71,6 +73,7 @@ const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
         {showIcon && (
           <button onClick={props.onPressIcon}>
             <Image
+              quality={100}
               src="/icons/trash.svg"
               alt="image"
               width={20}

@@ -29,6 +29,7 @@ export default function BaseFooter() {
               href="https://www.instagram.com/magazinex_rwa/?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw%3D%3D"
             >
               <Image
+                quality={100}
                 alt="instagram"
                 src={imageHovered.instagram}
                 height={40}
@@ -54,6 +55,7 @@ export default function BaseFooter() {
               href="https://x.com/MonsterX_RWA"
             >
               <Image
+                quality={100}
                 alt="instagram"
                 src={imageHovered.X}
                 height={40}
@@ -73,6 +75,7 @@ export default function BaseFooter() {
               href="https://www.monsterx.io/"
             >
               <Image
+                quality={100}
                 alt="instagram"
                 src={imageHovered.monsterx}
                 height={40}

@@ -58,6 +58,7 @@ const WalletImage = ({ walletId, size }: WalletDetailProps) => {
   if (imageData) {
     return (
       <Image
+        quality={100}
         width={size}
         height={size}
         src={imageData}
@@ -108,6 +109,7 @@ export default function Menu() {
       <DropdownMenuTrigger asChild>
         <div className="max-w-[159px] h-12 justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
           <Image
+            quality={100}
             className="shrink-0 rounded-full object-cover w-10 h-10"
             width={40}
             height={40}
@@ -126,6 +128,7 @@ export default function Menu() {
         <DropdownMenuLabel>
           <div className="justify-start items-center gap-3 inline-flex text-white text-sm font-extrabold capitalize cursor-pointer">
             <Image
+              quality={100}
               className="shrink-0 rounded-full object-cover h-10 w-10"
               width={40}
               height={40}
@@ -266,13 +269,13 @@ export default function Menu() {
               <div className="justify-start items-center gap-[17px] flex">
                 <div className="w-5 h-5 relative">
                   <Image
+                    quality={100}
                     src="/icons/Base.svg"
                     height={20}
                     width={20}
                     alt="matic"
                     loading="lazy"
                     blurDataURL={'/images/image_placeholder.png'}
-                    quality={100}
                   />
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">

@@ -42,6 +42,7 @@ export default function MintLoader({
               )}
             >
               <Image
+                quality={100}
                 src="/icons/refresh.svg"
                 alt="step1"
                 className="w-10 h-10"
@@ -62,6 +63,7 @@ export default function MintLoader({
               )}
             >
               <Image
+                quality={100}
                 src="/icons/refresh.svg"
                 alt="step1"
                 className="w-10 h-10"
@@ -82,6 +84,7 @@ export default function MintLoader({
               )}
             >
               <Image
+                quality={100}
                 src="/icons/refresh.svg"
                 alt="step1"
                 className="w-10 h-10"
@@ -102,6 +105,7 @@ export default function MintLoader({
         <div className="flex flex-col gap-y-4">
           <div className="flex gap-x-2 items-center">
             <Image
+              quality={100}
               src="/icons/info.svg"
               alt="step1"
               className="w-10 h-10"

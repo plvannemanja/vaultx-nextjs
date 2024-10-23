@@ -243,6 +243,7 @@ export default function UserArtistModal({
             {imageSrc && (
               <div className="width-[90%] object-cover mx-auto">
                 <Image
+                  quality={100}
                   src={imageSrc}
                   alt="logo"
                   layout="responsive"
@@ -257,6 +258,7 @@ export default function UserArtistModal({
           <>
             <div className="relative w-16 h-16">
               <Image
+                quality={100}
                 className="relative"
                 src="/icons/upload.svg"
                 width={66}
@@ -283,6 +285,7 @@ export default function UserArtistModal({
           </p>
           <div className="w-4 h-4 relative">
             <Image
+              quality={100}
               src="/icons/arrow_ico.svg"
               alt="arrow"
               width={18}
@@ -397,6 +400,7 @@ export default function UserArtistModal({
             <div className="h-10 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
               <div className="w-6 h-6 relative flex">
                 <Image
+                  quality={100}
                   src="/icons/add-new.svg"
                   alt="add-royalty"
                   width={24}
@@ -504,6 +508,7 @@ export default function UserArtistModal({
                   >
                     <div className="w-6 h-6 relative flex">
                       <Image
+                        quality={100}
                         src="/icons/add-new.svg"
                         alt="add-royalty"
                         width={24}

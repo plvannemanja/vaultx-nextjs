@@ -288,10 +288,10 @@ export default function Home() {
               </button>
               <div className="absolute -top-[2rem] w-[68rem] lg:flex justify-center hidden">
                 <Image
+                  quality={100}
                   src="/illustrations/neon-grid.png"
                   alt="neon-grid"
                   className="w-[60rem]"
-                  quality={100}
                   width={960}
                   height={960}
                 />
@@ -335,12 +335,12 @@ export default function Home() {
               </svg>
             </div>
             <Image
+              quality={100}
               src="/illustrations/circle-half-translucent.png"
               className="hidden lg:block absolute w-24 right-0"
               alt="circle-half-translucent"
               width={10}
               height={10}
-              quality={100}
             />
             <div className="flex flex-col gap-y-2 justify-center text-center items-center my-10 text-white flex-wrap relative">
               {section3.title
@@ -352,7 +352,8 @@ export default function Home() {
                 </Label>
               ) : null}
               {/* <div className="absolute top-20 w-[36rem]">
-                <Image
+                <Image 
+quality={100}
                   height={100}
                   width={100}
                   src="/illustrations/important.png"
@@ -377,12 +378,12 @@ export default function Home() {
         ) : null}
         <div className="flex justify-center lg:relative lg:bg-[url('/illustrations/wave-top-left-bottom-right.png')]">
           <Image
+            quality={100}
             src="/illustrations/right-lines.png"
             alt="illustration"
             className="hidden lg:block absolute w-24 right-0 top-[15rem]"
             width={96}
             height={96}
-            quality={100}
           />
           <NFTList color={section2?.color} />
         </div>
@@ -409,11 +410,11 @@ export default function Home() {
           {images?.bottomBaner && (
             <Link href={images?.bottomBaner.link} target="_blank">
               <Image
+                quality={100}
                 src={images?.bottomBaner.image}
                 alt="bottom-banner"
                 layout="fill"
                 objectFit="cover"
-                quality={100}
               ></Image>
             </Link>
           )}

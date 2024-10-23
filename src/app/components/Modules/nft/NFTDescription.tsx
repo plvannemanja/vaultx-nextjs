@@ -80,6 +80,7 @@ export default function NFTDescription() {
                 key={index}
               >
                 <Image
+                  quality={100}
                   alt={data.name}
                   // width={242}
                   // height={242}
@@ -260,6 +261,7 @@ export default function NFTDescription() {
                     <div className="flex w-full justify-between">
                       <div className="text-sm font-extrabold text-white flex items-center gap-2">
                         <Image
+                          quality={100}
                           src="/icons/lockable.svg"
                           width={16}
                           height={16}

@@ -58,6 +58,7 @@ export default function BaseButton({
         {title}
         {displayIcon && (
           <Image
+            quality={100}
             width={18}
             height={18}
             src={iconPath ?? '/icons/arrow_ico.svg'}

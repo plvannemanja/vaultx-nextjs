@@ -217,6 +217,7 @@ export default function NFTMain({
               onClick={() => setModal(false)}
             >
               <Image
+                quality={100}
                 src="/icons/delete_icon.svg"
                 alt=""
                 width={50}
@@ -235,6 +236,7 @@ export default function NFTMain({
         <div className="grid grid-cols-12 gap-4">
           <div className="w-full relative lg:col-span-6 col-span-12 max-h-[620px] lg:min-h-[683px] aspect-square">
             <Image
+              quality={100}
               onClick={() => setModal(true)}
               src={mainImage ? mainImage : data.cloudinaryUrl}
               // height={683}
@@ -260,11 +262,11 @@ export default function NFTMain({
               </div>
             </div>
             <Image
+              quality={100}
               alt="rwa"
               src="/images/rwa-logo.svg"
               height={100}
               width={100}
-              quality={100}
               className="w-20 h-16 absolute bottom-3 right-4"
             />
           </div>
@@ -414,6 +416,7 @@ export default function NFTMain({
                   <div className="flex justify-between">
                     <div className="flex gap-x-[10px] items-center">
                       <Image
+                        quality={100}
                         width={32}
                         height={32}
                         src={data?.owner?.avatar?.url || '/default-logo.png'}
@@ -431,6 +434,7 @@ export default function NFTMain({
                     </div>
                     <div className="flex gap-x-[10px] items-center">
                       <Image
+                        quality={100}
                         width={32}
                         height={32}
                         src={data?.mintedBy?.avatar?.url || '/default-logo.png'}
