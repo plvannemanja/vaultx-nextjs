@@ -14,6 +14,12 @@ import { useEffect, useState } from 'react';
 
 export const prices = [
   {
+    value: 'g',
+    label: 'Recently Minted',
+    param: 'createdAt',
+    paramValue: -1,
+  },
+  {
     value: 'e',
     label: 'Price: Low to High',
     param: 'price',
@@ -23,12 +29,6 @@ export const prices = [
     value: 'f',
     label: 'Price: High to Low',
     param: 'price',
-    paramValue: -1,
-  },
-  {
-    value: 'g',
-    label: 'Recently Minted',
-    param: 'createdAt',
     paramValue: -1,
   },
   {
