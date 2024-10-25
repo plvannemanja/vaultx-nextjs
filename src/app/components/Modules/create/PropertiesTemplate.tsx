@@ -35,9 +35,9 @@ export default function PropertiesTemplate({
   useEffect(() => {
     setAdvancedDetails({
       ...advancedDetails,
-      attributes: data,
+      attributes: editableProperties,
     });
-  }, [data]);
+  }, [editableProperties]);
 
   useEffect(() => {
     fetchProperties();
@@ -160,11 +160,10 @@ export default function PropertiesTemplate({
                 _id: 'basic',
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-              advancedDetails.propertyTemplateId === 'basic'
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === 'basic'
                 ? 'border-neon'
                 : 'border-none'
-            }`}
+              }`}
           >
             <p>Basic Template</p>
           </div>
@@ -173,11 +172,10 @@ export default function PropertiesTemplate({
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
-                advancedDetails.propertyTemplateId === item._id
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${advancedDetails.propertyTemplateId === item._id
                   ? 'border-neon'
                   : 'border-none'
-              }`}
+                }`}
             >
               <p>{item.name}</p>
               <button
