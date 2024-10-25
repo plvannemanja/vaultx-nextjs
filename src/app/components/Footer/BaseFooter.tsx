@@ -18,7 +18,7 @@ export default function BaseFooter() {
       <div className="flex flex-wrap justify-between px-20 gap-10 container">
         <Link href="/dashboard/appreciate">Appreciate</Link>
         <Link href="/dashboard/curation">Curation</Link>
-        <Link href="https://magazinex.io">Magazine</Link>
+        <Link href="https://hansdca380cf4f5.wpcomstaging.com">Magazine</Link>
         <Link href="https://www.monsterx.io">Who We Are</Link>
         <div className="flex flex-col gap-y-2 justify-center mx-auto lg:m-0">
           <p className="text-center">Join Us Today!</p>

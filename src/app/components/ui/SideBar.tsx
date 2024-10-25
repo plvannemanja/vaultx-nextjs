@@ -31,7 +31,7 @@ const marketPlaceLinks = [
     name: 'Magazine',
     value: 'magazine',
     icon: () => <PencilIcon />,
-    link: 'https://magazinex.io',
+    link: 'https://hansdca380cf4f5.wpcomstaging.com',
   },
   {
     name: 'How to work',
@@ -165,10 +165,10 @@ quality={100}
                   : '',
               )}
               href={`/dashboard/${link.value}`}
-              // onClick={() => {
-              //   if (pathname !== `/dashboard/${link.value}`)
-              //     window.location.href = `/dashboard/${link.value}`;
-              // }}
+            // onClick={() => {
+            //   if (pathname !== `/dashboard/${link.value}`)
+            //     window.location.href = `/dashboard/${link.value}`;
+            // }}
             >
               {/* <Image 
 quality={100}
