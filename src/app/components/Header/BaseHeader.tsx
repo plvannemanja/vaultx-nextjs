@@ -149,7 +149,7 @@ export function BaseHeader({ isNFT = false }: Props) {
             </Link>
             <Link
               className="p-1 hover:cursor-pointer hover:text-[#DDF247] transition-all duration-200 font-medium"
-              href="https://artistvaultx.wpcomstaging.com/"
+              href="https://hansdca380cf4f5.wpcomstaging.com"
               target="_blank"
             >
               Magazine
