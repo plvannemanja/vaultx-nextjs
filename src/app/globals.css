@@ -128,6 +128,13 @@
   font-family: 'Manrope', sans-serif;
 }
 
+@media (min-width: 640px) {
+  .nft-desc {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(242px, 1fr));
+  }
+}
+
 /* font classes END */
 body {
   background-color: #111111;

@@ -474,16 +474,11 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           onClose={() => setBasicDetails({ ...basicDetails, error: null })}
           className="bg-[#161616] max-h-[80%] min-w-[617px] max-w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0"
         >
-          {/* <TriggerModal
-            isOpen={basicDetails.error ? true : false}
-            close={() => setBasicDetails({ ...basicDetails, error: null })}
-          > */}
           <ErrorModal
             title={'Error in creation found'}
             data={JSON.parse(basicDetails.error)}
             close={() => setBasicDetails({ ...basicDetails, error: null })}
           />
-          {/* </TriggerModal> */}
         </BaseDialog>
       )}
       {advanceDetails.error && (

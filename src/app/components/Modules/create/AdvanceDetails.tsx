@@ -6,6 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { CategoryService } from '@/services/catergoryService';
 import { isValidNumber } from '@/utils/helpers';
 import { Textarea } from '@headlessui/react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { isAddress } from 'thirdweb';
 import { useCreateNFT } from '../../Context/CreateNFTContext';
@@ -39,6 +40,7 @@ export default function AdvanceDetails({
       ...advancedDetails,
       certificates: unlockableFiles,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unlockableFiles]);
 
   const [formData, setFormData] = useState<any>({
@@ -183,6 +185,7 @@ export default function AdvanceDetails({
         },
       ]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options.split]);
 
   const fetchCategories = async () => {
@@ -320,9 +323,16 @@ export default function AdvanceDetails({
               <div className="col-span-2 hidden">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => { }}
+                  onClick={() => {}}
                 >
-                  <img src="/icons/add-new.svg" className="w-6 h-6" />
+                  <Image
+                    src="/icons/add-new.svg"
+                    className="w-6 h-6"
+                    alt="add"
+                    width={24}
+                    height={24}
+                    quality={100}
+                  />
                   <p className="text-center text-sm text-[#DDF247]">Add New</p>
                 </div>
               </div>
@@ -357,11 +367,14 @@ export default function AdvanceDetails({
                   deSelect={true}
                 />
                 {unlockableFiles.length === 0 ? (
-                  <img
+                  <Image
                     src="/icons/trash.svg"
                     alt="trash"
                     className="w-6 h-6 cursor-pointer"
                     onClick={() => removeUnlockable(0)}
+                    width={24}
+                    height={24}
+                    quality={100}
                   />
                 ) : null}
                 <div
@@ -374,10 +387,13 @@ export default function AdvanceDetails({
                     }
                   }}
                 >
-                  <img
+                  <Image
                     src="/icons/add-new.svg"
                     alt="plus"
                     className="w-4 h-4"
+                    width={16}
+                    height={16}
+                    quality={100}
                   />
                   <p className="text-neon">Add</p>
                 </div>
@@ -391,11 +407,14 @@ export default function AdvanceDetails({
                       onFileSelect={(file: any) => handleFileChange(file, 0)}
                       maxSizeInBytes={1024 * 1024}
                     />
-                    <img
+                    <Image
                       src="/icons/trash.svg"
                       alt="trash"
                       className="w-6 h-6 cursor-pointer"
                       onClick={() => removeUnlockable(0)}
+                      width={24}
+                      height={24}
+                      quality={100}
                     />
                     <div
                       className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
@@ -407,10 +426,13 @@ export default function AdvanceDetails({
                         }
                       }}
                     >
-                      <img
+                      <Image
                         src="/icons/add-new.svg"
                         alt="plus"
                         className="w-4 h-4"
+                        width={16}
+                        height={16}
+                        quality={100}
                       />
                       <p className="text-neon">Add</p>
                     </div>
@@ -423,11 +445,14 @@ export default function AdvanceDetails({
                     onFileSelect={(file: any) => handleFileChange(file, index)}
                     maxSizeInBytes={1024 * 1024}
                   />
-                  <img
+                  <Image
                     src="/icons/trash.svg"
                     alt="trash"
                     className="w-6 h-6 cursor-pointer"
                     onClick={() => removeUnlockable(index)}
+                    width={24}
+                    height={24}
+                    quality={100}
                   />
                 </div>
               );
@@ -503,10 +528,13 @@ export default function AdvanceDetails({
                       className="h-[52px] mx-4 hidden"
                       onClick={() => removeSplit(index)}
                     >
-                      <img
+                      <Image
                         src="/icons/trash.svg"
-                        alt=""
+                        alt="trash"
                         className="cursor-pointer w-6 h-6"
+                        width={24}
+                        height={24}
+                        quality={100}
                       />
                     </button>
                   )}
@@ -517,7 +545,14 @@ export default function AdvanceDetails({
                         // addSplit();
                       }}
                     >
-                      <img src="/icons/add-new.svg" className="w-6 h-6" />
+                      <Image
+                        src="/icons/add-new.svg"
+                        className="w-6 h-6"
+                        alt="add"
+                        width={24}
+                        height={24}
+                        quality={100}
+                      />
                       <p className="text-center text-sm text-[#DDF247]">
                         Add New
                       </p>

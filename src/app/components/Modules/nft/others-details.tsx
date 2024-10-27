@@ -1,4 +1,5 @@
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import { NFTItemType } from '@/types';
 import {
   Disclosure,
@@ -19,7 +20,12 @@ const OthersDetails = ({ data }: Props) => {
       <Disclosure as="div" defaultOpen={true}>
         {({ open }) => (
           <>
-            <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-3 text-left text-[18px] border-b border-white/[8%]">
+            <DisclosureButton
+              className={cn(
+                'flex w-full flex-col justify-between py-2 pb-4 text-left   text-lg font-medium text-white text-[18px]',
+                open ? 'border-b border-white/[8%]' : '',
+              )}
+            >
               <div className="flex w-full justify-between">
                 <span className="text-white flex items-center text-sm gap-2 font-extrabold content-center manrope-font">
                   <Info className="w-4 h-4" />

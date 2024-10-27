@@ -26,7 +26,6 @@ import { useActiveAccount } from 'thirdweb/react';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BidIcon from '../../Icons/bid-icon';
-import BaseButton from '../../ui/BaseButton';
 
 export default function BidList({
   fetchNftData,
@@ -34,15 +33,14 @@ export default function BidList({
   fetchNftData: () => void;
 }) {
   const [loading, setLoading] = useState(false);
-  const { nftId, NFTDetail, bids, setBids, } = useNFTDetail();
+  const { nftId, NFTDetail, bids, setBids } = useNFTDetail();
   const { user } = useGlobalContext();
   const { toast } = useToast();
   const activeAccount = useActiveAccount();
   const createSellService = new CreateSellService();
 
   const cancel = async (bidInfo: IBid) => {
-    if (bidInfo.bidCanceled || bidInfo.bidSuccess)
-      return;
+    if (bidInfo.bidCanceled || bidInfo.bidSuccess) return;
     toast({
       title: 'Cancelling Bid',
       duration: 5000,
@@ -80,8 +78,7 @@ export default function BidList({
   };
 
   const accept = async (bidInfo: IBid) => {
-    if (bidInfo.bidCanceled || bidInfo.bidSuccess)
-      return;
+    if (bidInfo.bidCanceled || bidInfo.bidSuccess) return;
     toast({
       title: 'Accepting Bid',
       duration: 5000,
@@ -93,7 +90,7 @@ export default function BidList({
         NFTDetail?.tokenId,
         bidInfo.bidId,
         activeAccount,
-      )
+      );
 
       const data = {
         id: bidInfo._id,
@@ -151,8 +148,9 @@ export default function BidList({
                     <span>Bid Offers</span>
                   </div>
                   <ChevronUpIcon
-                    className={`${open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-[#989898]`}
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-[#989898]`}
                   />
                 </div>
               </DisclosureButton>
@@ -193,8 +191,8 @@ export default function BidList({
                           <TableCell>
                             {item?.createdAt
                               ? new Date(item?.createdAt)
-                                .toLocaleString()
-                                .slice(0, 10)
+                                  .toLocaleString()
+                                  .slice(0, 10)
                               : '-/-'}
                           </TableCell>
                           <TableCell>
@@ -228,7 +226,7 @@ export default function BidList({
                               <div className="py-3 min-w-24 rounded-lg text-black font-semibold bg-light">
                                 <button
                                   className="w-full h-full"
-                                  onClick={() => { }}
+                                  onClick={() => {}}
                                 >
                                   Bidded
                                 </button>
