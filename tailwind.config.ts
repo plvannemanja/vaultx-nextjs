@@ -17,6 +17,34 @@ const config = {
         '2xl': '1400px',
       },
     },
+    screens: {
+      xs: '375px',
+      // => @media (min-width: 375px) { ... }
+
+      xss: '480px',
+      // => @media (min-width: 425px) { ... }
+
+      sm: '640px',
+      // => @media (min-width: 640px) { ... }
+
+      md: '768px',
+      // => @media (min-width: 768px) { ... }
+
+      mdp: '850px',
+      // => @media (min-width: 850px) { ... }
+
+      lg: '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      xl: '1280px',
+      // => @media (min-width: 1280px) { ... }
+
+      xl2: '1366px',
+      // => @media (min-width: 1366px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
+    },
     extend: {
       fontFamily: {
         manrope: ['Manrope', 'sans-serif'],

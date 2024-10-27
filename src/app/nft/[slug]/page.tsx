@@ -167,7 +167,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
   }, [user, data]);
 
   return (
-    <div className="flex flex-col gap-y-4 py-5 w-full container px-10">
+    <div className="flex flex-col gap-y-4 py-2 sm:py-3 md:py-5 w-full container !px-5 lg:px-0">
       {data && (
         <>
           <div className="flex flex-col gap-y-6">
@@ -178,14 +178,14 @@ function PageDetail({ params }: { params: { slug: string } }) {
             <OthersDetails data={data} />
           </div>
           <div className="w-11/12 pt-5 px-5 pb-[30px] mx-auto rounded-[12px] bg-[#DDF247] relative flex justify-center items-center overflow-hidden mt-[55px]">
-            <div className="absolute -translate-y-1/2 top-1/2 -left-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
-            <div className="absolute -translate-y-1/2 top-1/2 -right-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
-            <div>
-              <h3 className="text-[40px] font-monserrat leading-[130%] font-extrabold max-w-[780px] mx-auto text-center text-black">
+            <div className="absolute sm:-translate-y-1/2 sm:top-1/2 top-[10%] -left-[90px] sm:-left-[120px] md:-left-[108px] bg-white w-32 h-32 sm:w-40 sm:h-40 md:w-[189px] md:h-[189px] rounded-full z-[1]"></div>
+            <div className="absolute sm:-translate-y-1/2 sm:top-1/2 bottom-[10%] -right-[90px] sm:-right-[120px] md:-right-[108px] bg-white w-32 h-32 md:w-[189px] sm:w-40 sm:h-40 md:h-[189px] rounded-full z-[1]"></div>
+            <div className="z-50 sm:px-0 px-5">
+              <h3 className="text-xl md:text-2xl lg:text-3xl xl:text-[40px] font-monserrat leading-[130%] font-extrabold max-w-[780px] mx-auto text-center text-black">
                 Join our newsletter to stay up to date on features and releases
               </h3>
-              <div className="flex gap-4 max-w-[572px] mx-auto mt-[30px] relative h-full">
-                <div className="flex items-center gap-2 bg-white min-w-[397px] p-1 px-3">
+              <div className="flex flex-col sm:flex-row gap-4 max-w-[572px] justify-center mx-auto mt-[30px] relative h-full">
+                <div className="flex items-center gap-2 bg-white md:min-w-[397px] p-1 px-3">
                   <Mail className="text-[#07171d]" />
                   <input
                     type="email"

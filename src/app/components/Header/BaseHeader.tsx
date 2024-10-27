@@ -168,15 +168,16 @@ export function BaseHeader({ isNFT = false }: Props) {
           {activeAccount ? (
             <>
               {isNFT && (
-                <button
+                <Link
+                  href="/dashboard/create"
                   className={
-                    'px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex cursor-pointer mr-2 self-center'
+                    'px-4 py-2.5 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 cursor-pointer mr-2 self-center sm:flex hidden'
                   }
                 >
                   <div className="text-neutral-900 text-sm font-semibold leading-normal">
                     Create RWA
                   </div>
-                </button>
+                </Link>
               )}
               <Menu />
             </>
