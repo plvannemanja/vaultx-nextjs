@@ -54,7 +54,7 @@ export default function NftCard({
               Created by:{' '}
             </span>
             <span className="text-[12px] leading-[160%] azeret-mono-font">
-              {data.curation.name ? data.curation.name : data.artist}
+              {data.artist}
             </span>
           </div>
           {data.curation?.name && (
