@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useActiveWalletChain } from 'thirdweb/react';
 
 interface IAcceptBidModalProps {
   bidderInfo: {
@@ -11,6 +12,7 @@ interface IAcceptBidModalProps {
 }
 
 export default function AcceptBidModal({ bidderInfo }: IAcceptBidModalProps) {
+  const activeChain = useActiveWalletChain();
   const [step, setStep] = useState(1);
 
   // Blockchain transaction
@@ -73,7 +75,7 @@ export default function AcceptBidModal({ bidderInfo }: IAcceptBidModalProps) {
 
             <div className="flex justify-between">
               <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-                <button className="w-full h-full" onClick={() => {}}>
+                <button className="w-full h-full" onClick={() => { }}>
                   Discard
                 </button>
               </div>
@@ -129,7 +131,7 @@ export default function AcceptBidModal({ bidderInfo }: IAcceptBidModalProps) {
               <div className="flex justify-between">
                 <div className="w-[48%] p-4 rounded-md border border-gray-400">
                   <p className="text-sm text-gray-500">Payment Method</p>
-                  <p className="text-neon">Polygon</p>
+                  <p className="text-neon">{activeChain?.name}</p>
                 </div>
                 <div className="w-[48%] p-4 rounded-md border border-gray-400">
                   <p className="text-sm text-gray-500">Payment Time</p>

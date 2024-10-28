@@ -8,12 +8,14 @@ import {
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ChevronUpIcon, EyeIcon, Info } from 'lucide-react';
 import Image from 'next/image';
+import { useActiveWalletChain } from 'thirdweb/react';
 
 type Props = {
   data: NFTItemType | null;
 };
 
 const OthersDetails = ({ data }: Props) => {
+  const activeChain = useActiveWalletChain();
   return (
     <div className="w-full rounded-[20px] p-5 bg-dark flex flex-col gap-y-6 bg-[#232323]">
       <Disclosure as="div" defaultOpen={true}>
@@ -26,9 +28,8 @@ const OthersDetails = ({ data }: Props) => {
                   <span>Details</span>
                 </span>
                 <ChevronUpIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-white/[53%]`}
+                  className={`${open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-white/[53%]`}
                 />
               </div>
             </DisclosureButton>
@@ -58,7 +59,7 @@ const OthersDetails = ({ data }: Props) => {
                     className="w-[1.2rem] h-8 fill-white"
                   />
                   <Label className="font-extrabold text-sm">
-                    View on Polygon Scan
+                    View on {activeChain?.name} Scan
                   </Label>
                   <a href={data?.minted ? '?a=' : ''}>
                     <ArrowTopRightOnSquareIcon

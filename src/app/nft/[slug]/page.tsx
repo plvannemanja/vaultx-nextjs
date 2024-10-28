@@ -17,6 +17,8 @@ import { FavoriteService } from '@/services/FavoriteService';
 import NftServices from '@/services/nftService';
 import { getAllNftActivitys } from '@/services/supplier';
 import { Mail } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 function PageDetail({ params }: { params: { slug: string } }) {
@@ -24,7 +26,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
   const favoriteService = new FavoriteService();
   const createSellService = new CreateSellService();
   const { toast } = useToast();
-  const { user } = useGlobalContext();
+  const { user, mediaImages } = useGlobalContext();
   const {
     NFTDetail: data,
     setNFTDetail: setData,
@@ -177,27 +179,18 @@ function PageDetail({ params }: { params: { slug: string } }) {
             <ActivityList />
             <OthersDetails data={data} />
           </div>
-          <div className="w-11/12 pt-5 px-5 pb-[30px] mx-auto rounded-[12px] bg-[#DDF247] relative flex justify-center items-center overflow-hidden mt-[55px]">
-            <div className="absolute -translate-y-1/2 top-1/2 -left-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
-            <div className="absolute -translate-y-1/2 top-1/2 -right-[108px] bg-white w-[189px] h-[189px] rounded-full z-[1]"></div>
-            <div>
-              <h3 className="text-[40px] font-monserrat leading-[130%] font-extrabold max-w-[780px] mx-auto text-center text-black">
-                Join our newsletter to stay up to date on features and releases
-              </h3>
-              <div className="flex gap-4 max-w-[572px] mx-auto mt-[30px] relative h-full">
-                <div className="flex items-center gap-2 bg-white min-w-[397px] p-1 px-3">
-                  <Mail className="text-[#07171d]" />
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full h-12 focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none bg-transparent border-b border-white/[8%] text-[#101012] flex-1"
-                  />
-                </div>
-                <button className="bg-[#141413] rounded-md text-white py-[14px] px-[20px] min-w-[158px] manrope-font text-lg font-semibold">
-                  Subscribe
-                </button>
-              </div>
-            </div>
+          <div className="w-11/12 pt-5 px-5 max-w-[1204px] h-64 pb-[30px] mx-auto rounded-[12px] relative flex justify-center items-center overflow-hidden mt-[55px]">
+            {mediaImages?.bottomBaner && (
+              <Link href={mediaImages?.bottomBaner.link} target="_blank">
+                <Image
+                  quality={100}
+                  src={mediaImages?.bottomBaner.image}
+                  alt="bottom-banner"
+                  layout="fill"
+                  objectFit="cover"
+                ></Image>
+              </Link>
+            )}
           </div>
         </>
       )}
