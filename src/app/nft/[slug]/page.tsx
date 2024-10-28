@@ -169,7 +169,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
   }, [user, data]);
 
   return (
-    <div className="flex flex-col gap-y-4 py-5 w-full container px-10">
+    <div className="flex flex-col gap-y-4 py-2 sm:py-3 md:py-5 w-full container !px-5 lg:px-0">
       {data && (
         <>
           <div className="flex flex-col gap-y-6">

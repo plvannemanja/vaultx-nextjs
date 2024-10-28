@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { getExplorerURL } from '@/lib/helper';
+import { cn } from '@/lib/utils';
 import { trimString } from '@/utils/helpers';
 import {
   Disclosure,
@@ -74,7 +75,12 @@ export default function ActivityList() {
         <Disclosure as="div" defaultOpen={true}>
           {({ open }) => (
             <>
-              <DisclosureButton className="flex w-full flex-col justify-between py-2 pb-4 text-left text-lg text-white text-[18px] border-b border-white/[8%]">
+              <DisclosureButton
+                className={cn(
+                  'flex w-full flex-col justify-between py-2 pb-4 text-left   text-lg font-medium text-white text-[18px]',
+                  open ? 'border-b border-white/[8%]' : '',
+                )}
+              >
                 <div className="flex w-full justify-between">
                   <div className="text-sm font-extrabold flex items-center gap-2">
                     <ArrowUpDown className="w-4 h-4" />
@@ -92,14 +98,20 @@ export default function ActivityList() {
                   {/* <TableCaption>A list of your item activity.</TableCaption> */}
                   <TableHeader>
                     <TableRow className="border-white/[8%] font-extrabold">
-                      <TableHead className="w-[100px] text-[#818181]">
-                        Event
-                      </TableHead>
+                      <TableHead className="text-[#818181]">Event</TableHead>
                       <TableHead className="text-[#818181]">Price</TableHead>
-                      <TableHead className="text-[#818181]">From</TableHead>
-                      <TableHead className="text-[#818181]">To</TableHead>
-                      <TableHead className="text-[#818181]">Date</TableHead>
-                      <TableHead className=" text-[#818181]">Time</TableHead>
+                      <TableHead className="text-[#818181] sm:table-cell hidden">
+                        From
+                      </TableHead>
+                      <TableHead className="text-[#818181] sm:table-cell hidden">
+                        To
+                      </TableHead>
+                      <TableHead className="text-[#818181] lg:table-cell hidden">
+                        Date
+                      </TableHead>
+                      <TableHead className=" text-[#818181] lg:table-cell hidden">
+                        Time
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -142,7 +154,7 @@ export default function ActivityList() {
                               </span>
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="sm:table-cell hidden">
                             <div className="flex gap-x-2 items-center capitalize text-[#DDF247]">
                               {item.fromWallet ? (
                                 <a
@@ -168,7 +180,7 @@ export default function ActivityList() {
                               )}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="sm:table-cell hidden">
                             <div className="flex gap-x-2 items-center text-[#DDF247]">
                               {item.toWallet ? (
                                 <a
@@ -194,10 +206,10 @@ export default function ActivityList() {
                               )}
                             </div>
                           </TableCell>
-                          <TableCell>
+                          <TableCell className="lg:table-cell hidden">
                             {moment(item.createdAt).format('DD MMM, YY')}
                           </TableCell>
-                          <TableCell className="">
+                          <TableCell className="lg:table-cell hidden">
                             {moment(item.createdAt).format('hh:mm A')}
                           </TableCell>
                         </TableRow>
