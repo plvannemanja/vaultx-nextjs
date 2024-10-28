@@ -16,10 +16,10 @@ export default function Page() {
   const [data, setData] = useState<any[]>([]);
   const [nfts, setNfts] = useState<any[]>([]);
   const { mediaImages } = useGlobalContext();
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<any>({
     searchInput: '',
     filter: {
-      price: 1,
+      createdAt: -1,
     },
     category: null,
   });
@@ -31,7 +31,7 @@ export default function Page() {
       setFilters({
         searchInput: data.search,
         filter: {
-          price: data.price.value,
+          [data?.price.param]: data.price.value,
         },
         category:
           data.category.label === 'Category' ? null : data.category.label,
@@ -50,9 +50,7 @@ export default function Page() {
         skip: 0,
         limit: 0,
         searchInput: filters.searchInput,
-        filter: {
-          price: filters.filter.price,
-        },
+        filter: filters.filter,
       };
       if (filters.category) {
         queryObject['category'] = filters.category;
@@ -102,12 +100,12 @@ quality={100}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 lg:gap-4 xl:gap-5 2xl:gap-6 mb-3">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
-              return (
-                <Link key={index} href={`/nft/${nft._id}`}>
-                  <NftCard data={nft} />
-                </Link>
-              );
-            })
+            return (
+              <Link key={index} href={`/nft/${nft._id}`}>
+                <NftCard data={nft} />
+              </Link>
+            );
+          })
           : null}
       </div>
     </div>

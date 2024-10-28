@@ -74,6 +74,7 @@ export default function Filters({
     price: {
       label: prices[0].label,
       value: prices[0].paramValue,
+      param: prices[0].param,
       active: false,
     },
     category: {
@@ -193,6 +194,7 @@ export default function Filters({
                       price: {
                         label: filteredPrice.label,
                         value: filteredPrice.paramValue,
+                        param: filteredPrice.param,
                       },
                     });
                     setState(search);
