@@ -158,6 +158,7 @@ export default function BuyModal({
         contactInformation: formData.description,
         concent: formData.accepted,
         buyHash: transactionHash,
+        lastPrice: Number(tokenAmount),
       };
 
       const saleService = new CreateSellService();
@@ -213,6 +214,7 @@ export default function BuyModal({
         contactInformation: formData.description,
         concent: formData.accepted,
         buyHash: transactionHash,
+        lastPrice: tokenAmount,
       };
       const createNftService = new CreateNftServices();
       await createNftService.mintAndSale({
