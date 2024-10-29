@@ -131,7 +131,7 @@ export default function BuyModal({
 
   const buyNFT = async () => {
     try {
-      setStep(4);
+      setStep(3);
       const tokenAmount = await getTokenAmount(
         NFTDetail.price.toString(),
         'Wei',
@@ -164,17 +164,17 @@ export default function BuyModal({
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
       await fetchNftData();
-      setStep(5);
+      setStep(4);
     } catch (error) {
       console.log(error);
       setError(JSON.stringify(error));
-      onClose();
+      // onClose();
     }
   };
 
   const buyFreeMint = async () => {
     try {
-      setStep(4);
+      setStep(3);
       const voucher: INFTVoucher = JSON.parse(
         NFTDetail.voucher,
         (key, value) => {
@@ -225,10 +225,10 @@ export default function BuyModal({
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
       await fetchNftData();
-      setStep(5);
+      setStep(4);
     } catch (error) {
       setError(JSON.stringify(error));
-      onClose();
+      // onClose();
     }
   };
 
