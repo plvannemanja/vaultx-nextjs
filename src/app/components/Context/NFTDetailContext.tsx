@@ -2,6 +2,7 @@
 
 import { IBid, INFTActivity, NFTItemType } from '@/types';
 import { createContext, ReactNode, useContext, useState } from 'react';
+import { formatEther } from 'viem';
 
 interface INFTDetailContext {
   NFTDetail: null | NFTItemType;
@@ -22,6 +23,8 @@ interface INFTDetailContext {
   setActivityList: (data: INFTActivity[]) => void;
   bids: IBid[];
   setBids: (data: IBid[]) => void;
+  ownable: boolean;
+  setOwnable: (data: boolean) => void;
 }
 
 interface NFTDetailProviderProps {
@@ -46,12 +49,20 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
   const [burnable, setBurnable] = useState(false);
   const [activityList, setActivityList] = useState<INFTActivity[]>([]);
   const [bids, setBids] = useState<IBid[]>([]);
+  const [ownable, setOwnable] = useState(false);
+
+  const setNFTDetailCustom = (data: null | NFTItemType) => {
+    if (data?.lastPrice) {
+      data.lastPrice = Number(formatEther(BigInt(data?.lastPrice)));
+    }
+    setNFTDetail(data);
+  }
 
   return (
     <NFTDetailContext.Provider
       value={{
         NFTDetail,
-        setNFTDetail,
+        setNFTDetail: setNFTDetailCustom,
         nftId,
         setNftId,
         mainImage,
@@ -68,6 +79,8 @@ export const NFTDetailProvider: React.FC<NFTDetailProviderProps> = ({
         setActivityList,
         bids,
         setBids,
+        ownable,
+        setOwnable,
       }}
     >
       {children}

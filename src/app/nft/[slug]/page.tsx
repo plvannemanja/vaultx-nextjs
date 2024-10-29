@@ -37,6 +37,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
     setBurnable,
     setActivityList,
     setBids,
+    setOwnable,
   } = useNFTDetail();
 
   const getArtitsLikes = async () => {
@@ -69,8 +70,10 @@ function PageDetail({ params }: { params: { slug: string } }) {
   };
 
   const handleNFTType = async (nft: any) => {
+    let ownable = false;
     let burnable = false;
     if (nft?.owner?.wallet?.toLowerCase() === user?.wallet?.toLowerCase()) {
+      ownable = true;
       if (
         nft?.saleId?.saleStatus === 'Sold' ||
         nft?.saleId?.saleStatus === 'Cancelled' ||
@@ -113,6 +116,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
       setType('');
     }
     setBurnable(burnable);
+    setOwnable(ownable);
   };
 
   const getAllNftActivity = async () => {

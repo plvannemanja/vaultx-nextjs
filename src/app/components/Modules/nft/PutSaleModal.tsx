@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,7 +12,7 @@ import { useNFTDetail } from '../../Context/NFTDetailContext';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { parseEther } from 'viem';
 import { IListAsset, listAsset, resaleAsset } from '@/lib/helper';
-import { useActiveAccount } from 'thirdweb/react';
+import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import ConnectedCard from '../../Cards/ConnectedCard';
 import {
   Disclosure,
@@ -21,9 +21,13 @@ import {
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import ErrorModal from '../create/ErrorModal';
-import { CurationType, INFTVoucher, PaymentSplitType } from '@/types';
+import { CurationType, INFTVoucher, ISellerInfo, PaymentSplitType } from '@/types';
 import { CreateNftServices } from '@/services/createNftService';
 import { z } from 'zod';
+import { formatNumberWithCommas } from '@/lib/utils';
+import { trimString } from '@/utils/helpers';
+import moment from 'moment';
+import Image from 'next/image';
 
 const addressSchema = z.object({
   username: z.string().nonempty('User name is invalid'),
@@ -72,6 +76,7 @@ export default function PutSaleModal({
   const { nftId, NFTDetail: nft } = useNFTDetail();
   const { fee } = useGlobalContext();
   const activeAccount = useActiveAccount();
+  const activeChain = useActiveWalletChain();
   const [countryCode, setCountryCode] = useState('');
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -83,6 +88,7 @@ export default function PutSaleModal({
   const salesService = new CreateSellService();
   const nftService = new CreateNftServices();
 
+  const [shipInfo, setShipInfo] = useState<Partial<ISellerInfo> | null>(null);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     username: null,
@@ -102,6 +108,22 @@ export default function PutSaleModal({
   });
 
   const [addressError, setAddressError] = useState<addressErrorType>({});
+
+  const expectedAmount = useMemo(
+    () => {
+      let value = 0;
+      if (nft?.saleTime) {
+        value = (formData.price * (100 - fee) / 100) * (100 - nft?.royalty) / 100;
+      } else {
+        const filterSplit = nft?.walletAddresses.filter(split => (split.address.toLowerCase() === activeAccount?.address.toLowerCase()));
+        if (filterSplit.length) {
+          value = (formData.price * (100 - fee) / 100) * filterSplit[0].percentage / 100;
+        }
+      }
+      return value;
+    },
+    [formData.price, nft]
+  );
   const handleUpdateSeller = (e: any) => {
     const { name, value } = e.target;
 
@@ -245,7 +267,7 @@ export default function PutSaleModal({
     }
   };
 
-  const submit = async () => {
+  const checkListModal = async () => {
     //TODO validate Form Data
     const result = addressSchema.safeParse({
       ...formData,
@@ -262,13 +284,19 @@ export default function PutSaleModal({
     } else {
       setAddressError({});
       // Handle valid submission
-      setStep(3);
-      try {
-        if (nft?.minted) await resellNft();
-        else await handleMint();
-      } catch (error) {
-        console.log(error);
-      }
+      setStep(2);
+      parentSetStep(2);
+    }
+  }
+
+  const submit = async () => {
+    setStep(3);
+    try {
+      if (nft?.minted) await resellNft();
+      else await handleMint();
+      setStep(4);
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -278,87 +306,6 @@ export default function PutSaleModal({
       ) : (
         <>
           {step === 1 && (
-            <div className="flex flex-col gap-y-4">
-              <p className="font-extrabold text-[30px] leading-[40px]">
-                List item for sale
-              </p>
-              <ConnectedCard />
-
-              {/* Blockchain card  */}
-
-              <div className="flex flex-col gap-y-2">
-                <p className="text-[#ffffff] text-[16px] azeret-mono-font">
-                  Price
-                </p>
-                <div className="flex justify-between items-center border border-gray-400 rounded-md p-3 my-1 azeret-mono-font">
-                  <span>{nft.price}</span>
-                  <div className="flex items-center gap-x-2">
-                    <svg
-                      width="26"
-                      height="26"
-                      viewBox="0 0 54 54"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clip-path="url(#clip0_717_11946)">
-                        <path
-                          d="M35.5928 21.4194C34.9702 21.0566 34.1618 21.0566 33.4767 21.4194L28.6184 24.2106L25.3193 26.0297L20.461 28.8191C19.8383 29.1836 19.03 29.1836 18.3449 28.8191L14.4839 26.6355C13.8612 26.2727 13.4258 25.6061 13.4258 24.8771V20.5706C13.4258 19.8433 13.7988 19.1767 14.4839 18.8122L18.2808 16.6894C18.9052 16.3249 19.7152 16.3249 20.4003 16.6894L24.1972 18.8122C24.8215 19.1767 25.2569 19.8433 25.2569 20.5706V23.3617L28.556 21.4802V18.6907C28.5596 18.3284 28.4626 17.9722 28.2758 17.6618C28.089 17.3513 27.8197 17.0988 27.4979 16.9324L20.461 12.9296C19.8383 12.5651 19.03 12.5651 18.3449 12.9296L11.1832 16.9324C10.8613 17.0988 10.592 17.3513 10.4052 17.6618C10.2184 17.9722 10.1215 18.3284 10.1251 18.6907V26.757C10.1251 27.486 10.498 28.1526 11.1832 28.5171L18.3449 32.5198C18.9676 32.8826 19.7776 32.8826 20.461 32.5198L25.3193 29.7894L28.6184 27.9096L33.4767 25.1809C34.0994 24.8164 34.9077 24.8164 35.5928 25.1809L39.3914 27.3037C40.0158 27.6666 40.4495 28.3331 40.4495 29.0621V33.3686C40.4495 34.0959 40.0782 34.7625 39.3914 35.127L35.5945 37.3106C34.9702 37.6751 34.1602 37.6751 33.4767 37.3106L29.6782 35.1877C29.0538 34.8232 28.6184 34.1567 28.6184 33.4294V30.6382L25.3193 32.5198V35.3092C25.3193 36.0366 25.6923 36.7048 26.3774 37.0676L33.5392 41.0704C34.1618 41.4349 34.9702 41.4349 35.6553 41.0704L42.817 37.0676C43.4397 36.7048 43.8751 36.0382 43.8751 35.3092V27.243C43.8787 26.8807 43.7818 26.5245 43.595 26.214C43.4082 25.9036 43.1388 25.6511 42.817 25.4846L35.5945 21.4194H35.5928Z"
-                          fill="white"
-                        ></path>
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_717_11946">
-                          <rect width="54" height="54" fill="white"></rect>
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </div>
-                </div>
-                <hr />
-
-                <div className="flex justify-between py-3 items-center azeret-mono-font">
-                  <span>Royalties</span>
-                  <span>{nft.royalty}%</span>
-                </div>
-                <hr />
-
-                <div className="flex justify-between py-3 items-center azeret-mono-font">
-                  <span>Marketplace fee</span>
-                  <span>{fee}%</span>
-                </div>
-                <hr />
-                <div className="flex justify-between py-3 items-center azeret-mono-font font-bold">
-                  <span>You will get</span>
-                  <span>{Number(nft.price).toFixed(2)} $</span>
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-6">
-                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
-                  <button
-                    className="w-full h-full"
-                    onClick={() => {
-                      onClose();
-                    }}
-                  >
-                    Discard
-                  </button>
-                </div>
-                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
-                  <button
-                    className="w-full h-full"
-                    onClick={async () => {
-                      setStep(2);
-                      parentSetStep(2);
-                    }}
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-          {step === 2 && (
             <>
               <div className="flex flex-col gap-y-5 w-full lg:min-w-[700px]">
                 <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
@@ -367,7 +314,7 @@ export default function PutSaleModal({
                       <>
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
                           <span>
-                            Give a new price to put this asset for sale.
+                            List Price
                           </span>
                           <ChevronUpIcon
                             className={`${open ? 'rotate-180 transform' : ''
@@ -493,7 +440,7 @@ export default function PutSaleModal({
                     {({ open }) => (
                       <>
                         <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                          <span>Shipping Address*</span>
+                          <span>Shipping Information</span>
                           <ChevronUpIcon
                             className={`${open ? 'rotate-180 transform' : ''
                               } h-5 w-5 text-white`}
@@ -677,6 +624,72 @@ export default function PutSaleModal({
                   </Disclosure>
                 </div>
                 <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+                  <p>Shipment Information</p>
+                  <hr />
+                  <div className="grid grid-cols-12 gap-3">
+                    <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
+                      <Label className="font-medium">Length(cm)</Label>
+                      <Input
+                        value={shipInfo?.length ?? ""}
+                        type="number"
+                        placeholder="--"
+                        className="bg-[#161616] border border-none h-[52px]"
+                        onChange={(e) => {
+                          setShipInfo({
+                            ...shipInfo,
+                            length: (e.target as any).value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
+                      <Label className="font-medium">Width(cm)</Label>
+                      <Input
+                        value={shipInfo?.width ?? ""}
+                        type="number"
+                        placeholder="--"
+                        className="bg-[#161616] border border-none h-[52px]"
+                        onChange={(e) => {
+                          setShipInfo({
+                            ...shipInfo,
+                            width: (e.target as any).value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
+                      <Label className="font-medium">Height(cm)</Label>
+                      <Input
+                        value={shipInfo?.height ?? ""}
+                        type="number"
+                        placeholder="--"
+                        className="bg-[#161616] border border-none h-[52px]"
+                        onChange={(e) => {
+                          setShipInfo({
+                            ...shipInfo,
+                            height: (e.target as any).value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="flex col-span-3 flex-col gap-y-2 max-w-[20rem]">
+                      <Label className="font-medium">Weight(kg)</Label>
+                      <Input
+                        value={shipInfo?.weight ?? ""}
+                        type="number"
+                        placeholder="--"
+                        className="bg-[#161616] border border-none h-[52px]"
+                        onChange={(e) => {
+                          setShipInfo({
+                            ...shipInfo,
+                            weight: (e.target as any).value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
                   <Disclosure as="div" defaultOpen={true}>
                     {({ open }) => (
                       <>
@@ -784,7 +797,6 @@ export default function PutSaleModal({
                       className="w-full h-full"
                       onClick={() => {
                         onClose();
-                        parentSetStep(1);
                       }}
                     >
                       Discard
@@ -793,7 +805,9 @@ export default function PutSaleModal({
                   <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
                     <button
                       className="w-full h-full"
-                      onClick={async () => await submit()}
+                      onClick={async () => {
+                        checkListModal();
+                      }}
                     >
                       Next
                     </button>
@@ -802,6 +816,73 @@ export default function PutSaleModal({
               </div>
             </>
           )}
+          {step === 2 && (
+            <div className="flex flex-col gap-y-4">
+              <p className="font-extrabold text-[30px] leading-[40px]">
+                List item for sale
+              </p>
+              <ConnectedCard />
+
+              {/* Blockchain card  */}
+
+              <div className="flex flex-col gap-y-2">
+                <p className="text-[#ffffff] text-[16px] azeret-mono-font">
+                  Price
+                </p>
+                <div className="flex justify-start items-center border border-gray-400 rounded-md p-3 my-1 azeret-mono-font">
+                  <span className="gap-x-2 mx-2">$</span>
+                  <span>{formatNumberWithCommas(nft.price)}</span>
+                </div>
+
+                {
+                  nft?.saleTime && (
+                    <div className="flex justify-between py-3 items-center azeret-mono-font">
+                      <span>Royalties</span>
+                      <span>{nft.royalty}%</span>
+                    </div>
+                  )
+                }
+
+                {
+                  !nft?.saleTime && nft?.walletAddresses.map(split => (
+                    <div className="flex justify-between py-3 items-center azeret-mono-font">
+                      <span>Split payment</span>
+                      <span>{split.percentage}%</span>
+                    </div>
+                  ))
+                }
+                <div className="flex justify-between py-3 items-center azeret-mono-font">
+                  <span>Marketplace fee</span>
+                  <span>{fee}%</span>
+                </div>
+                <div className="flex justify-between py-3 items-center azeret-mono-font font-bold">
+                  <span>You will get</span>
+                  <span>{Number(expectedAmount).toFixed(2)} $</span>
+                </div>
+              </div>
+
+              <div className="flex justify-between mt-6">
+                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-light">
+                  <button
+                    className="w-full h-full"
+                    onClick={() => {
+                      onClose();
+                    }}
+                  >
+                    Discard
+                  </button>
+                </div>
+                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+                  <button
+                    className="w-full h-full"
+                    onClick={async () => await submit()}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {step === 3 && (
             <div className="flex flex-col gap-y-9 items-center text-center">
               <img src="/icons/refresh.svg" className="w-20 mx-auto" />
@@ -809,6 +890,81 @@ export default function PutSaleModal({
                 Please wait while we put
                 <br /> it on sale
               </p>
+            </div>
+          )}
+          {step === 4 && (
+            <div className="flex flex-col gap-y-4">
+              <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
+                <img
+                  src="/icons/success.svg"
+                  className="w-[115px] h-[115px] mx-auto"
+                />
+                <p className="text-[30px] text-[#fff] font-extrabold ">
+                  List Success!
+                </p>
+                <div className='flex h-36 justify-between bg-neutral-800 rounded-2xl p-5 items-center'>
+                  <div className='flex gap-6 items-center'>
+                    <div className='w-28 h-28 rounded-2xl relative'>
+                      <Image
+                        quality={100}
+                        src={nft.cloudinaryUrl}
+                        alt="bottom-banner"
+                        layout="fill"
+                        objectFit="cover"
+                      ></Image>
+                    </div>
+                    <p className="azeret-mono-font">
+                      {nft?.name}
+                    </p>
+                  </div>
+                  <p className="azeret-mono-font">
+                    $ {formatNumberWithCommas(nft.price)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-y-3 mb-[20px]">
+                <div className="flex justify-between">
+                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                    <p className=" azeret-mono-font text-[#FFFFFF87]">From</p>
+                    <p className="text-neon azeret-mono-font">
+                      {trimString(activeAccount?.address)}
+                    </p>
+                  </div>
+                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                    <p className=" azeret-mono-font text-[#FFFFFF87]">To</p>
+                    <p className="text-neon azeret-mono-font">
+                      {trimString(activeAccount.address)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                    <p className=" azeret-mono-font text-[#FFFFFF87]">
+                      Payment Network
+                    </p>
+                    <p className="text-neon azeret-mono-font">
+                      {activeChain.name}
+                    </p>
+                  </div>
+                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
+                    <p className=" azeret-mono-font text-[#FFFFFF87]">
+                      Payment Time
+                    </p>
+                    <p className="text-neon azeret-mono-font">
+                      {moment().format('DD MMM, YY')}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
+                <button
+                  className="w-full h-full bg-[#DEE8E8]"
+                  onClick={() => onClose()}
+                >
+                  close
+                </button>
+              </div>
             </div>
           )}
         </>

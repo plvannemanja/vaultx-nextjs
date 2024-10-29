@@ -143,7 +143,11 @@ export type NFTItemType = {
   likes: number;
   active: boolean;
   attributes: AttributeType[];
-  walletAddresses: string[];
+  walletAddresses: Array<{
+    address: string,
+    percentage: number,
+  }>;
+  saleTime: Date;
   createdAt: string;
   updatedAt: string;
   __v: number;
