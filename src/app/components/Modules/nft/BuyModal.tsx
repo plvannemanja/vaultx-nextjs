@@ -214,7 +214,7 @@ export default function BuyModal({
         contactInformation: formData.description,
         concent: formData.accepted,
         buyHash: transactionHash,
-        lastPrice: tokenAmount,
+        lastPrice: Number(tokenAmount),
       };
       const createNftService = new CreateNftServices();
       await createNftService.mintAndSale({
@@ -744,60 +744,10 @@ export default function BuyModal({
           )}
 
           {step === 2 && (
-            <div className="flex flex-col gap-y-4 w-full">
-              <div className="flex gap-x-3 items-center">
-                <img src="/icons/info.svg" className="w-12" />
-                <p className="text-[30px] text-[#fff] font-extrabold">
-                  Caution
-                </p>
-              </div>
-
-              <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
-                Do not disclose buyer shipping information to third parties!
-                <br />
-                <br />
-              </p>
-
-              <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-                To maintain the confidentiality of buyer information and ensure
-                smooth transactions, please pay close attention to the following
-                points:
-                <br />
-                <br />
-                1. Confidentiality of Shipping Information: Buyer shipping
-                information should remain confidential to sellers. Be cautious
-                to prevent any external disclosures.
-                <br />
-                <br />
-                2. Tips for Safe Transactions: Handle buyer shipping information
-                securely to sustain safe and transparent transactions.
-                <br />
-                <br />
-                3. Protection of Personal Information: As a seller, it is
-                imperative to treat buyer personal information with utmost care.
-                Avoid disclosing it to third parties.We kindly request your
-                strict adherence to these guidelines to uphold transparency and
-                trust in your transactions. Ensuring a secure transaction
-                environment benefits everyone involved.
-                <br />
-                <br />
-                <br />
-                <span className="text-[#fff] font-extrabold">Thank You</span>
-              </p>
-
-              <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-                <button className="w-full h-full" onClick={() => setStep(3)}>
-                  I Agree
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
             <div className="flex flex-col gap-y-6 w-full text-[#fff]">
               <p className="text-[30px] font-extrabold">Checkout</p>
               <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-                You are about to purchase Dhruv from ${address}
+                You are about to purchase ${NFTDetail?.name} from ${address}
               </p>
 
               <ConnectedCard />
@@ -827,7 +777,7 @@ export default function BuyModal({
                   <button
                     className="w-full h-full"
                     onClick={() => {
-                      setStep(2);
+                      setStep(1);
                     }}
                   >
                     Cancel
@@ -841,7 +791,7 @@ export default function BuyModal({
               </div>
             </div>
           )}
-          {step === 4 && (
+          {step === 3 && (
             <div className="flex flex-col gap-y-4 items-center text-center">
               <img src="/icons/refresh.svg" className="w-20 mx-auto" />
               <p className="text-lg font-medium">
@@ -850,7 +800,7 @@ export default function BuyModal({
             </div>
           )}
 
-          {step === 5 && (
+          {step === 4 && (
             <div className="flex flex-col gap-y-4">
               <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
                 <img
@@ -903,9 +853,56 @@ export default function BuyModal({
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
                 <button
                   className="w-full h-full bg-[#DEE8E8]"
-                  onClick={() => onClose()}
+                  onClick={() => { setStep(5) }}
                 >
                   close
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
+            <div className="flex flex-col gap-y-4 w-full">
+              <div className="flex gap-x-3 items-center">
+                <img src="/icons/info.svg" className="w-12" />
+              </div>
+
+              <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
+                Do not disclose buyer shipping information to third parties!
+                <br />
+                <br />
+              </p>
+
+              <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
+                To maintain the confidentiality of buyer information and ensure
+                smooth transactions, please pay close attention to the following
+                points:
+                <br />
+                <br />
+                1. Confidentiality of Shipping Information: Buyer shipping
+                information should remain confidential to sellers. Be cautious
+                to prevent any external disclosures.
+                <br />
+                <br />
+                2. Tips for Safe Transactions: Handle buyer shipping information
+                securely to sustain safe and transparent transactions.
+                <br />
+                <br />
+                3. Protection of Personal Information: As a seller, it is
+                imperative to treat buyer personal information with utmost care.
+                Avoid disclosing it to third parties.We kindly request your
+                strict adherence to these guidelines to uphold transparency and
+                trust in your transactions. Ensuring a secure transaction
+                environment benefits everyone involved.
+                <br />
+                <br />
+                <br />
+                <span className="text-[#fff] font-extrabold">Thank You</span>
+              </p>
+
+              <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
+                <button className="w-full h-full" onClick={() => onClose()}>
+                  I Agree
                 </button>
               </div>
             </div>

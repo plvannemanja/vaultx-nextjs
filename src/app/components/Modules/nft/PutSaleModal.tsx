@@ -844,8 +844,8 @@ export default function PutSaleModal({
                 }
 
                 {
-                  !nft?.saleTime && nft?.walletAddresses.map(split => (
-                    <div className="flex justify-between py-3 items-center azeret-mono-font">
+                  !nft?.saleTime && nft?.walletAddresses.map((split, index) => (
+                    <div className="flex justify-between py-3 items-center azeret-mono-font" key="index">
                       <span>Split payment</span>
                       <span>{split.percentage}%</span>
                     </div>
