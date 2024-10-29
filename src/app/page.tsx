@@ -16,117 +16,10 @@ import NFTList from './components/Dashboard/NFTList';
 import TrendingList from './components/Dashboard/TrendingList';
 import BaseFooter from './components/Footer/BaseFooter';
 import { BaseHeader } from './components/Header/BaseHeader';
+import CurationArrowUpIcon from './components/Icons/home/curation-arrow-up';
+import NewEventIcon1 from './components/Icons/home/new-event-icon1';
+import NewEventIcon2 from './components/Icons/home/new-event-icon2';
 import NewsCard from './components/ui/NewsCard';
-
-const icon = (
-  <svg
-    width="177"
-    height="424"
-    viewBox="0 0 177 424"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g opacity="0.2">
-      <rect
-        x="-39.7812"
-        y="103.727"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="10.0195"
-        y="45.6094"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="28.0156"
-        y="173.387"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="77.8164"
-        y="0.5"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="-6.68359"
-        y="217.613"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="-6.68359"
-        y="21.6094"
-        width="98.6027"
-        height="126.227"
-        stroke="#DDF247"
-      />
-    </g>
-  </svg>
-);
-
-const icon2 = (
-  <svg
-    width="137"
-    height="425"
-    viewBox="0 0 137 425"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g opacity="0.2">
-      <rect
-        x="0.986328"
-        y="104.227"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="50.7871"
-        y="46.1094"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="68.7832"
-        y="173.885"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="118.584"
-        y="1"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="34.0859"
-        y="218.113"
-        width="98.6027"
-        height="205.454"
-        stroke="#DDF247"
-      />
-      <rect
-        x="34.0859"
-        y="22.1094"
-        width="98.6027"
-        height="126.227"
-        stroke="#DDF247"
-      />
-    </g>
-  </svg>
-);
 
 interface Isection1 {
   title: string;
@@ -283,10 +176,10 @@ export default function Home() {
                 : null}
             </div>{' '}
             <div className="flex justify-center items-center mt-10 relative">
-              <button className="px-8 py-2 rounded-xl text-neon border-neon font-medium hover:bg-[#ddf247] hover:text-black duration-300">
+              <button className="px-8 py-2 rounded-xl text-neon border-neon font-extrabold hover:bg-[#ddf247] hover:text-black duration-300 cursor-pointer min-h-11 text-sm">
                 Discover Artist
               </button>
-              <div className="absolute -top-[2rem] w-[68rem] lg:flex justify-center hidden">
+              <div className="absolute -top-[2rem] w-[68rem] lg:flex justify-center hidden -z-10">
                 <Image
                   quality={100}
                   src="/illustrations/neon-grid.png"
@@ -303,36 +196,9 @@ export default function Home() {
       <div className="py-10">
         <TrendingList data={section2} />
         {section3 ? (
-          <div className="py-[60px] lg:relative">
+          <div className="py-10 md:py-12 lg:py-[60px] lg:relative">
             <div className="hidden lg:block absolute left-0 top-[30rem]">
-              <svg
-                width="202"
-                height="292"
-                viewBox="0 0 202 292"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M134.42 89.3691L133.836 224.467L-1.26188 223.882"
-                  stroke="#DDF247"
-                />
-                <path
-                  d="M112.299 67.0547L111.715 202.152L-23.383 201.568"
-                  stroke="#DDF247"
-                />
-                <path
-                  d="M90.1758 44.7402L89.5915 179.838L-45.506 179.254"
-                  stroke="#DDF247"
-                />
-                <path
-                  d="M68.0547 22.4277L67.4705 157.525L-67.6271 156.941"
-                  stroke="#DDF247"
-                />
-                <path
-                  d="M45.9336 0.113281L45.3494 135.211L-89.7482 134.627"
-                  stroke="#DDF247"
-                />
-              </svg>
+              <CurationArrowUpIcon />
             </div>
             <Image
               quality={100}
@@ -353,7 +219,7 @@ export default function Home() {
               ) : null}
               {/* <div className="absolute top-20 w-[36rem]">
                 <Image 
-quality={100}
+                  quality={100}
                   height={100}
                   width={100}
                   src="/illustrations/important.png"
@@ -391,10 +257,10 @@ quality={100}
       {section4 ? (
         <div className="mt-4 sm:mt-8 md:mt-12 lg:mt-[60px] lg:bg-[url('/illustrations/wave-top-right-bottom-left.png')] relative">
           <div className="absolute hidden lg:block top-[-9rem] left-0">
-            {icon}
+            <NewEventIcon1 />
           </div>
           <div className="absolute hidden lg:block bottom-[-9rem] right-0">
-            {icon2}
+            <NewEventIcon2 />
           </div>
           <div className="container !px-3 xs:!px-5">
             <NewsCard

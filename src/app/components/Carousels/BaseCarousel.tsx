@@ -15,21 +15,29 @@ import NftCard from '../Cards/NftCard';
 interface IBaseCarouselProps {
   heading: React.ReactNode;
   data: any[];
+  discoverLink: string;
 }
 
-export function BaseCarousel({ heading, data }: IBaseCarouselProps) {
+export function BaseCarousel({
+  heading,
+  data,
+  discoverLink,
+}: IBaseCarouselProps) {
   return (
     <div className="w-full container !px-3 xs:!px-5 sm:!px-0">
       <div className="flex justify-between items-center my-10 text-white flex-wrap">
         {heading}
-        <div className="flex items-center gap-x-3 text-lg font-medium cursor-pointer">
-          <Label className="text-sm md:text-lg font-extrabold">
+        <Link
+          href={discoverLink}
+          className="flex items-center gap-x-3 text-lg font-medium cursor-pointer group"
+        >
+          <Label className="md:text-lg font-extrabold group-hover:text-[#ddf247] cursor-pointer">
             Discover More
           </Label>
-          <div className="w-6 h-6 rounded-full border flex justify-center items-center border-white/10 bg-[#2d2d2d]">
+          <div className="w-6 h-6 rounded-full border flex justify-center items-center group-hover:border-[#ddf247]/10 border-white/10 bg-[#2d2d2d] group-hover:text-[#ddf247]">
             <ArrowRight className="w-4 h-4" />
           </div>
-        </div>
+        </Link>
       </div>
       <Carousel
         className="w-full"

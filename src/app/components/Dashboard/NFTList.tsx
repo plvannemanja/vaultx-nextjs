@@ -61,6 +61,7 @@ export default function NFTList({ color }: { color: any }) {
   return (
     <BaseCarousel
       // heading={createTitleComp('Appreciate & Explore', color)}
+      discoverLink="/dashboard/appreciate"
       heading={heading}
       data={nfts}
     />

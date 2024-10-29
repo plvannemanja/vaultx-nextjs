@@ -67,6 +67,7 @@ export default function TrendingList({ data }: TrendingProps) {
   return (
     <BaseCarousel
       heading={createTitleComp(data?.title, data?.color)}
+      discoverLink="/dashboard/appreciate"
       data={icafNfts}
     />
   );
