@@ -22,7 +22,7 @@ export default function ArtistsCard({
           alt="artist-pic"
           className="rounded"
         />
-        <div className="absolute bottom-8 w-full sm:w-11/12 md:w-10/12 lg:w-9/12 mx-auto ml-4 flex flex-col gap-y-2 text-white font-bold">
+        <div className="absolute px-5 bottom-8 w-full mx-auto flex flex-col gap-y-2 text-white font-bold">
           <hr className="h-[2px] mb-2 border-0 bg-gradient-to-r from-[#32CCB8] via-[#32CCB8] to-[#DDF247] " />
           <p className="text-white">{title}</p>
           {subtitle1 && (

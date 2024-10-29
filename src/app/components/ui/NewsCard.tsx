@@ -18,17 +18,17 @@ export default function NewsCard({
   data,
 }: INewsCardProps) {
   return (
-    <div className="flex flex-col gap-y-10 text-white relative">
-      <div className="flex flex-col gap-y-5 text-center">
+    <div className="flex flex-col gap-y-8 md:gap-y-10 lg:gap-y-[50px] text-white relative">
+      <div className="flex flex-col gap-y-3 md:gap-y-4 text-center">
         {heading}
-        <p className="text-center manrope-font px-10 text-white md:text-xl">
+        <p className="text-center manrope-font font-light px-10 text-white md:text-xl">
           {description}
         </p>
       </div>
       <div className="grid grid-cols-12 gap-4 container justify-center">
         <div className="relative col-span-12 xl:col-span-7 min-h-[934px] group">
           <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-gradient-to-b from-[#666666]/0 via-[#131313]/[48%] to-black flex items-end">
-            <p className="text-white p-5 font-extrabold text-[22px] w-10/12 mx-auto">
+            <p className="text-white p-5 font-extrabold text-[30px] md:text-[40px] lg:text-[50px] w-11/12 mx-auto">
               {data?.[0]?.title}
             </p>
           </div>
@@ -47,7 +47,7 @@ export default function NewsCard({
           {data.slice(1).map((item, index) => (
             <div key={index} className="min-h-[298px] relative group">
               <div className="group-hover:cursor-pointer group-hover:opacity-100 transition-opacity duration-300 ease-in-out opacity-0 absolute z-10 top-0 left-0 h-full w-full bg-gradient-to-b from-[#666666]/0 via-[#131313]/[48%] to-black flex items-end">
-                <p className="text-white p-5 font-extrabold text-[22px]">
+                <p className="text-white p-5 font-extrabold sm:text-lg lg:text-[22px]">
                   {item.title}
                 </p>
               </div>
