@@ -1,4 +1,5 @@
 import { Label } from '@/components/ui/label';
+import { getExplorerURL } from '@/lib/helper';
 import { cn } from '@/lib/utils';
 import { NFTItemType } from '@/types';
 import {
@@ -10,6 +11,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid';
 import { ChevronUpIcon, EyeIcon, Info } from 'lucide-react';
 import Image from 'next/image';
 import { useActiveWalletChain } from 'thirdweb/react';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
 
 type Props = {
   data: NFTItemType | null;
@@ -17,6 +19,8 @@ type Props = {
 
 const OthersDetails = ({ data }: Props) => {
   const activeChain = useActiveWalletChain();
+  const { NFTDetail } = useNFTDetail();
+
   return (
     <div className="w-full rounded-[20px] p-5 bg-dark flex flex-col gap-y-6 bg-[#232323]">
       <Disclosure as="div" defaultOpen={true}>
@@ -67,7 +71,7 @@ const OthersDetails = ({ data }: Props) => {
                   <Label className="font-extrabold text-sm">
                     View on {activeChain?.name} Scan
                   </Label>
-                  <a href={data?.minted ? '?a=' : ''}>
+                  <a href={data?.minted ? getExplorerURL('nft', NFTDetail.tokenId.toString()) : ''}>
                     <ArrowTopRightOnSquareIcon
                       width={20}
                       height={20}

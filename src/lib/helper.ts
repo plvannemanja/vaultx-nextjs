@@ -312,11 +312,12 @@ export const purchaseAssetBeforeMint = async (
     : null;
 };
 export const getExplorerURL = (
-  type: 'address' | 'transaction',
+  type: 'address' | 'transaction' | 'nft',
   value: string,
 ) => {
   if (type === 'address') return `${explorer}address/${value}`;
   if (type === 'transaction') return `${explorer}tx/${value}`;
+  if (type === 'nft') return `${explorer}nft/${contract?.address}/${value}`
   return '';
 };
 
