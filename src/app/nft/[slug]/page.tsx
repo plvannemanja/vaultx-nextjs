@@ -88,9 +88,10 @@ function PageDetail({ params }: { params: { slug: string } }) {
 
         // get release time - blockchain logic
         const time = await deliveryTime();
-        if (purchaseDate + Number(time) > new Date().getTime())
-          setType('anyoneRelease');
-        else setType('inEscrow');
+        // if (purchaseDate + Number(time) * 1000 < new Date().getTime())
+        //   setType('anyoneRelease');
+        // else setType('inEscrow');
+        setType('inEscrow');
       } else if (nft?.saleId?.saleStatus === 'Dispute') {
         setType('dispute');
       } else {

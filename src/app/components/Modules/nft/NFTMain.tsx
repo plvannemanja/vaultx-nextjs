@@ -21,7 +21,7 @@ import Modal from '@mui/material/Modal';
 import { EyeIcon, Heart, Share2, SquareArrowOutUpRight } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useActiveAccount } from 'thirdweb/react';
+import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { useDebounce } from 'use-debounce';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
@@ -93,6 +93,7 @@ export default function NFTMain({
     bid: false,
   });
   const activeAccount = useActiveAccount();
+  const activeChain = useActiveWalletChain();
   const { user } = useGlobalContext();
   const [step, setStep] = useState(1); // Step state in the parent
   const [error, setError] = useState(null);
@@ -520,9 +521,9 @@ export default function NFTMain({
                         $ {formatNumberWithCommas(data.price)}
                       </p>
                     )}
-                    {(type === 'ordered' || type === 'release' || type === 'cancelRequested') && (
+                    {(type === 'inEscrow' || type === 'anyoneRelease' || type === 'release' || type === 'cancelRequested') && (
                       <p className='text-[32px] font-extrabold'>
-                        {formatNumberWithCommas(data.lastPrice)}
+                        {formatNumberWithCommas(data.lastPrice)} {activeChain.nativeCurrency?.symbol}
                       </p>
                     )
                     }
