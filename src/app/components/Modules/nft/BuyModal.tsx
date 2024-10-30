@@ -32,6 +32,8 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import ConnectedCard from '../../Cards/ConnectedCard';
 import ErrorModal from '../create/ErrorModal';
 import { z } from 'zod';
+import Image from 'next/image';
+import { formatNumberWithCommas } from '@/lib/utils';
 
 const addressSchema = z.object({
   username: z.string().nonempty('User name is invalid'),
@@ -163,7 +165,6 @@ export default function BuyModal({
 
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      await fetchNftData();
       setStep(4);
     } catch (error) {
       console.log(error);
@@ -224,7 +225,6 @@ export default function BuyModal({
       });
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      await fetchNftData();
       setStep(4);
     } catch (error) {
       setError(JSON.stringify(error));
@@ -747,8 +747,28 @@ export default function BuyModal({
             <div className="flex flex-col gap-y-6 w-full text-[#fff]">
               <p className="text-[30px] font-extrabold">Checkout</p>
               <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-                You are about to purchase ${NFTDetail?.name} from ${address}
+                You are about to purchase {NFTDetail?.name} from {address}
               </p>
+
+              <div className='flex h-36 justify-between bg-neutral-800 rounded-2xl p-5 items-center'>
+                <div className='flex gap-6 items-center'>
+                  <div className='w-28 h-28 rounded-2xl relative'>
+                    <Image
+                      quality={100}
+                      src={NFTDetail.cloudinaryUrl}
+                      alt="bottom-banner"
+                      layout="fill"
+                      objectFit="cover"
+                    ></Image>
+                  </div>
+                  <p className="azeret-mono-font">
+                    {NFTDetail?.name}
+                  </p>
+                </div>
+                <p className="azeret-mono-font">
+                  $ {formatNumberWithCommas(NFTDetail.price)}
+                </p>
+              </div>
 
               <ConnectedCard />
 
@@ -761,6 +781,23 @@ export default function BuyModal({
                   </span>
                   <span>{tokenAmount} ETH</span>
                 </div>
+                {
+                  NFTDetail?.saleTime && (
+                    <div className="flex justify-between py-3 items-center azeret-mono-font">
+                      <span>Royalties</span>
+                      <span>{NFTDetail.royalty}%</span>
+                    </div>
+                  )
+                }
+
+                {
+                  !NFTDetail?.saleTime && NFTDetail?.walletAddresses.map((split, index) => (
+                    <div className="flex justify-between py-3 items-center azeret-mono-font" key="index">
+                      <span>Split payment</span>
+                      <span>{split.percentage}%</span>
+                    </div>
+                  ))
+                }
                 <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
                   <span>VaultX Fee</span>
                   <span>{fee} %</span>
@@ -855,7 +892,7 @@ export default function BuyModal({
                   className="w-full h-full bg-[#DEE8E8]"
                   onClick={() => { setStep(5) }}
                 >
-                  close
+                  Next
                 </button>
               </div>
             </div>
@@ -863,8 +900,8 @@ export default function BuyModal({
 
           {step === 5 && (
             <div className="flex flex-col gap-y-4 w-full">
-              <div className="flex gap-x-3 items-center">
-                <img src="/icons/info.svg" className="w-12" />
+              <div className="flex flex-col gap-x-3 items-center">
+                <img src="/icons/triangle-alert.svg" className="w-40" />
               </div>
 
               <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
@@ -901,7 +938,10 @@ export default function BuyModal({
               </p>
 
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-                <button className="w-full h-full" onClick={() => onClose()}>
+                <button className="w-full h-full" onClick={() => {
+                  fetchNftData();
+                  onClose()
+                }}>
                   I Agree
                 </button>
               </div>
