@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useActiveAccount } from 'thirdweb/react';
 import { z } from 'zod';
 import { useGlobalContext } from '../Context/GlobalContext';
+import CongratsIcon from '../Icons/popup/congrats-icon';
 import { BaseDialog } from '../ui/BaseDialog';
 
 const signUpSchema = z.object({
@@ -26,7 +27,7 @@ export function SignUpModal() {
     email?: string;
     axios?: string;
   }>({});
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const activeAccount = useActiveAccount();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -174,9 +175,10 @@ export function SignUpModal() {
 
       {step === 2 && (
         <div className="items-center justify-center flex flex-col gap-y-3">
-          <div className="text-center text-white text-[121px] font-extrabold manrope-font capitalize">
+          {/* <div className="text-center text-white text-[121px] font-extrabold manrope-font capitalize">
             🎉
-          </div>
+          </div> */}
+          <CongratsIcon />
           <div className="text-center mb-3 text-white text-3xl font-extrabold manrope-font capitalize">
             Congrats!
           </div>

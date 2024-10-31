@@ -1,37 +1,37 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { City, Country, State } from 'country-state-city';
-import PhoneInput from 'react-phone-input-2';
-import { Textarea } from '@headlessui/react';
-import { Checkbox } from '@/components/ui/checkbox';
-import BaseButton from '../../ui/BaseButton';
-import { CreateSellService } from '@/services/createSellService';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
+import { Label } from '@/components/ui/label';
 import {
   getTokenAmount,
   purchaseAsset,
   purchaseAssetBeforeMint,
 } from '@/lib/helper';
-import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
-import { useGlobalContext } from '../../Context/GlobalContext';
-import { roundToDecimals, trimString } from '@/utils/helpers';
-import BasicLoadingModal from './BasicLoadingModal';
-import { nftServices } from '@/services/supplier';
-import moment from 'moment';
-import { INFTVoucher } from '@/types';
+import { cn } from '@/lib/utils';
 import { CreateNftServices } from '@/services/createNftService';
+import { CreateSellService } from '@/services/createSellService';
+import { INFTVoucher } from '@/types';
+import { roundToDecimals, trimString } from '@/utils/helpers';
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Textarea,
 } from '@headlessui/react';
 import { ChevronUpIcon } from '@heroicons/react/20/solid';
-import ConnectedCard from '../../Cards/ConnectedCard';
-import ErrorModal from '../create/ErrorModal';
+import { City, Country, State } from 'country-state-city';
+import moment from 'moment';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { z } from 'zod';
+import ConnectedCard from '../../Cards/ConnectedCard';
+import { useGlobalContext } from '../../Context/GlobalContext';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import BaseButton from '../../ui/BaseButton';
+import ErrorModal from '../create/ErrorModal';
 
 const addressSchema = z.object({
   username: z.string().nonempty('User name is invalid'),
@@ -104,8 +104,8 @@ export default function BuyModal({
 
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-    '...' +
-    activeAccount?.address.slice(-4)
+      '...' +
+      activeAccount?.address.slice(-4)
     : 'Connect Wallet';
 
   const countries = Country.getAllCountries();
@@ -305,34 +305,60 @@ export default function BuyModal({
 
   useEffect(() => {
     checkAmount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <>
+    <div className="bg-[#161616]">
       {error ? (
         <ErrorModal title="Error" data={error} close={() => onClose()} />
       ) : (
         <>
           {step === 1 && (
             <div className="flex flex-col gap-y-6 w-full">
+              <div className="flex items-center gap-x-2">
+                <Image
+                  src={'/icons/alert.svg'}
+                  width={49}
+                  height={50}
+                  className="w-8 h-8"
+                  quality={100}
+                  alt="alert"
+                />
+                <h1 className="font-extrabold text-[30px]">
+                  {"Buyer's Information"}
+                </h1>
+              </div>
               <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+                {/* <span>Buyer Information</span> */}
                 <Disclosure as="div" defaultOpen={true}>
                   {({ open }) => (
                     <>
-                      <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                        <span>Buyer Information</span>
-                        <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
-                        />
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <Label className="font-extrabold text-lg text-white">
+                            Buyer Information
+                          </Label>
+                          <div className="flex justify-center">
+                            <ChevronUpIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white/[53%]`}
+                            />
+                          </div>
+                        </div>
                       </DisclosureButton>
-                      <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
                         <div className="flex justify-between">
                           <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-bold text-[#ffffff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Name*
                             </h2>
-
                             <Input
                               value={formData.username ? formData.username : ''}
                               onChange={(e) =>
@@ -341,7 +367,7 @@ export default function BuyModal({
                                   username: (e.target as any).value,
                                 })
                               }
-                              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                               type="text"
                               placeholder="Enter your username"
                             />
@@ -352,7 +378,7 @@ export default function BuyModal({
                             )}
                           </div>
                           <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Email*
                             </h2>
 
@@ -364,7 +390,7 @@ export default function BuyModal({
                                   email: (e.target as any).value,
                                 })
                               }
-                              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                               type="text"
                               placeholder="Enter your email"
                             />
@@ -376,27 +402,29 @@ export default function BuyModal({
                           </div>
 
                           <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Country*
                             </h2>
 
-                            <select
-                              aria-label="select curation"
-                              className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                              name="country"
-                              value={JSON.stringify(sellerInfo.country)}
-                              onChange={handleUpdateSeller}
-                            >
-                              <option value="">Select</option>
-                              {countries.map((item: any) => (
-                                <option
-                                  key={item.isoCode}
-                                  value={JSON.stringify(item)}
-                                >
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
+                            <div className="bg-[#161616] rounded-xl pr-4">
+                              <select
+                                aria-label="Select Country"
+                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                                name="country"
+                                value={JSON.stringify(sellerInfo.country)}
+                                onChange={handleUpdateSeller}
+                              >
+                                <option value="">Select</option>
+                                {countries.map((item: any) => (
+                                  <option
+                                    key={item.isoCode}
+                                    value={JSON.stringify(item)}
+                                  >
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                             {addressError?.country && (
                               <p className="text-red-500 text-sm">
                                 {addressError.country}
@@ -411,20 +439,33 @@ export default function BuyModal({
               </div>
 
               <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
+                {/* <span>Shipping Address*</span> */}
                 <Disclosure as="div" defaultOpen={true}>
                   {({ open }) => (
                     <>
-                      <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                        <span>Shipping Address*</span>
-                        <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
-                        />
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <Label className="font-extrabold text-lg text-white">
+                            Shipping Address*
+                          </Label>
+                          <div className="flex justify-center">
+                            <ChevronUpIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white/[53%]`}
+                            />
+                          </div>
+                        </div>
                       </DisclosureButton>
-                      <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
                         <div className="flex flex-wrap mb-4 justify-between ">
                           <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Address 1*
                             </h2>
 
@@ -438,7 +479,7 @@ export default function BuyModal({
                                   address1: e.target.value,
                                 })
                               }
-                              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                               type="text"
                               placeholder="Enter address"
                             />
@@ -449,7 +490,7 @@ export default function BuyModal({
                             )}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Address 2*
                             </h2>
 
@@ -463,7 +504,7 @@ export default function BuyModal({
                                   address2: e.target.value,
                                 })
                               }
-                              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                               type="text"
                               placeholder="Enter address"
                             />
@@ -471,31 +512,33 @@ export default function BuyModal({
                         </div>
                         <div className="flex flex-wrap mb-4 justify-between">
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               State*
                             </h2>
 
-                            <select
-                              aria-label="select curation"
-                              className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                              name="state"
-                              value={
-                                sellerInfo.state
-                                  ? JSON.stringify(sellerInfo.state)
-                                  : ''
-                              }
-                              onChange={handleUpdateSeller}
-                            >
-                              <option value="">Select</option>
-                              {states.map((item: any) => (
-                                <option
-                                  key={item.isoCode}
-                                  value={JSON.stringify(item)}
-                                >
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
+                            <div className="bg-[#161616] rounded-xl pr-4">
+                              <select
+                                aria-label="Select state"
+                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                                name="state"
+                                value={
+                                  sellerInfo.state
+                                    ? JSON.stringify(sellerInfo.state)
+                                    : ''
+                                }
+                                onChange={handleUpdateSeller}
+                              >
+                                <option value="">Select</option>
+                                {states.map((item: any) => (
+                                  <option
+                                    key={item.isoCode}
+                                    value={JSON.stringify(item)}
+                                  >
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                             {addressError?.state && (
                               <p className="text-red-500 text-sm">
                                 {addressError.state}
@@ -503,31 +546,33 @@ export default function BuyModal({
                             )}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               City*
                             </h2>
 
-                            <select
-                              aria-label="select curation"
-                              className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                              name="city"
-                              value={
-                                sellerInfo.city
-                                  ? JSON.stringify(sellerInfo.city)
-                                  : ''
-                              }
-                              onChange={handleUpdateSeller}
-                            >
-                              <option value="">Select</option>
-                              {cities.map((item: any) => (
-                                <option
-                                  key={item.isoCode}
-                                  value={JSON.stringify(item)}
-                                >
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
+                            <div className="bg-[#161616] rounded-xl pr-4">
+                              <select
+                                aria-label="Select city"
+                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                                name="city"
+                                value={
+                                  sellerInfo.city
+                                    ? JSON.stringify(sellerInfo.city)
+                                    : ''
+                                }
+                                onChange={handleUpdateSeller}
+                              >
+                                <option value="">Select</option>
+                                {cities.map((item: any) => (
+                                  <option
+                                    key={item.isoCode}
+                                    value={JSON.stringify(item)}
+                                  >
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                             {/* {addressError?.city && (
                               <p className="text-red-500 text-sm">
                                 {addressError.city}
@@ -535,10 +580,9 @@ export default function BuyModal({
                             )} */}
                           </div>
                           <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-bold text-[#fff] text-[14px]">
+                            <h2 className="font-semibold text-sm text-white manrope-font">
                               Postal Code*
                             </h2>
-
                             <Input
                               value={
                                 sellerInfo.postalCode
@@ -551,7 +595,7 @@ export default function BuyModal({
                                   postalCode: e.target.value,
                                 })
                               }
-                              className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
+                              className="w-full border-none h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
                               type="text"
                               placeholder="Enter postcode"
                             />
@@ -565,9 +609,10 @@ export default function BuyModal({
                         <div className="flex flex-col mb-4 gap-y-3">
                           <PhoneInput
                             enableLongNumbers={true}
-                            containerClass="phone-container"
+                            containerClass="phone-container [&>div.special-label]:font-semibold [&>div.special-label]:text-sm [&>div.special-label]:text-white manrope-font"
                             buttonClass="phone-dropdown"
-                            inputClass="phone-control"
+                            inputClass="phone-control !rounded-xl !h-[52px] !px-[26px] placeholder:text-xs !py-[15px] placeholder:text-xs bg-[#161616] azeret-mono-font text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                            specialLabel="Phone Number*"
                             country={'us'}
                             value={
                               sellerInfo.phoneNumber
@@ -600,17 +645,30 @@ export default function BuyModal({
               </div>
 
               <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
+                {/* <span>Contact Information For Seller</span> */}
                 <Disclosure as="div" defaultOpen={true}>
                   {({ open }) => (
                     <>
-                      <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                        <span>Contact Information For Seller</span>
-                        <ChevronUpIcon
-                          className={`${open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white`}
-                        />
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <Label className="font-extrabold text-lg text-white">
+                            Contact Information For Seller
+                          </Label>
+                          <div className="flex justify-center">
+                            <ChevronUpIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white/[53%]`}
+                            />
+                          </div>
+                        </div>
                       </DisclosureButton>
-                      <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
+                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
                         <Textarea
                           value={
                             formData.description ? formData.description : ''
@@ -621,7 +679,7 @@ export default function BuyModal({
                               description: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
+                          className="w-full border-none bg-[#161616] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-sm placeholder:font-normal"
                           placeholder="Please describe your product"
                         />
                       </DisclosurePanel>
@@ -634,25 +692,24 @@ export default function BuyModal({
                 <Disclosure as="div" defaultOpen={true}>
                   {({ open }) => (
                     <>
-                      <DisclosureButton className="flex w-full flex-col justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                        <div className="flex w-full justify-between">
-                          <span>
-                            Consent for collection and usage of personal
-                            information
-                          </span>
-                          <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
-                          />
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center mb-1">
+                          <Label className="font-extrabold text-white text-lg">
+                            Contact Information For Seller
+                          </Label>
                         </div>
-                        <p className="text-[#ffffff53] text-[16px] azeret-mono-font">
+                        <p className="text-white/[53%] text-base azeret-mono-font">
                           Please read the following and check the appropriate
                           boxes to indicate your consent:
                         </p>
                       </DisclosureButton>
-
-                      <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                        <div className="text-white/50 text-base font-normal font-['Azeret Mono'] leading-relaxed">
+                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
+                        <div className="text-white/50 rounded-[24px] bg-[#161616] py-[15px] px-[26px] text-base font-normal azeret-mono-font">
                           We collect two types of information from you:
                           <br />
                           1. Personal Information: This includes your individual
@@ -686,7 +743,7 @@ export default function BuyModal({
                   />
                   <label
                     htmlFor="terms"
-                    className="text-[14px] azeret-mono-font font-medium leading-none text-[#FFFFFF87]"
+                    className="text-sm azeret-mono-font text-[#FFFFFF53]"
                   >
                     I agree to all terms, privacy policy and fees
                   </label>
@@ -698,6 +755,7 @@ export default function BuyModal({
                   </p>
                 )}
               </div>
+
               <div className="bg-dark p-5 gap-y-4 rounded-lg flex flex-col ">
                 <p className="text-[20px] font-extrabold text-[#fff] ">
                   Order Summary
@@ -793,7 +851,11 @@ export default function BuyModal({
           )}
           {step === 3 && (
             <div className="flex flex-col gap-y-4 items-center text-center">
-              <img src="/icons/refresh.svg" className="w-20 mx-auto" />
+              <img
+                src="/icons/refresh.svg"
+                alt="refresh"
+                className="w-20 mx-auto"
+              />
               <p className="text-lg font-medium">
                 Please wait while we purchasing NFT
               </p>
@@ -803,9 +865,13 @@ export default function BuyModal({
           {step === 4 && (
             <div className="flex flex-col gap-y-4">
               <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
-                <img
+                <Image
                   src="/icons/success.svg"
                   className="w-[115px] h-[115px] mx-auto"
+                  alt="success"
+                  quality={100}
+                  width={115}
+                  height={115}
                 />
                 <p className="text-[30px] text-[#fff] font-extrabold ">
                   Payment Success
@@ -853,7 +919,9 @@ export default function BuyModal({
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
                 <button
                   className="w-full h-full bg-[#DEE8E8]"
-                  onClick={() => { setStep(5) }}
+                  onClick={() => {
+                    setStep(5);
+                  }}
                 >
                   close
                 </button>
@@ -864,7 +932,7 @@ export default function BuyModal({
           {step === 5 && (
             <div className="flex flex-col gap-y-4 w-full">
               <div className="flex gap-x-3 items-center">
-                <img src="/icons/info.svg" className="w-12" />
+                <img alt="info" src="/icons/info.svg" className="w-12" />
               </div>
 
               <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
@@ -909,6 +977,6 @@ export default function BuyModal({
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
