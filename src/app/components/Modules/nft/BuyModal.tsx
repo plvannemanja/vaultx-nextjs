@@ -34,10 +34,16 @@ import ShippingInfo from '../ShippingInfo';
 
 const addressSchema = z.object({
   accepted: z.boolean().refine((val) => val === true, {
-    message: 'The value must be true.',
+    message: 'Please click the checkbox to agree',
   }),
-  shippingId: z.string().nonempty('Shipping information is invalid'),
-  contactId: z.string().nonempty('Contact information is invalid.'),
+  shippingId: z.string({
+    required_error: "Please select a template",
+    invalid_type_error: "Please select a template",
+  }).nonempty("Please select a template"),
+  contactId: z.string({
+    required_error: "Please select a template",
+    invalid_type_error: "Please select a template",
+  }).nonempty("Please select a template"),
 });
 
 interface addressErrorType {
@@ -76,8 +82,8 @@ export default function BuyModal({
 
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-      '...' +
-      activeAccount?.address.slice(-4)
+    '...' +
+    activeAccount?.address.slice(-4)
     : 'Connect Wallet';
 
   const cancelChanges = () => {
@@ -256,9 +262,8 @@ export default function BuyModal({
                           </Label>
                           <div className="flex justify-center">
                             <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white/[53%]`}
+                              className={`${open ? 'rotate-180 transform' : ''
+                                } h-5 w-5 text-white/[53%]`}
                             />
                           </div>
                         </div>
@@ -266,7 +271,7 @@ export default function BuyModal({
                       <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
                         <ShippingInfo isSetting />
                         {addressError?.shippingId && (
-                          <p className="text-red-500 text-sm">
+                          <p className="text-[#DDF247] text-sm">
                             {addressError.shippingId}
                           </p>
                         )}
@@ -292,9 +297,8 @@ export default function BuyModal({
                           </Label>
                           <div className="flex justify-center">
                             <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white/[53%]`}
+                              className={`${open ? 'rotate-180 transform' : ''
+                                } h-5 w-5 text-white/[53%]`}
                             />
                           </div>
                         </div>
@@ -302,7 +306,7 @@ export default function BuyModal({
                       <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
                         <ContactInfo isSetting />
                         {addressError?.contactId && (
-                          <p className="text-red-500 text-sm">
+                          <p className="text-[#DDF247] text-sm">
                             {addressError.contactId}
                           </p>
                         )}
@@ -375,9 +379,9 @@ export default function BuyModal({
                 </div>
 
                 {addressError?.accepted && (
-                  <p className="text-red-500 text-sm">
-                    {addressError.accepted}
-                  </p>
+                   < p className="text-[#DDF247] text-sm">
+                  {addressError.accepted}
+                </p>
                 )}
               </div>
 

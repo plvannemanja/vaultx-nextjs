@@ -32,10 +32,16 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 const addressSchema = z.object({
   accepted: z.boolean().refine((val) => val === true, {
-    message: 'The value must be true.',
+    message: 'Please click the checkbox to agree',
   }),
-  shippingId: z.string().nonempty("Shipping information is invalid"),
-  contactId: z.string().nonempty("Contact information is invalid.")
+  shippingId: z.string({
+    required_error: "Please select a template",
+    invalid_type_error: "Please select a template",
+  }).nonempty("Please select a template"),
+  contactId: z.string({
+    required_error: "Please select a template",
+    invalid_type_error: "Please select a template",
+  }).nonempty("Please select a template"),
 });
 
 interface addressErrorType {
@@ -263,13 +269,13 @@ export default function PutSaleModal({
                 </div>
                 <ShippingInfo />
                 {addressError?.shippingId && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-[#DDF247] text-sm">
                     {addressError.shippingId}
                   </p>
                 )}
                 <ContactInfo />
                 {addressError?.contactId && (
-                  <p className="text-red-500 text-sm">
+                  <p className="text-[#DDF247] text-sm">
                     {addressError.contactId}
                   </p>
                 )}
@@ -405,7 +411,7 @@ export default function PutSaleModal({
                   </div>
 
                   {addressError?.accepted && (
-                    <p className="text-red-500 text-sm">
+                    <p className="text-[#DDF247] text-sm">
                       {addressError.accepted}
                     </p>
                   )}

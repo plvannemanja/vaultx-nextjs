@@ -383,370 +383,370 @@ export default function ShippingInfo({ isSetting }: any) {
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data?.map((item: any, index: number) => {
-              return (
-                <div
-                  key={index}
-                  className={cn(
-                    `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] relative flex flex-col gap-y-4 p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
-                    isSetting ? ' bg-[#161616]' : '',
-                  )}
-                  onClick={() => {
-                    setSelectedShipping(item);
-                  }}
-                >
-                  <div className="flex justify-between">
-                    <div className="flex flex-col gap-y-2">
-                      <span className="text-xl font-semibold">{item.name}</span>
-                      <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
-                    </div>
-                    <div className="text-[#A6A6A6]">{item.type}</div>
+            return (
+              <div
+                key={index}
+                className={cn(
+                  `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] relative flex flex-col gap-y-4 p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
+                  isSetting ? ' bg-[#161616]' : '',
+                )}
+                onClick={() => {
+                  setSelectedShipping(item);
+                }}
+              >
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-y-2">
+                    <span className="text-xl font-semibold">{item.name}</span>
+                    <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
                   </div>
-                  <div>
-                    {item.address && item.country ? (
-                      <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
-                        {`${item.address.line1 + item.address.line2 + item.address.state + item.address.city + item.country}`
-                          .length > 150
-                          ? `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + item.address.city + ' ' + item.country}`.slice(
-                              0,
-                              150,
-                            ) + '...'
-                          : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
-                      </p>
-                    ) : null}
+                  <div className="text-[#A6A6A6]">{item.type}</div>
+                </div>
+                <div>
+                  {item.address && item.country ? (
+                    <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
+                      {`${item.address.line1 + item.address.line2 + item.address.state + item.address.city + item.country}`
+                        .length > 150
+                        ? `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + item.address.city + ' ' + item.country}`.slice(
+                          0,
+                          150,
+                        ) + '...'
+                        : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
+                    </p>
+                  ) : null}
 
-                    <div className="absolute bottom-2 left-2 flex items-center gap-1">
-                      <span
-                        onClick={() => handleDeleteSeller(item)}
-                        className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md"
-                      >
-                        <Image
-                          quality={100}
-                          width={16}
-                          height={16}
-                          alt="delete"
-                          src="/icons/trash.svg"
-                          className="w-5 h-5"
-                        />
-                      </span>
-                    </div>
-                    <div className="absolute bottom-2 right-2 flex items-center gap-1">
-                      <div
-                        className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
-                        onClick={() => {
-                          preserveState(item);
-                          setIsUpdateModalOpen(true);
-                        }}
-                      >
-                        Edit
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end ">
-                    <BaseDialog
-                      isOpen={isUpdateModalOpen}
-                      onClose={() => setIsUpdateModalOpen(false)}
-                      className="max-h-[80%] overflow-y-auto overflow-x-hidden bg-[#161616]"
+                  <div className="absolute bottom-2 left-2 flex items-center gap-1">
+                    <span
+                      onClick={() => handleDeleteSeller(item)}
+                      className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md"
                     >
-                      <div className="flex flex-col gap-y-5">
-                        <div className="px-4">
-                          <h1 className="font-bold text-[32px]">
-                            Edit Contact Information Template
-                          </h1>
-                        </div>
-
-                        <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
-                          <Disclosure as="div" defaultOpen={true}>
-                            {({ open }) => (
-                              <>
-                                <DisclosureButton
-                                  className={cn(
-                                    'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
-                                    open ? 'border-b border-white/[8%]' : '',
-                                  )}
-                                >
-                                  <div className="flex w-full justify-between items-center">
-                                    <Label className="font-extrabold text-lg text-white manrope-font">
-                                      Template Title
-                                    </Label>
-                                    {/* <div className="flex justify-center">
-                          <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white/[53%]`}
-                          />
-                        </div> */}
-                                  </div>
-                                </DisclosureButton>
-                                <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
-                                  <div className="flex flex-col gap-y-3">
-                                    <Input
-                                      onChange={(e) => {
-                                        setSellerInfo({
-                                          ...sellerInfo,
-                                          type: e.target.value,
-                                        });
-                                      }}
-                                      className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                      type="text"
-                                      value={sellerInfo.type}
-                                      placeholder="Enter Template Title * (e.g., Home, Gallery, Office, Etc)"
-                                    />
-                                  </div>
-                                </DisclosurePanel>
-                              </>
-                            )}
-                          </Disclosure>
-                        </div>
-                        <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
-                          <Disclosure as="div" defaultOpen={true}>
-                            {({ open }) => (
-                              <>
-                                <DisclosureButton
-                                  className={cn(
-                                    'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
-                                    open ? 'border-b border-white/[8%]' : '',
-                                  )}
-                                >
-                                  <div className="flex w-full justify-between items-center">
-                                    <Label className="font-extrabold text-lg text-white">
-                                      Basic information
-                                    </Label>
-                                    {/* <div className="flex justify-center">
-                          <ChevronUpIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-white/[53%]`}
-                          />
-                        </div> */}
-                                  </div>
-                                </DisclosureButton>
-                                <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
-                                  <div className="flex flex-wrap gap-2">
-                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                      <Label className="text-sm font-bold">
-                                        Name*
-                                      </Label>
-                                      <Input
-                                        onChange={(e) =>
-                                          setSellerInfo({
-                                            ...sellerInfo,
-                                            name: e.target.value,
-                                          })
-                                        }
-                                        className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                        type="text"
-                                        value={sellerInfo.name ?? ''}
-                                        placeholder="Enter name"
-                                      />
-                                    </div>
-                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                      <Label className="text-sm font-bold">
-                                        E-mail*
-                                      </Label>
-                                      <Input
-                                        onChange={(e) =>
-                                          setSellerInfo({
-                                            ...sellerInfo,
-                                            email: e.target.value,
-                                          })
-                                        }
-                                        className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                        type="text"
-                                        value={sellerInfo.email ?? ''}
-                                        placeholder="Enter email"
-                                      />
-                                    </div>
-                                    <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                      <Label className="text-sm font-bold">
-                                        Country*
-                                      </Label>
-                                      <div className="rounded-md bg-[#161616]">
-                                        <select
-                                          aria-label="select curation"
-                                          className="h-10 rounded-md px-2 bg-[#161616] text-xs font-AzeretMono focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none"
-                                          name="country"
-                                          value={JSON.stringify(
-                                            sellerInfo.country,
-                                          )}
-                                          onChange={handleUpdateSeller}
-                                        >
-                                          <option value="">Select</option>
-                                          {countries.map((item: any) => (
-                                            <option
-                                              key={item.isoCode}
-                                              value={JSON.stringify(item)}
-                                            >
-                                              {item.name}
-                                            </option>
-                                          ))}
-                                        </select>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </DisclosurePanel>
-                              </>
-                            )}
-                          </Disclosure>
-                        </div>
-
-                        <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
-                          <div className="flex flex-col gap-y-3">
-                            <Label className="font-extrabold text-lg text-white">
-                              Shipping Address
-                            </Label>
-                            <hr className="border-white/10" />
-                            <div className="flex flex-wrap justify-between">
-                              <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                <Label className="text-sm font-bold">
-                                  Address 1*
-                                </Label>
-                                <Input
-                                  onChange={(e) =>
-                                    setSellerInfo({
-                                      ...sellerInfo,
-                                      line1: e.target.value,
-                                    })
-                                  }
-                                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                  type="text"
-                                  value={sellerInfo.line1 ?? ''}
-                                  placeholder="Enter Address 1"
-                                />
-                              </div>
-                              <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                                <Label className="text-sm font-bold">
-                                  Address 2*
-                                </Label>
-                                <Input
-                                  onChange={(e) =>
-                                    setSellerInfo({
-                                      ...sellerInfo,
-                                      line2: e.target.value,
-                                    })
-                                  }
-                                  value={sellerInfo.line2 ?? ''}
-                                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                  type="text"
-                                  placeholder="Enter Address 2"
-                                />
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap justify-between">
-                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-sm font-bold">
-                                  State*
-                                </Label>
-                                <div className="bg-[#161616] rounded-xl pr-4">
-                                  <select
-                                    aria-label="Select curation"
-                                    className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                                    name="state"
-                                    value={JSON.stringify(sellerInfo.state)}
-                                    onChange={handleUpdateSeller}
-                                  >
-                                    <option value="">Select</option>
-                                    {states.map((item: any) => (
-                                      <option
-                                        key={item.isoCode}
-                                        value={JSON.stringify(item)}
-                                      >
-                                        {item.name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-sm font-bold">
-                                  City*
-                                </Label>
-                                <div className="bg-[#161616] rounded-xl pr-4">
-                                  <select
-                                    aria-label="Select curation"
-                                    className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                                    name="city"
-                                    value={
-                                      sellerInfo.city
-                                        ? JSON.stringify(sellerInfo.city)
-                                        : ''
-                                    }
-                                    onChange={handleUpdateSeller}
-                                  >
-                                    <option value="">Select</option>
-                                    {cities.map((item: any) => (
-                                      <option
-                                        key={item.isoCode}
-                                        value={JSON.stringify(item)}
-                                      >
-                                        {item.name}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                                <Label className="text-sm font-bold">
-                                  Postal Code*
-                                </Label>
-                                <Input
-                                  onChange={(e) =>
-                                    setSellerInfo({
-                                      ...sellerInfo,
-                                      postalCode: e.target.value,
-                                    })
-                                  }
-                                  value={sellerInfo.postalCode ?? ''}
-                                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                                  type="text"
-                                  placeholder="Enter Zip Code"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap-y-3">
-                            <PhoneInput
-                              enableLongNumbers={true}
-                              containerClass="phone-container flex flex-col gap-y-2 [&>div.special-label]:text-sm [&>div.special-label]:font-bold"
-                              buttonClass="phone-dropdown"
-                              inputClass="phone-control !h-[52px] !px-[26px] !mt-0 !py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex placeholder:text-white/[53%] text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                              specialLabel="Phone Number*"
-                              country={'us'}
-                              value={sellerInfo.phoneNumber}
-                              inputStyle={{
-                                width: '100%',
-                                height: '2.5rem',
-                                borderRadius: '0.375rem',
-                                padding: '0.5rem',
-                                marginTop: '0.5rem',
-                              }}
-                              onChange={(e) =>
-                                setSellerInfo({ ...sellerInfo, phoneNumber: e })
-                              }
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex gap-x-4 justify-center my-3 px-4">
-                          <BaseButton
-                            title="Cancel"
-                            variant="secondary"
-                            onClick={cancelChanges}
-                          />
-                          <BaseButton
-                            title="Save"
-                            variant="primary"
-                            onClick={async () => {
-                              await update(sellerInfo?.id);
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </BaseDialog>
+                      <Image
+                        quality={100}
+                        width={16}
+                        height={16}
+                        alt="delete"
+                        src="/icons/trash.svg"
+                        className="w-5 h-5"
+                      />
+                    </span>
+                  </div>
+                  <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                    <div
+                      className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                      onClick={() => {
+                        preserveState(item);
+                        setIsUpdateModalOpen(true);
+                      }}
+                    >
+                      Edit
+                    </div>
                   </div>
                 </div>
-              );
-            })
+
+                <div className="flex justify-end ">
+                  <BaseDialog
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    className="max-h-[80%] overflow-y-auto overflow-x-hidden bg-[#161616]"
+                  >
+                    <div className="flex flex-col gap-y-5">
+                      <div className="px-4">
+                        <h1 className="font-bold text-[32px]">
+                          Edit Contact Information Template
+                        </h1>
+                      </div>
+
+                      <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                        <Disclosure as="div" defaultOpen={true}>
+                          {({ open }) => (
+                            <>
+                              <DisclosureButton
+                                className={cn(
+                                  'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                                  open ? 'border-b border-white/[8%]' : '',
+                                )}
+                              >
+                                <div className="flex w-full justify-between items-center">
+                                  <Label className="font-extrabold text-lg text-white manrope-font">
+                                    Template Title
+                                  </Label>
+                                  {/* <div className="flex justify-center">
+                          <ChevronUpIcon
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white/[53%]`}
+                          />
+                        </div> */}
+                                </div>
+                              </DisclosureButton>
+                              <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                                <div className="flex flex-col gap-y-3">
+                                  <Input
+                                    onChange={(e) => {
+                                      setSellerInfo({
+                                        ...sellerInfo,
+                                        type: e.target.value,
+                                      });
+                                    }}
+                                    className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                    type="text"
+                                    value={sellerInfo.type}
+                                    placeholder="Enter Template Title * (e.g., Home, Gallery, Office, Etc)"
+                                  />
+                                </div>
+                              </DisclosurePanel>
+                            </>
+                          )}
+                        </Disclosure>
+                      </div>
+                      <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                        <Disclosure as="div" defaultOpen={true}>
+                          {({ open }) => (
+                            <>
+                              <DisclosureButton
+                                className={cn(
+                                  'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                                  open ? 'border-b border-white/[8%]' : '',
+                                )}
+                              >
+                                <div className="flex w-full justify-between items-center">
+                                  <Label className="font-extrabold text-lg text-white">
+                                    Basic information
+                                  </Label>
+                                  {/* <div className="flex justify-center">
+                          <ChevronUpIcon
+                            className={`${
+                              open ? 'rotate-180 transform' : ''
+                            } h-5 w-5 text-white/[53%]`}
+                          />
+                        </div> */}
+                                </div>
+                              </DisclosureButton>
+                              <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                                <div className="flex flex-wrap gap-2">
+                                  <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                    <Label className="text-sm font-bold">
+                                      Name*
+                                    </Label>
+                                    <Input
+                                      onChange={(e) =>
+                                        setSellerInfo({
+                                          ...sellerInfo,
+                                          name: e.target.value,
+                                        })
+                                      }
+                                      className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                      type="text"
+                                      value={sellerInfo.name ?? ''}
+                                      placeholder="Enter name"
+                                    />
+                                  </div>
+                                  <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                    <Label className="text-sm font-bold">
+                                      E-mail*
+                                    </Label>
+                                    <Input
+                                      onChange={(e) =>
+                                        setSellerInfo({
+                                          ...sellerInfo,
+                                          email: e.target.value,
+                                        })
+                                      }
+                                      className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                      type="text"
+                                      value={sellerInfo.email ?? ''}
+                                      placeholder="Enter email"
+                                    />
+                                  </div>
+                                  <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                                    <Label className="text-sm font-bold">
+                                      Country*
+                                    </Label>
+                                    <div className="rounded-md bg-[#161616]">
+                                      <select
+                                        aria-label="select curation"
+                                        className="h-10 rounded-md px-2 bg-[#161616] text-xs font-AzeretMono focus-visible:border-none focus-visible:outline-none focus-visible:shadow-none"
+                                        name="country"
+                                        value={JSON.stringify(
+                                          sellerInfo.country,
+                                        )}
+                                        onChange={handleUpdateSeller}
+                                      >
+                                        <option value="">Select</option>
+                                        {countries.map((item: any) => (
+                                          <option
+                                            key={item.isoCode}
+                                            value={JSON.stringify(item)}
+                                          >
+                                            {item.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                              </DisclosurePanel>
+                            </>
+                          )}
+                        </Disclosure>
+                      </div>
+
+                      <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                        <div className="flex flex-col gap-y-3">
+                          <Label className="font-extrabold text-lg text-white">
+                            Shipping Address
+                          </Label>
+                          <hr className="border-white/10" />
+                          <div className="flex flex-wrap justify-between">
+                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                              <Label className="text-sm font-bold">
+                                Address 1*
+                              </Label>
+                              <Input
+                                onChange={(e) =>
+                                  setSellerInfo({
+                                    ...sellerInfo,
+                                    line1: e.target.value,
+                                  })
+                                }
+                                className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                type="text"
+                                value={sellerInfo.line1 ?? ''}
+                                placeholder="Enter Address 1"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
+                              <Label className="text-sm font-bold">
+                                Address 2*
+                              </Label>
+                              <Input
+                                onChange={(e) =>
+                                  setSellerInfo({
+                                    ...sellerInfo,
+                                    line2: e.target.value,
+                                  })
+                                }
+                                value={sellerInfo.line2 ?? ''}
+                                className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                type="text"
+                                placeholder="Enter Address 2"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap justify-between">
+                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                              <Label className="text-sm font-bold">
+                                State*
+                              </Label>
+                              <div className="bg-[#161616] rounded-xl pr-4">
+                                <select
+                                  aria-label="Select curation"
+                                  className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                                  name="state"
+                                  value={JSON.stringify(sellerInfo.state)}
+                                  onChange={handleUpdateSeller}
+                                >
+                                  <option value="">Select</option>
+                                  {states.map((item: any) => (
+                                    <option
+                                      key={item.isoCode}
+                                      value={JSON.stringify(item)}
+                                    >
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                              <Label className="text-sm font-bold">
+                                City*
+                              </Label>
+                              <div className="bg-[#161616] rounded-xl pr-4">
+                                <select
+                                  aria-label="Select curation"
+                                  className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                                  name="city"
+                                  value={
+                                    sellerInfo.city
+                                      ? JSON.stringify(sellerInfo.city)
+                                      : ''
+                                  }
+                                  onChange={handleUpdateSeller}
+                                >
+                                  <option value="">Select</option>
+                                  {cities.map((item: any) => (
+                                    <option
+                                      key={item.isoCode}
+                                      value={JSON.stringify(item)}
+                                    >
+                                      {item.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
+                              <Label className="text-sm font-bold">
+                                Postal Code*
+                              </Label>
+                              <Input
+                                onChange={(e) =>
+                                  setSellerInfo({
+                                    ...sellerInfo,
+                                    postalCode: e.target.value,
+                                  })
+                                }
+                                value={sellerInfo.postalCode ?? ''}
+                                className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                                type="text"
+                                placeholder="Enter Zip Code"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-y-3">
+                          <PhoneInput
+                            enableLongNumbers={true}
+                            containerClass="phone-container flex flex-col gap-y-2 [&>div.special-label]:text-sm [&>div.special-label]:font-bold"
+                            buttonClass="phone-dropdown"
+                            inputClass="phone-control !h-[52px] !px-[26px] !mt-0 !py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex placeholder:text-white/[53%] text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                            specialLabel="Phone Number*"
+                            country={'us'}
+                            value={sellerInfo.phoneNumber}
+                            inputStyle={{
+                              width: '100%',
+                              height: '2.5rem',
+                              borderRadius: '0.375rem',
+                              padding: '0.5rem',
+                              marginTop: '0.5rem',
+                            }}
+                            onChange={(e) =>
+                              setSellerInfo({ ...sellerInfo, phoneNumber: e })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex gap-x-4 justify-center my-3 px-4">
+                        <BaseButton
+                          title="Cancel"
+                          variant="secondary"
+                          onClick={cancelChanges}
+                        />
+                        <BaseButton
+                          title="Save"
+                          variant="primary"
+                          onClick={async () => {
+                            await update(sellerInfo?.id);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </BaseDialog>
+                </div>
+              </div>
+            );
+          })
           : null}
 
         <div

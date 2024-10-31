@@ -130,135 +130,139 @@ export default function ContactInfo({ isSetting }: any) {
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data.map((item: any, index: number) => (
-              <div
-                key={index}
-                className={cn(
-                  `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative gap-y-4 p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
-                  isSetting ? ' bg-[#161616]' : '',
-                )}
-                onClick={() => setSelectedContact(item)}
-              >
-                <span className="text-xl font-semibold">
-                  {item.name ? item.name : `#${index + 1}`}
+            <div
+              key={index}
+              className={cn(
+                `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative gap-y-4 p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
+                isSetting ? ' bg-[#161616]' : '',
+              )}
+              onClick={() => setSelectedContact(item)}
+            >
+              <span className="text-xl font-semibold">
+                {item.name ? item.name : `#${index + 1}`}
+              </span>
+              <div>
+                <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
+                  {item?.contactInfo?.length > 150
+                    ? `${item.contactInfo.slice(0, 150)}...`
+                    : item.contactInfo}
+                  ...
+                </p>
+              </div>
+              <div className="absolute bottom-2 left-2 flex items-center gap-1">
+                <span
+                  onClick={() => {
+                    handleDeleteContact(item);
+                  }}
+                  className="text-[#DDF247] cursor-pointer px-2 py-1 rounded-md"
+                >
+                  <Image
+                    quality={100}
+                    width={16}
+                    height={16}
+                    alt="delete"
+                    src="/icons/trash.svg"
+                    className="w-5 h-5"
+                  />
                 </span>
-                <div>
-                  <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
-                    {item?.contactInfo?.length > 150
-                      ? `${item.contactInfo.slice(0, 150)}...`
-                      : item.contactInfo}
-                    ...
-                  </p>
+              </div>
+              <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                <div
+                  className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                  onClick={() => {
+                    setIsUpdateModalOpen(true);
+                    setNewContact({
+                      ...newContact,
+                      id: item._id,
+                      name: item.name,
+                      contactInfo: item.contactInfo,
+                    });
+                  }}
+                >
+                  Edit
                 </div>
-                <div className="absolute bottom-2 right-2 flex items-center gap-1">
-                  <div
-                    className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
-                    onClick={() => {
-                      setIsUpdateModalOpen(true);
-                      setNewContact({
-                        ...newContact,
-                        id: item._id,
-                        name: item.name,
-                        contactInfo: item.contactInfo,
-                      });
-                    }}
-                  >
-                    Edit
-                  </div>
-                  <div
-                    className="text-[#DDF247] h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
-                    onClick={() => {
-                      handleDeleteContact(item);
-                    }}
-                  >
-                    <Image
-                      quality={100}
-                      width={16}
-                      height={16}
-                      alt="delete"
-                      src="/icons/trash.svg"
-                      className="w-4 h-4"
-                    />
-                  </div>
-                </div>
+              </div>
 
-                <div className="flex justify-end">
-                  <BaseDialog
-                    isOpen={isUpdateModalOpen}
-                    onClose={() => setIsUpdateModalOpen(false)}
-                    className="max-h-[80%] overflow-y-auto overflow-x-hidden bg-[#161616]"
-                  >
-                    <div className="px-4">
-                      <h1 className="font-bold text-[32px]">
-                        Edit Contact Information Template
-                      </h1>
+              <div className="flex justify-end">
+                <BaseDialog
+                  isOpen={isUpdateModalOpen}
+                  onClose={() => setIsUpdateModalOpen(false)}
+                  className="max-h-[80%] overflow-y-auto overflow-x-hidden bg-[#161616]"
+                >
+                  <div className="px-4">
+                    <h1 className="font-bold text-[32px]">
+                      Edit Contact Information Template
+                    </h1>
+                  </div>
+                  <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                    <div className="flex flex-col gap-y-4">
+                      <Label className="font-extrabold text-lg text-white">
+                        Contact Information Name
+                      </Label>
+                      <hr className="border-white/10" />
+                      <Input
+                        value={newContact.name ? newContact.name : ""}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            name: e.target.value,
+                          })
+                        }
+                        autoFocus={false}
+                        tabIndex={-1}
+                        className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                        type="text"
+                        placeholder="Enter Template Title * (e.g., #1, Basic, Etc)"
+                      />
                     </div>
-                    <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
-                      <div className="flex flex-col gap-y-4">
-                        <Label className="font-extrabold text-lg text-white">
-                          Contact Information Name
-                        </Label>
-                        <hr className="border-white/10" />
-                        <Input
-                          value={newContact.name ? newContact.name : item.name}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              name: e.target.value,
-                            })
-                          }
-                          autoFocus={true}
-                          className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                          type="text"
-                          placeholder="Enter Template Title * (e.g., #1, Basic, Etc)"
-                        />
-                      </div>
-                    </div>
-                    <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
-                      <div className="flex flex-col gap-y-4">
-                        <Label className="font-extrabold text-lg text-white">
-                          Contact Information For Seller
-                        </Label>
-                        <hr className="border-white/10" />
-                        <Textarea
-                          value={
-                            newContact.contactInfo
-                              ? newContact.contactInfo
-                              : item.contactInfo
-                          }
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              contactInfo: e.target.value,
-                            })
-                          }
-                          className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                          placeholder="Please share your preferred contact method or messenger ID for shipping arrangements
+                  </div>
+                  <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                    <div className="flex flex-col gap-y-4">
+                      <Label className="font-extrabold text-lg text-white">
+                        Contact Information For Seller
+                      </Label>
+                      <hr className="border-white/10" />
+                      <Textarea
+                        value={
+                          newContact.contactInfo
+                            ? newContact.contactInfo
+                            : ""
+                        }
+                        tabIndex={-2}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            contactInfo: e.target.value,
+                          })
+                        }
+                        className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                        placeholder="Please share your preferred contact method or messenger ID for shipping arrangements
 
 At VaultX, we prioritize the safe delivery of each artwork through shipping methods mutually agreed upon between sellers and buyers, taking into account the unique characteristics of each piece.  After completing a transaction, both parties can use this space to share contact information and discuss shipping arrangements. Your message will remain confidential and will only be shared with the relevant parties once the transaction is finalized.
 Please refer to the example below when composing your message for coordinating with the other party."
-                        />
-                      </div>
-
-                      <div className="flex gap-x-4 justify-center my-3">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={cancelChanges}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={async () => {
-                            await update(newContact?.id);
-                            setIsUpdateModalOpen(false);
-                          }}
-                        />
-                      </div>
+                      />
                     </div>
-                  </BaseDialog>
-                </div>
+
+                    <div className="flex gap-x-4 justify-center my-3">
+                      <BaseButton
+                        title="Cancel"
+                        variant="secondary"
+                        onClick={cancelChanges}
+                      />
+                      <BaseButton
+                        title="Save"
+                        variant="primary"
+                        onClick={async () => {
+                          await update(newContact?.id);
+                          setIsUpdateModalOpen(false);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </BaseDialog>
               </div>
-            ))
+            </div>
+          ))
           : null}
         <div
           className={cn(
@@ -314,7 +318,7 @@ Please refer to the example below when composing your message for coordinating w
                   }
                   className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   type="text"
-                  autoFocus={true}
+                  tabIndex={-1}
                   placeholder="Enter Template Title * (e.g., #1, Basic, Etc)"
                 />
               </div>
@@ -333,6 +337,7 @@ Please refer to the example below when composing your message for coordinating w
                       contactInfo: e.target.value,
                     })
                   }
+                  tabIndex={-2}
                   className="w-full border-none resize-none px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   rows={8}
                   placeholder="Please share your preferred contact method or messenger ID for shipping arrangements 
