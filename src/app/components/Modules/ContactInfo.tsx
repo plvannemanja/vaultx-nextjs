@@ -79,7 +79,7 @@ export default function ContactInfo({ isSetting }: any) {
       contact: selectedContact,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedContact]);
+  }, [selectedContact, data]);
 
   useEffect(() => {
     fetchContacts();
@@ -124,123 +124,123 @@ export default function ContactInfo({ isSetting }: any) {
       <div className="flex flex-wrap gap-5">
         {data && data.length > 0
           ? data.map((item: any, index: number) => (
-              <div
-                key={index}
-                className={cn(
-                  `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
-                  isSetting ? ' bg-[#161616]' : '',
-                )}
-                onClick={() => setSelectedContact(item)}
-              >
-                <span className="text-xl font-semibold">
-                  {item.name ? item.name : `#${index + 1}`}
-                </span>
-                <div>
-                  <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
-                    {item?.contactInfo?.length > 150
-                      ? `${item.contactInfo.slice(0, 150)}...`
-                      : item.contactInfo}
-                    ...
-                  </p>
+            <div
+              key={index}
+              className={cn(
+                `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] flex flex-col relative justify-between p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
+                isSetting ? ' bg-[#161616]' : '',
+              )}
+              onClick={() => setSelectedContact(item)}
+            >
+              <span className="text-xl font-semibold">
+                {item.name ? item.name : `#${index + 1}`}
+              </span>
+              <div>
+                <p className="text-[#A6A6A6] py-1 font-AzeretMono text-[12px]">
+                  {item?.contactInfo?.length > 150
+                    ? `${item.contactInfo.slice(0, 150)}...`
+                    : item.contactInfo}
+                  ...
+                </p>
+              </div>
+              <div className="absolute bottom-2 right-2 flex items-center gap-1">
+                <div
+                  className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                  onClick={() => {
+                    setIsUpdateModalOpen(true);
+                    setNewContact({
+                      ...newContact,
+                      id: item._id,
+                      name: item.name,
+                      contactInfo: item.contactInfo,
+                    });
+                  }}
+                >
+                  Edit
                 </div>
-                <div className="absolute bottom-2 right-2 flex items-center gap-1">
-                  <div
-                    className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
-                    onClick={() => {
-                      setIsUpdateModalOpen(true);
-                      setNewContact({
-                        ...newContact,
-                        id: item._id,
-                        name: item.name,
-                        contactInfo: item.contactInfo,
-                      });
-                    }}
-                  >
-                    Edit
-                  </div>
-                  <div
-                    className="text-[#DDF247] h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
-                    onClick={() => {
-                      handleDeleteContact(item);
-                    }}
-                  >
-                    <Image
-                      quality={100}
-                      width={16}
-                      height={16}
-                      alt="delete"
-                      src="/icons/trash.svg"
-                      className="w-4 h-4"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end">
-                  <BaseDialog
-                    isOpen={isUpdateModalOpen}
-                    onClose={() => setIsUpdateModalOpen(false)}
-                    className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
-                  >
-                    <div className="flex flex-col gap-y-5">
-                      <div className="flex flex-col gap-y-4">
-                        <Label className="text-lg font-medium">
-                          Contact Information Name
-                        </Label>
-                        <Input
-                          value={newContact.name ? newContact.name : item.name}
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              name: e.target.value,
-                            })
-                          }
-                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
-                          type="text"
-                          placeholder="Enter contact name"
-                        />
-                      </div>
-
-                      <div className="flex flex-col gap-y-4">
-                        <Label className="text-lg font-medium">
-                          Contact Information For Seller
-                        </Label>
-                        <Textarea
-                          value={
-                            newContact.contactInfo
-                              ? newContact.contactInfo
-                              : item.contactInfo
-                          }
-                          onChange={(e) =>
-                            setNewContact({
-                              ...newContact,
-                              contactInfo: e.target.value,
-                            })
-                          }
-                          className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
-                          placeholder="Please describe your product"
-                        />
-                      </div>
-
-                      <div className="flex gap-x-4 justify-center my-3">
-                        <BaseButton
-                          title="Cancel"
-                          variant="secondary"
-                          onClick={cancelChanges}
-                        />
-                        <BaseButton
-                          title="Save"
-                          variant="primary"
-                          onClick={async () => {
-                            await update(item._id);
-                            setIsUpdateModalOpen(false);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </BaseDialog>
+                <div
+                  className="text-[#DDF247] h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                  onClick={() => {
+                    handleDeleteContact(item);
+                  }}
+                >
+                  <Image
+                    quality={100}
+                    width={16}
+                    height={16}
+                    alt="delete"
+                    src="/icons/trash.svg"
+                    className="w-4 h-4"
+                  />
                 </div>
               </div>
-            ))
+
+              <div className="flex justify-end">
+                <BaseDialog
+                  isOpen={isUpdateModalOpen}
+                  onClose={() => setIsUpdateModalOpen(false)}
+                  className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                >
+                  <div className="flex flex-col gap-y-5">
+                    <div className="flex flex-col gap-y-4">
+                      <Label className="text-lg font-medium">
+                        Contact Information Name
+                      </Label>
+                      <Input
+                        value={newContact.name ? newContact.name : item.name}
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            name: e.target.value,
+                          })
+                        }
+                        className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
+                        type="text"
+                        placeholder="Enter contact name"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-y-4">
+                      <Label className="text-lg font-medium">
+                        Contact Information For Seller
+                      </Label>
+                      <Textarea
+                        value={
+                          newContact.contactInfo
+                            ? newContact.contactInfo
+                            : item.contactInfo
+                        }
+                        onChange={(e) =>
+                          setNewContact({
+                            ...newContact,
+                            contactInfo: e.target.value,
+                          })
+                        }
+                        className="w-full border-none bg-[#161616] placeholder:text-xs font-AzeretMono"
+                        placeholder="Please describe your product"
+                      />
+                    </div>
+
+                    <div className="flex gap-x-4 justify-center my-3">
+                      <BaseButton
+                        title="Cancel"
+                        variant="secondary"
+                        onClick={cancelChanges}
+                      />
+                      <BaseButton
+                        title="Save"
+                        variant="primary"
+                        onClick={async () => {
+                          await update(item._id);
+                          setIsUpdateModalOpen(false);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </BaseDialog>
+              </div>
+            </div>
+          ))
           : null}
         <div
           className={cn(
