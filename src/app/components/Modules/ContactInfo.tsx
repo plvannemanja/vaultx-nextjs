@@ -79,7 +79,16 @@ export default function ContactInfo({ isSetting }: any) {
       contact: selectedContact,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedContact, data]);
+  }, [selectedContact]);
+
+
+  useEffect(() => {
+    if (!selectedContact)
+      return;
+    const filtered = data.filter(item => item._id === selectedContact._id)
+    if (filtered.length)
+      setSelectedContact(filtered[0]);
+  }, [data]);
 
   useEffect(() => {
     fetchContacts();
