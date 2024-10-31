@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -8,7 +7,7 @@ import {
   purchaseAsset,
   purchaseAssetBeforeMint,
 } from '@/lib/helper';
-import { cn } from '@/lib/utils';
+import { cn, formatNumberWithCommas } from '@/lib/utils';
 import { CreateNftServices } from '@/services/createNftService';
 import { CreateSellService } from '@/services/createSellService';
 import { INFTVoucher } from '@/types';
@@ -163,7 +162,6 @@ export default function BuyModal({
 
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      await fetchNftData();
       setStep(4);
     } catch (error) {
       console.log(error);
@@ -224,7 +222,6 @@ export default function BuyModal({
       });
       const saleService = new CreateSellService();
       await saleService.buyItem(data);
-      await fetchNftData();
       setStep(4);
     } catch (error) {
       setError(JSON.stringify(error));
@@ -805,8 +802,26 @@ export default function BuyModal({
             <div className="flex flex-col gap-y-6 w-full text-[#fff]">
               <p className="text-[30px] font-extrabold">Checkout</p>
               <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
-                You are about to purchase ${NFTDetail?.name} from ${address}
+                You are about to purchase {NFTDetail?.name} from {address}
               </p>
+
+              <div className="flex h-36 justify-between bg-neutral-800 rounded-2xl p-5 items-center">
+                <div className="flex gap-6 items-center">
+                  <div className="w-28 h-28 rounded-2xl relative">
+                    <Image
+                      quality={100}
+                      src={NFTDetail.cloudinaryUrl}
+                      alt="bottom-banner"
+                      layout="fill"
+                      objectFit="cover"
+                    ></Image>
+                  </div>
+                  <p className="azeret-mono-font">{NFTDetail?.name}</p>
+                </div>
+                <p className="azeret-mono-font">
+                  $ {formatNumberWithCommas(NFTDetail.price)}
+                </p>
+              </div>
 
               <ConnectedCard />
 
@@ -819,6 +834,23 @@ export default function BuyModal({
                   </span>
                   <span>{tokenAmount} ETH</span>
                 </div>
+                {NFTDetail?.saleTime && (
+                  <div className="flex justify-between py-3 items-center azeret-mono-font">
+                    <span>Royalties</span>
+                    <span>{NFTDetail.royalty}%</span>
+                  </div>
+                )}
+
+                {!NFTDetail?.saleTime &&
+                  NFTDetail?.walletAddresses.map((split, index) => (
+                    <div
+                      className="flex justify-between py-3 items-center azeret-mono-font"
+                      key="index"
+                    >
+                      <span>Split payment</span>
+                      <span>{split.percentage}%</span>
+                    </div>
+                  ))}
                 <div className="flex justify-between items-center text-[16px] azeret-mono-font text-[#FFFFFF]">
                   <span>VaultX Fee</span>
                   <span>{fee} %</span>
@@ -923,7 +955,7 @@ export default function BuyModal({
                     setStep(5);
                   }}
                 >
-                  close
+                  Next
                 </button>
               </div>
             </div>
@@ -969,7 +1001,13 @@ export default function BuyModal({
               </p>
 
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
-                <button className="w-full h-full" onClick={() => onClose()}>
+                <button
+                  className="w-full h-full"
+                  onClick={() => {
+                    fetchNftData();
+                    onClose();
+                  }}
+                >
                   I Agree
                 </button>
               </div>
