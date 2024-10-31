@@ -1,5 +1,6 @@
 'use client';
 
+import { CreateNFTProvider } from '@/app/components/Context/CreateNFTContext';
 import { useGlobalContext } from '@/app/components/Context/GlobalContext';
 import {
   NFTDetailProvider,
@@ -178,7 +179,9 @@ function PageDetail({ params }: { params: { slug: string } }) {
       {data && (
         <>
           <div className="flex flex-col gap-y-6">
-            <NFTMain fetchNftData={fetchNftData} />
+            <CreateNFTProvider>
+              <NFTMain fetchNftData={fetchNftData} />
+            </CreateNFTProvider>
             <NFTDescription />
             <BidList fetchNftData={fetchNftData} />
             <ActivityList />

@@ -4,8 +4,6 @@ import React, { useMemo, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import PhoneInput from 'react-phone-input-2';
-import { City, Country, State } from 'country-state-city';
 import { useToast } from '@/hooks/use-toast';
 import { CreateSellService } from '@/services/createSellService';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
@@ -23,43 +21,27 @@ import { ChevronUpIcon } from '@heroicons/react/20/solid';
 import ErrorModal from '../create/ErrorModal';
 import { CurationType, INFTVoucher, ISellerInfo, PaymentSplitType } from '@/types';
 import { CreateNftServices } from '@/services/createNftService';
-import { z } from 'zod';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { trimString } from '@/utils/helpers';
 import moment from 'moment';
 import Image from 'next/image';
+import ShippingInfo from '../ShippingInfo';
+import ContactInfo from '../ContactInfo';
+import { z } from 'zod';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 const addressSchema = z.object({
-  username: z.string().nonempty('User name is invalid'),
-  email: z.string().email({ message: 'Email is invalid' }),
   accepted: z.boolean().refine((val) => val === true, {
     message: 'The value must be true.',
   }),
-  country: z.object({
-    name: z.string().nonempty('country name is invalid'),
-  }),
-  // city: z.object({
-  //   name: z.string().nonempty('city name is invalid'),
-  // }),
-  state: z.object({
-    name: z.string().nonempty('state name is invalid'),
-  }),
-  address1: z.string().nonempty('address 1 is invalid'),
-  postalCode: z.string(),
-  phoneNumber: z.string().nonempty(),
+  shippingId: z.string().nonempty("Shipping information is invalid"),
+  contactId: z.string().nonempty("Contact information is invalid.")
 });
 
 interface addressErrorType {
-  username?: string;
-  email?: string;
-  description?: string;
   accepted?: string;
-  country?: string;
-  state?: string;
-  // city?: string;
-  address1?: string;
-  postalCode?: string;
-  phoneNumber?: string;
+  shippingId?: string;
+  contactId?: string;
 }
 
 export default function PutSaleModal({
@@ -77,38 +59,20 @@ export default function PutSaleModal({
   const { fee } = useGlobalContext();
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
-  const [countryCode, setCountryCode] = useState('');
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
   const [error, setError] = useState(null);
 
-  const countries = Country.getAllCountries();
+  const { sellerInfo: { shipping, shippingId, contact, contactId } } = useCreateNFT();
   const { toast } = useToast();
   const salesService = new CreateSellService();
   const nftService = new CreateNftServices();
+  const [addressError, setAddressError] = useState<addressErrorType>({});
 
   const [shipInfo, setShipInfo] = useState<Partial<ISellerInfo> | null>(null);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    username: null,
-    email: null,
-    description: null,
     accepted: true,
     price: nft.price,
   });
-  const [sellerInfo, setSellerInfo] = useState({
-    country: null,
-    address1: '',
-    address2: '',
-    state: null,
-    city: null,
-    postalCode: '',
-    phoneNumber: '',
-  });
-
-  const [addressError, setAddressError] = useState<addressErrorType>({});
-
   const expectedAmount = useMemo(
     () => {
       let value = 0;
@@ -124,46 +88,6 @@ export default function PutSaleModal({
     },
     [formData.price, nft]
   );
-  const handleUpdateSeller = (e: any) => {
-    const { name, value } = e.target;
-
-    if (name === 'country') {
-      setSelectedCountry(value);
-      const parsedVal = JSON.parse(value);
-      const countryStates = State.getStatesOfCountry(parsedVal.isoCode);
-
-      // @ts-ignore
-      setStates(countryStates);
-      setCountryCode(parsedVal.isoCode);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    } else if (name === 'state') {
-      const parsedVal = JSON.parse(value);
-      const stateCities = City.getCitiesOfState(countryCode, parsedVal.isoCode);
-
-      // @ts-ignore
-      setCities(stateCities);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    } else if (name === 'city') {
-      const parsedVal = JSON.parse(value);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    }
-    setSellerInfo({
-      ...sellerInfo,
-      [name]: value,
-    });
-  };
 
   const resellNft = async () => {
     if (!formData.accepted) {
@@ -183,18 +107,12 @@ export default function PutSaleModal({
       );
       const data = {
         nftId: nftId,
-        name: formData.username,
-        email: formData.email,
-        country: sellerInfo.country ? sellerInfo.country.name : '',
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          city: sellerInfo.city ? sellerInfo.city.name : '',
-          state: sellerInfo.state ? sellerInfo.state.name : '',
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-        contactInformation: formData.description,
+        name: shipping?.name,
+        email: shipping?.email,
+        country: shipping?.country,
+        address: shipping?.address,
+        phoneNumber: shipping?.phoneNumber,
+        contactInformation: contact?.contactInfo,
         concent: formData.accepted,
         saleHash: transactionHash,
         price: formData.price,
@@ -271,9 +189,11 @@ export default function PutSaleModal({
     //TODO validate Form Data
     const result = addressSchema.safeParse({
       ...formData,
-      ...sellerInfo,
+      shippingId,
+      contactId,
     });
 
+    console.log(shipping, contact)
     if (!result.success) {
       const addressErrors = result.error.errors.reduce((acc, error) => {
         acc[error.path[0]] = error.message;
@@ -307,7 +227,7 @@ export default function PutSaleModal({
         <>
           {step === 1 && (
             <>
-              <div className="flex flex-col gap-y-5 w-full lg:min-w-[700px]">
+              <div className="flex flex-col gap-y-5 w-full lg:min-w-[1200px]">
                 <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
                   <Disclosure as="div" defaultOpen={true}>
                     {({ open }) => (
@@ -341,288 +261,18 @@ export default function PutSaleModal({
                     )}
                   </Disclosure>
                 </div>
-                <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-                  <Disclosure as="div" defaultOpen={true}>
-                    {({ open }) => (
-                      <>
-                        <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                          <span>Buyer Information</span>
-                          <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
-                          />
-                        </DisclosureButton>
-                        <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                          <div className="flex justify-between">
-                            <div className="flex flex-col gap-y-2 w-[32%]">
-                              <Label className="text-lg font-medium">
-                                Name*
-                              </Label>
-                              <Input
-                                value={
-                                  formData.username ? formData.username : ''
-                                }
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    username: (e.target as any).value,
-                                  })
-                                }
-                                className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                                type="text"
-                                placeholder="Enter your username"
-                              />
-                              {addressError?.username && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.username}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-y-2 w-[32%]">
-                              <Label className="text-lg font-medium">
-                                Email*
-                              </Label>
-                              <Input
-                                value={formData.email ? formData.email : ''}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    email: (e.target as HTMLInputElement).value,
-                                  })
-                                }
-                                className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                                type="text"
-                                placeholder="Enter your email"
-                              />
-                              {addressError?.email && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.email}
-                                </p>
-                              )}
-                            </div>
-
-                            <div className="flex flex-col gap-y-2 w-[32%]">
-                              <Label className="text-lg font-medium">
-                                Country*
-                              </Label>
-                              <select
-                                aria-label="select curation"
-                                className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                                name="country"
-                                value={JSON.stringify(sellerInfo.country)}
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {countries.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                              {addressError?.country && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.country}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </DisclosurePanel>
-                      </>
-                    )}
-                  </Disclosure>
-                </div>
-
-                <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-                  <Disclosure as="div" defaultOpen={true}>
-                    {({ open }) => (
-                      <>
-                        <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                          <span>Shipping Information</span>
-                          <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
-                          />
-                        </DisclosureButton>
-                        <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                          <div className="flex flex-wrap mb-4 justify-between ">
-                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                              <h2 className="font-bold text-[#fff] text-[14px]">
-                                Address 1*
-                              </h2>
-
-                              <Input
-                                value={
-                                  sellerInfo.address1 ? sellerInfo.address1 : ''
-                                }
-                                onChange={(e) =>
-                                  setSellerInfo({
-                                    ...sellerInfo,
-                                    address1: e.target.value,
-                                  })
-                                }
-                                className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                                type="text"
-                                placeholder="Enter address"
-                              />
-                              {addressError?.address1 && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.address1}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                              <h2 className="font-bold text-[#fff] text-[14px]">
-                                Address 2*
-                              </h2>
-
-                              <Input
-                                value={
-                                  sellerInfo.address2 ? sellerInfo.address2 : ''
-                                }
-                                onChange={(e) =>
-                                  setSellerInfo({
-                                    ...sellerInfo,
-                                    address2: e.target.value,
-                                  })
-                                }
-                                className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                                type="text"
-                                placeholder="Enter address"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex flex-wrap mb-4 justify-between">
-                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                              <h2 className="font-bold text-[#fff] text-[14px]">
-                                State*
-                              </h2>
-
-                              <select
-                                aria-label="select curation"
-                                className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                                name="state"
-                                value={
-                                  sellerInfo.state
-                                    ? JSON.stringify(sellerInfo.state)
-                                    : ''
-                                }
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {states.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                              {addressError?.state && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.state}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                              <h2 className="font-bold text-[#fff] text-[14px]">
-                                City*
-                              </h2>
-
-                              <select
-                                aria-label="select curation"
-                                className="rounded-md px-2 bg-[#161616] text-white border-none h-[52px]"
-                                name="city"
-                                value={
-                                  sellerInfo.city
-                                    ? JSON.stringify(sellerInfo.city)
-                                    : ''
-                                }
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {cities.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                              {/* {addressError?.city && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.city}
-                                </p>
-                              )} */}
-                            </div>
-                            <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                              <h2 className="font-bold text-[#fff] text-[14px]">
-                                Postal Code*
-                              </h2>
-
-                              <Input
-                                value={
-                                  sellerInfo.postalCode
-                                    ? sellerInfo.postalCode
-                                    : ''
-                                }
-                                onChange={(e) =>
-                                  setSellerInfo({
-                                    ...sellerInfo,
-                                    postalCode: e.target.value,
-                                  })
-                                }
-                                className="w-full border-none bg-[#161616] h-[52px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53]"
-                                type="text"
-                                placeholder="Enter postcode"
-                              />
-                              {addressError?.postalCode && (
-                                <p className="text-red-500 text-sm">
-                                  {addressError.postalCode}
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex flex-col mb-4 gap-y-3">
-                            <PhoneInput
-                              enableLongNumbers={true}
-                              containerClass="phone-container"
-                              buttonClass="phone-dropdown"
-                              inputClass="phone-control"
-                              country={'us'}
-                              value={
-                                sellerInfo.phoneNumber
-                                  ? sellerInfo.phoneNumber
-                                  : ''
-                              }
-                              inputStyle={{
-                                width: '100%',
-                                height: '2.5rem',
-                                borderRadius: '0.375rem',
-                                padding: '0.5rem',
-                                marginTop: '0.5rem',
-                                color: '#fff',
-                                backgroundColor: '#161616',
-                              }}
-                              onChange={(e) =>
-                                setSellerInfo({ ...sellerInfo, phoneNumber: e })
-                              }
-                            />
-                            {addressError?.phoneNumber && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.phoneNumber}
-                              </p>
-                            )}
-                          </div>
-                        </DisclosurePanel>
-                      </>
-                    )}
-                  </Disclosure>
-                </div>
+                <ShippingInfo />
+                {addressError?.shippingId && (
+                  <p className="text-red-500 text-sm">
+                    {addressError.shippingId}
+                  </p>
+                )}
+                <ContactInfo />
+                {addressError?.contactId && (
+                  <p className="text-red-500 text-sm">
+                    {addressError.contactId}
+                  </p>
+                )}
                 <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
                   <p>Shipment Information</p>
                   <hr />
@@ -688,36 +338,6 @@ export default function PutSaleModal({
                       />
                     </div>
                   </div>
-                </div>
-                <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-                  <Disclosure as="div" defaultOpen={true}>
-                    {({ open }) => (
-                      <>
-                        <DisclosureButton className="flex w-full justify-between py-2 text-left   text-lg font-medium text-[#fff] text-[18px] border-b border-[#FFFFFF80] ">
-                          <span>Contact Information For Seller</span>
-                          <ChevronUpIcon
-                            className={`${open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white`}
-                          />
-                        </DisclosureButton>
-                        <DisclosurePanel className=" pt-4 pb-2 text-sm text-white  rounded-b-lg">
-                          <Textarea
-                            value={
-                              formData.description ? formData.description : ''
-                            }
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                description: (e.target as any).value,
-                              })
-                            }
-                            className="w-full border-none bg-[#161616] h-[240px] text-[#ffffff] azeret-mono-font placeholder:text-[#ffffff53] p-4 rounded-md"
-                            placeholder="Please describe your product"
-                          />
-                        </DisclosurePanel>
-                      </>
-                    )}
-                  </Disclosure>
                 </div>
 
                 <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
