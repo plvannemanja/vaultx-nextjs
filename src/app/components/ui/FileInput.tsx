@@ -21,6 +21,7 @@ interface IFileInputProps {
   showIcon?: boolean;
   onPressIcon?: () => void;
   isProfile?: boolean;
+  className?: string;
 }
 
 export default function FileInput({
@@ -35,6 +36,7 @@ export default function FileInput({
   showIcon,
   onPressIcon,
   isProfile,
+  className,
 }: IFileInputProps) {
   const fileInputRef = useRef(null);
   const [fileName, setFileName] = useState<any>(null);
@@ -73,7 +75,7 @@ export default function FileInput({
     <div class="grow shrink basis-0 text-white/50 text-sm font-normal font-['Azeret Mono'] leading-snug">Choose File</div>
 </div> */
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className={cn('flex flex-col gap-y-2', className)}>
       {title && <p className={`text-sm font-medium ${titleStyles}`}>{title}</p>}
       <input
         type="file"

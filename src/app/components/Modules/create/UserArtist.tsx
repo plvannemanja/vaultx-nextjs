@@ -115,7 +115,7 @@ export default function UserArtist() {
         <Button
           variant="outline"
           role="combobox"
-          className="w-full bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]/50 hover:text-white/30 border-white/[12%] justify-between !h-13 azeret-mono-font text-xs text-white/30"
+          className="w-full bg-[#1A1A1A]/50 hover:bg-[#1A1A1A]/50 hover:text-white/30 border-white/[12%] justify-between azeret-mono-font text-xs text-white/30 rounded-lg !h-[44px] py-3 px-4"
         >
           {selectedArtist
             ? userArtists.find((item) => item._id === selectedArtist)?.name
@@ -143,7 +143,7 @@ export default function UserArtist() {
                       setSelectedArtist(item._id);
                       setOpen(false);
                     }}
-                    className="text-sm cursor-pointer flex justify-between items-center"
+                    className="text-sm cursor-pointer flex justify-between items-center bg-transparent hover:bg-transparent"
                   >
                     <div className="flex items-center">
                       <Check
@@ -157,6 +157,7 @@ export default function UserArtist() {
                       {item.name}
                     </div>
                     <Edit
+                      className="w-4 h-4"
                       onClick={() => {
                         setEditUser(item);
                         setTimeout(() => {

@@ -345,6 +345,7 @@ export default function AdvanceDetails({
             <p className="text-lg font-semibold">Unlockable Content</p>
             <Textarea
               className="font-AzeretMono rounded-md focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none text-[#989898] placeholder:text-[#989898] resize-none p-4 placeholder:text-xs bg-[#232323] focus:placeholder-transparent focus:outline-none"
+              placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
               onChange={(e) => {
                 setFormData({
                   ...formData,
@@ -357,7 +358,6 @@ export default function AdvanceDetails({
               }}
               rows={4}
               value={advancedDetails.unlockable}
-              placeholder="Only the artwork owner can view this content and file. You may also attach a certificate of authenticity issued by a third party and a special image just for the buyer."
             />
             {unlockableFiles.length == 0 && (
               <div className="flex gap-x-4 items-center">
@@ -406,6 +406,7 @@ export default function AdvanceDetails({
                     <FileInput
                       onFileSelect={(file: any) => handleFileChange(file, 0)}
                       maxSizeInBytes={1024 * 1024}
+                      className="min-w-[200px]"
                     />
                     <Image
                       src="/icons/trash.svg"

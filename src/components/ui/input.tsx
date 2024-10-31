@@ -62,7 +62,7 @@ const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
           className={cn(
             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
             className,
-            'pl-10',
+            'pl-7',
             showIcon && 'pr-10',
           )}
           ref={ref}
@@ -78,7 +78,7 @@ const LinkInput = React.forwardRef<HTMLInputElement, InputProps>(
               alt="image"
               width={20}
               height={20}
-              className="absolute top-3 right-3 w-5 h-5"
+              className="absolute top-3 right-3 w-7 h-5"
             />
           </button>
         )}

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import { Input } from '@/components/ui/input';
+
 import { Label } from '@/components/ui/label';
 import {
   getTokenAmount,
@@ -16,31 +16,28 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
-  Textarea,
 } from '@headlessui/react';
-import { ChevronUpIcon } from '@heroicons/react/20/solid';
-import { City, Country, State } from 'country-state-city';
+import { ChevronUpIcon } from 'lucide-react';
 import moment from 'moment';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import PhoneInput from 'react-phone-input-2';
 import { useActiveAccount, useActiveWalletChain } from 'thirdweb/react';
 import { z } from 'zod';
 import ConnectedCard from '../../Cards/ConnectedCard';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BaseButton from '../../ui/BaseButton';
+import ContactInfo from '../ContactInfo';
 import ErrorModal from '../create/ErrorModal';
 import ShippingInfo from '../ShippingInfo';
-import ContactInfo from '../ContactInfo';
-import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 const addressSchema = z.object({
   accepted: z.boolean().refine((val) => val === true, {
     message: 'The value must be true.',
   }),
-  shippingId: z.string().nonempty("Shipping information is invalid"),
-  contactId: z.string().nonempty("Contact information is invalid.")
+  shippingId: z.string().nonempty('Shipping information is invalid'),
+  contactId: z.string().nonempty('Contact information is invalid.'),
 });
 
 interface addressErrorType {
@@ -52,9 +49,13 @@ interface addressErrorType {
 export default function BuyModal({
   onClose,
   fetchNftData,
+  step,
+  setStep,
 }: {
   onClose: () => void;
   fetchNftData: () => void;
+  step: number;
+  setStep: (value: number) => void;
 }) {
   const { NFTDetail, nftId: id } = useNFTDetail();
   const { fee } = useGlobalContext();
@@ -65,20 +66,19 @@ export default function BuyModal({
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
 
-  const { sellerInfo: { shipping, shippingId, contact, contactId } } = useCreateNFT();
+  const {
+    sellerInfo: { shipping, shippingId, contact, contactId },
+  } = useCreateNFT();
 
   const [formData, setFormData] = useState({
     accepted: false,
   });
-  const [step, setStep] = useState(1);
-
 
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-    '...' +
-    activeAccount?.address.slice(-4)
+      '...' +
+      activeAccount?.address.slice(-4)
     : 'Connect Wallet';
-
 
   const cancelChanges = () => {
     setFormData({
@@ -216,7 +216,13 @@ export default function BuyModal({
   return (
     <div className="bg-[#161616]">
       {error ? (
-        <ErrorModal title="Error" data={error} close={() => onClose()} />
+        <ErrorModal
+          title="Error"
+          data={error}
+          close={() => {
+            onClose();
+          }}
+        />
       ) : (
         <>
           {step === 1 && (
@@ -234,19 +240,77 @@ export default function BuyModal({
                   {"Buyer's Information"}
                 </h1>
               </div>
+              <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                <Disclosure as="div" defaultOpen={true}>
+                  {({ open }) => (
+                    <>
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <Label className="font-extrabold text-lg text-white">
+                            Shipping Information
+                          </Label>
+                          <div className="flex justify-center">
+                            <ChevronUpIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white/[53%]`}
+                            />
+                          </div>
+                        </div>
+                      </DisclosureButton>
+                      <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                        <ShippingInfo isSetting />
+                        {addressError?.shippingId && (
+                          <p className="text-red-500 text-sm">
+                            {addressError.shippingId}
+                          </p>
+                        )}
+                      </DisclosurePanel>
+                    </>
+                  )}
+                </Disclosure>
+              </div>
 
-              <ShippingInfo />
-              {addressError?.shippingId && (
-                <p className="text-red-500 text-sm">
-                  {addressError.shippingId}
-                </p>
-              )}
-              <ContactInfo />
-              {addressError?.contactId && (
-                <p className="text-red-500 text-sm">
-                  {addressError.contactId}
-                </p>
-              )}
+              <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+                <Disclosure as="div" defaultOpen={true}>
+                  {({ open }) => (
+                    <>
+                      <DisclosureButton
+                        className={cn(
+                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
+                          open ? 'border-b border-white/[8%]' : '',
+                        )}
+                      >
+                        <div className="flex w-full justify-between items-center">
+                          <Label className="font-extrabold text-lg text-white">
+                            Contact Information
+                          </Label>
+                          <div className="flex justify-center">
+                            <ChevronUpIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-white/[53%]`}
+                            />
+                          </div>
+                        </div>
+                      </DisclosureButton>
+                      <DisclosurePanel className="pt-4 pb-2 text-sm  text-white  rounded-b-lg">
+                        <ContactInfo isSetting />
+                        {addressError?.contactId && (
+                          <p className="text-red-500 text-sm">
+                            {addressError.contactId}
+                          </p>
+                        )}
+                      </DisclosurePanel>
+                    </>
+                  )}
+                </Disclosure>
+              </div>
 
               <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
                 <Disclosure as="div" defaultOpen={true}>
@@ -288,7 +352,7 @@ export default function BuyModal({
                 </Disclosure>
               </div>
 
-              <div className="flex flex-col space-y-2 p-4">
+              <div className="flex flex-col space-y-2">
                 <div className="flex items-center space-x-2">
                   <input
                     id="terms"
@@ -316,7 +380,7 @@ export default function BuyModal({
                 )}
               </div>
 
-              <div className="flex w-full gap-x-4 justify-center my-3 px-4">
+              <div className="flex w-full gap-x-4 justify-center">
                 <BaseButton
                   title="Discard"
                   variant="secondary"
@@ -339,7 +403,7 @@ export default function BuyModal({
           {step === 2 && (
             <div className="flex flex-col gap-y-6 w-full text-[#fff]">
               <p className="text-[30px] font-extrabold">Checkout</p>
-              <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
+              <p className="text-[16px] azeret-mono-font text-[#858585]">
                 You are about to purchase {NFTDetail?.name} from {address}
               </p>
 
@@ -411,7 +475,7 @@ export default function BuyModal({
                     Cancel
                   </button>
                 </div>
-                <div className="py-3 w-[48%] rounded-lg text-black font-semibold bg-neon">
+                <div className="py-3 w-[48%] rounded-lg text-black bg-neon font-extrabold text-sm">
                   <button className="w-full h-full" onClick={purchase}>
                     Checkout
                   </button>
@@ -434,7 +498,7 @@ export default function BuyModal({
 
           {step === 4 && (
             <div className="flex flex-col gap-y-4">
-              <div className="flex flex-col gap-y-5 justify-center text-center mb-[40px]">
+              <div className="flex flex-col gap-y-5 justify-center text-center mb-5">
                 <Image
                   src="/icons/success.svg"
                   className="w-[115px] h-[115px] mx-auto"
@@ -443,40 +507,39 @@ export default function BuyModal({
                   width={115}
                   height={115}
                 />
-                <p className="text-[30px] text-[#fff] font-extrabold ">
+                <p className="text-[30px] text-[#fff] font-extrabold">
                   Payment Success
                 </p>
-                <p className=" azeret-mono-font text-[#FFFFFF87]">
+                <p className=" azeret-mono-font text-[#FFFFFF53]">
                   Your payment is completed successfully.
                 </p>
               </div>
-
               <div className="flex flex-col gap-y-3 mb-[20px]">
                 <div className="flex justify-between">
-                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
-                    <p className=" azeret-mono-font text-[#FFFFFF87]">From</p>
+                  <div className="w-[48%] p-4 rounded-[9px] border flex flex-col gap-y-2 border-[#FFFFFF14]">
+                    <p className=" azeret-mono-font text-[#858585]">From</p>
                     <p className="text-neon azeret-mono-font">
                       {trimString(NFTDetail.owner.wallet)}
                     </p>
                   </div>
-                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
-                    <p className=" azeret-mono-font text-[#FFFFFF87]">From</p>
+                  <div className="w-[48%] p-4 rounded-[9px] border flex flex-col gap-y-2 border-[#FFFFFF14]">
+                    <p className=" azeret-mono-font text-[#858585]">From</p>
                     <p className="text-neon azeret-mono-font">
                       {trimString(activeAccount.address)}
                     </p>
                   </div>
                 </div>
                 <div className="flex justify-between">
-                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
-                    <p className=" azeret-mono-font text-[#FFFFFF87]">
+                  <div className="w-[48%] p-4 rounded-[9px] border flex flex-col gap-y-2 border-[#FFFFFF14]">
+                    <p className=" azeret-mono-font text-[#858585]">
                       Payment Method
                     </p>
                     <p className="text-neon azeret-mono-font">
                       {activeChain.name}
                     </p>
                   </div>
-                  <div className="w-[48%] p-4 rounded-md border border-[#FFFFFF24]">
-                    <p className=" azeret-mono-font text-[#FFFFFF87]">
+                  <div className="w-[48%] p-4 rounded-[9px] border flex flex-col gap-y-2 border-[#FFFFFF14]">
+                    <p className=" azeret-mono-font text-[#858585]">
                       Payment Time
                     </p>
                     <p className="text-neon azeret-mono-font">
@@ -488,7 +551,7 @@ export default function BuyModal({
 
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-[#DEE8E8]">
                 <button
-                  className="w-full h-full bg-[#DEE8E8]"
+                  className="w-full h-full bg-[#DEE8E8] font-extrabold text-sm"
                   onClick={() => {
                     setStep(5);
                   }}
@@ -500,47 +563,50 @@ export default function BuyModal({
           )}
 
           {step === 5 && (
-            <div className="flex flex-col gap-y-4 w-full">
-              <div className="flex gap-x-3 items-center">
-                <img alt="info" src="/icons/info.svg" className="w-12" />
+            <div className="flex flex-col gap-y-5 w-full">
+              <div className="flex gap-x-3 items-center justify-center mb-5">
+                <img
+                  alt="info"
+                  src="/icons/triangle-alert.svg"
+                  className="w-24"
+                />
               </div>
-
-              <p className="text-[16px] azeret-mono-font font-extrabold text-[#FFFFFF87]">
+              <p className="text-xl azeret-mono-font font-extrabold text-center">
                 Do not disclose buyer shipping information to third parties!
-                <br />
-                <br />
               </p>
-
-              <p className="text-[16px] azeret-mono-font text-[#FFFFFF87]">
+              <p className="azeret-mono-font text-[#858585]">
                 To maintain the confidentiality of buyer information and ensure
                 smooth transactions, please pay close attention to the following
                 points:
-                <br />
-                <br />
-                1. Confidentiality of Shipping Information: Buyer shipping
-                information should remain confidential to sellers. Be cautious
-                to prevent any external disclosures.
-                <br />
-                <br />
-                2. Tips for Safe Transactions: Handle buyer shipping information
-                securely to sustain safe and transparent transactions.
-                <br />
-                <br />
-                3. Protection of Personal Information: As a seller, it is
-                imperative to treat buyer personal information with utmost care.
-                Avoid disclosing it to third parties.We kindly request your
-                strict adherence to these guidelines to uphold transparency and
-                trust in your transactions. Ensuring a secure transaction
-                environment benefits everyone involved.
-                <br />
-                <br />
-                <br />
-                <span className="text-[#fff] font-extrabold">Thank You</span>
+                <ol className="list-decimal ml-10 mt-5">
+                  <li className="mb-3">
+                    Confidentiality of Shipping Information: Buyer shipping
+                    information should remain confidential to sellers. Be
+                    cautious to prevent any external disclosures.
+                  </li>
+                  <li className="mb-3">
+                    Tips for Safe Transactions: Handle buyer shipping
+                    information securely to sustain safe and transparent
+                    transactions.
+                  </li>
+                  <li className="mb-3">
+                    Protection of Personal Information: As a seller, it is
+                    imperative to treat buyer personal information with utmost
+                    care. Avoid disclosing it to third parties.We kindly request
+                    your strict adherence to these guidelines to uphold
+                    transparency and trust in your transactions. Ensuring a
+                    secure transaction environment benefits everyone involved.
+                  </li>
+                </ol>
+              </p>
+
+              <p className="text-white azeret-mono-font text-[18px] font-extrabold text-center">
+                Thank You !
               </p>
 
               <div className="py-3 w-full rounded-lg text-black font-semibold bg-neon">
                 <button
-                  className="w-full h-full"
+                  className="w-full h-full font-extrabold text-sm"
                   onClick={() => {
                     fetchNftData();
                     onClose();
