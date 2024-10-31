@@ -31,38 +31,22 @@ import { useGlobalContext } from '../../Context/GlobalContext';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
 import BaseButton from '../../ui/BaseButton';
 import ErrorModal from '../create/ErrorModal';
+import ShippingInfo from '../ShippingInfo';
+import ContactInfo from '../ContactInfo';
+import { useCreateNFT } from '../../Context/CreateNFTContext';
 
 const addressSchema = z.object({
-  username: z.string().nonempty('User name is invalid'),
-  email: z.string().email({ message: 'Email is invalid' }),
   accepted: z.boolean().refine((val) => val === true, {
     message: 'The value must be true.',
   }),
-  country: z.object({
-    name: z.string().nonempty('country name is invalid'),
-  }),
-  // city: z.object({
-  //   name: z.string().nonempty('city name is invalid'),
-  // }),
-  state: z.object({
-    name: z.string().nonempty('state name is invalid'),
-  }),
-  address1: z.string().nonempty('address 1 is invalid'),
-  postalCode: z.string(),
-  phoneNumber: z.string().nonempty(),
+  shippingId: z.string().nonempty("Shipping information is invalid"),
+  contactId: z.string().nonempty("Contact information is invalid.")
 });
 
 interface addressErrorType {
-  username?: string;
-  email?: string;
-  description?: string;
   accepted?: string;
-  country?: string;
-  state?: string;
-  // city?: string;
-  address1?: string;
-  postalCode?: string;
-  phoneNumber?: string;
+  shippingId?: string;
+  contactId?: string;
 }
 
 export default function BuyModal({
@@ -81,50 +65,24 @@ export default function BuyModal({
   const activeAccount = useActiveAccount();
   const activeChain = useActiveWalletChain();
 
+  const { sellerInfo: { shipping, shippingId, contact, contactId } } = useCreateNFT();
+
   const [formData, setFormData] = useState({
-    username: null,
-    email: null,
-    description: null,
     accepted: false,
   });
   const [step, setStep] = useState(1);
-  const [sellerInfo, setSellerInfo] = useState<any>({
-    country: null,
-    state: null,
-    // city: null,
-    address1: null,
-    address2: null,
-    postalCode: null,
-    phoneNumber: null,
-  });
-  const [countryCode, setCountryCode] = useState('');
-  const [states, setStates] = useState([]);
-  const [cities, setCities] = useState([]);
+
 
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-      '...' +
-      activeAccount?.address.slice(-4)
+    '...' +
+    activeAccount?.address.slice(-4)
     : 'Connect Wallet';
 
-  const countries = Country.getAllCountries();
 
   const cancelChanges = () => {
     setFormData({
-      username: null,
-      email: null,
-      description: null,
       accepted: false,
-    });
-
-    setSellerInfo({
-      country: null,
-      state: null,
-      city: null,
-      address1: null,
-      address2: null,
-      postalCode: null,
-      phoneNumber: null,
     });
   };
 
@@ -143,18 +101,12 @@ export default function BuyModal({
 
       const data = {
         nftId: id,
-        name: formData.username,
-        email: formData.email,
-        country: sellerInfo.country ? sellerInfo.country.name : '',
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          city: sellerInfo.city ? sellerInfo.city.name : '',
-          state: sellerInfo.state ? sellerInfo.state.name : '',
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-        contactInformation: formData.description,
+        name: shipping?.name,
+        email: shipping?.email,
+        country: shipping?.country,
+        address: shipping?.address,
+        phoneNumber: shipping?.phoneNumber,
+        contactInformation: contact?.contactInfo,
         concent: formData.accepted,
         buyHash: transactionHash,
         lastPrice: Number(tokenAmount),
@@ -198,18 +150,12 @@ export default function BuyModal({
       );
       const data = {
         nftId: id,
-        name: formData.username,
-        email: formData.email,
-        country: sellerInfo.country ? sellerInfo.country.name : '',
-        address: {
-          line1: sellerInfo.address1,
-          line2: sellerInfo.address2,
-          city: sellerInfo.city ? sellerInfo.city.name : '',
-          state: sellerInfo.state ? sellerInfo.state.name : '',
-          postalCode: sellerInfo.postalCode,
-        },
-        phoneNumber: sellerInfo.phoneNumber,
-        contactInformation: formData.description,
+        name: shipping?.name,
+        email: shipping?.email,
+        country: shipping?.country,
+        address: shipping?.address,
+        phoneNumber: shipping?.phoneNumber,
+        contactInformation: contact?.contactInfo,
         concent: formData.accepted,
         buyHash: transactionHash,
         lastPrice: Number(tokenAmount),
@@ -237,7 +183,8 @@ export default function BuyModal({
   const handleAddress = async () => {
     const result = addressSchema.safeParse({
       ...formData,
-      ...sellerInfo,
+      shippingId,
+      contactId,
     });
 
     if (!result.success) {
@@ -252,45 +199,6 @@ export default function BuyModal({
       // Handle valid submission
       setStep(2);
     }
-  };
-
-  const handleUpdateSeller = (e: any) => {
-    const { name, value } = e.target;
-    if (name === 'country') {
-      const parsedVal = JSON.parse(value);
-      const countryStates = State.getStatesOfCountry(parsedVal.isoCode);
-
-      // @ts-ignore
-      setStates(countryStates);
-      setCountryCode(parsedVal.isoCode);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    } else if (name === 'state') {
-      const parsedVal = JSON.parse(value);
-      const stateCities = City.getCitiesOfState(countryCode, parsedVal.isoCode);
-
-      // @ts-ignore
-      setCities(stateCities);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    } else if (name === 'city') {
-      const parsedVal = JSON.parse(value);
-      setSellerInfo({
-        ...sellerInfo,
-        [name]: parsedVal,
-      });
-      return null;
-    }
-    setSellerInfo({
-      ...sellerInfo,
-      [name]: value,
-    });
   };
 
   const checkAmount = async () => {
@@ -326,364 +234,19 @@ export default function BuyModal({
                   {"Buyer's Information"}
                 </h1>
               </div>
-              <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-                {/* <span>Buyer Information</span> */}
-                <Disclosure as="div" defaultOpen={true}>
-                  {({ open }) => (
-                    <>
-                      <DisclosureButton
-                        className={cn(
-                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
-                          open ? 'border-b border-white/[8%]' : '',
-                        )}
-                      >
-                        <div className="flex w-full justify-between items-center">
-                          <Label className="font-extrabold text-lg text-white">
-                            Buyer Information
-                          </Label>
-                          <div className="flex justify-center">
-                            <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white/[53%]`}
-                            />
-                          </div>
-                        </div>
-                      </DisclosureButton>
-                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
-                        <div className="flex justify-between">
-                          <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Name*
-                            </h2>
-                            <Input
-                              value={formData.username ? formData.username : ''}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  username: (e.target as any).value,
-                                })
-                              }
-                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
-                              type="text"
-                              placeholder="Enter your username"
-                            />
-                            {addressError?.username && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.username}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Email*
-                            </h2>
 
-                            <Input
-                              value={formData.email ? formData.email : ''}
-                              onChange={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  email: (e.target as any).value,
-                                })
-                              }
-                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
-                              type="text"
-                              placeholder="Enter your email"
-                            />
-                            {addressError?.email && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.email}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="flex flex-col gap-y-2 w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Country*
-                            </h2>
-
-                            <div className="bg-[#161616] rounded-xl pr-4">
-                              <select
-                                aria-label="Select Country"
-                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                                name="country"
-                                value={JSON.stringify(sellerInfo.country)}
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {countries.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            {addressError?.country && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.country}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </DisclosurePanel>
-                    </>
-                  )}
-                </Disclosure>
-              </div>
-
-              <div className="w-full rounded-[20px] px-4 py-3 flex flex-col gap-y-2 bg-[#232323]">
-                {/* <span>Shipping Address*</span> */}
-                <Disclosure as="div" defaultOpen={true}>
-                  {({ open }) => (
-                    <>
-                      <DisclosureButton
-                        className={cn(
-                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
-                          open ? 'border-b border-white/[8%]' : '',
-                        )}
-                      >
-                        <div className="flex w-full justify-between items-center">
-                          <Label className="font-extrabold text-lg text-white">
-                            Shipping Address*
-                          </Label>
-                          <div className="flex justify-center">
-                            <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white/[53%]`}
-                            />
-                          </div>
-                        </div>
-                      </DisclosureButton>
-                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
-                        <div className="flex flex-wrap mb-4 justify-between ">
-                          <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Address 1*
-                            </h2>
-
-                            <Input
-                              value={
-                                sellerInfo.address1 ? sellerInfo.address1 : ''
-                              }
-                              onChange={(e) =>
-                                setSellerInfo({
-                                  ...sellerInfo,
-                                  address1: e.target.value,
-                                })
-                              }
-                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
-                              type="text"
-                              placeholder="Enter address"
-                            />
-                            {addressError?.address1 && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.address1}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex flex-col gap-y-2 lg:w-[48%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Address 2*
-                            </h2>
-
-                            <Input
-                              value={
-                                sellerInfo.address2 ? sellerInfo.address2 : ''
-                              }
-                              onChange={(e) =>
-                                setSellerInfo({
-                                  ...sellerInfo,
-                                  address2: e.target.value,
-                                })
-                              }
-                              className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
-                              type="text"
-                              placeholder="Enter address"
-                            />
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap mb-4 justify-between">
-                          <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              State*
-                            </h2>
-
-                            <div className="bg-[#161616] rounded-xl pr-4">
-                              <select
-                                aria-label="Select state"
-                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                                name="state"
-                                value={
-                                  sellerInfo.state
-                                    ? JSON.stringify(sellerInfo.state)
-                                    : ''
-                                }
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {states.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            {addressError?.state && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.state}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              City*
-                            </h2>
-
-                            <div className="bg-[#161616] rounded-xl pr-4">
-                              <select
-                                aria-label="Select city"
-                                className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                                name="city"
-                                value={
-                                  sellerInfo.city
-                                    ? JSON.stringify(sellerInfo.city)
-                                    : ''
-                                }
-                                onChange={handleUpdateSeller}
-                              >
-                                <option value="">Select</option>
-                                {cities.map((item: any) => (
-                                  <option
-                                    key={item.isoCode}
-                                    value={JSON.stringify(item)}
-                                  >
-                                    {item.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            {/* {addressError?.city && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.city}
-                              </p>
-                            )} */}
-                          </div>
-                          <div className="flex flex-col gap-y-2 lg:w-[32%]">
-                            <h2 className="font-semibold text-sm text-white manrope-font">
-                              Postal Code*
-                            </h2>
-                            <Input
-                              value={
-                                sellerInfo.postalCode
-                                  ? sellerInfo.postalCode
-                                  : ''
-                              }
-                              onChange={(e) =>
-                                setSellerInfo({
-                                  ...sellerInfo,
-                                  postalCode: e.target.value,
-                                })
-                              }
-                              className="w-full border-none h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
-                              type="text"
-                              placeholder="Enter postcode"
-                            />
-                            {addressError?.postalCode && (
-                              <p className="text-red-500 text-sm">
-                                {addressError.postalCode}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex flex-col mb-4 gap-y-3">
-                          <PhoneInput
-                            enableLongNumbers={true}
-                            containerClass="phone-container [&>div.special-label]:font-semibold [&>div.special-label]:text-sm [&>div.special-label]:text-white manrope-font"
-                            buttonClass="phone-dropdown"
-                            inputClass="phone-control !rounded-xl !h-[52px] !px-[26px] placeholder:text-xs !py-[15px] placeholder:text-xs bg-[#161616] azeret-mono-font text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-                            specialLabel="Phone Number*"
-                            country={'us'}
-                            value={
-                              sellerInfo.phoneNumber
-                                ? sellerInfo.phoneNumber
-                                : ''
-                            }
-                            inputStyle={{
-                              width: '100%',
-                              height: '2.5rem',
-                              borderRadius: '0.375rem',
-                              padding: '0.5rem',
-                              marginTop: '0.5rem',
-                              color: '#fff',
-                              backgroundColor: '#161616',
-                            }}
-                            onChange={(e) =>
-                              setSellerInfo({ ...sellerInfo, phoneNumber: e })
-                            }
-                          />
-                          {addressError?.phoneNumber && (
-                            <p className="text-red-500 text-sm">
-                              {addressError.phoneNumber}
-                            </p>
-                          )}
-                        </div>
-                      </DisclosurePanel>
-                    </>
-                  )}
-                </Disclosure>
-              </div>
-
-              <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
-                {/* <span>Contact Information For Seller</span> */}
-                <Disclosure as="div" defaultOpen={true}>
-                  {({ open }) => (
-                    <>
-                      <DisclosureButton
-                        className={cn(
-                          'flex w-full flex-col justify-between py-2 pb-3 text-left   text-lg font-medium text-white text-[18px]',
-                          open ? 'border-b border-white/[8%]' : '',
-                        )}
-                      >
-                        <div className="flex w-full justify-between items-center">
-                          <Label className="font-extrabold text-lg text-white">
-                            Contact Information For Seller
-                          </Label>
-                          <div className="flex justify-center">
-                            <ChevronUpIcon
-                              className={`${
-                                open ? 'rotate-180 transform' : ''
-                              } h-5 w-5 text-white/[53%]`}
-                            />
-                          </div>
-                        </div>
-                      </DisclosureButton>
-                      <DisclosurePanel className="pt-4 pb-2 text-sm text-white rounded-b-lg">
-                        <Textarea
-                          value={
-                            formData.description ? formData.description : ''
-                          }
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              description: (e.target as any).value,
-                            })
-                          }
-                          className="w-full border-none bg-[#161616] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-sm placeholder:font-normal"
-                          placeholder="Please describe your product"
-                        />
-                      </DisclosurePanel>
-                    </>
-                  )}
-                </Disclosure>
-              </div>
+              <ShippingInfo />
+              {addressError?.shippingId && (
+                <p className="text-red-500 text-sm">
+                  {addressError.shippingId}
+                </p>
+              )}
+              <ContactInfo />
+              {addressError?.contactId && (
+                <p className="text-red-500 text-sm">
+                  {addressError.contactId}
+                </p>
+              )}
 
               <div className="w-full rounded-[20px] px-4 py-3 bg-dark flex flex-col gap-y-6 bg-[#232323]">
                 <Disclosure as="div" defaultOpen={true}>
@@ -751,31 +314,6 @@ export default function BuyModal({
                     {addressError.accepted}
                   </p>
                 )}
-              </div>
-
-              <div className="bg-dark p-5 gap-y-4 rounded-lg flex flex-col ">
-                <p className="text-[20px] font-extrabold text-[#fff] ">
-                  Order Summary
-                </p>
-                <hr />
-                <div className="flex items-center justify-between">
-                  <span className="text-lg text-[#FFFFFF] azeret-mono-font">
-                    Price
-                  </span>
-                  <span className="text-lg font-medium text-[#DDF247]">
-                    ${NFTDetail?.price}
-                  </span>
-                </div>
-                <hr />
-
-                <p className="text-[16px] azeret-mono-font text-[#fff] az ">
-                  Payment You will pay the purchase amount in cryptocurrency
-                  based on the real-time CoinMarketCap exchange rate at the
-                  current moment.
-                  <br />
-                  If the bidding is not successful, all cryptocurrency used in
-                  the purchase price, excluding gas fees, will be refunded.
-                </p>
               </div>
 
               <div className="flex w-full gap-x-4 justify-center my-3 px-4">
