@@ -438,7 +438,7 @@ export default function ShippingInfo({ isSetting }: any) {
                     <BaseDialog
                       isOpen={isUpdateModalOpen}
                       onClose={() => setIsUpdateModalOpen(false)}
-                      className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+                      className="max-h-[80%] overflow-y-auto overflow-x-hidden"
                     >
                       <div className="flex flex-col gap-y-5">
                         <div className="rounded-md px-4 py-3 bg-dark flex flex-col gap-y-6">
@@ -464,7 +464,7 @@ export default function ShippingInfo({ isSetting }: any) {
                             <Label className="text-lg font-semibold">
                               Seller Information
                             </Label>
-                            <hr />
+                            <hr className="border-white/10" />
                             <div className="flex flex-wrap gap-2">
                               <div className="flex flex-col gap-y-2 lg:w-[32%]">
                                 <Label className="text-lg font-semibold">
@@ -533,7 +533,7 @@ export default function ShippingInfo({ isSetting }: any) {
                             <Label className="text-lg font-semibold">
                               Shipping Address
                             </Label>
-                            <hr />
+                            <hr className="border-white/10" />
                             <div className="flex flex-wrap justify-between">
                               <div className="flex flex-col gap-y-2 lg:w-[48%]">
                                 <Label className="text-lg font-semibold">
@@ -737,7 +737,7 @@ export default function ShippingInfo({ isSetting }: any) {
                 <Label className="text-lg font-semibold">
                   Seller Information
                 </Label>
-                <hr />
+                <hr className="border-white/10" />
                 <div className="flex flex-wrap gap-2">
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
                     <Label className="text-lg font-semibold">Name*</Label>
@@ -802,7 +802,7 @@ export default function ShippingInfo({ isSetting }: any) {
                 <Label className="text-lg font-semibold">
                   Shipping Address
                 </Label>
-                <hr />
+                <hr className="border-white/10" />
                 <div className="flex flex-wrap justify-between">
                   <div className="flex flex-col gap-y-2 lg:w-[48%]">
                     <Label className="text-lg font-semibold">Address 1*</Label>

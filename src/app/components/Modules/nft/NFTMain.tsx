@@ -78,6 +78,7 @@ export default function NFTMain({
   console.log({ type });
   const [modal, setModal] = useState(false);
   const [views, setViews] = useState(0);
+  const [buyStep, setBuyStep] = useState(1);
   const [modalStatus, setModalStatus] = useState<IModalStatus>({
     quote: false,
     remove: false,
@@ -525,11 +526,11 @@ export default function NFTMain({
                       type === 'anyoneRelease' ||
                       type === 'release' ||
                       type === 'cancelRequested') && (
-                        <p className="text-[32px] font-extrabold">
-                          {formatNumberWithCommas(data.lastPrice)}{' '}
-                          {activeChain.nativeCurrency?.symbol}
-                        </p>
-                      )}
+                      <p className="text-[32px] font-extrabold">
+                        {formatNumberWithCommas(data.lastPrice)}{' '}
+                        {activeChain.nativeCurrency?.symbol}
+                      </p>
+                    )}
                   </div>
                   <div className="flex justify-between items-center gap-y-2 w-full mt-2">
                     {type === 'buy' ? (
@@ -556,7 +557,7 @@ export default function NFTMain({
                         >
                           <BidModal
                             title={data.name}
-                            update={() => { }}
+                            update={() => {}}
                             onClose={() => {
                               setModalStatus({ ...modalStatus, bid: false });
                             }}
@@ -569,21 +570,31 @@ export default function NFTMain({
                               title="Buy Now"
                               className={'!rounded-[14px] w-full'}
                               variant="primary"
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
-                          className="bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden"
+                          className={cn(
+                            'bg-[#161616] max-h-[80%] overflow-y-auto overflow-x-hidden',
+                            buyStep !== 5 && buyStep !== 1
+                              ? 'max-w-[550px]'
+                              : '',
+                            // buyStep === 5 ? 'max-w-[750px]' : '',
+                          )}
                           isOpen={modalStatus.buy}
                           onClose={(val) => {
+                            setBuyStep(1);
                             setModalStatus({ ...modalStatus, buy: val });
                           }}
                           modal={true}
                         >
                           <BuyModal
                             onClose={() => {
+                              setBuyStep(1);
                               setModalStatus({ ...modalStatus, buy: false });
                             }}
                             fetchNftData={fetchNftData}
+                            step={buyStep}
+                            setStep={setBuyStep}
                           />
                         </BaseDialog>
                       </div>
@@ -597,7 +608,7 @@ export default function NFTMain({
                               title="Release Escrow"
                               variant="primary"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.release}
@@ -623,7 +634,7 @@ export default function NFTMain({
                               title="Cancel Order"
                               variant="secondaryOutline"
                               className={'!rounded-[14px] w-full'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.cancel}
@@ -653,7 +664,7 @@ export default function NFTMain({
                               title="Put On Sale"
                               variant="primary"
                               className={'rounded-[14px]'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.resell}
@@ -724,7 +735,7 @@ export default function NFTMain({
                         >
                           <BidModal
                             title={data.name}
-                            update={() => { }}
+                            update={() => {}}
                             onClose={() => {
                               setModalStatus({ ...modalStatus, bid: false });
                             }}
@@ -738,7 +749,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Cancel Requested"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                           className={'!rounded-[14px]'}
                         />
                       </div>
@@ -752,7 +763,7 @@ export default function NFTMain({
                             title="Release Escrow"
                             variant="primary"
                             className={'rounded-[14px]'}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           />
                         }
                         isOpen={modalStatus.release}
@@ -777,7 +788,7 @@ export default function NFTMain({
                               title="Escrow Release Request"
                               variant="primary"
                               className={'!rounded-[14px]'}
-                              onClick={() => { }}
+                              onClick={() => {}}
                             />
                           }
                           isOpen={modalStatus.escrowRelease}
@@ -807,7 +818,7 @@ export default function NFTMain({
                         <BaseButton
                           title="Release Requested"
                           variant="primary"
-                          onClick={() => { }}
+                          onClick={() => {}}
                           className={'!rounded-[14px]'}
                         />
                       </div>

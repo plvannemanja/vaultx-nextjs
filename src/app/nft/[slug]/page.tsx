@@ -17,7 +17,6 @@ import { CreateSellService } from '@/services/createSellService';
 import { FavoriteService } from '@/services/FavoriteService';
 import NftServices from '@/services/nftService';
 import { getAllNftActivitys } from '@/services/supplier';
-import { Mail } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
