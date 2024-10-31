@@ -322,15 +322,15 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
       )}
 
       <div className="flex gap-[40px] gap-y-5 flex-col lg:flex-row lg:justify-between">
-        <div className="col-span-12 lg:col-span-5 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start px-10 py-[222px]">
+        <div className="col-span-12 lg:col-span-5 lg:w-full bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] flex-col justify-center items-center gap-y-[23px] inline-flex self-start py-24 px-10 min-h-[721px] max-h-[721px]">
           {file ? (
-            <div className="flex flex-col text-center gap-y-[23px]  ">
+            <div className="flex flex-col text-center gap-y-[23px]">
               {imageSrc && (
                 <Image
                   quality={100}
                   src={imageSrc}
                   alt="logo"
-                  className="w-[90%] object-cover mx-auto"
+                  className="max-w-[90%] object-contain mx-auto max-h-[400px] "
                   width={200}
                   height={200}
                 />
@@ -412,7 +412,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   onChange={(e) =>
                     setFormData({ ...formData, name: (e.target as any).value })
                   }
-                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex"
+                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   type="text"
                   placeholder="Enter Collection Name"
                 />
@@ -430,7 +430,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     })
                   }
                   disabled={editMode ? true : false}
-                  className="w-full border-none h-[48px] placeholder:text-xs azeret-mono-font bg-[#232323] gap-[30px] inline-flex"
+                  className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#232323] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   type="text"
                   placeholder="i.e TAT"
                 />
@@ -534,7 +534,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   description: (e.target as any).value,
                 });
               }}
-              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-sm placeholder:font-normal"
+              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] placeholder:text-sm placeholder:font-normal focus:placeholder-transparent focus:outline-none"
               placeholder="Please describe your curation"
             />
           </div>
@@ -573,7 +573,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               website: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 focus:placeholder-transparent focus:outline-none "
                           type="text"
                           placeholder="Enter your website link"
                         />
@@ -590,7 +590,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               twitter: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 focus:placeholder-transparent focus:outline-none "
                           type="text"
                           placeholder="Enter your twitter link"
                         />
@@ -609,7 +609,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               facebook: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 focus:placeholder-transparent focus:outline-none "
                           type="text"
                           placeholder="Enter your facebook link"
                         />
@@ -626,7 +626,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                               instagram: (e.target as any).value,
                             })
                           }
-                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                          className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 focus:placeholder-transparent focus:outline-none "
                           type="text"
                           placeholder="Enter your instagram link"
                         />
@@ -693,7 +693,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                             <Input
                               value={item.title ? item.title : ''}
                               onChange={(e) => handleVideo(index, e, 'title')}
-                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px]"
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 h-[48px] focus:placeholder-transparent focus:outline-none"
                               type="text"
                               placeholder="Enter video title"
                               showIcon={index > 0}
@@ -713,7 +713,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                             <LinkInput
                               value={item.url ? item.url : ''}
                               onChange={(e) => handleVideo(index, e, 'link')}
-                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0"
+                              className="w-full border-none bg-[#161616] rounded-xl placeholder:text-white/[53%] azeret-mono-font placeholder:text-xs px-1 focus-within:border-0 shadow-none outline-0 border-0 focus-visible:shadow-none focus-visible:outline-0 focus-visible:border-0 focus:placeholder-transparent focus:outline-none "
                               type="text"
                               placeholder="Enter video link"
                               showIcon={index > 0}
