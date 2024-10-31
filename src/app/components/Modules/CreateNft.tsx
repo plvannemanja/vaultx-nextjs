@@ -405,10 +405,18 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       <p className="text-[32px] text-white font-extrabold">Create RWA</p>
       <div className="my-4 flex gap-x-7 flex-wrap items-center">
         <div
-          className={`flex gap-x-2 items-center ${step !== 1 ? 'opacity-60' : ''}`}
+          className={cn(
+            `font-extrabold flex gap-x-2 items-center `,
+            step === 1 ? '' : 'text-[#4A4A4A]',
+          )}
         >
-          <div className="w-10 h-10 rounded-full relative bg-neon">
-            <span className={`absolute top-2 left-4 text-black`}>1</span>
+          <div
+            className={cn(
+              'w-10 h-10 rounded-full relative flex justify-center items-center',
+              step === 1 ? 'bg-neon' : 'bg-[#4A4A4A]',
+            )}
+          >
+            <span className={`text-[#161616]`}>1</span>
           </div>
           <p>Basic Details</p>
         </div>
@@ -430,12 +438,19 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
             strokeLinejoin="round"
           ></path>
         </svg>
-
         <div
-          className={`flex gap-x-2 items-center ${step !== 2 ? 'opacity-60' : ''}`}
+          className={cn(
+            `font-extrabold flex gap-x-2 items-center`,
+            step === 2 ? '' : 'text-[#4A4A4A]',
+          )}
         >
-          <div className="w-10 h-10 rounded-full relative bg-neon">
-            <span className={`absolute top-2 left-4 text-black`}>2</span>
+          <div
+            className={cn(
+              'w-10 h-10 rounded-full relative bg-neon flex justify-center items-center',
+              step === 2 ? 'bg-neon' : 'bg-[#4A4A4A]',
+            )}
+          >
+            <span className={`text-[#161616]`}>2</span>
           </div>
           <p>Advance Details</p>
         </div>
@@ -460,10 +475,18 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </svg>
 
         <div
-          className={`flex gap-x-2 items-center ${step !== 3 ? 'opacity-60' : ''}`}
+          className={cn(
+            `font-extrabold flex gap-x-2 items-center`,
+            step === 3 ? '' : 'text-[#4A4A4A]',
+          )}
         >
-          <div className="w-10 h-10 rounded-full relative bg-neon">
-            <span className={`absolute top-2 left-4 text-black`}>3</span>
+          <div
+            className={cn(
+              'w-10 h-10 rounded-full relative bg-neon flex justify-center items-center',
+              step === 3 ? 'bg-neon' : 'bg-[#4A4A4A]',
+            )}
+          >
+            <span className={`text-[#161616]`}>3</span>
           </div>
           <p>Seller Information</p>
         </div>

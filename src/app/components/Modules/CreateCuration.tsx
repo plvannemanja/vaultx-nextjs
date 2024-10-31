@@ -404,7 +404,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
           <div className="w-full rounded-md flex flex-col gap-y-2">
             <div className="flex gap-x-3">
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-semibold text-sm text-white manrope-font">
+                <Label className="font-extrabold test-sm text-white manrope-font">
                   Curation Title*
                 </Label>
                 <Input
@@ -418,7 +418,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                 />
               </div>
               <div className="flex flex-col gap-y-[16px] basis-1/2">
-                <Label className="font-semibold text-sm text-white manrope-font">
+                <Label className="font-extrabold test-sm text-white manrope-font">
                   Symbol*
                 </Label>
                 <Input
@@ -523,7 +523,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
             </div> */}
           </div>
           <div className="flex flex-col gap-y-[16px]">
-            <Label className="font-semibold text-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Description*
             </Label>
             <Textarea
@@ -562,7 +562,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   <DisclosurePanel className="pt-5 pb-2 text-sm  text-white  rounded-b-lg">
                     <div className=" mb-5 flex gap-x-3">
                       <div className="flex flex-col gap-y-3 basis-1/2">
-                        <Label className="font-semibold text-sm text-white manrope-font">
+                        <Label className="font-extrabold test-sm text-white manrope-font">
                           Website
                         </Label>
                         <LinkInput
@@ -579,7 +579,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         />
                       </div>
                       <div className="flex flex-col gap-y-3 basis-1/2">
-                        <Label className="font-semibold text-sm text-white manrope-font">
+                        <Label className="font-extrabold test-sm text-white manrope-font">
                           X(Twitter)
                         </Label>
                         <LinkInput
@@ -598,7 +598,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                     </div>
                     <div className="mt-2 flex gap-x-3">
                       <div className="flex flex-col gap-y-3 basis-1/2">
-                        <Label className="font-semibold text-sm text-white manrope-font">
+                        <Label className="font-extrabold test-sm text-white manrope-font">
                           Facebook
                         </Label>
                         <LinkInput
@@ -615,7 +615,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                         />
                       </div>
                       <div className="flex flex-col gap-y-3 basis-1/2">
-                        <Label className="font-semibold text-sm text-white manrope-font">
+                        <Label className="font-extrabold test-sm text-white manrope-font">
                           Instagram
                         </Label>
                         <LinkInput
@@ -687,7 +687,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                       return (
                         <div key={index} className="flex gap-x-3">
                           <div className="flex flex-col gap-y-3 basis-1/2">
-                            <Label className="font-semibold text-sm text-white manrope-font">
+                            <Label className="font-extrabold test-sm text-white manrope-font">
                               Title
                             </Label>
                             <Input
@@ -707,7 +707,7 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                             />
                           </div>
                           <div className="flex flex-col gap-y-3 basis-1/2">
-                            <Label className="font-semibold text-sm text-white manrope-font">
+                            <Label className="font-extrabold test-sm text-white manrope-font">
                               Video Link
                             </Label>
                             <LinkInput

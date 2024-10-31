@@ -190,14 +190,14 @@ export default function BasicDetails({
   return (
     <div className="flex flex-col gap-y-4">
       <div className="flex gap-y-5 flex-col lg:flex-row lg:justify-between">
-        <div className="flex flex-col items-center gap-y-6 justify-center py-24 lg:w-[42%] bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] self-start px-10 font-Manrope">
+        <div className="flex flex-col items-center gap-y-6 justify-center py-24 lg:w-[42%] bg-[#232323] border-dashed rounded-[30px] border-2 border-[#3a3a3a] self-start px-10 font-Manrope min-h-[721px] max-h-[721px]">
           {basicDetail.file ? (
             <div className="flex flex-col text-center gap-y-[23px]  ">
               {basicDetail.imageSrc && (
                 <img
                   src={basicDetail.imageSrc}
                   alt="logo"
-                  className="w-[90%] object-cover mx-auto"
+                  className="max-w-[90%] object-contain mx-auto max-h-[400px] "
                 />
               )}
               {basicDetail.file ? basicDetail.file.name : 'No files selected'}
@@ -273,7 +273,7 @@ export default function BasicDetails({
 
         <div className="flex flex-col gap-y-[30px] lg:w-[55%]">
           <div className="flex flex-col gap-y-4">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Product name*
             </Label>
             <Input
@@ -291,7 +291,7 @@ export default function BasicDetails({
           </div>
 
           <div className="flex flex-col gap-y-4">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Description*
             </Label>
             <Textarea
@@ -313,7 +313,7 @@ export default function BasicDetails({
           </div>
 
           <div className="flex flex-col gap-y-4">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Price(USD)*
             </Label>
             <Input
@@ -349,7 +349,7 @@ export default function BasicDetails({
           </div>
 
           <div className="flex flex-col gap-y-4">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Artist name*
             </Label>
             <div className="grid grid-cols-12 gap-x-2 p-3 bg-[#232323] rounded-[17px]">
@@ -360,7 +360,7 @@ export default function BasicDetails({
                 <BaseDialog
                   className="bg-[#111111] lg:min-w-[1400px] max-h-[80%] w-full overflow-y-auto overflow-x-hidden"
                   trigger={
-                    <div className="flex cursor-pointer justify-center relative gap-x-2 items-center w-full h-full bg-[#DDF247]/[9%] rounded-md">
+                    <div className="flex h-[42px] py-3 px-4 cursor-pointer justify-center relative gap-x-2 items-center w-full bg-[#DDF247]/[9%] rounded-md">
                       <Image
                         quality={100}
                         width={20}
@@ -369,7 +369,7 @@ export default function BasicDetails({
                         src="/icons/add-new.svg"
                         className="w-5 h-5"
                       />
-                      <p className="text-center text-sm text-[#DDF247]">
+                      <p className="text-center font-bold text-xs text-white">
                         Add Artist
                       </p>
                     </div>
@@ -382,7 +382,7 @@ export default function BasicDetails({
           </div>
 
           <div className="flex flex-col gap-y-4">
-            <Label className="font-bold test-sm text-white manrope-font">
+            <Label className="font-extrabold test-sm text-white manrope-font">
               Curation*
             </Label>
             <div className="bg-[#232323] rounded-xl pr-4">
@@ -426,7 +426,7 @@ export default function BasicDetails({
                       <Label className="font-extrabold test-[20] text-white">
                         Attachment
                       </Label>
-                      {/* <Label className="font-bold test-sm text-white manrope-font">
+                      {/* <Label className="font-extrabold test-sm text-white manrope-font">
                         Your l÷inks
                       </Label> */}
                       <ChevronUpIcon
