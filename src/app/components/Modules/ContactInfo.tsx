@@ -206,9 +206,10 @@ export default function ContactInfo({ isSetting }: any) {
                               name: e.target.value,
                             })
                           }
+                          autoFocus={true}
                           className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                           type="text"
-                          placeholder="Enter contact name"
+                          placeholder="Enter Enter Template Title * (e.g., #1, Basic, Etc)"
                         />
                       </div>
                     </div>
@@ -310,7 +311,8 @@ export default function ContactInfo({ isSetting }: any) {
                   }
                   className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   type="text"
-                  placeholder="Enter contact name"
+                  autoFocus={true}
+                  placeholder="Enter Enter Template Title * (e.g., #1, Basic, Etc)"
                 />
               </div>
             </div>
@@ -329,7 +331,7 @@ export default function ContactInfo({ isSetting }: any) {
                     })
                   }
                   className="w-full border-none resize-none px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                  rows={8}
+                  rows={10}
                   placeholder="Enter Contact Information"
                 />
               </div>
