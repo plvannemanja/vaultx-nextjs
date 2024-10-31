@@ -1,17 +1,16 @@
 'use client';
 
+import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import React, { useEffect, useRef, useState } from 'react';
-import _ from 'lodash';
-import { ArrowUpTrayIcon, PlusCircleIcon } from '@heroicons/react/20/solid';
+import { useToast } from '@/hooks/use-toast';
 import { CreateSellService } from '@/services/createSellService';
-import { useNFTDetail } from '../../Context/NFTDetailContext';
-import BasicLoadingModal from './BasicLoadingModal';
+import { ArrowUpTrayIcon } from '@heroicons/react/20/solid';
+import { ChevronUpIcon } from 'lucide-react';
+import React, { useRef, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
-import { ChevronUpIcon } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useNFTDetail } from '../../Context/NFTDetailContext';
+import BasicLoadingModal from './BasicLoadingModal';
 
 const validateSchema = z.object({
   email: z.string().email('Invalid email address'),

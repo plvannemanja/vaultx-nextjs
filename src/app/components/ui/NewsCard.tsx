@@ -21,7 +21,7 @@ export default function NewsCard({
     <div className="flex flex-col gap-y-8 md:gap-y-10 lg:gap-y-[50px] text-white relative">
       <div className="flex flex-col gap-y-3 md:gap-y-4 text-center">
         {heading}
-        <p className="text-center manrope-font font-light px-10 text-white md:text-xl">
+        <p className="text-center manrope-font px-10 text-white md:text-[22px]">
           {description}
         </p>
       </div>
