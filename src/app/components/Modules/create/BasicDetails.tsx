@@ -284,7 +284,7 @@ export default function BasicDetails({
                   productName: (e.target as any).value,
                 })
               }
-              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl azeret-mono-font justify-start items-center gap-[30px] inline-flex placeholder:text-sm"
+              className="w-full border-none  h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl azeret-mono-font justify-start items-center gap-[30px] inline-flex placeholder:text-sm focus:placeholder-transparent focus:outline-none"
               type="text"
               placeholder="Enter Product Name"
             />
@@ -306,7 +306,7 @@ export default function BasicDetails({
                   productDescription: (e.target as any).value,
                 })
               }
-              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-sm"
+              className="w-full border-none bg-[#232323] azeret-mono-font rounded-[20px] placeholder:text-white/[53%] h-[180px] resize-none py-[15px] px-[26px] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-sm focus:placeholder-transparent focus:outline-none"
               // className="w-full border-none bg-[#232323] py-[15px]  px-[25px] rounded-xl text-[11px]"
               placeholder="Please describe your product"
             />
@@ -328,7 +328,7 @@ export default function BasicDetails({
                   });
                 }
               }}
-              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-sm azeret-mono-font justify-start items-center gap-[30px] inline-flex"
+              className="w-full border-none h-[52px] px-[26px] py-[15px] bg-[#232323] rounded-xl placeholder:text-sm azeret-mono-font justify-start items-center gap-[30px] inline-flex focus:placeholder-transparent focus:outline-none"
               type="text" // Change to 'text' to allow decimals
               placeholder="Please write the selling price in USD($), not cryptocurrency."
             />

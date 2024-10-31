@@ -13,9 +13,34 @@ import { City, Country, State } from 'country-state-city';
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
+import { z } from 'zod';
 import { useCreateNFT } from '../Context/CreateNFTContext';
 import BaseButton from '../ui/BaseButton';
 import { BaseDialog } from '../ui/BaseDialog';
+
+const addressSchema = z.object({
+  name: z.string().nonempty('User name is invalid'),
+  email: z.string().email({ message: 'Email is invalid' }),
+  country: z.object({
+    name: z.string().nonempty('country name is invalid'),
+  }),
+  state: z.object({
+    name: z.string().nonempty('state name is invalid'),
+  }),
+  line1: z.string().nonempty('address 1 is invalid'),
+  postalCode: z.string(),
+  phoneNumber: z.string().nonempty(),
+});
+
+interface addressErrorType {
+  name?: string;
+  email?: string;
+  country?: string;
+  state?: string;
+  line1?: string;
+  postalCode?: string;
+  phoneNumber?: string;
+}
 
 export default function ShippingInfo({ isSetting }: any) {
   const nftContext = useCreateNFT();
@@ -42,12 +67,29 @@ export default function ShippingInfo({ isSetting }: any) {
   const [selectedShipping, setSelectedShipping] = useState<any>(
     nftContext.sellerInfo.shipping,
   );
+  const [addressError, setAddressError] = useState<addressErrorType>({});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-  const update = async (id) => {
+  const update = async (id: any) => {
     let response = null;
 
+    const result = addressSchema.safeParse(sellerInfo);
+
+    if (!result.success) {
+      const addressErrors = result.error.errors.reduce((acc, error) => {
+        acc[error.path[0]] = error.message;
+        return acc;
+      }, {});
+
+      setAddressError(addressErrors);
+      return;
+    }
+    setAddressError({});
+
+    setIsModalOpen(false);
+    setIsUpdateModalOpen(false);
     try {
       if (id) {
         response = await upsertSellerInfo({
@@ -630,7 +672,6 @@ export default function ShippingInfo({ isSetting }: any) {
                             variant="primary"
                             onClick={async () => {
                               await update(item._id);
-                              setIsUpdateModalOpen(false);
                             }}
                           />
                         </div>
@@ -708,6 +749,11 @@ export default function ShippingInfo({ isSetting }: any) {
                       type="text"
                       placeholder="Enter name"
                     />
+                    {addressError?.name && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.name}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
                     <Label className="text-lg font-semibold">E-mail*</Label>
@@ -719,6 +765,11 @@ export default function ShippingInfo({ isSetting }: any) {
                       type="text"
                       placeholder="Enter email"
                     />
+                    {addressError?.email && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.email}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
                     <Label className="text-lg font-semibold">Country*</Label>
@@ -736,6 +787,11 @@ export default function ShippingInfo({ isSetting }: any) {
                         </option>
                       ))}
                     </select>
+                    {addressError?.country && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.country}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -761,6 +817,11 @@ export default function ShippingInfo({ isSetting }: any) {
                       type="text"
                       placeholder="Enter name"
                     />
+                    {addressError?.line1 && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.line1}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[48%]">
                     <Label className="text-lg font-semibold">Address 2*</Label>
@@ -794,6 +855,11 @@ export default function ShippingInfo({ isSetting }: any) {
                         </option>
                       ))}
                     </select>
+                    {addressError?.state && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.state}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col gap-y-2 lg:w-[32%]">
                     <Label className="text-lg font-semibold">City*</Label>
@@ -829,6 +895,11 @@ export default function ShippingInfo({ isSetting }: any) {
                       type="text"
                       placeholder="Enter email"
                     />
+                    {addressError?.postalCode && (
+                      <p className="text-red-500 text-sm">
+                        {addressError.postalCode}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -852,6 +923,11 @@ export default function ShippingInfo({ isSetting }: any) {
                     setSellerInfo({ ...sellerInfo, phoneNumber: e })
                   }
                 />
+                {addressError?.phoneNumber && (
+                  <p className="text-red-500 text-sm">
+                    {addressError.phoneNumber}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -866,7 +942,6 @@ export default function ShippingInfo({ isSetting }: any) {
                 variant="primary"
                 onClick={async () => {
                   await update('');
-                  setIsModalOpen(false);
                 }}
               />
             </div>
