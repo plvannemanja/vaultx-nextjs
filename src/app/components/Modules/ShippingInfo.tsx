@@ -490,7 +490,7 @@ export default function ShippingInfo({ isSetting }: any) {
                                       className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                                       type="text"
                                       value={sellerInfo.type}
-                                      placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)"
+                                      placeholder="Enter Template Title * (e.g., Home, Gallery, Office, Etc)"
                                     />
                                   </div>
                                 </DisclosurePanel>
@@ -826,7 +826,7 @@ export default function ShippingInfo({ isSetting }: any) {
                           }
                           className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                           type="text"
-                          placeholder="Enter Shipping Address Name (Home, Gallery, Studio etc)"
+                          placeholder="Enter Template Title * (e.g., Home, Gallery, Office, Etc)"
                         />
                       </div>
                     </DisclosurePanel>
@@ -1045,7 +1045,7 @@ export default function ShippingInfo({ isSetting }: any) {
                       }
                       className="w-full border-none bg-[#161616] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
                       type="text"
-                      placeholder="Enter email"
+                      placeholder="Enter Zip Code"
                     />
                     {addressError?.postalCode && (
                       <p className="text-red-500 text-sm">
