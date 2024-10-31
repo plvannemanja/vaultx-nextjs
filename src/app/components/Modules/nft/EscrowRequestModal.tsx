@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import React, { useRef, useState } from 'react';
 import PhoneInput from 'react-phone-input-2';
-import FileInput from '../../ui/FileInput';
 
 const validateSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -13,18 +12,13 @@ const validateSchema = z.object({
   request: z.string().nonempty('Dispute request is required.'),
 });
 
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from '@headlessui/react';
+import { useToast } from '@/hooks/use-toast';
+import { CreateSellService } from '@/services/createSellService';
 import { ArrowUpTrayIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
-import BaseButton from '../../ui/BaseButton';
 import { z } from 'zod';
 import { useNFTDetail } from '../../Context/NFTDetailContext';
-import { CreateSellService } from '@/services/createSellService';
+import BaseButton from '../../ui/BaseButton';
 import BasicLoadingModal from './BasicLoadingModal';
-import { useToast } from '@/hooks/use-toast';
 export default function EscrowRequestModal({
   onClose,
   fetchNftData,

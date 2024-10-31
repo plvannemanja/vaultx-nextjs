@@ -324,7 +324,8 @@ export default function BuyModal({
                       >
                         <div className="flex w-full justify-between items-center mb-1">
                           <Label className="font-extrabold text-white text-lg">
-                            Contact Information For Seller
+                            Consent for collection and Usage of Personal
+                            Information
                           </Label>
                         </div>
                         <p className="text-white/[53%] text-base azeret-mono-font">
@@ -343,7 +344,7 @@ export default function BuyModal({
                           2. Non-Personal Information: This includes information
                           that does not identify you as an individual, such as
                           your device type, browser type, operating system, IP
-                          address, browsing history, and clickstream data.
+                          address, browsing history, and clickstream data. 
                           <br />
                         </div>
                       </DisclosurePanel>
