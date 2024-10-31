@@ -194,7 +194,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
       setNftId(nftId);
 
       const selectedSeller = nftContext.sellerInfo.shipping;
-
+      const selectedContact = nftContext.sellerInfo.contact;
       if (!selectedSeller.address) {
         throw new Error('Address is required');
       }
@@ -223,6 +223,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
           height: nftContext.sellerInfo.height,
           weight: nftContext.sellerInfo.weight,
         },
+        contactInformation: selectedContact?.contactInfo,
         splitPayments: splitData,
         nftId,
       };

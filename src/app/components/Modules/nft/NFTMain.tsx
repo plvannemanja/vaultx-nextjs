@@ -700,7 +700,7 @@ export default function NFTMain({
                       </div>
                     )}
 
-                    {type === 'NotForSale' && (
+                    {(type === 'NotForSale' || type === 'bid') && (
                       <div className="flex flex-col gap-x-2 items-center">
                         <BaseDialog
                           isOpen={modalStatus.bid}
@@ -711,9 +711,6 @@ export default function NFTMain({
                             <BaseButton
                               title="Place a Bid"
                               variant="secondaryOutline"
-                              className={
-                                '!rounded-[14px] w-full bg-[#DDF24733] !border-0'
-                              }
                               onClick={() => {
                                 setModalStatus({ ...modalStatus, bid: true });
                               }}
