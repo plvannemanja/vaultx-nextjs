@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { upsertProperty } from '@/services/supplier';
+import Image from 'next/image';
 import { useState } from 'react';
 import BaseButton from '../ui/BaseButton';
 import { BaseDialog } from '../ui/BaseDialog';
@@ -66,7 +67,7 @@ export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
       ...property,
       attributes: [
         ...property.attributes,
-        { type: 'New Property', value: 'Enter value' },
+        { type: 'New Property', value: 'Value' },
       ],
     });
   };
@@ -86,56 +87,86 @@ export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
     <BaseDialog
       isOpen={isOpen}
       onClose={handleCancel}
-      className="bg-dark max-h-[80%] overflow-y-auto overflow-x-hidden"
+      className="max-h-[80%] overflow-y-auto overflow-x-hidden bg-[#161616]"
     >
       <div className="flex flex-col gap-y-5">
-        <div className="flex flex-col gap-y-4">
-          <Label className="text-lg font-medium">
-            Properties Template Name
-          </Label>
-          <Input
-            value={property.name}
-            onChange={(e) => setProperty({ ...property, name: e.target.value })}
-            className="w-full border-none bg-[#161616]"
-            type="text"
-            placeholder="Enter your properties template name"
-          />
+        <div className="px-4">
+          <h1 className="font-bold text-[32px]">Add New Properties Template</h1>
+        </div>
+        <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+          <div className="flex flex-col gap-y-5">
+            <Label className="font-extrabold text-lg text-white">
+              Template Title
+            </Label>
+            <hr className="border-white/10" />
+            <div className="">
+              <Input
+                value={property.name}
+                onChange={(e) =>
+                  setProperty({ ...property, name: e.target.value })
+                }
+                className="w-full border-none h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
+                type="text"
+                placeholder="Enter Template Title * (e.g., #1, Curation Name, Etc)"
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-y-4 my-6">
-          <p className="text-xl font-medium text-white">Properties value</p>
-          <div className="flex gap-4 flex-wrap">
-            {property.attributes.map((item, index) => (
-              <div
-                key={index}
-                className="flex justify-center relative py-3 gap-y-1 flex-col w-[10rem] border-2 border-white rounded-md"
-              >
-                <input
-                  type="text"
-                  className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                  value={item.type}
-                  onChange={(e) => updateProp(index, 'type', e.target.value)}
-                />
-                <input
-                  type="text"
-                  className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto"
-                  value={item.value}
-                  onChange={(e) => updateProp(index, 'value', e.target.value)}
-                />
+        <div className="rounded-[20px] px-5 py-3 bg-[#232323]">
+          <div className="flex flex-col gap-y-5">
+            <Label className="font-extrabold text-lg text-white">
+              Properties Value
+            </Label>
+            <hr className="border-white/10" />
+            <div className="flex gap-4 flex-wrap">
+              {property.attributes.map((item, index) => (
                 <div
-                  className="absolute top-2 right-2 cursor-pointer"
-                  onClick={() => removeProp(index)}
+                  key={index}
+                  className="flex justify-center relative min-h-[93px] bg-[#161613] py-3 gap-y-1 flex-col border border-white/[12%] rounded-[12px] w-[10rem] outline outline-transparent"
                 >
-                  <img src="/icons/trash.svg" className="w-4 h-4" />
+                  <input
+                    type="text"
+                    className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none text-sm"
+                    value={item.type}
+                    onChange={(e) => updateProp(index, 'type', e.target.value)}
+                  />
+                  <input
+                    type="text"
+                    className="text-[#979797] text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none azeret-mono-font"
+                    value={item.value}
+                    onChange={(e) => updateProp(index, 'value', e.target.value)}
+                  />
+                  <div
+                    className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-white/[12%]"
+                    onClick={() => removeProp(index)}
+                  >
+                    <img src="/icons/trash.svg" className="w-4 h-4" />
+                  </div>
                 </div>
+              ))}
+              <div
+                className="flex cursor-pointer justify-center min-h-[85px] relative bg-[#161613] gap-x-[10px] items-center w-[10rem] border-2 border-[#DDF247] rounded-[12px]"
+                onClick={addNewProp}
+              >
+                <img src="/icons/add-new.svg" alt="icon" className="w-6 h-6" />
+                <p className="text-center text-sm font-extrabold text-[#DDF247]">
+                  Add
+                </p>
               </div>
-            ))}
-            <div
-              className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
-              onClick={addNewProp}
-            >
-              <img src="/icons/add-new.svg" className="w-10 h-10" />
-              <p className="text-center text-sm text-[#DDF247]">Add New</p>
+            </div>
+            <div className="flex items-center gap-x-2">
+              <Image
+                src="/icons/ractangle.svg"
+                alt="info"
+                width={10}
+                height={10}
+                quality={100}
+              />
+              <p className="text-lg font-medium">
+                You can freely change properties values ​​by clicking on the
+                title and content.
+              </p>
             </div>
           </div>
         </div>

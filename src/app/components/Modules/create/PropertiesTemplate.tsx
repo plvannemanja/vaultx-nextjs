@@ -160,10 +160,11 @@ export default function PropertiesTemplate({
                 _id: 'basic',
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${advancedDetails.propertyTemplateId === 'basic'
+            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+              advancedDetails.propertyTemplateId === 'basic'
                 ? 'border-neon'
                 : 'border-none'
-              }`}
+            }`}
           >
             <p>Basic Template</p>
           </div>
@@ -172,10 +173,11 @@ export default function PropertiesTemplate({
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${advancedDetails.propertyTemplateId === item._id
+              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
+                advancedDetails.propertyTemplateId === item._id
                   ? 'border-neon'
                   : 'border-none'
-                }`}
+              }`}
             >
               <p>{item.name}</p>
               <button
@@ -220,11 +222,11 @@ export default function PropertiesTemplate({
           {editableProperties.map((item, index) => (
             <div
               key={index}
-              className="flex justify-center min-h-[93px] relative p-4 gap-y-1 flex-col w-[10rem] border border-[#ffffff12] rounded-md"
+              className="flex justify-center relative min-h-[93px] bg-[#232323] py-3 gap-y-1 flex-col border border-white/[12%] rounded-[12px] w-[10rem] outline outline-transparent"
             >
               <input
                 type="text"
-                className="text-white text-center text-sm w-[80%] rounded-md bg-transparent mx-auto"
+                className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none text-sm"
                 value={item.type}
                 onChange={(e) =>
                   handlePropertyChange(index, 'type', e.target.value)
@@ -232,7 +234,7 @@ export default function PropertiesTemplate({
               />
               <input
                 type="text"
-                className="text-[#888] text-sm text-center w-[80%] rounded-md bg-transparent mx-auto"
+                className="text-[#979797] text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none azeret-mono-font"
                 value={item.value}
                 onChange={(e) =>
                   handlePropertyChange(index, 'value', e.target.value)
@@ -248,11 +250,13 @@ export default function PropertiesTemplate({
           ))}
           {addStatus && (
             <div
-              className="flex cursor-pointer justify-center relative py-3 gap-y-1 items-center w-[10rem] border-2 border-[#DDF247] rounded-md"
+              className="flex cursor-pointer justify-center min-h-[85px] relative bg-[#161613] gap-x-[10px] items-center w-[10rem] border-2 border-[#DDF247] rounded-[12px]"
               onClick={handleAddProperty}
             >
-              <img src="/icons/add-new.svg" className="w-10 h-10" />
-              <p className="text-center text-sm text-[#DDF247]">Add New</p>
+              <img src="/icons/add-new.svg" alt="icon" className="w-6 h-6" />
+              <p className="text-center text-sm font-extrabold text-[#DDF247]">
+                Add
+              </p>
             </div>
           )}
         </div>
