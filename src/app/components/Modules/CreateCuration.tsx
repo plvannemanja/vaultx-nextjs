@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { createCollection } from '@/lib/helper';
-import { cn } from '@/lib/utils';
+import { cn, truncate } from '@/lib/utils';
 import { collectionServices } from '@/services/supplier';
 import { acceptedFormats, ensureValidUrl, maxFileSize } from '@/utils/helpers';
 import {
@@ -335,7 +335,9 @@ export default function CreateCuration({ editMode }: { editMode?: any }) {
                   height={200}
                 />
               )}
-              {file ? file.name : 'No files selected'}
+              <span className="break-words" title={file ? file.name : ''}>
+                {file ? truncate(file.name, 100) : 'No files selected'}
+              </span>
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px]">

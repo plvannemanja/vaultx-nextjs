@@ -224,13 +224,13 @@ export default function UserArtistModal({
   }, [editUser]);
 
   return (
-    <div className="grid grid-cols-12 gap-4 h-auto relative bg-dark-900">
+    <div className="grid grid-cols-12 gap-4 h-auto relative bg-[#161616]">
       {/* Header Section */}
-      <div className="col-span-12 mb-10 text-[#DEE8E8] lg:w-11/12 mx-auto flex-col justify-center items-center gap-4 inline-flex pt-8">
-        <div className="text-center text-xl font-extrabold">
+      <div className="col-span-12 flex flex-col gap-y-[58px] mb-10 text-[#DEE8E8] lg:w-11/12 mx-auto justify-center items-center gap-4  pt-8">
+        <div className="text-center text-xl lg:text-2xl xl:text-[32px] font-extrabold">
           Registering affiliated artists
         </div>
-        <p className="self-stretch text-sm text-center azeret-mono-font font-medium leading-normal">
+        <p className="self-stretch md:text-lg lg:text-xl xl:text-2xl text-center azeret-mono-font font-medium leading-normal text-white/[53%]">
           We use artist templates to avoid mistakes that can arise from
           repetitive artist information entry. Entering artist information can
           shorten the mint time.
@@ -324,7 +324,7 @@ export default function UserArtistModal({
             onChange={(e) =>
               setFormData({ ...formData, name: (e.target as any).value })
             }
-            className="w-full h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal rounded-xl"
+            className="w-full h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal rounded-xl"
             type="text"
             placeholder="Enter Artist Name"
           />
@@ -342,7 +342,7 @@ export default function UserArtistModal({
             onChange={(e) =>
               setFormData({ ...formData, wallet: (e.target as any).value })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address"
           />
@@ -354,7 +354,7 @@ export default function UserArtistModal({
                 confirmWallet: (e.target as any).value,
               })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-dark-900 azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address again"
           />
@@ -369,7 +369,7 @@ export default function UserArtistModal({
           <hr className="border-white/[8%] my-4 w-full" />
           <div className="self-stretch flex items-center gap-3 grid-cols-6">
             <Input
-              className="flex-grow h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal col-span-4"
+              className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal col-span-4"
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -383,7 +383,7 @@ export default function UserArtistModal({
 
             <div>
               <Input
-                className="h-12 px-5 py-4 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-xl font-bold col-span-1"
+                className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -418,23 +418,23 @@ export default function UserArtistModal({
               Split Payments (%) *
             </div>
           </div>
-          <div className="text-[#696969] text-sm font-normal">
+          <div className="text-[#949494] text-sm font-normal">
             The sum of all numbers (percentages) must equal 100%.
           </div>
           <div className="self-stretch flex items-start gap-3 w-full">
-            <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl flex items-center">
-              <div className="text-[#696969] text-center text-sm font-normal">
+            <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl justify-center flex items-center">
+              <span className="text-[#B7B2B2] text-center azeret-mono-font text-sm font-normal">
                 My wallet address
-              </div>
+              </span>
             </div>
-            <div className="w-6/12 h-12 px-6 py-4 bg-dark-900 rounded-xl flex items-center">
+            <div className="w-6/12 h-12 px-6 py-4 bg-[#161616] rounded-xl flex items-center">
               <div className="text-[#696969] text-sm font-normal">
                 {activeAccount?.address}
               </div>
             </div>
             <div>
               <Input
-                className="h-10 px-5 py-4 bg-dark-800 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-xl font-bold"
+                className="h-12 px-5 py-4 bg-[#161616] rounded-xl text-[#B7B2B2] flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -452,14 +452,14 @@ export default function UserArtistModal({
           </div>
           {paymentSplits.map((split, index) => (
             <div className="self-stretch flex items-start gap-3" key={index}>
-              <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl flex items-center">
-                <div className="text-[#696969] text-sm font-normal">
+              <div className="w-3/12 h-12 px-6 py-4 bg-[#1F1F1F] rounded-xl justify-center flex items-center">
+                <span className="text-[#B7B2B2] text-center azeret-mono-font text-sm font-normal">
                   Artist wallet address
-                </div>
+                </span>
               </div>
               <div className="w-6/12 px-0 py-0">
                 <Input
-                  className="h-12 bg-dark-900 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal"
+                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal"
                   onChange={(e) =>
                     updateSplit(index, 'paymentWallet', e.target.value)
                   }
@@ -470,7 +470,7 @@ export default function UserArtistModal({
               </div>
               <div>
                 <Input
-                  className="h-12 px-5 py-4 bg-dark-800 rounded-xl flex items-center azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs font-bold"
+                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                   onChange={(e) => {
                     const value = Number(e.target.value);
                     updateSplit(index, 'paymentPercentage', value);
@@ -540,10 +540,10 @@ export default function UserArtistModal({
         <BaseDialog
           isOpen={errors.active}
           onClose={(val) => setErrors({ active: val, data: [] })}
-          className="bg-black max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden"
+          className="bg-[#161616] max-h-[80%] w-[617px] mx-auto overflow-y-auto overflow-x-hidden border-0 outline-none"
         >
           <ErrorModal
-            title={'Error in creation found'}
+            title={'Please fill in the required field'}
             data={errors.data}
             close={() => {
               setErrors({ active: false, data: [] });

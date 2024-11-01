@@ -27,13 +27,16 @@ export default function ErrorModal({
         {Array.isArray(data) ? (
           data.map((item: any, index: number) => {
             return (
-              <div key={index}>
-                <p className="text-white/[53%] azeret-mono-font text-lg">
-                  {index + 1}.{' '}
+              <div
+                key={index}
+                className="text-white/[53%] azeret-mono-font text-lg lg:text-xl xl:text-[22px] flex items-center gap-x-2"
+              >
+                <p>{index + 1}. </p>
+                <strong>
                   {item.path[0].slice(0, 1).toUpperCase() +
                     item.path[0].slice(1)}{' '}
-                  is invalid
-                </p>
+                </strong>
+                <p>is invalid</p>
               </div>
             );
           })
