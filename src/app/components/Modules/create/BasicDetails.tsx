@@ -4,7 +4,7 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
+import { cn, truncate } from '@/lib/utils';
 import { collectionServices } from '@/services/supplier';
 import { acceptedFormats, maxFileSize } from '@/utils/helpers';
 import {
@@ -200,7 +200,14 @@ export default function BasicDetails({
                   className="max-w-[90%] object-contain mx-auto max-h-[400px] "
                 />
               )}
-              {basicDetail.file ? basicDetail.file.name : 'No files selected'}
+              <span
+                className="break-words"
+                title={basicDetail.file ? basicDetail.file.name : ''}
+              >
+                {basicDetail.file
+                  ? truncate(basicDetail.file.name, 100)
+                  : 'No files selected'}
+              </span>
             </div>
           ) : (
             <div className="flex flex-col justify-center items-center gap-y-[23px] ">

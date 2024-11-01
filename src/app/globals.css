@@ -128,6 +128,19 @@
   font-family: 'Manrope', sans-serif;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input.number-input::-webkit-outer-spin-button,
+input.number-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input.number-input[type='number'] {
+  -moz-appearance: textfield;
+  /* color: #0e9dd181; */
+}
+
 @media (min-width: 640px) {
   .nft-desc {
     display: grid;
