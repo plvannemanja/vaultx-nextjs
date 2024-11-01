@@ -236,10 +236,9 @@ export default function ContactInfo({ isSetting }: any) {
                           })
                         }
                         className="w-full border-none  h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
-                        placeholder="Please share your preferred contact method or messenger ID for shipping arrangements
+                        placeholder="Please share your preferred contact method or messenger ID for shipping arrangements.
 
-At VaultX, we prioritize the safe delivery of each artwork through shipping methods mutually agreed upon between sellers and buyers, taking into account the unique characteristics of each piece.  After completing a transaction, both parties can use this space to share contact information and discuss shipping arrangements. Your message will remain confidential and will only be shared with the relevant parties once the transaction is finalized.
-Please refer to the example below when composing your message for coordinating with the other party."
+At VaultX, we prioritize the safe delivery of each artwork through shipping methods mutually agreed upon between sellers and buyers, taking into account the unique characteristics of each piece.  After completing a transaction, both parties can use this space to share contact information and discuss shipping arrangements. Your message will remain confidential and will only be shared with the relevant parties once the transaction is finalized."
                       />
                     </div>
 
@@ -340,11 +339,9 @@ Please refer to the example below when composing your message for coordinating w
                   tabIndex={-2}
                   className="w-full border-none resize-none px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                   rows={8}
-                  placeholder="Please share your preferred contact method or messenger ID for shipping arrangements 
+                  placeholder="Please share your preferred contact method or messenger ID for shipping arrangements. 
                   &#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;
-                  At VaultX, we prioritize the safe delivery of each artwork through shipping methods mutually agreed upon between sellers and buyers, taking into account the unique characteristics of each piece.  After completing a transaction, both parties can use this space to share contact information and discuss shipping arrangements. Your message will remain confidential and will only be shared with the relevant parties once the transaction is finalized.
-                  &#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;
-                  Please refer to the example below when composing your message for coordinating with the other party."
+                  At VaultX, we prioritize the safe delivery of each artwork through shipping methods mutually agreed upon between sellers and buyers, taking into account the unique characteristics of each piece.  After completing a transaction, both parties can use this space to share contact information and discuss shipping arrangements. Your message will remain confidential and will only be shared with the relevant parties once the transaction is finalized."
                 />
               </div>
             </div>
