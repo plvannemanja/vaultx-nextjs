@@ -5,6 +5,7 @@ import {
 } from '@/app/components/Context/CreateNFTContext';
 import ContactInfo from '@/app/components/Modules/ContactInfo';
 import UserArtistSetting from '@/app/components/Modules/create/UserArtistSetting';
+import PropertiesInfo from '@/app/components/Modules/Properties';
 import ShippingInfo from '@/app/components/Modules/ShippingInfo';
 import BaseButton from '@/app/components/ui/BaseButton';
 import FileInput from '@/app/components/ui/FileInput';
@@ -27,6 +28,7 @@ import {
 } from '@headlessui/react';
 import { ChevronUpIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
 const defaultAttributes = [
   { type: 'Type', value: 'Write it here' },
   { type: 'Medium', value: 'Write it here' },
@@ -35,7 +37,6 @@ const defaultAttributes = [
   { type: 'Signature', value: 'Write it here' },
   { type: 'Authentication', value: 'Write it here' },
 ];
-
 export default function Page() {
   return (
     <CreateNFTProvider>
@@ -166,7 +167,9 @@ const MainComponent = () => {
   const { advancedDetails, setAdvancedDetails } = useCreateNFT();
   const [data, setData] = useState(advancedDetails.attributes);
   const [isModalOpenTemplate, setIsModalOpenTemplate] = useState(false);
-  const [editableProperties, setEditableProperties] = useState([]);
+  const [isList, setIsList] = useState(false);
+  const [editableProperties, setEditableProperties] =
+    useState(defaultAttributes);
 
   useEffect(() => {
     setAdvancedDetails({
@@ -203,6 +206,7 @@ const MainComponent = () => {
 
   const handleTemplateSelect = (template) => {
     setEditableProperties(template.attributes);
+    setIsList(true);
     setAdvancedDetails({
       ...advancedDetails,
       propertyTemplateId: template._id || null,
@@ -257,6 +261,26 @@ const MainComponent = () => {
         duration: 2000,
       });
     }
+  };
+
+  const handlePropertyChange = (index, field, value) => {
+    const updatedProperties = editableProperties.map((prop, i) =>
+      i === index ? { ...prop, [field]: value } : prop,
+    );
+    setEditableProperties(updatedProperties);
+    updateTemplate(updatedProperties);
+  };
+
+  const handleAddProperty = () => {
+    const newProperty = { type: 'New Property', value: 'Enter value' };
+    setEditableProperties([...editableProperties, newProperty]);
+    updateTemplate([...editableProperties, newProperty]);
+  };
+
+  const handleRemoveProperty = (index) => {
+    const updatedProperties = editableProperties.filter((_, i) => i !== index);
+    setEditableProperties(updatedProperties);
+    updateTemplate(updatedProperties);
   };
 
   return (
@@ -651,13 +675,14 @@ const MainComponent = () => {
                   {/* <PropertiesTemplate addStatus={true} isSetting /> */}
                   <div className="flex flex-wrap gap-5 font-medium text-lg">
                     <div
-                      onClick={() =>
+                      onClick={() => {
+                        setIsList(false);
                         handleTemplateSelect({
                           name: 'Basic Template',
                           attributes: defaultAttributes,
                           _id: 'basic',
-                        })
-                      }
+                        });
+                      }}
                       className={`w-[18rem] h-[15rem] bg-[#161616] border-2 flex justify-center items-center rounded-md relative ${
                         advancedDetails.propertyTemplateId === 'basic'
                           ? 'border-neon'
@@ -694,7 +719,6 @@ const MainComponent = () => {
                         </div>
                       </div>
                     ))}
-
                     <div
                       onClick={() => setIsModalOpenTemplate(true)}
                       className="w-[18rem] h-[15rem] bg-[#161616] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
@@ -707,12 +731,62 @@ const MainComponent = () => {
                       </p>
                     </div>
                   </div>
+                  <div className="flex flex-wrap gap-3 my-5">
+                    {editableProperties.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-center relative min-h-[93px] bg-[#161613] py-3 gap-y-1 flex-col border border-white/[12%] rounded-[12px] w-[10rem] outline outline-transparent"
+                      >
+                        <input
+                          type="text"
+                          className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none text-sm"
+                          value={item.type}
+                          onChange={(e) =>
+                            handlePropertyChange(index, 'type', e.target.value)
+                          }
+                        />
+                        <input
+                          type="text"
+                          className="text-[#979797] text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none azeret-mono-font"
+                          value={item.value}
+                          onChange={(e) =>
+                            handlePropertyChange(index, 'value', e.target.value)
+                          }
+                        />
+                        <div
+                          className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-white/[12%]"
+                          onClick={() => handleRemoveProperty(index)}
+                        >
+                          <img src="/icons/trash.svg" className="w-4 h-4" />
+                        </div>
+                      </div>
+                    ))}
+                    <div
+                      className="flex cursor-pointer justify-center min-h-[85px] relative bg-[#161613] gap-x-[10px] items-center w-[10rem] border-2 border-[#DDF247] rounded-[12px]"
+                      onClick={handleAddProperty}
+                    >
+                      <img
+                        src="/icons/add-new.svg"
+                        alt="icon"
+                        className="w-6 h-6"
+                      />
+                      <p className="text-center text-sm font-extrabold text-[#DDF247]">
+                        Add
+                      </p>
+                    </div>
+                  </div>
                 </DisclosurePanel>
               </>
             )}
           </Disclosure>
         </div>
         <UserArtistSetting isSetting />
+
+        <PropertiesInfo
+          close={() => setIsModalOpenTemplate(false)}
+          isOpen={isModalOpenTemplate}
+          onTemplateAdd={fetchProperties}
+        />
 
         <div className="flex gap-x-4 justify-center my-10">
           <BaseButton

@@ -8,14 +8,11 @@ import { useState } from 'react';
 import { Address, isAddress } from 'thirdweb';
 import { useActiveAccount } from 'thirdweb/react';
 import { parseEther, zeroAddress } from 'viem';
-import ConnectedCard from '../Cards/ConnectedCard';
 import { useCreateNFT } from '../Context/CreateNFTContext';
 import { BaseDialog } from '../ui/BaseDialog';
 import AdvanceDetails from './create/AdvanceDetails';
-import BasicDetails from './create/BasicDetails';
 import ErrorModal from './create/ErrorModal';
 import MintLoader from './create/MintLoader';
-import SellerInformation from './create/SellerInformation';
 
 export enum StepType {
   basic,
@@ -533,7 +530,7 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </BaseDialog>
       )}
 
-      {step === 1 && (
+      {/* {step === 1 && (
         <>
           <div className="flex mb-[30px]">
             <ConnectedCard isRwa />
@@ -542,13 +539,13 @@ export default function CreateNft({ editMode }: { editMode?: any }) {
         </>
       )}
 
-      {step === 2 && (
-        <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
-      )}
+      {step === 2 && ( */}
+      <AdvanceDetails handler={handleAdvanceDetails} nextStep={nextStep} />
+      {/* )}
 
       {step === 3 && (
         <SellerInformation handler={handleSellerInfo} nextStep={nextStep} />
-      )}
+      )} */}
     </div>
   );
 }
