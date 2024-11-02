@@ -100,6 +100,8 @@ quality={100}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 lg:gap-4 xl:gap-5 2xl:gap-6 mb-3">
         {nfts.length > 0
           ? nfts.map((nft: any, index: number) => {
+            if (!nft.active || !nft.curationInfo || !nft.curationInfo.length || !nft.curationInfo?.[0].active)
+              return null;
             return (
               <Link key={index} href={`/nft/${nft._id}`}>
                 <NftCard data={nft} />

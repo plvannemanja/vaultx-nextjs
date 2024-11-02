@@ -261,7 +261,12 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
 
       setData({
         ...data,
-        [ProfileTabs.All]: nft.data.nfts,
+        [ProfileTabs.All]: nft.data.nfts.filter(
+          (nft: any) =>
+            nft?.active &&
+            nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0].active,
+        ),
       });
     } catch (error) {
       console.log(error);
@@ -280,7 +285,12 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       if (response.data) {
         setData({
           ...data,
-          [ProfileTabs.Own]: response.data.nfts,
+          [ProfileTabs.Own]: response.data.nfts.filter(
+            (nft: any) =>
+              nft?.active &&
+              nft.ownerInfo?.[0]?.active &&
+              nft.curationInfo?.[0].active,
+          ),
         });
       }
     } catch (error) {
@@ -300,7 +310,12 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
       if (response.data) {
         setData({
           ...data,
-          [ProfileTabs.Created]: response.data.nfts ? response.data.nfts : [],
+          [ProfileTabs.Created]: response.data.nfts ? response.data.nfts.filter(
+            (nft: any) =>
+              nft?.active &&
+              nft.ownerInfo?.[0]?.active &&
+              nft.curationInfo?.[0].active,
+          ) : [],
         });
       }
     } catch (error) {

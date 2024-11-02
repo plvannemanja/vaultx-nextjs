@@ -36,12 +36,12 @@ export default function NFTList({ color }: { color: any }) {
         data: { nfts },
       } = await nftService.getAllNfts({ limit: 0, skip: 0, searchInput: '' });
       const filterNFTs = nfts[0]?.data
-        // .filter(
-        //   (nft: any) =>
-        //     !nft?.active &&
-        //     !nft.ownerInfo?.[0]?.active &&
-        //     !nft.curationInfo?.[0].active,
-        // )
+        .filter(
+          (nft: any) =>
+            nft?.active &&
+            nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0].active,
+        )
         ?.slice(0, 4);
       setNfts(filterNFTs);
     } catch (error) {
