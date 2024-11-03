@@ -73,7 +73,7 @@ export default function BuyModal({
   const activeChain = useActiveWalletChain();
 
   const {
-    sellerInfo: { shipping, shippingId, contact, contactId },
+    sellerInfo: { shipping, shippingId, contact, contactId }, setSellerInfo,
   } = useCreateNFT();
 
   const [formData, setFormData] = useState({
@@ -85,12 +85,6 @@ export default function BuyModal({
     '...' +
     activeAccount?.address.slice(-4)
     : 'Connect Wallet';
-
-  const cancelChanges = () => {
-    setFormData({
-      accepted: false,
-    });
-  };
 
   const buyNFT = async () => {
     try {
@@ -135,7 +129,7 @@ export default function BuyModal({
         NFTDetail.voucher,
         (key, value) => {
           // Check if the value is a number and can be safely converted to BigInt
-          if (typeof value === 'number' && Number.isSafeInteger(value)) {
+          if (typeof value === 'number') {
             return BigInt(value);
           }
           return value;
@@ -215,6 +209,17 @@ export default function BuyModal({
   };
 
   useEffect(() => {
+    setSellerInfo({
+      shipping: null,
+      shippingId: null,
+      contactId: null,
+      contact: null,
+      accepted: false,
+      width: null,
+      height: null,
+      length: null,
+      weight: null,
+    })
     checkAmount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -348,7 +353,7 @@ export default function BuyModal({
                           2. Non-Personal Information: This includes information
                           that does not identify you as an individual, such as
                           your device type, browser type, operating system, IP
-                          address, browsing history, and clickstream data. 
+                          address, browsing history, and clickstream data.
                           <br />
                         </div>
                       </DisclosurePanel>
@@ -379,9 +384,9 @@ export default function BuyModal({
                 </div>
 
                 {addressError?.accepted && (
-                   < p className="text-[#DDF247] text-sm">
-                  {addressError.accepted}
-                </p>
+                  < p className="text-[#DDF247] text-sm">
+                    {addressError.accepted}
+                  </p>
                 )}
               </div>
 
@@ -389,7 +394,7 @@ export default function BuyModal({
                 <BaseButton
                   title="Discard"
                   variant="secondary"
-                  onClick={cancelChanges}
+                  onClick={onClose}
                   className="w-full"
                 />
                 <BaseButton

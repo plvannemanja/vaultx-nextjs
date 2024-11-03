@@ -145,7 +145,7 @@ export default function PutSaleModal({
       if (nft?.voucher) {
         const voucher: INFTVoucher = JSON.parse(nft.voucher, (key, value) => {
           // Check if the value is a number and can be safely converted to BigInt
-          if (typeof value === 'number' && Number.isSafeInteger(value)) {
+          if (typeof value === 'number') {
             return BigInt(value);
           }
           return value;

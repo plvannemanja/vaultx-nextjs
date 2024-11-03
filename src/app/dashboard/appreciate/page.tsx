@@ -60,7 +60,12 @@ export default function Page() {
 
       if (response.data.nfts && response.data.nfts.length > 0) {
         const nfts = response.data.nfts[0]?.data;
-        setNfts(nfts);
+        setNfts(nfts.filter(
+          (nft: any) =>
+            nft?.active &&
+            nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0].active,
+        ));
       }
     };
     fetchData();
