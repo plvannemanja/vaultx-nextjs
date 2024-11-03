@@ -141,7 +141,14 @@ export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
                     className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-white/[12%]"
                     onClick={() => removeProp(index)}
                   >
-                    <img src="/icons/trash.svg" className="w-4 h-4" />
+                    <Image
+                      src="/icons/trash.svg"
+                      className="w-4 h-4"
+                      alt="trash"
+                      width={20}
+                      height={20}
+                      quality={100}
+                    />
                   </div>
                 </div>
               ))}
@@ -149,7 +156,14 @@ export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
                 className="flex cursor-pointer justify-center min-h-[85px] relative bg-[#161613] gap-x-[10px] items-center w-[10rem] border-2 border-[#DDF247] rounded-[12px]"
                 onClick={addNewProp}
               >
-                <img src="/icons/add-new.svg" alt="icon" className="w-6 h-6" />
+                <Image
+                  src="/icons/add-new.svg"
+                  alt="icon"
+                  className="w-6 h-6"
+                  width={20}
+                  height={20}
+                  quality={100}
+                />
                 <p className="text-center text-sm font-extrabold text-[#DDF247]">
                   Add
                 </p>

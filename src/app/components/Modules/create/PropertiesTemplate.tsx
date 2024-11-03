@@ -1,4 +1,5 @@
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import {
   deleteProperty,
   getProperties,
@@ -10,20 +11,22 @@ import { useCreateNFT } from '../../Context/CreateNFTContext';
 import PropertiesInfo from '../Properties';
 
 const defaultAttributes = [
-  { type: 'Type', value: 'Write it here' },
-  { type: 'Medium', value: 'Write it here' },
-  { type: 'Support', value: 'Write it here' },
-  { type: 'Dimensions (cm)', value: 'Write it here' },
-  { type: 'Signature', value: 'Write it here' },
-  { type: 'Authentication', value: 'Write it here' },
+  { type: 'Type', value: '' },
+  { type: 'Medium', value: '' },
+  { type: 'Support', value: '' },
+  { type: 'Dimensions (cm)', value: '' },
+  { type: 'Signature', value: '' },
+  { type: 'Authentication', value: '' },
 ];
 
 export default function PropertiesTemplate({
   addStatus,
   isSetting,
+  isCreate,
 }: {
   addStatus: boolean;
   isSetting?: boolean;
+  isCreate?: boolean;
 }) {
   const { toast } = useToast();
   const { advancedDetails, setAdvancedDetails } = useCreateNFT();
@@ -37,6 +40,7 @@ export default function PropertiesTemplate({
       ...advancedDetails,
       attributes: editableProperties,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editableProperties]);
 
   useEffect(() => {
@@ -47,6 +51,7 @@ export default function PropertiesTemplate({
       ...advancedDetails,
       propertyTemplateId: 'basic',
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateTemplate = (updatedProperties) => {
@@ -132,7 +137,7 @@ export default function PropertiesTemplate({
   };
 
   const handleAddProperty = () => {
-    const newProperty = { type: 'New Property', value: 'Enter value' };
+    const newProperty = { type: '', value: '' };
     setEditableProperties([...editableProperties, newProperty]);
     updateTemplate([...editableProperties, newProperty]);
   };
@@ -160,28 +165,33 @@ export default function PropertiesTemplate({
                 _id: 'basic',
               })
             }
-            className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
-              advancedDetails.propertyTemplateId === 'basic'
-                ? 'border-neon'
-                : 'border-none'
-            }`}
+            className={cn(
+              `w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative ${
+                advancedDetails.propertyTemplateId === 'basic'
+                  ? 'border-neon'
+                  : 'border-none'
+              }`,
+              isCreate && 'h-[136px]',
+            )}
           >
             <p>Basic Template</p>
           </div>
-
           {data.map((item, index) => (
             <div
               key={index}
               onClick={() => handleTemplateSelect(item)}
-              className={`w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
-                advancedDetails.propertyTemplateId === item._id
-                  ? 'border-neon'
-                  : 'border-none'
-              }`}
+              className={cn(
+                `w-[18rem] h-[15rem] bg-[#232323] border-2 flex justify-center items-center rounded-md relative font-medium text-lg ${
+                  advancedDetails.propertyTemplateId === item._id
+                    ? 'border-neon'
+                    : 'border-none'
+                }`,
+                isCreate && 'h-[136px]',
+              )}
             >
               <p>{item.name}</p>
               <button
-                className="absolute bottom-2 right-2 text-[#DDF247] border border-white/[20%] px-[10px] rounded py-1 text-[14px]"
+                className="absolute bottom-2 font-semibold right-2 text-[#DDF247] border border-white/[20%] px-[10px] rounded-[6px] py-[3px] text-[14px]"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleTemplateEdit(item);
@@ -193,14 +203,24 @@ export default function PropertiesTemplate({
                 className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-white/[20%]"
                 onClick={() => handleTemplateDelete(item)}
               >
-                <img src="/icons/trash.svg" className="w-4 h-4" />
+                <Image
+                  src="/icons/trash.svg"
+                  className="w-4 h-4"
+                  alt="trash"
+                  width={20}
+                  height={20}
+                  quality={100}
+                />
               </div>
             </div>
           ))}
 
           <div
             onClick={() => setIsModalOpenTemplate(true)}
-            className="w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative"
+            className={cn(
+              'w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative',
+              isCreate && 'h-[136px]',
+            )}
           >
             <div className="w-12 h-12 rounded-full bg-[#111] border border-white/[30%] flex items-center justify-center">
               <Image
@@ -212,7 +232,7 @@ export default function PropertiesTemplate({
                 height={20}
               />
             </div>
-            <p className="text-[#828282] font-medium text-lg">
+            <p className="text-[#828282] font-semibold text-lg">
               Add new template
             </p>
           </div>
@@ -234,8 +254,9 @@ export default function PropertiesTemplate({
               />
               <input
                 type="text"
-                className="text-[#979797] text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none azeret-mono-font"
+                className="text-[#979797] placeholder:text-[#888888] placeholder:font-medium text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none azeret-mono-font"
                 value={item.value}
+                placeholder="Write it here"
                 onChange={(e) =>
                   handlePropertyChange(index, 'value', e.target.value)
                 }
@@ -244,7 +265,14 @@ export default function PropertiesTemplate({
                 className="absolute top-2 right-2 cursor-pointer w-[26px] h-[26px] flex items-center justify-center rounded-full border border-[#ffffff12]"
                 onClick={() => handleRemoveProperty(index)}
               >
-                <img src="/icons/trash.svg" className="w-4 h-4" />
+                <Image
+                  src="/icons/trash.svg"
+                  className="w-4 h-4"
+                  alt="trash"
+                  width={20}
+                  height={20}
+                  quality={100}
+                />
               </div>
             </div>
           ))}
@@ -253,7 +281,14 @@ export default function PropertiesTemplate({
               className="flex cursor-pointer justify-center min-h-[85px] relative bg-[#161613] gap-x-[10px] items-center w-[10rem] border-2 border-[#DDF247] rounded-[12px]"
               onClick={handleAddProperty}
             >
-              <img src="/icons/add-new.svg" alt="icon" className="w-6 h-6" />
+              <Image
+                src="/icons/add-new.svg"
+                alt="icon"
+                className="w-6 h-6"
+                width={24}
+                height={24}
+                quality={100}
+              />
               <p className="text-center text-sm font-extrabold text-[#DDF247]">
                 Add
               </p>
@@ -262,7 +297,14 @@ export default function PropertiesTemplate({
         </div>
 
         <div className="flex gap-x-3 item-center">
-          <img src="/icons/dot.svg" className="w-4 h-4" />
+          <Image
+            src="/icons/dot.svg"
+            className="w-4 h-4"
+            alt="dot"
+            width={20}
+            height={20}
+            quality={100}
+          />
           <span className="text-sm">
             You can freely change properties values by clicking on the title and
             content.

@@ -64,7 +64,7 @@ export default function SellerInformation({
               value={sellerInfo.length}
               type="number"
               placeholder="--"
-              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent"
+              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent number-input"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -79,7 +79,7 @@ export default function SellerInformation({
               value={sellerInfo.width}
               type="number"
               placeholder="--"
-              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent"
+              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent number-input"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -94,7 +94,7 @@ export default function SellerInformation({
               value={sellerInfo.height}
               type="number"
               placeholder="--"
-              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent"
+              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent number-input"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -109,7 +109,7 @@ export default function SellerInformation({
               value={sellerInfo.weight}
               type="number"
               placeholder="--"
-              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent"
+              className="bg-[#161616] border border-none h-[52px] focus:placeholder-transparent number-input"
               onChange={(e) => {
                 setSellerInfo({
                   ...sellerInfo,
@@ -122,17 +122,19 @@ export default function SellerInformation({
       </div>
 
       <div className="bg-dark p-4 gap-y-4 rounded-lg flex flex-col">
-        <p className="font-medium">
-          Consent for collection and usage of personal information
-        </p>
-        <p className="text-white/[53%] azeret-mono-font text-xs">
-          Please read the following and check the appropriate boxes to indicate
-          your consent:
-        </p>
+        <div>
+          <p className="font-medium mb-1">
+            Consent for collection and usage of personal information
+          </p>
+          <p className="text-white/[53%] azeret-mono-font text-xs">
+            Please read the following and check the appropriate boxes to
+            indicate your consent:
+          </p>
+        </div>
         <hr className="border-white/[8%]" />
         <Textarea
           disabled={true}
-          className="p-4 rounded-md azeret-mono-font overflow-hidden w-full border-none bg-[#161616] text-sm placeholder:text-xs font-AzeretMono"
+          className="p-4 rounded-md azeret-mono-font overflow-hidden w-full border-none placeholder:text-white/[53%] bg-[#161616] text-sm placeholder:text-xs font-AzeretMono"
           rows={4}
           placeholder={`We collect two types of information from you: 
 1. Personal Information: This includes your individual information such as Email, Phone Number, Username, Avatar, Profile Picture, Date of Birth, and more.  
