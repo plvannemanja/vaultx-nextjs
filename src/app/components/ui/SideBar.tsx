@@ -20,23 +20,23 @@ const marketPlaceLinks = [
   {
     name: 'Appreciation',
     value: 'appreciate',
-    icon: () => <AppreciationIcon />,
+    icon: (props) => <AppreciationIcon {...props} />,
   },
   {
     name: 'Curation',
     value: 'curation',
-    icon: () => <CurationIcon />,
+    icon: (props) => <CurationIcon {...props} />,
   },
   {
     name: 'Magazine',
     value: 'magazine',
-    icon: () => <PencilIcon />,
+    icon: (props) => <PencilIcon {...props} />,
     link: 'https://hansdca380cf4f5.wpcomstaging.com',
   },
   {
     name: 'How to work',
     value: 'how-to-work',
-    icon: () => <CarbonBoard />,
+    icon: (props) => <CarbonBoard {...props} />,
   },
 ];
 
@@ -44,27 +44,27 @@ const accountLinks = [
   {
     name: 'My Profile',
     value: 'profile',
-    icon: () => <ProfileIcon />,
+    icon: (props) => <ProfileIcon {...props} />,
   },
   {
     name: 'My favorite',
     value: 'profile?tab=fav',
-    icon: () => <FavoriteIcon />,
+    icon: (props) => <FavoriteIcon {...props} />,
   },
   {
     name: 'My Order',
     value: 'profile?tab=order',
-    icon: () => <MyOrderIcon />,
+    icon: (props) => <MyOrderIcon {...props} />,
   },
   {
     name: 'Settings',
     value: 'settings',
-    icon: () => <SettingsIcon />,
+    icon: (props) => <SettingsIcon {...props} />,
   },
   {
     name: 'Help Center',
     value: 'help-center',
-    icon: () => <HelpIcon />,
+    icon: (props) => <HelpIcon {...props} />,
   },
 ];
 
@@ -124,7 +124,12 @@ export default function SideBar({ className }: { className?: string }) {
                   : '',
               )}
             >
-              {<link.icon />}
+              {
+                <link.icon
+                  className="w-5 h-5"
+                  stroke={pathname === `/dashboard/${link.value}` && '#ddf247'}
+                />
+              }
               {/* <Image 
 quality={100}
                 src={link.icon}
@@ -165,10 +170,10 @@ quality={100}
                   : '',
               )}
               href={`/dashboard/${link.value}`}
-            // onClick={() => {
-            //   if (pathname !== `/dashboard/${link.value}`)
-            //     window.location.href = `/dashboard/${link.value}`;
-            // }}
+              // onClick={() => {
+              //   if (pathname !== `/dashboard/${link.value}`)
+              //     window.location.href = `/dashboard/${link.value}`;
+              // }}
             >
               {/* <Image 
 quality={100}
@@ -181,7 +186,10 @@ quality={100}
                   pathname === `/dashboard/${link.value}` && 'icon-svg',
                 )}
               /> */}
-              <link.icon />
+              <link.icon
+                className="w-5 h-5"
+                stroke={pathname === `/dashboard/${link.value}` && '#ddf247'}
+              />
               <span>{link.name}</span>
 
               {/* {hovered === link.value ? (

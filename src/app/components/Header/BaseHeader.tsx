@@ -11,8 +11,10 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { client, wallets } from '@/lib/client';
+import { cn } from '@/lib/utils';
 import { List } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useActiveAccount, useConnectModal } from 'thirdweb/react';
 import { WalletAutoConnect } from '../theme-provider';
 import Menu from './Menu';
@@ -46,6 +48,29 @@ type Props = {
 };
 
 export function BaseHeader({ isNFT = false }: Props) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY) {
+        // Scrolling down
+        setIsVisible(false);
+      } else {
+        // Scrolling up
+        setIsVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Clean up event listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
+
   // const { user } = useGlobalContext();
   // const detailsModal = useWalletDetailsModal();
   const { connect } = useConnectModal();
@@ -62,7 +87,10 @@ export function BaseHeader({ isNFT = false }: Props) {
 
   return (
     <header
-    // className="sticky top-0 z-50 left-0 w-full bg-[#161616]/95 backdrop-blur supports-[backdrop-filter]:bg-[#161616]/60"
+      className={cn(
+        'sticky top-0 z-50 left-0 w-full bg-[#161616]/95 backdrop-blur supports-[backdrop-filter]:bg-[#161616]/60 transition-transform duration-300',
+        isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0',
+      )}
     >
       <div className="container !px-3 xs:!px-5 sm:!px-0 h-[88px] w-full py-5 justify-between items-center flex">
         <div className="flex gap-x-4 items-center">
