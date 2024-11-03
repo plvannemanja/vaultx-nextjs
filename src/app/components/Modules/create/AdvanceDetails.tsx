@@ -283,7 +283,7 @@ export default function AdvanceDetails({
             <div className="grid grid-cols-12 gap-x-2">
               <div className="col-span-4">
                 <Input
-                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl inline-flex text-[#B7B2B2]"
+                  className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl flex text-[#B7B2B2] placeholder:text-[#B7B2B2] placeholder:text-sm text-sm"
                   onChange={(e) =>
                     setAdvancedDetails({
                       ...advancedDetails,
@@ -299,7 +299,7 @@ export default function AdvanceDetails({
               <div className="col-span-1 flex">
                 <div className="relative">
                   <Input
-                    className="h-[52px] py-[15px] text-[#979797] disabled:bg-[#232323] bg-[#232323] rounded-xl justify-start items-center"
+                    className="h-[52px] py-[15px] text-[#979797] text-center placeholder:text-lg placeholder:font-extrabold disabled:bg-[#232323] bg-[#232323] rounded-xl justify-center items-center"
                     onChange={(e) => {
                       let val = Number(e.target.value);
                       setAdvancedDetails({
@@ -341,7 +341,7 @@ export default function AdvanceDetails({
         )}
 
         {options.unlockable && (
-          <div className="flex flex-col gap-y-3 mt-3">
+          <div className="flex flex-col gap-y-3 mt-3 w-full">
             <p className="text-lg font-semibold">Unlockable Content</p>
             <Textarea
               className="font-AzeretMono rounded-md focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none text-[#989898] placeholder:text-[#989898] resize-none p-4 placeholder:text-xs bg-[#232323] focus:placeholder-transparent focus:outline-none"
@@ -360,10 +360,11 @@ export default function AdvanceDetails({
               value={advancedDetails.unlockable}
             />
             {unlockableFiles.length == 0 && (
-              <div className="flex gap-x-4 items-center">
+              <div className="flex gap-x-4 w-full items-center">
                 <FileInput
                   onFileSelect={(file: any) => handleFileChange(file, 0)}
                   maxSizeInBytes={1024 * 1024}
+                  className="min-w-[400px]"
                   deSelect={true}
                 />
                 {unlockableFiles.length === 0 ? (
@@ -378,7 +379,7 @@ export default function AdvanceDetails({
                   />
                 ) : null}
                 <div
-                  className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                  className="flex gap-x-2 px-4 h-full py-1 rounded-md items-center border-2 border-neon cursor-pointer"
                   onClick={() => {
                     if (unlockableFiles.length === 0) {
                       setUnlockableFiles([null, null]);
@@ -402,11 +403,11 @@ export default function AdvanceDetails({
             {unlockableFiles.map((item: any, index: number) => {
               if (index == 0) {
                 return (
-                  <div className="flex gap-x-4 items-center" key={index}>
+                  <div className="flex gap-x-4 items-center w-full" key={index}>
                     <FileInput
                       onFileSelect={(file: any) => handleFileChange(file, 0)}
                       maxSizeInBytes={1024 * 1024}
-                      className="min-w-[200px]"
+                      className="min-w-[400px]"
                     />
                     <Image
                       src="/icons/trash.svg"
@@ -418,7 +419,7 @@ export default function AdvanceDetails({
                       quality={100}
                     />
                     <div
-                      className="flex gap-x-2 px-4 h-[52px] py-1 rounded-md items-center border-2 border-neon cursor-pointer"
+                      className="flex gap-x-2 px-4 h-full py-1 rounded-md items-center border-2 border-neon cursor-pointer"
                       onClick={() => {
                         if (unlockableFiles.length === 0) {
                           setUnlockableFiles([null, null]);
@@ -441,9 +442,10 @@ export default function AdvanceDetails({
                 );
               }
               return (
-                <div className="flex gap-x-4 items-center" key={index}>
+                <div className="flex gap-x-4 items-center w-full" key={index}>
                   <FileInput
                     onFileSelect={(file: any) => handleFileChange(file, index)}
+                    className="min-w-[400px]"
                     maxSizeInBytes={1024 * 1024}
                   />
                   <Image
@@ -464,27 +466,31 @@ export default function AdvanceDetails({
         {options.category && (
           <div className="flex flex-col gap-y-2">
             <Label className="text-lg font-semibold">Category</Label>
-            <select
-              aria-label="Select category"
-              // className="h-10 rounded-md px-2 w-full"
-              className="w-full border-none bg-[#232323] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs font-AzeretMono inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
-              name="country"
-              onChange={(e) => {
-                setFormData({ ...formData, category: (e.target as any).value });
-                setAdvancedDetails({
-                  ...advancedDetails,
-                  category: (e.target as any).value,
-                });
-              }}
-              value={advancedDetails.category}
-            >
-              <option value="">Select</option>
-              {categories.map((item: any) => (
-                <option key={item._id} value={item._id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
+            <div className="bg-[#232323] rounded-xl pr-4">
+              <select
+                aria-label="Select a category"
+                className="w-full border-none bg-[#232323] h-[52px] px-[15px] py-[15px] rounded-xl placeholder:text-xs azeret-mono-font justify-start items-center gap-[30px] inline-flex text-white/[53%] text-sm focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none"
+                name="country"
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    category: (e.target as any).value,
+                  });
+                  setAdvancedDetails({
+                    ...advancedDetails,
+                    category: (e.target as any).value,
+                  });
+                }}
+                value={advancedDetails.category}
+              >
+                <option value="">Select</option>
+                {categories.map((item: any) => (
+                  <option key={item._id} value={item._id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
 
@@ -495,7 +501,7 @@ export default function AdvanceDetails({
               <div key={index} className="grid grid-cols-12 gap-x-2">
                 <div className="col-span-4">
                   <Input
-                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl inline-flex text-[#B7B2B2]"
+                    className="border-none w-[500px] grid-cols-3 h-[52px] px-[26px] disabled:bg-[#232323] py-[15px] bg-[#232323] rounded-xl flex text-[#B7B2B2] placeholder:text-[#B7B2B2] placeholder:text-sm text-sm"
                     onChange={(e) =>
                       updateSplit(index, 'paymentWallet', e.target.value)
                     }
@@ -508,7 +514,7 @@ export default function AdvanceDetails({
                 <div className="col-span-1 flex">
                   <div className="relative">
                     <Input
-                      className="h-[52px] py-[15px] text-[#979797] disabled:bg-[#232323] bg-[#232323] rounded-xl justify-start items-center"
+                      className="h-[52px] py-[15px] text-[#979797] text-center placeholder:text-lg placeholder:font-extrabold disabled:bg-[#232323] bg-[#232323] rounded-xl justify-center items-center"
                       onChange={(e) => {
                         const value = BigInt(e.target.value); // Convert the input value to bigint
                         updateSplit(index, 'paymentPercentage', value);
@@ -565,7 +571,7 @@ export default function AdvanceDetails({
           </div>
         )}
 
-        <PropertiesTemplate addStatus={false} />
+        <PropertiesTemplate addStatus={false} isCreate />
 
         <div className="flex gap-x-4 justify-center my-5">
           <BaseButton

@@ -23,9 +23,6 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Vault',
   description: 'Monstorx frontend real world NFT marketplace',
-  icons: {
-    icon: './favicon.png',
-  },
 };
 
 export default function RootLayout({

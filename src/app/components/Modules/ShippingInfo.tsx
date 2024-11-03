@@ -376,8 +376,8 @@ export default function ShippingInfo({ isSetting }: any) {
   return (
     <div className="flex flex-col gap-y-5">
       {isSetting ? null : (
-        <p className="text-lg font-semibold text-white font-manrope">
-          Shipping Information
+        <p className="text-lg font-extrabold text-white font-manrope">
+          Select Shipping Information
         </p>
       )}
       <div className="flex flex-wrap gap-5">
@@ -387,7 +387,7 @@ export default function ShippingInfo({ isSetting }: any) {
                 <div
                   key={index}
                   className={cn(
-                    `w-[18rem] cursor-pointer h-[15rem] bg-[#232323] relative flex flex-col gap-y-4 p-4 rounded-md ${isSelected(item) ? 'border-2 border-[#DDF247]' : ''}`,
+                    `w-[18rem] cursor-pointer h-[230px] bg-[#232323] relative flex flex-col gap-y-4 p-4 border-2 border-transparent rounded-[12px] ${isSelected(item) ? ' border-[#DDF247]' : ''}`,
                     isSetting ? ' bg-[#161616]' : '',
                   )}
                   onClick={() => {
@@ -396,19 +396,21 @@ export default function ShippingInfo({ isSetting }: any) {
                 >
                   <div className="flex justify-between">
                     <div className="flex flex-col gap-y-2">
-                      <span className="text-xl font-semibold">{item.name}</span>
-                      <span className="text-[#A6A6A6]">{item.phoneNumber}</span>
+                      <span className="text-lg font-semibold">{item.name}</span>
+                      <span className="text-[#A6A6A6] text-xs">
+                        {item.phoneNumber}
+                      </span>
                     </div>
-                    <div className="text-[#A6A6A6]">{item.type}</div>
+                    <div className="text-white text-sm">{item.type}</div>
                   </div>
                   <div>
                     {item.address && item.country ? (
-                      <p className="text-[#A6A6A6] azeret-mono-font text-[12px]">
+                      <p className="text-[#A6A6A6] azeret-mono-font text-xs">
                         {`${item.address.line1 + item.address.line2 + item.address.state + item.address.city + item.country}`
-                          .length > 150
+                          .length > 100
                           ? `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + item.address.city + ' ' + item.country}`.slice(
                               0,
-                              150,
+                              100,
                             ) + '...'
                           : `${item.address.line1 + ' ' + item.address.line2 + ' ' + item.address.state + ' ' + item.address.city + ' ' + item.country}`}{' '}
                       </p>
@@ -431,7 +433,7 @@ export default function ShippingInfo({ isSetting }: any) {
                     </div>
                     <div className="absolute bottom-2 right-2 flex items-center gap-1">
                       <div
-                        className="text-[#DDF247] text-xs h-full cursor-pointer px-2 py-1 rounded-md border-2 border-[#ffffff12]  text-[14px]"
+                        className="text-[#DDF247] text-sm h-full cursor-pointer px-2 py-1 rounded-md border-2 border-white/[12%]"
                         onClick={() => {
                           preserveState(item);
                           setIsUpdateModalOpen(true);
@@ -740,10 +742,9 @@ export default function ShippingInfo({ isSetting }: any) {
               );
             })
           : null}
-
         <div
           className={cn(
-            'w-[18rem] h-[15rem] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-md relative',
+            'w-[18rem] h-[230px] bg-[#232323] flex flex-col gap-y-2 justify-center items-center rounded-[12px] relative',
             isSetting ? ' bg-[#161616]' : '',
           )}
           onClick={resetState}
