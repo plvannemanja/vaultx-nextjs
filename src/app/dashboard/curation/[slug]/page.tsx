@@ -212,7 +212,12 @@ export default function Page({ params }: { params: { slug: string } }) {
       [filters.filter.param]: filters.filter.value,
     });
 
-    setNfts(nfts);
+    setNfts(nfts.filter(
+      (nft: any) =>
+        nft?.active &&
+        nft.ownerInfo?.[0]?.active &&
+        nft.curationInfo?.[0].active,
+    ));
   };
 
   const fetchLikes = async () => {
@@ -562,8 +567,8 @@ export default function Page({ params }: { params: { slug: string } }) {
               key={index}
               onClick={() => setFilterBadge(badge.value)}
               className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${filterbadge === badge.value
-                  ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
-                  : 'hover:bg-[#232323] bg-transparent text-white'
+                ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
+                : 'hover:bg-[#232323] bg-transparent text-white'
                 }`}
             >
               {badge.label}
