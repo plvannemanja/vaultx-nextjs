@@ -64,6 +64,7 @@ export default function Page() {
           (nft: any) =>
             nft?.active &&
             nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0] &&
             nft.curationInfo?.[0].active,
         ));
       }

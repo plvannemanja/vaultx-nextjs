@@ -265,6 +265,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
           (nft: any) =>
             nft?.active &&
             nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0] &&
             nft.curationInfo?.[0].active,
         ),
       });
@@ -289,6 +290,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             (nft: any) =>
               nft?.active &&
               nft.ownerInfo?.[0]?.active &&
+              nft.curationInfo?.[0] &&
               nft.curationInfo?.[0].active,
           ),
         });
@@ -314,6 +316,7 @@ export default function Tabs({ tab }: { tab: ProfileTabs }) {
             (nft: any) =>
               nft?.active &&
               nft.ownerInfo?.[0]?.active &&
+              nft.curationInfo?.[0] &&
               nft.curationInfo?.[0].active,
           ) : [],
         });
