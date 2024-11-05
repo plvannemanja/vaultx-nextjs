@@ -35,11 +35,13 @@ export default function NFTList({ color }: { color: any }) {
       const {
         data: { nfts },
       } = await nftService.getAllNfts({ limit: 0, skip: 0, searchInput: '' });
+      debugger;
       const filterNFTs = nfts[0]?.data
         .filter(
           (nft: any) =>
             nft?.active &&
             nft.ownerInfo?.[0]?.active &&
+            nft.curationInfo?.[0] &&
             nft.curationInfo?.[0].active,
         )
         ?.slice(0, 4);
