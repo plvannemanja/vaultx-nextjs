@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/sheet';
 import { client, wallets } from '@/lib/client';
 import { List } from 'lucide-react';
-import { useActiveAccount, useConnectModal } from 'thirdweb/react';
+import { ConnectButton, PayEmbed, useActiveAccount, useConnectModal } from 'thirdweb/react';
 import { useGlobalContext } from '../Context/GlobalContext';
 import { WalletAutoConnect } from '../theme-provider';
 import SideBar from '../ui/SideBar';
@@ -28,6 +28,8 @@ export default function AppHeader() {
 
   return (
     <div className="flex justify-between lg:justify-end px-3 py-4 items-center">
+      <PayEmbed client={client} />
+      <ConnectButton client={client} />
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
