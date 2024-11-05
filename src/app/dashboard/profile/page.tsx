@@ -151,6 +151,7 @@ export default function Page() {
       duration: 2000,
     });
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const description = truncate(desc?.replace(/\r\n|\n/g, '<br />'), 300);

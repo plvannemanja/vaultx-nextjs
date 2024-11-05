@@ -264,6 +264,15 @@ export default function Page({ params }: { params: { slug: string } }) {
     150,
   );
 
+  const checkAllSocialIconsArePresent = () => {
+    return (
+      curation?.twitter ||
+      curation?.instagram ||
+      curation?.facebook ||
+      curation?.website
+    );
+  };
+
   return (
     <div className="flex flex-col gap-y-4 px-4 mx-4 my-4">
       <div
@@ -285,7 +294,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div className="w-full absolute bottom-4 flex items-center justify-between px-5 z-20">
           {curation.owner?.wallet && (
             <div
-              className="flex gap-x-3 h-10 text-sm backdrop-blur-sm items-center p-3 rounded-xl text-white border border-white/[29%] cursor-pointer"
+              className="flex gap-x-3 h-10 text-sm items-center p-3 rounded-xl text-white border border-white/[29%] cursor-pointer"
               onClick={() => copyAddr()}
             >
               {trimString(curation.owner?.wallet)}
@@ -293,7 +302,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
           )}
           <div className="flex gap-4">
-            <div className="flex px-5 py-3 backdrop-blur-sm h-12 rounded-full gap-x-3 p-3 border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
+            <div className="flex px-5 py-3 h-12 rounded-full gap-x-3 p-3 border-[1.15px] items-center border-[#151515]/10 bg-black/[39%] cursor-pointer">
               <span className="font-medium">{likes}</span>
               <div className="checkmark" onClick={() => handleLike()}>
                 <Heart
@@ -306,9 +315,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
             {user?.wallet &&
               String(user?.wallet).toLowerCase() ===
-              String(curation.owner?.wallet)?.toLowerCase() && (
+                String(curation.owner?.wallet)?.toLowerCase() && (
                 <Link href={`/dashboard/curation/edit/${params.slug}`}>
-                  <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border items-center border-[#151515]/30 bg-black/40 cursor-pointer">
+                  <div className="flex px-5 py-3 gap-x-3 p-3 h-12 rounded-full border-[1.15px] items-center border-[#151515]/10 bg-black/[39%] cursor-pointer">
                     <Edit className="w-5 h-5" />
                     <div className="text-white text-base font-medium">Edit</div>
                   </div>
@@ -391,7 +400,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col gap-y-7 md:w-[38%] py-4">
+        <div className="w-full flex flex-col gap-y-7 md:w-[40%] py-4">
           <div className="flex flex-col border bg-white/[1%] border-white/20 rounded-lg">
             <div className="px-4 py-4 flex justify-between items-center">
               <span className="text-lg font-medium azeret-mono-font text-[#96989B]">
@@ -421,82 +430,103 @@ export default function Page({ params }: { params: { slug: string } }) {
               <span className="font-bold">{curationInfo?.volumeRanking}</span>
             </div>
           </div>
-          <div className="w-full h-20 px-20 py-4 rounded-xl border bg-white/[1%] border-white/20 flex justify-center items-center">
+          <div
+            className={cn(
+              'w-full h-20 py-4 rounded-xl border bg-white/[1%] border-white/20 flex justify-center items-center',
+              checkAllSocialIconsArePresent() ? 'px-20' : '',
+            )}
+          >
             <div className="flex gap-x-8">
-              <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
-                <Link href={ensureValidUrl(curation?.twitter)}>
-                  <svg
-                    width="21"
-                    height="20"
-                    viewBox="0 0 21 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g clip-path="url(#clip0_3474_12420)">
-                      <path
-                        d="M10.9183 18.3327C15.5207 18.3327 19.2516 14.6017 19.2516 9.99935C19.2516 5.39697 15.5207 1.66602 10.9183 1.66602C6.31592 1.66602 2.58496 5.39697 2.58496 9.99935C2.58496 14.6017 6.31592 18.3327 10.9183 18.3327Z"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M2.58496 10H19.2516"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M10.9183 18.3327C12.7593 18.3327 14.2516 14.6017 14.2516 9.99935C14.2516 5.39697 12.7593 1.66602 10.9183 1.66602C9.07734 1.66602 7.58496 5.39697 7.58496 9.99935C7.58496 14.6017 9.07734 18.3327 10.9183 18.3327Z"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M5.02539 4.22461C6.53343 5.73265 8.61676 6.6654 10.9179 6.6654C13.2191 6.6654 15.3025 5.73265 16.8105 4.22461"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M16.7031 15.4408C15.195 13.9327 13.1117 13 10.8105 13C8.50934 13 6.42601 13.9327 4.91797 15.4408"
-                        stroke="white"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_3474_12420">
-                        <rect
-                          width="20"
+              {checkAllSocialIconsArePresent() ? (
+                <>
+                  {curation?.twitter && (
+                    <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
+                      <Link href={ensureValidUrl(curation?.twitter)}>
+                        <svg
+                          width="21"
                           height="20"
-                          fill="white"
-                          transform="translate(0.917969)"
-                        />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </Link>
-              </div>
-              <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
-                <Link href={ensureValidUrl(curation?.website)}>
-                  <Twitter className="w-5 h-5 fill-white stroke-none" />
-                </Link>
-              </div>
-              <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
-                <Link href={ensureValidUrl(curation?.facebook)}>
-                  <Facebook className="w-5 h-5 fill-white stroke-none" />
-                </Link>
-              </div>
-              <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
-                <Link href={ensureValidUrl(curation?.instagram)}>
-                  <Instagram className="w-5 h-5 " />
-                </Link>
-              </div>
+                          viewBox="0 0 21 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g clip-path="url(#clip0_3474_12420)">
+                            <path
+                              d="M10.9183 18.3327C15.5207 18.3327 19.2516 14.6017 19.2516 9.99935C19.2516 5.39697 15.5207 1.66602 10.9183 1.66602C6.31592 1.66602 2.58496 5.39697 2.58496 9.99935C2.58496 14.6017 6.31592 18.3327 10.9183 18.3327Z"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M2.58496 10H19.2516"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M10.9183 18.3327C12.7593 18.3327 14.2516 14.6017 14.2516 9.99935C14.2516 5.39697 12.7593 1.66602 10.9183 1.66602C9.07734 1.66602 7.58496 5.39697 7.58496 9.99935C7.58496 14.6017 9.07734 18.3327 10.9183 18.3327Z"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M5.02539 4.22461C6.53343 5.73265 8.61676 6.6654 10.9179 6.6654C13.2191 6.6654 15.3025 5.73265 16.8105 4.22461"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path
+                              d="M16.7031 15.4408C15.195 13.9327 13.1117 13 10.8105 13C8.50934 13 6.42601 13.9327 4.91797 15.4408"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_3474_12420">
+                              <rect
+                                width="20"
+                                height="20"
+                                fill="white"
+                                transform="translate(0.917969)"
+                              />
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
+                  {curation?.website && (
+                    <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
+                      <Link href={ensureValidUrl(curation?.website)}>
+                        <Twitter className="w-5 h-5 fill-white stroke-none" />
+                      </Link>
+                    </div>
+                  )}
+                  {curation?.facebook && (
+                    <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
+                      <Link href={ensureValidUrl(curation?.facebook)}>
+                        <Facebook className="w-5 h-5 fill-white stroke-none" />
+                      </Link>
+                    </div>
+                  )}
+                  {curation?.instagram && (
+                    <div className="w-8 h-8 flex justify-center items-center border border-white rounded-full">
+                      <Link href={ensureValidUrl(curation?.instagram)}>
+                        <Instagram className="w-5 h-5 " />
+                      </Link>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="azeret-mono-font text-lg text-[#96989B]">
+                  The owner has no registered SNS.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -511,8 +541,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             //   ? 'h-[200px] before:absolute before:top-0 before:left-0 before:w-full before:h-full before:z-10 before:bg-gradient-to-b before:to-[#111] before:from-[#111]/[23%] before:content-[""]'
             //   : '',
             Array.isArray(curation?.descriptionImage) &&
-            curation?.descriptionImage.length === 2 &&
-            'flex space-x-4',
+              curation?.descriptionImage.length === 2 &&
+              'flex space-x-4',
           )}
         >
           <div
@@ -533,7 +563,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                     className="rounded-xl w-full h-full"
                     width={'100%'}
                     height={'100%'}
-                  // quality={100}
+                    // quality={100}
                   />
                 </div>
               ))}
@@ -561,10 +591,11 @@ export default function Page({ params }: { params: { slug: string } }) {
             <Badge
               key={index}
               onClick={() => setFilterBadge(badge.value)}
-              className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${filterbadge === badge.value
+              className={`px-4 py-3 rounded-xl font-extrabold text-sm border border-white/[12%] cursor-pointer ${
+                filterbadge === badge.value
                   ? 'bg-neon text-black hover:text-black hover:bg-[#ddf247]'
                   : 'hover:bg-[#232323] bg-transparent text-white'
-                }`}
+              }`}
             >
               {badge.label}
             </Badge>
