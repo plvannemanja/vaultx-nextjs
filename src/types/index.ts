@@ -125,6 +125,7 @@ export type NFTItemType = {
   mintedBy: Partial<UserType>;
   owner: Partial<UserType>;
   cloudinaryUrl: string;
+  cloudinaryPlaceholderUrl: string;
   curation: string | Partial<CurationType>;
   lastPrice: number;
   price: number;

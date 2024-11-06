@@ -2,11 +2,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn, formatNumberWithCommas } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
 
 interface INftCardProps {
   _id: string;
   name: string;
   cloudinaryUrl: string;
+  cloudinaryPlaceholderUrl: string;
   curation: {
     name: string;
   };
@@ -22,9 +25,25 @@ export default function NftCard({
   data: INftCardProps;
   className?: string;
 }) {
+
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    if (data.cloudinaryPlaceholderUrl) {
+      fetch(data.cloudinaryPlaceholderUrl, { mode: 'no-cors' })
+        .then(() => {
+          setIsImageLoaded(true);
+        }).catch(() => {
+          setIsImageLoaded(true);
+        });
+    }
+  }, [data.cloudinaryPlaceholderUrl]);
+
+
   if (data.curationInfo?.length) {
     data.curation = data.curationInfo[0];
   }
+
   return (
     <Card
       className={cn(
@@ -34,13 +53,14 @@ export default function NftCard({
     >
       <CardContent className="rounded-[20px] p-0">
         <div className="w-full overflow-hidden rounded-[8px] p-5">
+
           <Image
             width={296}
             height={296}
-            src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
+            src={isImageLoaded ? data.cloudinaryUrl : data.cloudinaryPlaceholderUrl}
             className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
-            blurDataURL={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
+            blurDataURL={data.cloudinaryPlaceholderUrl || ''}
             placeholder="blur"
             quality={100}
           />
