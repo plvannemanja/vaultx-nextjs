@@ -65,7 +65,7 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     if (!activeAccount) return;
     try {
-      const address = checksumAddress(activeAccount?.address) as Address;
+      const address = checksumAddress(activeAccount?.address as `0x${string}`) as Address;
       const { data } = await authenticationServices.connectWallet({
         wallet: address,
       });
