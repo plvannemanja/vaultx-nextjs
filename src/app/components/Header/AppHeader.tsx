@@ -28,8 +28,8 @@ export default function AppHeader() {
 
   return (
     <div className="flex justify-between lg:justify-end px-3 py-4 items-center">
-      <PayEmbed client={client} />
-      <ConnectButton client={client} />
+      {/* <PayEmbed client={client} />
+      <ConnectButton client={client} /> */}
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>

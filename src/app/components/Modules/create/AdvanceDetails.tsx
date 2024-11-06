@@ -323,7 +323,7 @@ export default function AdvanceDetails({
               <div className="col-span-2 hidden">
                 <div
                   className="flex cursor-pointer h-[52px] justify-center relative gap-y-1 items-center px-[14px] py-[16px] border-2 border-[#DDF247] rounded-md"
-                  onClick={() => {}}
+                  onClick={() => { }}
                 >
                   <Image
                     src="/icons/add-new.svg"
@@ -406,7 +406,7 @@ export default function AdvanceDetails({
                   <div className="flex gap-x-4 items-center w-full" key={index}>
                     <FileInput
                       onFileSelect={(file: any) => handleFileChange(file, 0)}
-                      maxSizeInBytes={1024 * 1024}
+                      maxSizeInBytes={50 * 1024 * 1024}
                       className="min-w-[400px]"
                     />
                     <Image
@@ -446,7 +446,7 @@ export default function AdvanceDetails({
                   <FileInput
                     onFileSelect={(file: any) => handleFileChange(file, index)}
                     className="min-w-[400px]"
-                    maxSizeInBytes={1024 * 1024}
+                    maxSizeInBytes={50 * 1024 * 1024}
                   />
                   <Image
                     src="/icons/trash.svg"
