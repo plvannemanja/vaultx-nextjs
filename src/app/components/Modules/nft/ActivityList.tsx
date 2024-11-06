@@ -98,18 +98,22 @@ export default function ActivityList() {
                   {/* <TableCaption>A list of your item activity.</TableCaption> */}
                   <TableHeader>
                     <TableRow className="border-white/[8%] font-extrabold">
-                      <TableHead className="text-[#818181]">Event</TableHead>
-                      <TableHead className="text-[#818181]">Price</TableHead>
-                      <TableHead className="text-[#818181] sm:table-cell hidden">
+                      <TableHead className="text-[#818181] font-normal">
+                        Event
+                      </TableHead>
+                      <TableHead className="text-[#818181] font-normal">
+                        Price
+                      </TableHead>
+                      <TableHead className="text-[#818181] font-normal sm:table-cell hidden">
                         From
                       </TableHead>
-                      <TableHead className="text-[#818181] sm:table-cell hidden">
+                      <TableHead className="text-[#818181] font-normal sm:table-cell hidden">
                         To
                       </TableHead>
-                      <TableHead className="text-[#818181] lg:table-cell hidden">
+                      <TableHead className="text-[#818181] font-normal lg:table-cell hidden">
                         Date
                       </TableHead>
-                      <TableHead className=" text-[#818181] lg:table-cell hidden">
+                      <TableHead className=" text-[#818181] font-normal lg:table-cell hidden">
                         Time
                       </TableHead>
                     </TableRow>
@@ -126,11 +130,12 @@ export default function ActivityList() {
                           className="border-white/[8%] font-normal azeret-mono-font"
                         >
                           <TableCell className="whitespace-nowrap">
-                            <div className="flex gap-x-2 items-center">
+                            <div className="flex gap-x-2 items-center text-sm font-normal">
                               {getIcon(item.state)}
                               {item.actionHash ? (
                                 <a
                                   target="_blank"
+                                  className="font-normal"
                                   href={getExplorerURL(
                                     'transaction',
                                     item?.actionHash,
@@ -139,7 +144,9 @@ export default function ActivityList() {
                                   {item.state}
                                 </a>
                               ) : (
-                                item.state
+                                <span className="text-sm font-normal">
+                                  {item.state}
+                                </span>
                               )}
                             </div>
                           </TableCell>

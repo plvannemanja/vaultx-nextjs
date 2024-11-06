@@ -66,9 +66,7 @@ export default function NftCard({
           />
         </div>
         <div className="flex flex-col px-5 py-3 gap-y-2.5 rounded-b-[20px]">
-          <p className="font-extrabold">
-            {data.name.length > 24 ? `${data.name.slice(0, 24)}...` : data.name}
-          </p>
+          <p className="font-extrabold truncate">{data.name}</p>
           <div className="flex justify-between">
             <span className="text-xs text-white/30  azeret-mono-font">
               Created by:{' '}

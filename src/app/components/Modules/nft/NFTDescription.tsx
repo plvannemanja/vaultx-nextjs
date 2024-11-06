@@ -67,7 +67,7 @@ export default function NFTDescription() {
 
   const description = truncate(
     data?.description?.replace(/\r\n|\n/g, '<br />'),
-    320,
+    180,
   );
 
   return (
@@ -78,7 +78,7 @@ export default function NFTDescription() {
             return (
               <div
                 // className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 h-[242px] aspect-square relative w-full"
-                className="h-[290px] xss:h-[260px] sm: md:h-[260px] lg:h-[242px] xl:h-[280px] relative w-full"
+                className="h-[290px] xss:h-[260px] sm: md:h-[260px] lg:h-[242px] xl:h-[280px] relative w-full cursor-pointer"
                 key={index}
               >
                 <Image
@@ -126,13 +126,12 @@ export default function NFTDescription() {
                 <span
                   className="text-white/[53%] text-sm sm:text-xs lg:text-sm font-normal azeret-mono-font"
                   dangerouslySetInnerHTML={{
-                    // data.description.replace(/\r\n|\n/g, '<br />'),
                     __html: loadMore
                       ? data?.description?.replace(/\r\n|\n/g, '<br />')
                       : description,
                   }}
                 ></span>
-                {description?.length > 320 && (
+                {description?.length > 180 && (
                   <span
                     className="text-[#DDF247] inline-block ml-2 cursor-pointer font-normal azeret-mono-font"
                     onClick={() => setLoadMore((prev) => !prev)}
