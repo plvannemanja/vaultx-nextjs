@@ -821,7 +821,7 @@ export default function NFTMain({
                 <p className="font-extrabold text-sm ">Overview</p>
                 <hr className="border-white/[8%]" />
                 <div className="grid grid-cols-12 gap-y-3 sm:gap-y-0 w-full gap-x-3 justify-between">
-                  <div className="flex flex-col col-span-12 sm:col-span-7 gap-y-[10px]">
+                  <div className="flex flex-col col-span-12 sm:col-span-8 gap-y-[10px]">
                     <div className="flex px-4 py-[15px] lg:px-3 xl:px-4 lg:py-3 xl:py-[15px] rounded-md justify-between  items-center border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
                       <span className="font-extrabold text-white text-sm font-manrope">
                         Artist
@@ -849,8 +849,8 @@ export default function NFTMain({
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col col-span-12 xs:col-span-8 xss:col-span-8  sm:col-span-5 gap-y-3">
-                    <div className="flex flex-col gap-y-[11px] px-4 py-2 rounded-md justify-between border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
+                  <div className="flex flex-col col-span-12 xs:col-span-8 xss:col-span-8 sm:col-span-4 gap-y-3">
+                    <div className="flex flex-col gap-y-[11px] px-5 py-2 rounded-md justify-between border-[#404040] border-2 bg-gradient-to-bl from-[rgba(255,255,255,0.06)] to-[rgba(255,255,255,0.03)]">
                       <p className="font-extrabold text-sm">Size</p>
                       <div className="mt-2 text-sm font-AzeretMono text-white/60">
                         <p className="flex mb-[11px]">
@@ -858,7 +858,7 @@ export default function NFTMain({
                           <span className="text-center w-[30px] inline-block">
                             :
                           </span>
-                          <span className="flex-1">
+                          <span className="flex-1 text-right">
                             {data?.shippingInformation?.lengths}cm
                           </span>
                         </p>
@@ -867,7 +867,7 @@ export default function NFTMain({
                           <span className="text-center w-[30px] inline-block">
                             :
                           </span>
-                          <span className="flex-1">
+                          <span className="flex-1 text-right">
                             {data?.shippingInformation?.height}cm
                           </span>
                         </p>
@@ -876,7 +876,7 @@ export default function NFTMain({
                           <span className="text-center w-[30px] inline-block ">
                             :
                           </span>
-                          <span className="flex-1">
+                          <span className="flex-1 text-right">
                             {data?.shippingInformation?.width}cm
                           </span>
                         </p>
@@ -885,7 +885,7 @@ export default function NFTMain({
                           <span className="text-center w-[30px] inline-block ">
                             :
                           </span>
-                          <span className="flex-1">
+                          <span className="flex-1 text-right">
                             {data?.shippingInformation?.weight}cm
                           </span>
                         </p>
