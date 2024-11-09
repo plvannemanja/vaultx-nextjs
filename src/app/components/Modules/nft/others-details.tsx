@@ -38,8 +38,9 @@ const OthersDetails = ({ data }: Props) => {
                   <span>Details</span>
                 </span>
                 <ChevronUpIcon
-                  className={`${open ? 'rotate-180 transform' : ''
-                    } h-5 w-5 text-white/[53%]`}
+                  className={`${
+                    open ? 'rotate-180 transform' : ''
+                  } h-5 w-5 text-white/[53%]`}
                 />
               </div>
             </DisclosureButton>
@@ -71,7 +72,13 @@ const OthersDetails = ({ data }: Props) => {
                   <Label className="font-extrabold text-sm">
                     View on {activeChain?.name} Scan
                   </Label>
-                  <a href={data?.minted ? getExplorerURL('nft', NFTDetail.tokenId.toString()) : ''}>
+                  <a
+                    href={
+                      data?.minted
+                        ? getExplorerURL('nft', NFTDetail.tokenId.toString())
+                        : ''
+                    }
+                  >
                     <ArrowTopRightOnSquareIcon
                       width={20}
                       height={20}

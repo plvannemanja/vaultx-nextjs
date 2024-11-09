@@ -10,23 +10,34 @@ export default function ConnectedCard(props: Props) {
   const activeChain = useActiveWalletChain();
   const address = activeAccount?.address
     ? activeAccount?.address.slice(0, 6) +
-    '...' +
-    activeAccount?.address.slice(-4)
+      '...' +
+      activeAccount?.address.slice(-4)
     : 'Connect Wallet';
   return (
     <>
       <div className="lg:w-full h-[106px] px-10 py-[30px] bg-[#232323] rounded-[15px] border-2 border-dashed	 border-[#3a3a3a] flex justify-between items-center gap-[30px]">
         <div className="flex flex-row items-center gap-5">
           <div>
-            <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M26.9529 54C41.8906 54 54 41.9117 54 27C54 12.0883 41.8906 0 26.9529 0C12.7809 0 1.15466 10.8808 0 24.7304H35.7501V29.2696H1.94168e-07C1.15466 43.1192 12.7809 54 26.9529 54Z" fill="white" />
+            <svg
+              width="54"
+              height="54"
+              viewBox="0 0 54 54"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M26.9529 54C41.8906 54 54 41.9117 54 27C54 12.0883 41.8906 0 26.9529 0C12.7809 0 1.15466 10.8808 0 24.7304H35.7501V29.2696H1.94168e-07C1.15466 43.1192 12.7809 54 26.9529 54Z"
+                fill="white"
+              />
             </svg>
           </div>
           <div className=" gap-[13px]">
             <p className="text-white text-lg font-extrabold">
               {address ?? 'Connect Wallet'}
             </p>
-            <p className="text-white/[53%] font-normal">{activeChain?.name}</p>
+            <p className="text-white/[53%] font-normal azeret-mono-font">
+              {activeChain?.name}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-5">

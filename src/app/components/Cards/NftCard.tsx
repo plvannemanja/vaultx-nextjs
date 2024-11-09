@@ -2,8 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn, formatNumberWithCommas } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
 
 interface INftCardProps {
   _id: string;
@@ -25,7 +24,6 @@ export default function NftCard({
   data: INftCardProps;
   className?: string;
 }) {
-
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
@@ -33,12 +31,12 @@ export default function NftCard({
       fetch(data.cloudinaryPlaceholderUrl, { mode: 'no-cors' })
         .then(() => {
           setIsImageLoaded(true);
-        }).catch(() => {
+        })
+        .catch(() => {
           setIsImageLoaded(true);
         });
     }
   }, [data.cloudinaryPlaceholderUrl]);
-
 
   if (data.curationInfo?.length) {
     data.curation = data.curationInfo[0];
@@ -53,15 +51,16 @@ export default function NftCard({
     >
       <CardContent className="rounded-[20px] p-0">
         <div className="w-full overflow-hidden rounded-[8px] p-5">
-
           <Image
             width={296}
             height={296}
-            src={isImageLoaded ? data.cloudinaryUrl : data.cloudinaryPlaceholderUrl}
+            src={
+              isImageLoaded ? data.cloudinaryUrl : data.cloudinaryPlaceholderUrl
+            }
             className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"
-            blurDataURL={data.cloudinaryPlaceholderUrl || ''}
-            placeholder="blur"
+            // blurDataURL={data.cloudinaryPlaceholderUrl || ''}
+            // placeholder="blur"
             quality={100}
           />
         </div>
@@ -94,7 +93,6 @@ export default function NftCard({
                 width={20}
                 alt="matic"
                 loading="lazy"
-                blurDataURL={'/images/image_placeholder.png'}
                 quality={100}
               />
               ${formatNumberWithCommas(data.price)}

@@ -8,6 +8,7 @@ import BaseButton from '../ui/BaseButton';
 import { BaseDialog } from '../ui/BaseDialog';
 
 export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
+  // const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const [property, setProperty] = useState({
     id: null,
@@ -108,6 +109,7 @@ export default function PropertiesInfo({ close, onTemplateAdd, isOpen }) {
                 className="w-full border-none h-[52px] px-[26px] placeholder:text-xs py-[15px] bg-[#161616] azeret-mono-font rounded-xl justify-start items-center gap-[30px] inline-flex  focus:placeholder-transparent focus:outline-none"
                 type="text"
                 placeholder="Enter Template Title * (e.g., #1, Curation Name, Etc)"
+                autoFocus={false}
               />
             </div>
           </div>

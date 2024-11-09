@@ -35,7 +35,7 @@ export default function NFTList({ color }: { color: any }) {
       const {
         data: { nfts },
       } = await nftService.getAllNfts({ limit: 0, skip: 0, searchInput: '' });
-      debugger;
+      // debugger;
       const filterNFTs = nfts[0]?.data
         .filter(
           (nft: any) =>

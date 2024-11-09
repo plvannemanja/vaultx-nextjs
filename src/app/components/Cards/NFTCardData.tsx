@@ -26,7 +26,7 @@ export default function NFTCardData({ data }: { data: INftCardProps }) {
             src={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
             className="rounded w-full object-cover hover:scale-110 transition-transform duration-300 min-h-[296px] max-h-[296px]"
             alt="nft-image"
-            blurDataURL={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
+            // blurDataURL={data.cloudinaryUrl ? data.cloudinaryUrl : ''}
             placeholder="blur"
           />
         </div>

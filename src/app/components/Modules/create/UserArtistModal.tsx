@@ -224,13 +224,13 @@ export default function UserArtistModal({
   }, [editUser]);
 
   return (
-    <div className="grid grid-cols-12 gap-4 h-auto relative bg-[#161616]">
+    <div className="grid grid-cols-12 gap-4 h-auto relative">
       {/* Header Section */}
-      <div className="col-span-12 flex flex-col gap-y-[58px] mb-10 text-[#DEE8E8] lg:w-11/12 mx-auto justify-center items-center gap-4  pt-8">
-        <div className="text-center text-xl lg:text-2xl xl:text-[32px] font-extrabold">
+      <div className="col-span-12 flex flex-col gap-y-7 mb-5 text-[#DEE8E8] lg:w-11/12 mx-auto justify-center items-center gap-4  pt-8">
+        <div className="text-center text-xl lg:text-[32px] font-extrabold">
           Registering affiliated artists
         </div>
-        <p className="self-stretch md:text-lg lg:text-xl xl:text-2xl text-center azeret-mono-font font-medium leading-normal text-white/[53%]">
+        <p className="self-stretch md:text-lg lg:text-2xl text-center azeret-mono-font font-medium leading-normal text-white/[53%]">
           We use artist templates to avoid mistakes that can arise from
           repetitive artist information entry. Entering artist information can
           shorten the mint time.
@@ -239,9 +239,9 @@ export default function UserArtistModal({
       {/* Upload Artist Profile Image Section */}
       <div className="col-span-3 px-10 py-5 bg-dark-700 rounded-2xl border-2 border-dark-600 flex-col justify-center items-center gap-6 inline-flex border-dashed h-[450px]">
         {file || (editUser && imageSrc) ? (
-          <div className="flex flex-col text-center gap-y-[23px]  ">
+          <div className="flex flex-col text-center gap-y-[23px]">
             {imageSrc && (
-              <div className="width-[90%] object-cover mx-auto">
+              <div className="w-[90%] object-cover mx-auto">
                 <Image
                   quality={100}
                   src={imageSrc}
@@ -324,7 +324,7 @@ export default function UserArtistModal({
             onChange={(e) =>
               setFormData({ ...formData, name: (e.target as any).value })
             }
-            className="w-full h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs text-sm font-normal rounded-xl"
+            className="w-full h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs focus:placeholder-transparent text-sm font-normal rounded-xl"
             type="text"
             placeholder="Enter Artist Name"
           />
@@ -342,7 +342,7 @@ export default function UserArtistModal({
             onChange={(e) =>
               setFormData({ ...formData, wallet: (e.target as any).value })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs focus:placeholder-transparent rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address"
           />
@@ -354,7 +354,7 @@ export default function UserArtistModal({
                 confirmWallet: (e.target as any).value,
               })
             }
-            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs rounded-xl flex items-center gap-4"
+            className="w-full border-none  h-12 px-6 py-4 bg-[#161616] azeret-mono-font placeholder:text-white/[53%] focus-visible:border-0 focus-visible:outline-none focus-visible:shadow-none placeholder:text-xs focus:placeholder-transparent rounded-xl flex items-center gap-4"
             type="text"
             placeholder="Please enter the artist's wallet address again"
           />
@@ -368,22 +368,23 @@ export default function UserArtistModal({
           </div>
           <hr className="border-white/[8%] my-4 w-full" />
           <div className="self-stretch flex items-center gap-3 grid-cols-6">
-            <Input
-              className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal col-span-4"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  royaltyAddress: e.target.value,
-                })
-              }
-              placeholder="Please enter the percentage of royalties agreed upon with the artist in numbers."
-              type="text"
-              value={formData.royaltyAddress ?? ''}
-            />
-
+            <div className="flex-1">
+              <Input
+                className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus:placeholder-transparent focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal col-span-4"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    royaltyAddress: e.target.value,
+                  })
+                }
+                placeholder="Please enter the percentage of royalties agreed upon with the artist in numbers."
+                type="text"
+                value={formData.royaltyAddress ?? ''}
+              />
+            </div>
             <div>
               <Input
-                className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
+                className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus:placeholder-transparent focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -397,7 +398,7 @@ export default function UserArtistModal({
                 value={formData.royalty.toString()}
               />
             </div>
-            <div className="h-10 px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
+            <div className="h-10 min-w-[95px] px-4 py-3 bg-transparent rounded-lg border-2 border-yellow-400 flex items-center gap-2.5">
               <div className="w-6 h-6 relative flex">
                 <Image
                   quality={100}
@@ -427,14 +428,14 @@ export default function UserArtistModal({
                 My wallet address
               </span>
             </div>
-            <div className="w-6/12 h-12 px-6 py-4 bg-[#161616] rounded-xl flex items-center">
+            <div className="w-6/12 h-12 px-6 py-4 bg-[#161616] rounded-xl flex items-center flex-1">
               <div className="text-[#696969] text-sm font-normal">
                 {activeAccount?.address}
               </div>
             </div>
             <div>
               <Input
-                className="h-12 px-5 py-4 bg-[#161616] rounded-xl text-[#B7B2B2] flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
+                className="h-12 px-5 py-4 bg-[#161616] rounded-xl text-[#B7B2B2] flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold number-input focus-visible:outline-none focus:placeholder-transparent focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                 onChange={(e) => {
                   setFormData({
                     ...formData,
@@ -457,9 +458,9 @@ export default function UserArtistModal({
                   Artist wallet address
                 </span>
               </div>
-              <div className="w-6/12 px-0 py-0">
+              <div className="w-6/12 flex-1 px-0 py-0">
                 <Input
-                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal"
+                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font text-[#B7B2B2] placeholder:text-white/[53%] focus-visible:border-0 number-input focus-visible:outline-none focus:placeholder-transparent focus-visible:shadow-none border-0 outline-none placeholder:text-xs text-sm font-normal"
                   onChange={(e) =>
                     updateSplit(index, 'paymentWallet', e.target.value)
                   }
@@ -470,7 +471,7 @@ export default function UserArtistModal({
               </div>
               <div>
                 <Input
-                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
+                  className="h-12 px-5 py-4 bg-[#161616] rounded-xl flex items-center azeret-mono-font placeholder:text-[#545454] placeholder:font-bold focus-visible:border-0 number-input focus-visible:outline-none focus:placeholder-transparent focus-visible:shadow-none border-0 outline-none placeholder:text-lg text-sm font-normal text-center"
                   onChange={(e) => {
                     const value = Number(e.target.value);
                     updateSplit(index, 'paymentPercentage', value);
