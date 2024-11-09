@@ -275,7 +275,7 @@ export default function Menu() {
                     width={20}
                     alt="matic"
                     loading="lazy"
-                    blurDataURL={'/images/image_placeholder.png'}
+                    // blurDataURL={'/images/image_placeholder.png'}
                   />
                 </div>
                 <div className="text-center text-white text-base font-extrabold capitalize">

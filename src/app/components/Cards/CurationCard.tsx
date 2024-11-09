@@ -28,9 +28,9 @@ export default function CurationCard({ data }: { data: ICurationCard }) {
               width={482}
               className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
               alt="nft-image"
-              blurDataURL={
-                data.image ? data.image : mediaImages?.curationTop.image
-              }
+              // blurDataURL={
+              //   data.image ? data.image : mediaImages?.curationTop.image
+              // }
               placeholder="blur"
             />
           </div>

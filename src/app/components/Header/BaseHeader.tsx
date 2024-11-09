@@ -199,10 +199,10 @@ export function BaseHeader({ isNFT = false }: Props) {
                 <Link
                   href="/dashboard/create"
                   className={
-                    'px-4 py-2.5 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 cursor-pointer mr-2 self-center sm:flex hidden'
+                    'px-4 py-2.5 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 cursor-pointer mr-2 self-center sm:flex hidden font-extrabold'
                   }
                 >
-                  <div className="text-neutral-900 text-sm font-semibold leading-normal">
+                  <div className="text-neutral-900 text-sm leading-normal">
                     Create RWA
                   </div>
                 </Link>
@@ -211,10 +211,10 @@ export function BaseHeader({ isNFT = false }: Props) {
             </>
           ) : (
             <div
-              className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex hover:bg-white hover:text-gray-900 cursor-pointer"
+              className="max-w-[200px] h-12 px-5 py-3 bg-[#DDF247] rounded-xl border border-[#DDF247] justify-center items-center gap-2 inline-flex cursor-pointer"
               onClick={handleConnect}
             >
-              <div className="text-neutral-900 text-sm md:text-base font-semibold leading-normal">
+              <div className="text-neutral-900 text-sm md:text-base font-bold leading-normal">
                 Connect Wallet
               </div>
               <WalletIcon />
