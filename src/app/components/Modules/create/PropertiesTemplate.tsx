@@ -18,6 +18,14 @@ const defaultAttributes = [
   { type: 'Signature', value: '' },
   { type: 'Authentication', value: '' },
 ];
+// const defaultAttributes = [
+//   { type: '', value: '' },
+//   { type: '', value: '' },
+//   { type: '', value: '' },
+//   { type: '', value: '' },
+//   { type: '', value: '' },
+//   { type: '', value: '' },
+// ];
 
 export default function PropertiesTemplate({
   addStatus,
@@ -246,7 +254,8 @@ export default function PropertiesTemplate({
             >
               <input
                 type="text"
-                className="text-white text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none text-sm"
+                className="text-white/70 text-center w-[65%] rounded-md bg-transparent mx-auto flex justify-start items-center gap-[30px] focus:placeholder-transparent focus:outline-none text-sm placeholder:text-white/70 placeholder:text-sm placeholder:font-medium"
+                placeholder="Title"
                 value={item.type}
                 onChange={(e) =>
                   handlePropertyChange(index, 'type', e.target.value)
