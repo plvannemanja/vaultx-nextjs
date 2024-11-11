@@ -105,7 +105,7 @@ export default function Page() {
               quality={100}
               src={mediaImages?.curationTop.image}
               alt="hero"
-              layout="fill"
+              fill
               objectFit="cover"
               className="rounded-lg"
             />

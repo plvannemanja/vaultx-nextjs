@@ -37,7 +37,7 @@ export default function NewsCard({
               quality={100}
               src={data?.[0]?.image}
               alt="news"
-              layout="fill"
+              fill
               objectFit="cover"
               className="rounded w-full md:aspect-auto aspect-square object-cover"
             />
@@ -58,7 +58,7 @@ export default function NewsCard({
                   alt="news"
                   // width={298}
                   // height={298}
-                  layout="fill"
+                  fill
                   objectFit="cover"
                   className="aspect-square object-cover rounded w-ful"
                 />

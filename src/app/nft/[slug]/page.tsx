@@ -193,7 +193,7 @@ function PageDetail({ params }: { params: { slug: string } }) {
                   quality={100}
                   src={mediaImages?.bottomBaner.image}
                   alt="bottom-banner"
-                  layout="fill"
+                  fill
                   objectFit="cover"
                 ></Image>
               </Link>

@@ -279,7 +279,7 @@ export default function Home() {
                 quality={100}
                 src={images?.bottomBaner.image}
                 alt="bottom-banner"
-                layout="fill"
+                fill
                 objectFit="cover"
               ></Image>
             </Link>

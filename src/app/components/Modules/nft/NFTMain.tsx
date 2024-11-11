@@ -98,6 +98,7 @@ export default function NFTMain({
   const { user } = useGlobalContext();
   const [step, setStep] = useState(1); // Step state in the parent
   const [error, setError] = useState(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const nftService = new NftServices();
   const createSellService = new CreateSellService();
@@ -177,6 +178,21 @@ export default function NFTMain({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
+  useEffect(() => {
+    if (data.cloudinaryPlaceholderUrl) {
+      fetch(data.cloudinaryUrl, { mode: 'no-cors' })
+        .then(() => {
+          setIsImageLoaded(true);
+        })
+        .catch(() => {
+          setIsImageLoaded(true);
+        });
+    }
+    else {
+      setIsImageLoaded(true);
+    }
+  }, [data.cloudinaryPlaceholderUrl, data.cloudinaryUrl]);
+
   return (
     <>
       {error && (
@@ -233,11 +249,13 @@ export default function NFTMain({
             <Image
               quality={100}
               onClick={() => setModal(true)}
-              src={mainImage ? mainImage : data.cloudinaryUrl}
+              src={
+                !isImageLoaded ? data.cloudinaryPlaceholderUrl:  mainImage ? mainImage : data.cloudinaryUrl 
+              }
               // height={683}
               // width={620}
               // quality={100}
-              layout="fill"
+              fill
               objectFit="cover"
               alt="hero"
               className="cursor-zoom-in rounded-[20px] object-cover "

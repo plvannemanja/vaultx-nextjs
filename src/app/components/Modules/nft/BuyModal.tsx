@@ -424,7 +424,7 @@ export default function BuyModal({
                       quality={100}
                       src={NFTDetail.cloudinaryUrl}
                       alt="bottom-banner"
-                      layout="fill"
+                      fill
                       objectFit="cover"
                     ></Image>
                   </div>

@@ -25,10 +25,12 @@ export default function NftCard({
   className?: string;
 }) {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const backendUrl = process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
 
+  const nftImage = `${backendUrl}/nft/image?quality=10&url=${data.cloudinaryUrl}`;
   useEffect(() => {
     if (data.cloudinaryPlaceholderUrl) {
-      fetch(data.cloudinaryPlaceholderUrl, { mode: 'no-cors' })
+      fetch(nftImage, { mode: 'no-cors' })
         .then(() => {
           setIsImageLoaded(true);
         })
@@ -36,7 +38,10 @@ export default function NftCard({
           setIsImageLoaded(true);
         });
     }
-  }, [data.cloudinaryPlaceholderUrl]);
+    else {
+      setIsImageLoaded(true);
+    }
+  }, [data.cloudinaryPlaceholderUrl, nftImage]);
 
   if (data.curationInfo?.length) {
     data.curation = data.curationInfo[0];
@@ -55,7 +60,7 @@ export default function NftCard({
             width={296}
             height={296}
             src={
-              isImageLoaded ? data.cloudinaryUrl : data.cloudinaryPlaceholderUrl
+              isImageLoaded ? nftImage : data.cloudinaryPlaceholderUrl
             }
             className="w-full !aspect-[4/3] !object-cover hover:scale-110 transition-transform duration-300"
             alt="nft-image"

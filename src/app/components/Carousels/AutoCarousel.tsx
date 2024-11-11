@@ -44,7 +44,7 @@ export function AutoCarousel({ data }: IBaseCarouselProps) {
                         loading="lazy"
                         width={'100%'}
                         height={'100%'}
-                        // layout="fill"
+                        // fill
                         // objectFit="cover"
                         className="rounded-3xl absolute z-0 left-0 right-0 top-0 bottom-0 object-cover w-full h-full"
                       />

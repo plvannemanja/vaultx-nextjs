@@ -7,10 +7,38 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: [
-      'vaultx-backet.s3.ap-northeast-2.amazonaws.com',
-      'tan-absent-fox-474.mypinata.cloud',
-    ], // Add your image domain here
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'vaultx-backet.s3.ap-northeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'tan-absent-fox-474.mypinata.cloud',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.vault-x.io',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'tapi.vault-x.io',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '5000',
+        pathname: '/**',
+      },
+    ],
   },
   experimental: {
     missingSuspenseWithCSRBailout: false,

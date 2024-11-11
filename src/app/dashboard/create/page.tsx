@@ -252,7 +252,7 @@ export default function Page() {
                   quality={100}
                   src={mediaImages?.mintingBanner.image}
                   alt="hero"
-                  layout="fill"
+                  fill
                   objectFit="cover"
                 ></Image>
               </a>

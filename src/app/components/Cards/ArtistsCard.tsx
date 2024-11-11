@@ -17,7 +17,7 @@ export default function ArtistsCard({
         <Image
           quality={100}
           src={image}
-          layout="fill"
+          fill
           objectFit="cover"
           alt="artist-pic"
           className="rounded"

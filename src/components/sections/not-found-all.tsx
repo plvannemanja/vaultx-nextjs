@@ -10,7 +10,7 @@ const NotFoundAll = () => {
       <Image
         quality={100}
         src="/images/not-found-bg.png"
-        layout="fill"
+        fill
         alt="not-found-bg"
         className="absolute z-[1] aspect-video object-cover"
         // width={1920}

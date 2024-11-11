@@ -97,7 +97,7 @@ quality={100}
               quality={100}
               src={mediaImages?.appreciateTop.image}
               alt="hero"
-              layout="fill"
+              fill
               objectFit="cover"
               className="rounded-lg "
             />

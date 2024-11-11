@@ -294,7 +294,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             quality={100}
             src={curation?.bannerImage}
             alt="hero"
-            layout="fill"
+            fill
             objectFit="cover"
             className="rounded-xl"
           />

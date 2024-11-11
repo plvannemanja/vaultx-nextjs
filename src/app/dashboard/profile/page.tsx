@@ -163,7 +163,7 @@ export default function Page() {
           quality={100}
           src="/images/work-default.png"
           alt="hero"
-          layout="fill"
+          fill
           objectFit="cover"
           className="rounded-xl"
         />

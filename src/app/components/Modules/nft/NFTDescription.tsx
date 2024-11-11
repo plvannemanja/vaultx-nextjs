@@ -17,6 +17,7 @@ import DescriptionIcon from '../../Icons/description-icon';
 import PropertyIcon from '../../Icons/nft/property';
 
 export default function NFTDescription() {
+  const backendUrl = process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
   const [loadMore, setLoadMore] = useState(false);
   const { user } = useGlobalContext();
   const { NFTDetail: data, setMainImage, type } = useNFTDetail();
@@ -86,13 +87,13 @@ export default function NFTDescription() {
                   alt={data.name}
                   // width={242}
                   // height={242}
-                  layout="fill"
+                  fill
                   objectFit="cover"
                   key={index}
                   onClick={() => {
                     setMainImage(item);
                   }}
-                  src={item}
+                  src={`${backendUrl}/nft/image?quality=10&url=${item}`}
                   className="opacity-60 hover:opacity-100 rounded"
                 />
               </div>

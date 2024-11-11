@@ -535,7 +535,7 @@ export default function PutSaleModal({
                         quality={100}
                         src={nft.cloudinaryUrl}
                         alt="bottom-banner"
-                        layout="fill"
+                        fill
                         objectFit="cover"
                       ></Image>
                     </div>
