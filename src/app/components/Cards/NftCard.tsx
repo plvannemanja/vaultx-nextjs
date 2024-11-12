@@ -27,7 +27,7 @@ export default function NftCard({
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const backendUrl = process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
 
-  const nftImage = `${backendUrl}/nft/image?quality=10&url=${data.cloudinaryUrl}`;
+  const nftImage = `${backendUrl}/nft/image?quality=30&url=${data.cloudinaryUrl}`;
   useEffect(() => {
     if (data.cloudinaryPlaceholderUrl) {
       fetch(nftImage, { mode: 'no-cors' })

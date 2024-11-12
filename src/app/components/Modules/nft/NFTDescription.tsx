@@ -93,7 +93,7 @@ export default function NFTDescription() {
                   onClick={() => {
                     setMainImage(item);
                   }}
-                  src={`${backendUrl}/nft/image?quality=10&url=${item}`}
+                  src={`${backendUrl}/nft/image?quality=30&url=${item}`}
                   className="opacity-60 hover:opacity-100 rounded"
                 />
               </div>
