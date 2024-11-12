@@ -178,20 +178,9 @@ export default function NFTMain({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  useEffect(() => {
-    if (data.cloudinaryPlaceholderUrl) {
-      fetch(data.cloudinaryUrl, { mode: 'no-cors' })
-        .then(() => {
-          setIsImageLoaded(true);
-        })
-        .catch(() => {
-          setIsImageLoaded(true);
-        });
-    }
-    else {
-      setIsImageLoaded(true);
-    }
-  }, [data.cloudinaryPlaceholderUrl, data.cloudinaryUrl]);
+  const backendUrl = process.env.NEXT_PUBLIC_APP_BACKEND_URL || 'https://api.vault-x.io/api/v2';
+
+  const nftImage = `${backendUrl}/nft/image?quality=90&url=${mainImage ? mainImage : data.cloudinaryUrl}`;
 
   return (
     <>
@@ -241,6 +230,7 @@ export default function NFTMain({
                 data?.cloudinaryUrl,
                 ...(data?.attachments ? data.attachments : []),
               ]}
+              placeholder={data?.cloudinaryPlaceholderUrl}
             />
           </Box>
         </Modal>
@@ -250,7 +240,7 @@ export default function NFTMain({
               quality={100}
               onClick={() => setModal(true)}
               src={
-                !isImageLoaded ? data.cloudinaryPlaceholderUrl:  mainImage ? mainImage : data.cloudinaryUrl 
+                !isImageLoaded ? data.cloudinaryPlaceholderUrl:  nftImage 
               }
               // height={683}
               // width={620}
@@ -259,6 +249,8 @@ export default function NFTMain({
               objectFit="cover"
               alt="hero"
               className="cursor-zoom-in rounded-[20px] object-cover "
+              onLoadingComplete={() => setIsImageLoaded(true)}
+              onError={() => setIsImageLoaded(true)}
             />
             <div
               onClick={() => handleLike()}

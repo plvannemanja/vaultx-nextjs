@@ -3,7 +3,7 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function SlickCarousel(props: any) {
   const settings = {
@@ -12,31 +12,43 @@ export default function SlickCarousel(props: any) {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+  
+  const [loadedImageIndices, setLoadedImageIndices] = useState<boolean[]>([]);
 
   const images = props.images;
+  const placeholder = props.placeholder;
   const slider = useRef(null);
 
+  useEffect(() => {
+    setLoadedImageIndices(new Array(images.length).fill(false));
+  }, [images]);
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImageIndices((prev) => {
+      const newLoadedState = [...prev];
+      newLoadedState[index] = true;
+      return newLoadedState;
+    });
+  };
+
   return (
-    <div
-      style={{
-        position: 'relative',
-      }}
-    >
+    <div style={{ position: 'relative' }}>
       <Slider ref={slider} {...settings}>
-        {images.map((image: string, index: number) => {
-          return (
-            <div key={index}>
-              <img
-                src={image}
-                alt="NFT"
-                style={{
-                  margin: 'auto',
-                  height: '100vh',
-                }}
-              />
-            </div>
-          );
-        })}
+        {images.map((image: string, index: number) => (
+          <div key={index}>
+            <img
+              src={loadedImageIndices[index] ? image : placeholder}
+              alt="NFT"
+              style={{
+                margin: 'auto',
+                height: '100vh',
+                transition: 'opacity 0.5s ease-in-out',
+              }}
+              onLoad={() => handleImageLoad(index)}
+              onError={() => handleImageLoad(index)}
+            />
+          </div>
+        ))}
       </Slider>
       <div
         style={{
