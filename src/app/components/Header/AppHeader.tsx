@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import WalletIcon from '@/components/Icon/WalletIcon';
 import {
   Sheet,
@@ -21,6 +22,11 @@ export default function AppHeader() {
   const activeAccount = useActiveAccount();
   const { connect } = useConnectModal();
 
+  const MoonPayBuyWidget = dynamic(
+    () => import('@moonpay/moonpay-react').then((mod) => mod.MoonPayBuyWidget),
+    { ssr: false },
+  );
+
   const handleConnect = async () => {
     const result = await connect({ client, wallets });
     console.log(result);
@@ -30,6 +36,14 @@ export default function AppHeader() {
     <div className="flex justify-between lg:justify-end px-3 py-4 items-center">
       {/* <PayEmbed client={client} />
       <ConnectButton client={client} /> */}
+      <MoonPayBuyWidget
+        variant="embedded"
+        baseCurrencyCode="usd"
+        baseCurrencyAmount="100"
+        defaultCurrencyCode="ETH_Base"
+        onLogin={async () => console.log("Customer logged in!")}
+        visible
+      />
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>

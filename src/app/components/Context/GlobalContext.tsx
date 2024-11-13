@@ -19,6 +19,13 @@ import {
 } from 'thirdweb/react';
 import { checksumAddress } from 'viem';
 import { SignUpModal } from '../Modules/SignUp';
+import dynamic from 'next/dynamic';
+import { moonpayApiKey } from '@/lib/ramp';
+
+const MoonPayProvider = dynamic(
+  () => import('@moonpay/moonpay-react').then((mod) => mod.MoonPayProvider),
+  { ssr: false },
+);
 
 export interface Iimages {
   homeAutority: Array<{ image: string; link: string }>;
@@ -115,7 +122,12 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       }}
     >
       <SignUpModal />
-      {children}
+      <MoonPayProvider
+        apiKey={moonpayApiKey}
+        debug
+      >
+        {children}
+      </MoonPayProvider>
     </globalContext.Provider>
   );
 };

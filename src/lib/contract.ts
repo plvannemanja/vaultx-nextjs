@@ -3,7 +3,7 @@ import { baseSepolia, base } from 'thirdweb/chains';
 import { client } from './client';
 
 // get a contract
-const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
+export const isDev = process.env.NEXT_PUBLIC_ENV === 'development';
 
 const addr = isDev
   ? process.env.NEXT_PUBLIC_APP_SEPOLIA_ADDRESS
