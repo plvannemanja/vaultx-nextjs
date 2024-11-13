@@ -36,14 +36,6 @@ export default function AppHeader() {
     <div className="flex justify-between lg:justify-end px-3 py-4 items-center">
       {/* <PayEmbed client={client} />
       <ConnectButton client={client} /> */}
-      <MoonPayBuyWidget
-        variant="embedded"
-        baseCurrencyCode="usd"
-        baseCurrencyAmount="100"
-        defaultCurrencyCode="ETH_Base"
-        onLogin={async () => console.log("Customer logged in!")}
-        visible
-      />
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
