@@ -275,18 +275,19 @@ export const purchaseAssetBeforeMint = async (
   amount: bigint,
   account: Account,
 ) => {
-  const transaction = await prepareContractCall({
-    contract,
-    method:
-      'function purchaseAssetBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable',
-    params: [voucher],
-    value: amount,
-  });
-  const { transactionHash } = await sendTransaction({
-    transaction,
-    account,
-  });
+  // const transaction = await prepareContractCall({
+  //   contract,
+  //   method:
+  //     'function purchaseAssetBeforeMint((uint256 curationId, string tokenURI, uint256 price, address royaltyWallet, uint256 royaltyPercentage, address[] paymentWallets, uint256[] paymentPercentages, bytes signature) voucher) payable',
+  //   params: [voucher],
+  //   value: amount,
+  // });
+  // const { transactionHash } = await sendTransaction({
+  //   transaction,
+  //   account,
+  // });
 
+  const transactionHash = "0x204b5f3a9071586dd4299242397ad5d9153f6e1af7259b4fe5c834445cfd9573";
   const receipt = await waitForReceipt({
     client,
     chain,

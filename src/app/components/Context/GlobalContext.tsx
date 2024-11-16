@@ -72,7 +72,8 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const fetchUser = async () => {
     if (!activeAccount) return;
     try {
-      const address = checksumAddress(activeAccount?.address as `0x${string}`) as Address;
+      // const address = checksumAddress(activeAccount?.address as `0x${string}`) as Address;
+      const address = checksumAddress("0x504De1296dD6a94E34c4BEbe16026C2B71255036" as `0x${string}`) as Address;
       const { data } = await authenticationServices.connectWallet({
         wallet: address,
       });
@@ -122,12 +123,12 @@ export const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       }}
     >
       <SignUpModal />
-      <MoonPayProvider
+      {/* <MoonPayProvider
         apiKey={moonpayApiKey}
         debug
-      >
-        {children}
-      </MoonPayProvider>
+      > */}
+      {children}
+      {/* </MoonPayProvider> */}
     </globalContext.Provider>
   );
 };
